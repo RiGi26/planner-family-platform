@@ -63,11 +63,26 @@ export function samplePath(d: string, samples = 24): Point[] {
   return out
 }
 
+/**
+ * Sampling runs on the main thread, and the stage switch in the writing screen is a
+ * tap the learner is waiting on — so each character is sampled once and remembered.
+ * Only browser results are cached: during prerender `samplePath` returns nothing,
+ * and caching that would poison every later call.
+ */
+const medianCache = new Map<string, Point[][]>()
+
 /** The reference skeleton for every stroke, in KanjiVG space. */
 export function medians(character: string, samples = 24): Point[][] {
   const char = DATA[character]
   if (!char) return []
-  return char.strokes.map((d) => samplePath(d, samples))
+
+  const key = `${character}:${samples}`
+  const cached = medianCache.get(key)
+  if (cached) return cached
+
+  const out = char.strokes.map((d) => samplePath(d, samples))
+  if (typeof document !== 'undefined') medianCache.set(key, out)
+  return out
 }
 
 /** Path length in KanjiVG units, for pacing the draw-on animation. */

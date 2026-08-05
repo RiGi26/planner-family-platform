@@ -71,9 +71,24 @@ export function WritingPractice({
   const [recall, setRecall] = useState<Point[][]>([])
   const [checked, setChecked] = useState<WritingResult | null>(null)
 
-  // Sampling needs the browser's SVG geometry, so it cannot run during render on
-  // the server. Under static export this component only ever mounts client-side.
-  const reference = useMemo(() => (stage === 'demo' ? [] : medians(character)), [character, stage])
+  // Sampling needs the browser's SVG geometry, so it comes back empty during
+  // prerender — harmless, because nothing renders it directly. What matters is that
+  // it does NOT depend on the stage: recomputing on the Jiplak → Ingat switch put
+  // synchronous geometry work inside the very tap the learner was waiting on.
+  const reference = useMemo(() => medians(character), [character])
+
+  /**
+   * The only way stages change. Every stage starts clean: leftover Jiplak ink
+   * shown during Ingat is the answer leaked, and a leftover `checked` from a
+   * previous visit is a canvas that refuses to draw.
+   */
+  function go(next: Stage) {
+    setStage(next)
+    setChecked(null)
+    setRecall([])
+    if (next === 'jiplak') reset()
+    if (next === 'demo') setDemoKey((k) => k + 1)
+  }
 
   const validate = useCallback(
     (stroke: Point[], index: number) => {
@@ -139,11 +154,7 @@ export function WritingPractice({
           <button
             key={s}
             type="button"
-            onClick={() => {
-              setStage(s)
-              if (s === 'jiplak') reset()
-              if (s === 'demo') setDemoKey((k) => k + 1)
-            }}
+            onClick={() => go(s)}
             className={clsx(
               'min-h-tap flex-1 rounded-[2px] text-[13px] transition-colors',
               stage === s ? 'bg-ink text-paper-raised' : 'text-ink-muted',
@@ -170,6 +181,10 @@ export function WritingPractice({
         </div>
       ) : (
         <InkCanvas
+          // Remounted on every stage change. Jiplak and Ingat sharing one canvas
+          // instance carried the traced ink into Recall — the answer on screen, and
+          // the traced strokes silently prepended to what got saved as "from memory".
+          key={stage}
           size={size}
           onStrokeEnd={stage === 'ingat' ? setRecall : undefined}
           validateStroke={stage === 'jiplak' ? validate : undefined}
@@ -223,10 +238,7 @@ export function WritingPractice({
           </p>
           <button
             type="button"
-            onClick={() => {
-              setStage('jiplak')
-              reset()
-            }}
+            onClick={() => go('jiplak')}
             className="min-h-tap rounded-[3px] bg-shu px-4 text-[15px] font-medium text-paper-raised"
           >
             Lanjut ke jiplak
@@ -257,7 +269,7 @@ export function WritingPractice({
 
           <button
             type="button"
-            onClick={() => setStage('ingat')}
+            onClick={() => go('ingat')}
             disabled={traced < total}
             className="min-h-tap rounded-[3px] bg-shu px-4 text-[15px] font-medium text-paper-raised disabled:bg-rule disabled:text-ink-muted"
           >

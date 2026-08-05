@@ -110,14 +110,26 @@ export function InkCanvas({
     if (!drawing.current || !rect.current) return
     e.preventDefault()
 
-    const p = { x: e.clientX - rect.current.left, y: e.clientY - rect.current.top }
-    const last = current.current[current.current.length - 1]
-    // Drop points that have barely moved: they add nothing to the shape and make
-    // the scorer's resampling noisier.
-    if (last && Math.hypot(p.x - last.x, p.y - last.y) < 1.5) return
+    // Mobile browsers batch pointermove to one event per frame and tuck the real
+    // samples into getCoalescedEvents(). Reading only the batched event drops the
+    // points in between, and a fast harai comes out as three straight segments.
+    const native = e.nativeEvent
+    const samples =
+      typeof native.getCoalescedEvents === 'function' && native.getCoalescedEvents().length > 0
+        ? native.getCoalescedEvents()
+        : [native]
 
-    current.current.push(p)
-    paint()
+    let added = false
+    for (const ev of samples) {
+      const p = { x: ev.clientX - rect.current.left, y: ev.clientY - rect.current.top }
+      const last = current.current[current.current.length - 1]
+      // Drop points that have barely moved: they add nothing to the shape and make
+      // the scorer's resampling noisier.
+      if (last && Math.hypot(p.x - last.x, p.y - last.y) < 1.5) continue
+      current.current.push(p)
+      added = true
+    }
+    if (added) paint()
   }
 
   function end(e: React.PointerEvent<SVGSVGElement>) {
