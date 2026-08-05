@@ -188,8 +188,11 @@ export function WritingPractice({
           size={size}
           onStrokeEnd={stage === 'ingat' ? setRecall : undefined}
           validateStroke={stage === 'jiplak' ? validate : undefined}
+          // Clearing the tracing puts the stage back to stroke one. Without this the
+          // accepted-stroke overlay and the "goresan 3/3" counter would keep
+          // describing ink the learner has just wiped off.
+          onClear={stage === 'jiplak' ? reset : undefined}
           disabled={Boolean(checked)}
-          hideClear={stage === 'jiplak'}
         >
           {stage === 'jiplak' ? (
             <>

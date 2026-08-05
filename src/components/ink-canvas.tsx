@@ -44,10 +44,16 @@ export type InkCanvasProps = {
    * shown beside the canvas rather than by wiping the whole attempt.
    */
   validateStroke?: (stroke: Point[], index: number) => boolean
+  /**
+   * Fired after the canvas is wiped. The Trace stage keeps its own progress —
+   * which strokes were accepted, how many were repeated — and clearing the ink
+   * without telling it would leave a counter describing strokes that are no
+   * longer on the paper.
+   */
+  onClear?: () => void
   /** Anything to draw behind the ink: a faint template, guides, markers. */
   children?: React.ReactNode
   disabled?: boolean
-  hideClear?: boolean
   className?: string
 }
 
@@ -58,9 +64,9 @@ export function InkCanvas({
   size,
   onStrokeEnd,
   validateStroke,
+  onClear,
   children,
   disabled = false,
-  hideClear = false,
   className,
 }: InkCanvasProps) {
   const wrapRef = useRef<HTMLDivElement | null>(null)
@@ -162,6 +168,7 @@ export function InkCanvas({
     current.current = []
     paint()
     onStrokeEnd?.([])
+    onClear?.()
   }
 
   return (
@@ -229,16 +236,14 @@ export function InkCanvas({
         </g>
       </svg>
 
-      {hideClear ? null : (
-        <button
-          type="button"
-          onClick={clear}
-          disabled={disabled || strokes.length === 0}
-          className="mt-3 min-h-tap w-full rounded-[3px] border border-rule px-4 text-[14px] text-ink-muted disabled:opacity-40"
-        >
-          Hapus
-        </button>
-      )}
+      <button
+        type="button"
+        onClick={clear}
+        disabled={disabled || strokes.length === 0}
+        className="mt-3 min-h-tap w-full rounded-[3px] border border-rule px-4 text-[14px] text-ink-muted disabled:opacity-40"
+      >
+        Hapus
+      </button>
     </div>
   )
 }
