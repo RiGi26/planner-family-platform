@@ -51,7 +51,11 @@ export const supabase = createClient(url, anonKey, {
     // no expiry — that is governed by the dashboard's Sessions settings, which must
     // stay empty.
     autoRefreshToken: true,
-    detectSessionInUrl: false,
+    // Must stay on. Invitation and password-reset links carry their token in the URL
+    // fragment, and this is what exchanges it for a session. Turned off, both links
+    // land on a page that can only conclude they were already used.
+    detectSessionInUrl: true,
+    flowType: 'pkce',
   },
 })
 

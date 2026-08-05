@@ -1,3 +1,4 @@
+import { RequireAuth } from '@/components/auth-provider'
 import { BottomNav } from '@/components/bottom-nav'
 import { Sheet, Ticks } from '@/components/sheet'
 
@@ -36,7 +37,7 @@ export default function TodayPage() {
   const left = DEMO.quotaTotal - DEMO.quotaDone
 
   return (
-    <>
+    <RequireAuth>
       <main
         className="mx-auto max-w-lg px-5 pb-40"
         style={{ paddingTop: 'calc(var(--spacing-safe-top) + 12px)' }}
@@ -130,6 +131,6 @@ export default function TodayPage() {
       </div>
 
       <BottomNav />
-    </>
+    </RequireAuth>
   )
 }
