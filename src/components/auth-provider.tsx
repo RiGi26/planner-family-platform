@@ -3,7 +3,6 @@
 import { createContext, useContext, useEffect, useState } from 'react'
 import type { Session, User } from '@supabase/supabase-js'
 import { useRouter } from 'next/navigation'
-import { clearAll, db } from '@/lib/db'
 import { t } from '@/lib/i18n'
 import { supabase } from '@/lib/supabase-client'
 
@@ -33,28 +32,6 @@ const AuthContext = createContext<AuthState>({
   recovering: false,
 })
 
-/**
- * The local database is per-origin, not per-user. If account B signs in on a
- * device where account A studied, A's cards, queue and handwriting are all still
- * sitting in IndexedDB — and the sync layer would happily push them under B's
- * session to be rejected row by row by RLS. Wiping on a detected switch keeps one
- * device usable by more than one person, which "general app" now requires.
- */
-async function guardLocalData(userId: string) {
-  try {
-    const last = await db.meta.get('last_user_id')
-    if (last && last.value !== userId) {
-      await clearAll()
-      // delete() closes the connection; reopen so the app keeps working without a
-      // reload when the switch happens mid-session.
-      await db.open()
-    }
-    await db.meta.put({ key: 'last_user_id', value: userId })
-  } catch {
-    // IndexedDB unavailable (private mode, storage pressure) — nothing to guard.
-  }
-}
-
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [state, setState] = useState<AuthState>({
     session: null,
@@ -62,11 +39,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     loading: true,
     recovering: false,
   })
-
-  const userId = state.user?.id
-  useEffect(() => {
-    if (userId) void guardLocalData(userId)
-  }, [userId])
 
   useEffect(() => {
     let active = true

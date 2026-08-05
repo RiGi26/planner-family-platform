@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from 'next'
 import { IBM_Plex_Mono, Zen_Kaku_Gothic_New, Zen_Old_Mincho } from 'next/font/google'
 import { AuthProvider } from '@/components/auth-provider'
 import { QueryProvider } from '@/components/query-provider'
+import { SyncProvider } from '@/components/sync-provider'
 import { t } from '@/lib/i18n'
 import './globals.css'
 
@@ -56,7 +57,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="id" suppressHydrationWarning>
       <body className={`${gothic.variable} ${mincho.variable} ${mono.variable}`}>
         <QueryProvider>
-          <AuthProvider>{children}</AuthProvider>
+          <AuthProvider>
+            {/* Inside AuthProvider because it reads the session; wraps everything
+                because the local store has to be filled before any screen reads it. */}
+            <SyncProvider>{children}</SyncProvider>
+          </AuthProvider>
         </QueryProvider>
       </body>
     </html>
