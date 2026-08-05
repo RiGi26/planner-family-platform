@@ -125,7 +125,7 @@ function TodayScreen() {
           href="/sesi/"
           className="flex min-h-[60px] items-center justify-center gap-3 rounded-[3px] bg-shu px-5 text-paper-raised shadow-[0_8px_24px_-12px_rgba(0,0,0,0.55)]"
         >
-          <span aria-hidden className="font-[family-name:var(--font-zen-mincho)] text-[22px] leading-none">
+          <span aria-hidden className="font-mincho text-[22px] leading-none">
             始
           </span>
           <span className="text-left">

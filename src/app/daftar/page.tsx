@@ -135,7 +135,7 @@ export default function SignUpPage() {
           autoCapitalize="characters"
           autoCorrect="off"
           spellCheck={false}
-          className="font-[family-name:var(--font-plex-mono)] tracking-[0.12em] uppercase"
+          className="font-mono tracking-[0.12em] uppercase"
           placeholder={t.daftar.codePlaceholder}
         />
 

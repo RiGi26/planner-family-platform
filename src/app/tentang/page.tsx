@@ -51,7 +51,7 @@ export default function AboutPage() {
       <div className="mt-4">
         <span
           aria-hidden
-          className="font-[family-name:var(--font-zen-mincho)] text-[32px] leading-none text-shu"
+          className="font-mincho text-[32px] leading-none text-shu"
         >
           升
         </span>
@@ -80,6 +80,15 @@ export default function AboutPage() {
             </ExternalLink>
           </li>
         </ul>
+      </Section>
+
+      <Section heading={t.tentang.fontsHeading}>
+        <p className="text-[14px] leading-relaxed text-ink-muted">{t.tentang.fontsBody}</p>
+        <p className="mt-3 text-[14px]">
+          <ExternalLink href="https://openfontlicense.org/">
+            {t.tentang.fontsLicense}
+          </ExternalLink>
+        </p>
       </Section>
 
       <Section heading={t.tentang.depsHeading}>

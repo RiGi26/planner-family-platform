@@ -36,7 +36,7 @@ export function AuthShell({
         {/* 升 — the measure that gives 升目 its name. Mincho, so the stroke ends show. */}
         <span
           aria-hidden
-          className="font-[family-name:var(--font-zen-mincho)] text-[32px] leading-none text-shu"
+          className="font-mincho text-[32px] leading-none text-shu"
         >
           升
         </span>

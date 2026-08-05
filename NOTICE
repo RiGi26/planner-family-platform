@@ -23,6 +23,30 @@ The superseded licence texts for that package remain in
 licenses/hanzi-writer-data-jp/ for reference; no data from it ships any more.
 
 
+Typefaces — public/fonts/*.woff2
+--------------------------------
+
+Three families ship with the app, subset by scripts/subset-fonts.mjs to the ~290
+glyphs it can display. All three are under the SIL Open Font License 1.1, and the
+full licence text for each is in licenses/:
+
+  - Zen Kaku Gothic New — © The Zen Kaku Gothic Project Authors
+    (licenses/zen-kaku-gothic/OFL.txt)
+  - Zen Old Mincho — © The Zen Old Mincho Project Authors
+    (licenses/zen-old-mincho/OFL.txt)
+  - IBM Plex Mono — © IBM Corp., Reserved Font Name "Plex"
+    (licenses/ibm-plex/OFL.txt)
+
+Serving these from Google Fonts made Google the distributor. Self-hosting moves
+that role here, and the OFL requires the licence to travel with the files — which
+is why the texts above are in the repository and named on the /tentang/ screen
+rather than merely linked.
+
+The files are subsets: glyphs outside the set were removed, and nothing else about
+the fonts was modified. Neither family is renamed, so the Reserved Font Name terms
+are untouched.
+
+
 Kana dataset — src/data/kana.json
 ---------------------------------
 

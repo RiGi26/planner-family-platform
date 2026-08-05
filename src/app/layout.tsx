@@ -1,5 +1,4 @@
 import type { Metadata, Viewport } from 'next'
-import { IBM_Plex_Mono, Zen_Kaku_Gothic_New, Zen_Old_Mincho } from 'next/font/google'
 import { AuthProvider } from '@/components/auth-provider'
 import { QueryProvider } from '@/components/query-provider'
 import { SwUpdateReloader } from '@/components/sw-update'
@@ -7,32 +6,19 @@ import { SyncProvider } from '@/components/sync-provider'
 import { t } from '@/lib/i18n'
 import './globals.css'
 
-// next/font/google downloads these at build time and serves them from our own origin.
-// That is the whole reason for using it here: a CDN <link> would break the first load
-// offline and would not resolve at all inside a Capacitor WebView later.
-const gothic = Zen_Kaku_Gothic_New({
-  weight: ['400', '500', '700', '900'],
-  subsets: ['latin'],
-  variable: '--font-zen-kaku',
-  display: 'swap',
-})
-
-// Mincho exists only for the writing module and the hanko stamp — it shows tome,
-// hane and harai, which is exactly what the user is practising. It must never leak
-// out into general UI, or it stops meaning anything.
-const mincho = Zen_Old_Mincho({
-  weight: ['400', '600', '900'],
-  subsets: ['latin'],
-  variable: '--font-zen-mincho',
-  display: 'swap',
-})
-
-const mono = IBM_Plex_Mono({
-  weight: ['400', '500', '600'],
-  subsets: ['latin'],
-  variable: '--font-plex-mono',
-  display: 'swap',
-})
+/**
+ * The fonts are self-hosted from `public/fonts` and declared in globals.css.
+ *
+ * next/font/google used to load them here, and the reason it no longer does is
+ * not preference: it registers a *hashed* family name and exposes it through a
+ * CSS variable, while globals.css asked for the literal family name. Nothing
+ * matched, every screen rendered in system-ui, and 13.2 MB of Japanese webfont
+ * was downloaded and precached to draw nothing. Real `@font-face` rules with
+ * real family names remove the indirection that hid this for weeks.
+ *
+ * Mincho stays reserved for 升 and 始 — it shows tome, hane and harai, which is
+ * what the writing module is teaching. It must never leak into general UI.
+ */
 
 export const metadata: Metadata = {
   title: t.meta.title,
@@ -56,7 +42,18 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="id" suppressHydrationWarning>
-      <body className={`${gothic.variable} ${mincho.variable} ${mono.variable}`}>
+      <head>
+        {/* Only the body face. Preloading all six would repeat the mistake this
+            change exists to undo, at a smaller scale. */}
+        <link
+          rel="preload"
+          href="/fonts/zen-kaku-400.woff2"
+          as="font"
+          type="font/woff2"
+          crossOrigin="anonymous"
+        />
+      </head>
+      <body>
         {/* Outside the providers: it owns nothing and reads nothing, it only
             watches for a deploy claiming this page mid-session. */}
         <SwUpdateReloader />

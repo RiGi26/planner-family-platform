@@ -272,6 +272,10 @@ export const id = {
       'Data urutan goresan berasal dari KanjiVG © Ulrich Apel dan kontributor, dilisensikan di bawah Creative Commons Attribution-ShareAlike 3.0. Masume memakai subset 150 karakter; path goresannya tidak diubah. Data turunannya mengikuti lisensi yang sama.',
     kanjivgSite: 'Situs KanjiVG',
     kanjivgLicense: 'Teks lisensi CC BY-SA 3.0',
+    fontsHeading: 'Huruf',
+    fontsBody:
+      'Masume memakai Zen Kaku Gothic New, Zen Old Mincho, dan IBM Plex Mono — ketiganya di bawah SIL Open Font License 1.1. Berkasnya dipangkas hanya berisi huruf yang dipakai aplikasi ini; selain itu tidak diubah, dan namanya tidak diganti.',
+    fontsLicense: 'Teks lisensi OFL 1.1',
     depsHeading: 'Dibangun dengan',
     depsBody:
       'Next.js, Supabase, Dexie, ts-fsrs, TanStack Query, dan Serwist — masing-masing di bawah lisensi MIT atau Apache 2.0.',

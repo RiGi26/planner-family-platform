@@ -1,6 +1,72 @@
 @import 'tailwindcss';
 
 /* ---------------------------------------------------------------------------
+   Self-hosted, subset to the glyphs this app can actually display.
+
+   These live at the top level rather than inside `@layer`, because Tailwind v4
+   hoists layers and an `@font-face` that lands after first paint is a face the
+   first paint did not have.
+
+   Until these existed, `--font-gothic` below named 'Zen Kaku Gothic New' while
+   next/font registered a *hashed* family name — so the literal name matched
+   nothing, `body` fell through to system-ui, and 13.2 MB of Japanese webfont was
+   downloaded and precached without ever being drawn. The token was not wrong;
+   there was simply no font by that name. Now there is.
+
+   No `unicode-range`: a glyph outside the subset already falls through to the
+   next family in the stack, so declaring the range would only duplicate that
+   behaviour and give us a second place to forget to update.
+
+   Rebuild with `npm run fonts`; `npm run verify:fonts` says when a new character
+   in the UI has escaped the subset.
+--------------------------------------------------------------------------- */
+
+@font-face {
+  font-family: 'Zen Kaku Gothic New';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/zen-kaku-400.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Zen Kaku Gothic New';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('/fonts/zen-kaku-500.woff2') format('woff2');
+}
+/* 600 is not a weight Zen Kaku publishes — Google answers HTTP 400 for it — so
+   `font-semibold` resolves to 700 here exactly as it already did. */
+@font-face {
+  font-family: 'Zen Kaku Gothic New';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('/fonts/zen-kaku-700.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Zen Old Mincho';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/zen-mincho-400.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/plex-mono-400.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('/fonts/plex-mono-500.woff2') format('woff2');
+}
+
+/* ---------------------------------------------------------------------------
    Masume design tokens
 
    Three ideas carry the whole system:
