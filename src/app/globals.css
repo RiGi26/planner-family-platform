@@ -1,0 +1,177 @@
+@import 'tailwindcss';
+
+/* ---------------------------------------------------------------------------
+   Goukaku design tokens
+
+   Three ideas carry the whole system:
+
+   1. Paper and ink. Light mode is ink filling paper. Dark mode is not "the same
+      screen, dimmed" — the metaphor inverts, and paper fills ink. A finished
+      cell is dark on light by day and light on dark by night.
+
+   2. One accent per screen. `shu` (vermilion) marks exactly one primary action.
+      Anything that is merely *behind schedule* uses `oker`, never shu, so that
+      falling behind never reads as an error.
+
+   3. The writing canvas is exempt. It stays paper-coloured in both modes,
+      because people write on paper, not on ink.
+--------------------------------------------------------------------------- */
+
+:root {
+  color-scheme: light;
+
+  --paper: #e7e1d8;
+  --paper-raised: #faf8f4;
+  --paper-sunken: #f2ece2;
+
+  --ink: #211d1a;
+  --ink-muted: #5c564e;
+  --ink-faint: #8c857a;
+
+  --rule: #d9d2c7;
+  /* Must differ from --paper. An empty cell that matches the page background is
+     invisible, and the sheet collapses back into the progress bar it exists to
+     replace: you see the ink and nothing of the work left. */
+  --cell-empty: #cec6b8;
+
+  --shu: #ce3f29;
+  --shu-tint: #f9e6e3;
+
+  --ai: #2f5d8a;
+  --ai-tint: #e4eaf0;
+
+  --oker: #9a6a1f;
+  --oker-tint: #f2efe9;
+
+  --pinus: #2e7263;
+  --pinus-tint: #e4edeb;
+}
+
+.dark {
+  color-scheme: dark;
+
+  --paper: #171512;
+  --paper-raised: #201d19;
+  --paper-sunken: #201d19;
+
+  --ink: #ece7df;
+  --ink-muted: #a69d91;
+  --ink-faint: #8c857a;
+
+  --rule: #363028;
+  --cell-empty: #363028;
+
+  --shu: #e86a50;
+  --shu-tint: #482c24;
+
+  --ai: #7fa6c9;
+  --ai-tint: #33383c;
+
+  --oker: #d2a24c;
+  --oker-tint: #443823;
+
+  --pinus: #6bb3a0;
+  --pinus-tint: #2f3b34;
+}
+
+@theme inline {
+  --color-paper: var(--paper);
+  --color-paper-raised: var(--paper-raised);
+  --color-paper-sunken: var(--paper-sunken);
+  --color-ink: var(--ink);
+  --color-ink-muted: var(--ink-muted);
+  --color-ink-faint: var(--ink-faint);
+  --color-rule: var(--rule);
+  --color-cell-empty: var(--cell-empty);
+  --color-shu: var(--shu);
+  --color-shu-tint: var(--shu-tint);
+  --color-ai: var(--ai);
+  --color-ai-tint: var(--ai-tint);
+  --color-oker: var(--oker);
+  --color-oker-tint: var(--oker-tint);
+  --color-pinus: var(--pinus);
+  --color-pinus-tint: var(--pinus-tint);
+
+  /* The canvas ignores the theme on purpose — see note 3 above. */
+  --color-canvas: #faf8f4;
+  --color-canvas-ink: #211d1a;
+  --color-canvas-rule: #d9d2c7;
+
+  --font-gothic: 'Zen Kaku Gothic New', system-ui, -apple-system, sans-serif;
+  --font-mincho: 'Zen Old Mincho', 'Yu Mincho', serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+
+  /* Touch target floor, and the two safe-area insets every full-screen frame uses. */
+  --spacing-tap: 44px;
+  --spacing-safe-top: max(env(safe-area-inset-top), 12px);
+  --spacing-safe-bottom: max(env(safe-area-inset-bottom), 12px);
+}
+
+@layer base {
+  html {
+    /* The session screen is one big tap target, so pull-to-refresh anywhere on the
+       page — not just on the canvas — would interrupt a review. */
+    overscroll-behavior-y: none;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--font-gothic);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* Below 16px iOS zooms the viewport when an input takes focus, which throws the
+     whole layout off centre. Login and Settings are the only screens with inputs,
+     and both are easy to get wrong once and never notice. */
+  input,
+  select,
+  textarea {
+    font-size: max(16px, 1rem);
+  }
+
+  /* Tabular figures everywhere numbers change in place: quota counters, intervals,
+     card positions. Without this the digits shuffle sideways on every card. */
+  .tnum {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: 'tnum' 1;
+  }
+
+  ::selection {
+    background: var(--shu);
+    color: var(--paper-raised);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+/* The day-closing stamp. Fires once a day, and nowhere else in the app. */
+@keyframes hanko {
+  0% {
+    transform: rotate(-9deg) scale(1.6);
+    opacity: 0;
+  }
+  60% {
+    transform: rotate(-9deg) scale(0.96);
+    opacity: 1;
+  }
+  100% {
+    transform: rotate(-9deg) scale(1);
+    opacity: 1;
+  }
+}
+
+.animate-hanko {
+  animation: hanko 420ms cubic-bezier(0.2, 0.9, 0.3, 1) both;
+}

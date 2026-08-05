@@ -1,0 +1,3958 @@
+[
+  {
+    "id": "kana-hira-basic-a-3042",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "あ",
+    "reading": "a",
+    "meanings": [
+      "a"
+    ],
+    "seq": 1,
+    "data": {
+      "script": "hiragana",
+      "group": "basic",
+      "row": "a",
+      "row_label": "あ行",
+      "col": "a",
+      "strokes_key": "あ"
+    }
+  },
+  {
+    "id": "kana-hira-basic-i-3044",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "い",
+    "reading": "i",
+    "meanings": [
+      "i"
+    ],
+    "seq": 2,
+    "data": {
+      "script": "hiragana",
+      "group": "basic",
+      "row": "a",
+      "row_label": "あ行",
+      "col": "i",
+      "strokes_key": "い"
+    }
+  },
+  {
+    "id": "kana-hira-basic-u-3046",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "う",
+    "reading": "u",
+    "meanings": [
+      "u"
+    ],
+    "seq": 3,
+    "data": {
+      "script": "hiragana",
+      "group": "basic",
+      "row": "a",
+      "row_label": "あ行",
+      "col": "u",
+      "strokes_key": "う"
+    }
+  },
+  {
+    "id": "kana-hira-basic-e-3048",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "え",
+    "reading": "e",
+    "meanings": [
+      "e"
+    ],
+    "seq": 4,
+    "data": {
+      "script": "hiragana",
+      "group": "basic",
+      "row": "a",
+      "row_label": "あ行",
+      "col": "e",
+      "strokes_key": "え"
+    }
+  },
+  {
+    "id": "kana-hira-basic-o-304a",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "お",
+    "reading": "o",
+    "meanings": [
+      "o"
+    ],
+    "seq": 5,
+    "data": {
+      "script": "hiragana",
+      "group": "basic",
+      "row": "a",
+      "row_label": "あ行",
+      "col": "o",
+      "strokes_key": "お"
+    }
+  },
+  {
+    "id": "kana-hira-basic-ka-304b",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "か",
+    "reading": "ka",
+    "meanings": [
+      "ka"
+    ],
+    "seq": 6,
+    "data": {
+      "script": "hiragana",
+      "group": "basic",
+      "row": "k",
+      "row_label": "か行",
+      "col": "a",
+      "strokes_key": "か"
+    }
+  },
+  {
+    "id": "kana-hira-basic-ki-304d",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "き",
+    "reading": "ki",
+    "meanings": [
+      "ki"
+    ],
+    "seq": 7,
+    "data": {
+      "script": "hiragana",
+      "group": "basic",
+      "row": "k",
+      "row_label": "か行",
+      "col": "i",
+      "strokes_key": "き"
+    }
+  },
+  {
+    "id": "kana-hira-basic-ku-304f",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "く",
+    "reading": "ku",
+    "meanings": [
+      "ku"
+    ],
+    "seq": 8,
+    "data": {
+      "script": "hiragana",
+      "group": "basic",
+      "row": "k",
+      "row_label": "か行",
+      "col": "u",
+      "strokes_key": "く"
+    }
+  },
+  {
+    "id": "kana-hira-basic-ke-3051",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "け",
+    "reading": "ke",
+    "meanings": [
+      "ke"
+    ],
+    "seq": 9,
+    "data": {
+      "script": "hiragana",
+      "group": "basic",
+      "row": "k",
+      "row_label": "か行",
+      "col": "e",
+      "strokes_key": "け"
+    }
+  },
+  {
+    "id": "kana-hira-basic-ko-3053",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "こ",
+    "reading": "ko",
+    "meanings": [
+      "ko"
+    ],
+    "seq": 10,
+    "data": {
+      "script": "hiragana",
+      "group": "basic",
+      "row": "k",
+      "row_label": "か行",
+      "col": "o",
+      "strokes_key": "こ"
+    }
+  },
+  {
+    "id": "kana-hira-basic-sa-3055",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "さ",
+    "reading": "sa",
+    "meanings": [
+      "sa"
+    ],
+    "seq": 11,
+    "data": {
+      "script": "hiragana",
+      "group": "basic",
+      "row": "s",
+      "row_label": "さ行",
+      "col": "a",
+      "strokes_key": "さ"
+    }
+  },
+  {
+    "id": "kana-hira-basic-shi-3057",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "し",
+    "reading": "shi",
+    "meanings": [
+      "shi"
+    ],
+    "seq": 12,
+    "data": {
+      "script": "hiragana",
+      "group": "basic",
+      "row": "s",
+      "row_label": "さ行",
+      "col": "i",
+      "strokes_key": "し"
+    }
+  },
+  {
+    "id": "kana-hira-basic-su-3059",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "す",
+    "reading": "su",
+    "meanings": [
+      "su"
+    ],
+    "seq": 13,
+    "data": {
+      "script": "hiragana",
+      "group": "basic",
+      "row": "s",
+      "row_label": "さ行",
+      "col": "u",
+      "strokes_key": "す"
+    }
+  },
+  {
+    "id": "kana-hira-basic-se-305b",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "せ",
+    "reading": "se",
+    "meanings": [
+      "se"
+    ],
+    "seq": 14,
+    "data": {
+      "script": "hiragana",
+      "group": "basic",
+      "row": "s",
+      "row_label": "さ行",
+      "col": "e",
+      "strokes_key": "せ"
+    }
+  },
+  {
+    "id": "kana-hira-basic-so-305d",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "そ",
+    "reading": "so",
+    "meanings": [
+      "so"
+    ],
+    "seq": 15,
+    "data": {
+      "script": "hiragana",
+      "group": "basic",
+      "row": "s",
+      "row_label": "さ行",
+      "col": "o",
+      "strokes_key": "そ"
+    }
+  },
+  {
+    "id": "kana-hira-basic-ta-305f",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "た",
+    "reading": "ta",
+    "meanings": [
+      "ta"
+    ],
+    "seq": 16,
+    "data": {
+      "script": "hiragana",
+      "group": "basic",
+      "row": "t",
+      "row_label": "た行",
+      "col": "a",
+      "strokes_key": "た"
+    }
+  },
+  {
+    "id": "kana-hira-basic-chi-3061",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "ち",
+    "reading": "chi",
+    "meanings": [
+      "chi"
+    ],
+    "seq": 17,
+    "data": {
+      "script": "hiragana",
+      "group": "basic",
+      "row": "t",
+      "row_label": "た行",
+      "col": "i",
+      "strokes_key": "ち"
+    }
+  },
+  {
+    "id": "kana-hira-basic-tsu-3064",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "つ",
+    "reading": "tsu",
+    "meanings": [
+      "tsu"
+    ],
+    "seq": 18,
+    "data": {
+      "script": "hiragana",
+      "group": "basic",
+      "row": "t",
+      "row_label": "た行",
+      "col": "u",
+      "strokes_key": "つ"
+    }
+  },
+  {
+    "id": "kana-hira-basic-te-3066",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "て",
+    "reading": "te",
+    "meanings": [
+      "te"
+    ],
+    "seq": 19,
+    "data": {
+      "script": "hiragana",
+      "group": "basic",
+      "row": "t",
+      "row_label": "た行",
+      "col": "e",
+      "strokes_key": "て"
+    }
+  },
+  {
+    "id": "kana-hira-basic-to-3068",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "と",
+    "reading": "to",
+    "meanings": [
+      "to"
+    ],
+    "seq": 20,
+    "data": {
+      "script": "hiragana",
+      "group": "basic",
+      "row": "t",
+      "row_label": "た行",
+      "col": "o",
+      "strokes_key": "と"
+    }
+  },
+  {
+    "id": "kana-hira-basic-na-306a",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "な",
+    "reading": "na",
+    "meanings": [
+      "na"
+    ],
+    "seq": 21,
+    "data": {
+      "script": "hiragana",
+      "group": "basic",
+      "row": "n",
+      "row_label": "な行",
+      "col": "a",
+      "strokes_key": "な"
+    }
+  },
+  {
+    "id": "kana-hira-basic-ni-306b",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "に",
+    "reading": "ni",
+    "meanings": [
+      "ni"
+    ],
+    "seq": 22,
+    "data": {
+      "script": "hiragana",
+      "group": "basic",
+      "row": "n",
+      "row_label": "な行",
+      "col": "i",
+      "strokes_key": "に"
+    }
+  },
+  {
+    "id": "kana-hira-basic-nu-306c",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "ぬ",
+    "reading": "nu",
+    "meanings": [
+      "nu"
+    ],
+    "seq": 23,
+    "data": {
+      "script": "hiragana",
+      "group": "basic",
+      "row": "n",
+      "row_label": "な行",
+      "col": "u",
+      "strokes_key": "ぬ"
+    }
+  },
+  {
+    "id": "kana-hira-basic-ne-306d",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "ね",
+    "reading": "ne",
+    "meanings": [
+      "ne"
+    ],
+    "seq": 24,
+    "data": {
+      "script": "hiragana",
+      "group": "basic",
+      "row": "n",
+      "row_label": "な行",
+      "col": "e",
+      "strokes_key": "ね"
+    }
+  },
+  {
+    "id": "kana-hira-basic-no-306e",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "の",
+    "reading": "no",
+    "meanings": [
+      "no"
+    ],
+    "seq": 25,
+    "data": {
+      "script": "hiragana",
+      "group": "basic",
+      "row": "n",
+      "row_label": "な行",
+      "col": "o",
+      "strokes_key": "の"
+    }
+  },
+  {
+    "id": "kana-hira-basic-ha-306f",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "は",
+    "reading": "ha",
+    "meanings": [
+      "ha"
+    ],
+    "seq": 26,
+    "data": {
+      "script": "hiragana",
+      "group": "basic",
+      "row": "h",
+      "row_label": "は行",
+      "col": "a",
+      "strokes_key": "は"
+    }
+  },
+  {
+    "id": "kana-hira-basic-hi-3072",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "ひ",
+    "reading": "hi",
+    "meanings": [
+      "hi"
+    ],
+    "seq": 27,
+    "data": {
+      "script": "hiragana",
+      "group": "basic",
+      "row": "h",
+      "row_label": "は行",
+      "col": "i",
+      "strokes_key": "ひ"
+    }
+  },
+  {
+    "id": "kana-hira-basic-fu-3075",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "ふ",
+    "reading": "fu",
+    "meanings": [
+      "fu"
+    ],
+    "seq": 28,
+    "data": {
+      "script": "hiragana",
+      "group": "basic",
+      "row": "h",
+      "row_label": "は行",
+      "col": "u",
+      "strokes_key": "ふ"
+    }
+  },
+  {
+    "id": "kana-hira-basic-he-3078",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "へ",
+    "reading": "he",
+    "meanings": [
+      "he"
+    ],
+    "seq": 29,
+    "data": {
+      "script": "hiragana",
+      "group": "basic",
+      "row": "h",
+      "row_label": "は行",
+      "col": "e",
+      "strokes_key": "へ"
+    }
+  },
+  {
+    "id": "kana-hira-basic-ho-307b",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "ほ",
+    "reading": "ho",
+    "meanings": [
+      "ho"
+    ],
+    "seq": 30,
+    "data": {
+      "script": "hiragana",
+      "group": "basic",
+      "row": "h",
+      "row_label": "は行",
+      "col": "o",
+      "strokes_key": "ほ"
+    }
+  },
+  {
+    "id": "kana-hira-basic-ma-307e",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "ま",
+    "reading": "ma",
+    "meanings": [
+      "ma"
+    ],
+    "seq": 31,
+    "data": {
+      "script": "hiragana",
+      "group": "basic",
+      "row": "m",
+      "row_label": "ま行",
+      "col": "a",
+      "strokes_key": "ま"
+    }
+  },
+  {
+    "id": "kana-hira-basic-mi-307f",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "み",
+    "reading": "mi",
+    "meanings": [
+      "mi"
+    ],
+    "seq": 32,
+    "data": {
+      "script": "hiragana",
+      "group": "basic",
+      "row": "m",
+      "row_label": "ま行",
+      "col": "i",
+      "strokes_key": "み"
+    }
+  },
+  {
+    "id": "kana-hira-basic-mu-3080",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "む",
+    "reading": "mu",
+    "meanings": [
+      "mu"
+    ],
+    "seq": 33,
+    "data": {
+      "script": "hiragana",
+      "group": "basic",
+      "row": "m",
+      "row_label": "ま行",
+      "col": "u",
+      "strokes_key": "む"
+    }
+  },
+  {
+    "id": "kana-hira-basic-me-3081",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "め",
+    "reading": "me",
+    "meanings": [
+      "me"
+    ],
+    "seq": 34,
+    "data": {
+      "script": "hiragana",
+      "group": "basic",
+      "row": "m",
+      "row_label": "ま行",
+      "col": "e",
+      "strokes_key": "め"
+    }
+  },
+  {
+    "id": "kana-hira-basic-mo-3082",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "も",
+    "reading": "mo",
+    "meanings": [
+      "mo"
+    ],
+    "seq": 35,
+    "data": {
+      "script": "hiragana",
+      "group": "basic",
+      "row": "m",
+      "row_label": "ま行",
+      "col": "o",
+      "strokes_key": "も"
+    }
+  },
+  {
+    "id": "kana-hira-basic-ya-3084",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "や",
+    "reading": "ya",
+    "meanings": [
+      "ya"
+    ],
+    "seq": 36,
+    "data": {
+      "script": "hiragana",
+      "group": "basic",
+      "row": "y",
+      "row_label": "や行",
+      "col": "a",
+      "strokes_key": "や"
+    }
+  },
+  {
+    "id": "kana-hira-basic-yu-3086",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "ゆ",
+    "reading": "yu",
+    "meanings": [
+      "yu"
+    ],
+    "seq": 37,
+    "data": {
+      "script": "hiragana",
+      "group": "basic",
+      "row": "y",
+      "row_label": "や行",
+      "col": "u",
+      "strokes_key": "ゆ"
+    }
+  },
+  {
+    "id": "kana-hira-basic-yo-3088",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "よ",
+    "reading": "yo",
+    "meanings": [
+      "yo"
+    ],
+    "seq": 38,
+    "data": {
+      "script": "hiragana",
+      "group": "basic",
+      "row": "y",
+      "row_label": "や行",
+      "col": "o",
+      "strokes_key": "よ"
+    }
+  },
+  {
+    "id": "kana-hira-basic-ra-3089",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "ら",
+    "reading": "ra",
+    "meanings": [
+      "ra"
+    ],
+    "seq": 39,
+    "data": {
+      "script": "hiragana",
+      "group": "basic",
+      "row": "r",
+      "row_label": "ら行",
+      "col": "a",
+      "strokes_key": "ら"
+    }
+  },
+  {
+    "id": "kana-hira-basic-ri-308a",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "り",
+    "reading": "ri",
+    "meanings": [
+      "ri"
+    ],
+    "seq": 40,
+    "data": {
+      "script": "hiragana",
+      "group": "basic",
+      "row": "r",
+      "row_label": "ら行",
+      "col": "i",
+      "strokes_key": "り"
+    }
+  },
+  {
+    "id": "kana-hira-basic-ru-308b",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "る",
+    "reading": "ru",
+    "meanings": [
+      "ru"
+    ],
+    "seq": 41,
+    "data": {
+      "script": "hiragana",
+      "group": "basic",
+      "row": "r",
+      "row_label": "ら行",
+      "col": "u",
+      "strokes_key": "る"
+    }
+  },
+  {
+    "id": "kana-hira-basic-re-308c",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "れ",
+    "reading": "re",
+    "meanings": [
+      "re"
+    ],
+    "seq": 42,
+    "data": {
+      "script": "hiragana",
+      "group": "basic",
+      "row": "r",
+      "row_label": "ら行",
+      "col": "e",
+      "strokes_key": "れ"
+    }
+  },
+  {
+    "id": "kana-hira-basic-ro-308d",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "ろ",
+    "reading": "ro",
+    "meanings": [
+      "ro"
+    ],
+    "seq": 43,
+    "data": {
+      "script": "hiragana",
+      "group": "basic",
+      "row": "r",
+      "row_label": "ら行",
+      "col": "o",
+      "strokes_key": "ろ"
+    }
+  },
+  {
+    "id": "kana-hira-basic-wa-308f",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "わ",
+    "reading": "wa",
+    "meanings": [
+      "wa"
+    ],
+    "seq": 44,
+    "data": {
+      "script": "hiragana",
+      "group": "basic",
+      "row": "w",
+      "row_label": "わ行",
+      "col": "a",
+      "strokes_key": "わ"
+    }
+  },
+  {
+    "id": "kana-hira-basic-wo-3092",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "を",
+    "reading": "wo",
+    "meanings": [
+      "wo"
+    ],
+    "seq": 45,
+    "data": {
+      "script": "hiragana",
+      "group": "basic",
+      "row": "w",
+      "row_label": "わ行",
+      "col": "o",
+      "strokes_key": "を"
+    }
+  },
+  {
+    "id": "kana-hira-basic-n-3093",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "ん",
+    "reading": "n",
+    "meanings": [
+      "n"
+    ],
+    "seq": 46,
+    "data": {
+      "script": "hiragana",
+      "group": "basic",
+      "row": "n-final",
+      "row_label": "ん",
+      "col": "a",
+      "strokes_key": "ん"
+    }
+  },
+  {
+    "id": "kana-hira-dakuten-ga-304c",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "が",
+    "reading": "ga",
+    "meanings": [
+      "ga"
+    ],
+    "seq": 47,
+    "data": {
+      "script": "hiragana",
+      "group": "dakuten",
+      "row": "g",
+      "row_label": "が行",
+      "col": "a",
+      "strokes_key": "が"
+    }
+  },
+  {
+    "id": "kana-hira-dakuten-gi-304e",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "ぎ",
+    "reading": "gi",
+    "meanings": [
+      "gi"
+    ],
+    "seq": 48,
+    "data": {
+      "script": "hiragana",
+      "group": "dakuten",
+      "row": "g",
+      "row_label": "が行",
+      "col": "i",
+      "strokes_key": "ぎ"
+    }
+  },
+  {
+    "id": "kana-hira-dakuten-gu-3050",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "ぐ",
+    "reading": "gu",
+    "meanings": [
+      "gu"
+    ],
+    "seq": 49,
+    "data": {
+      "script": "hiragana",
+      "group": "dakuten",
+      "row": "g",
+      "row_label": "が行",
+      "col": "u",
+      "strokes_key": "ぐ"
+    }
+  },
+  {
+    "id": "kana-hira-dakuten-ge-3052",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "げ",
+    "reading": "ge",
+    "meanings": [
+      "ge"
+    ],
+    "seq": 50,
+    "data": {
+      "script": "hiragana",
+      "group": "dakuten",
+      "row": "g",
+      "row_label": "が行",
+      "col": "e",
+      "strokes_key": "げ"
+    }
+  },
+  {
+    "id": "kana-hira-dakuten-go-3054",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "ご",
+    "reading": "go",
+    "meanings": [
+      "go"
+    ],
+    "seq": 51,
+    "data": {
+      "script": "hiragana",
+      "group": "dakuten",
+      "row": "g",
+      "row_label": "が行",
+      "col": "o",
+      "strokes_key": "ご"
+    }
+  },
+  {
+    "id": "kana-hira-dakuten-za-3056",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "ざ",
+    "reading": "za",
+    "meanings": [
+      "za"
+    ],
+    "seq": 52,
+    "data": {
+      "script": "hiragana",
+      "group": "dakuten",
+      "row": "z",
+      "row_label": "ざ行",
+      "col": "a",
+      "strokes_key": "ざ"
+    }
+  },
+  {
+    "id": "kana-hira-dakuten-ji-3058",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "じ",
+    "reading": "ji",
+    "meanings": [
+      "ji"
+    ],
+    "seq": 53,
+    "data": {
+      "script": "hiragana",
+      "group": "dakuten",
+      "row": "z",
+      "row_label": "ざ行",
+      "col": "i",
+      "strokes_key": "じ"
+    }
+  },
+  {
+    "id": "kana-hira-dakuten-zu-305a",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "ず",
+    "reading": "zu",
+    "meanings": [
+      "zu"
+    ],
+    "seq": 54,
+    "data": {
+      "script": "hiragana",
+      "group": "dakuten",
+      "row": "z",
+      "row_label": "ざ行",
+      "col": "u",
+      "strokes_key": "ず"
+    }
+  },
+  {
+    "id": "kana-hira-dakuten-ze-305c",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "ぜ",
+    "reading": "ze",
+    "meanings": [
+      "ze"
+    ],
+    "seq": 55,
+    "data": {
+      "script": "hiragana",
+      "group": "dakuten",
+      "row": "z",
+      "row_label": "ざ行",
+      "col": "e",
+      "strokes_key": "ぜ"
+    }
+  },
+  {
+    "id": "kana-hira-dakuten-zo-305e",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "ぞ",
+    "reading": "zo",
+    "meanings": [
+      "zo"
+    ],
+    "seq": 56,
+    "data": {
+      "script": "hiragana",
+      "group": "dakuten",
+      "row": "z",
+      "row_label": "ざ行",
+      "col": "o",
+      "strokes_key": "ぞ"
+    }
+  },
+  {
+    "id": "kana-hira-dakuten-da-3060",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "だ",
+    "reading": "da",
+    "meanings": [
+      "da"
+    ],
+    "seq": 57,
+    "data": {
+      "script": "hiragana",
+      "group": "dakuten",
+      "row": "d",
+      "row_label": "だ行",
+      "col": "a",
+      "strokes_key": "だ"
+    }
+  },
+  {
+    "id": "kana-hira-dakuten-ji-3062",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "ぢ",
+    "reading": "ji",
+    "meanings": [
+      "ji",
+      "di"
+    ],
+    "seq": 58,
+    "data": {
+      "script": "hiragana",
+      "group": "dakuten",
+      "row": "d",
+      "row_label": "だ行",
+      "col": "i",
+      "strokes_key": "ぢ"
+    }
+  },
+  {
+    "id": "kana-hira-dakuten-zu-3065",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "づ",
+    "reading": "zu",
+    "meanings": [
+      "zu",
+      "du"
+    ],
+    "seq": 59,
+    "data": {
+      "script": "hiragana",
+      "group": "dakuten",
+      "row": "d",
+      "row_label": "だ行",
+      "col": "u",
+      "strokes_key": "づ"
+    }
+  },
+  {
+    "id": "kana-hira-dakuten-de-3067",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "で",
+    "reading": "de",
+    "meanings": [
+      "de"
+    ],
+    "seq": 60,
+    "data": {
+      "script": "hiragana",
+      "group": "dakuten",
+      "row": "d",
+      "row_label": "だ行",
+      "col": "e",
+      "strokes_key": "で"
+    }
+  },
+  {
+    "id": "kana-hira-dakuten-do-3069",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "ど",
+    "reading": "do",
+    "meanings": [
+      "do"
+    ],
+    "seq": 61,
+    "data": {
+      "script": "hiragana",
+      "group": "dakuten",
+      "row": "d",
+      "row_label": "だ行",
+      "col": "o",
+      "strokes_key": "ど"
+    }
+  },
+  {
+    "id": "kana-hira-dakuten-ba-3070",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "ば",
+    "reading": "ba",
+    "meanings": [
+      "ba"
+    ],
+    "seq": 62,
+    "data": {
+      "script": "hiragana",
+      "group": "dakuten",
+      "row": "b",
+      "row_label": "ば行",
+      "col": "a",
+      "strokes_key": "ば"
+    }
+  },
+  {
+    "id": "kana-hira-dakuten-bi-3073",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "び",
+    "reading": "bi",
+    "meanings": [
+      "bi"
+    ],
+    "seq": 63,
+    "data": {
+      "script": "hiragana",
+      "group": "dakuten",
+      "row": "b",
+      "row_label": "ば行",
+      "col": "i",
+      "strokes_key": "び"
+    }
+  },
+  {
+    "id": "kana-hira-dakuten-bu-3076",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "ぶ",
+    "reading": "bu",
+    "meanings": [
+      "bu"
+    ],
+    "seq": 64,
+    "data": {
+      "script": "hiragana",
+      "group": "dakuten",
+      "row": "b",
+      "row_label": "ば行",
+      "col": "u",
+      "strokes_key": "ぶ"
+    }
+  },
+  {
+    "id": "kana-hira-dakuten-be-3079",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "べ",
+    "reading": "be",
+    "meanings": [
+      "be"
+    ],
+    "seq": 65,
+    "data": {
+      "script": "hiragana",
+      "group": "dakuten",
+      "row": "b",
+      "row_label": "ば行",
+      "col": "e",
+      "strokes_key": "べ"
+    }
+  },
+  {
+    "id": "kana-hira-dakuten-bo-307c",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "ぼ",
+    "reading": "bo",
+    "meanings": [
+      "bo"
+    ],
+    "seq": 66,
+    "data": {
+      "script": "hiragana",
+      "group": "dakuten",
+      "row": "b",
+      "row_label": "ば行",
+      "col": "o",
+      "strokes_key": "ぼ"
+    }
+  },
+  {
+    "id": "kana-hira-dakuten-pa-3071",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "ぱ",
+    "reading": "pa",
+    "meanings": [
+      "pa"
+    ],
+    "seq": 67,
+    "data": {
+      "script": "hiragana",
+      "group": "dakuten",
+      "row": "p",
+      "row_label": "ぱ行",
+      "col": "a",
+      "strokes_key": "ぱ"
+    }
+  },
+  {
+    "id": "kana-hira-dakuten-pi-3074",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "ぴ",
+    "reading": "pi",
+    "meanings": [
+      "pi"
+    ],
+    "seq": 68,
+    "data": {
+      "script": "hiragana",
+      "group": "dakuten",
+      "row": "p",
+      "row_label": "ぱ行",
+      "col": "i",
+      "strokes_key": "ぴ"
+    }
+  },
+  {
+    "id": "kana-hira-dakuten-pu-3077",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "ぷ",
+    "reading": "pu",
+    "meanings": [
+      "pu"
+    ],
+    "seq": 69,
+    "data": {
+      "script": "hiragana",
+      "group": "dakuten",
+      "row": "p",
+      "row_label": "ぱ行",
+      "col": "u",
+      "strokes_key": "ぷ"
+    }
+  },
+  {
+    "id": "kana-hira-dakuten-pe-307a",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "ぺ",
+    "reading": "pe",
+    "meanings": [
+      "pe"
+    ],
+    "seq": 70,
+    "data": {
+      "script": "hiragana",
+      "group": "dakuten",
+      "row": "p",
+      "row_label": "ぱ行",
+      "col": "e",
+      "strokes_key": "ぺ"
+    }
+  },
+  {
+    "id": "kana-hira-dakuten-po-307d",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "ぽ",
+    "reading": "po",
+    "meanings": [
+      "po"
+    ],
+    "seq": 71,
+    "data": {
+      "script": "hiragana",
+      "group": "dakuten",
+      "row": "p",
+      "row_label": "ぱ行",
+      "col": "o",
+      "strokes_key": "ぽ"
+    }
+  },
+  {
+    "id": "kana-hira-youon-kya-304d3083",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "きゃ",
+    "reading": "kya",
+    "meanings": [
+      "kya"
+    ],
+    "seq": 72,
+    "data": {
+      "script": "hiragana",
+      "group": "youon",
+      "row": "き",
+      "row_label": "き拗音",
+      "col": "a",
+      "strokes_key": "きゃ"
+    }
+  },
+  {
+    "id": "kana-hira-youon-kyu-304d3085",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "きゅ",
+    "reading": "kyu",
+    "meanings": [
+      "kyu"
+    ],
+    "seq": 73,
+    "data": {
+      "script": "hiragana",
+      "group": "youon",
+      "row": "き",
+      "row_label": "き拗音",
+      "col": "u",
+      "strokes_key": "きゅ"
+    }
+  },
+  {
+    "id": "kana-hira-youon-kyo-304d3087",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "きょ",
+    "reading": "kyo",
+    "meanings": [
+      "kyo"
+    ],
+    "seq": 74,
+    "data": {
+      "script": "hiragana",
+      "group": "youon",
+      "row": "き",
+      "row_label": "き拗音",
+      "col": "o",
+      "strokes_key": "きょ"
+    }
+  },
+  {
+    "id": "kana-hira-youon-sha-30573083",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "しゃ",
+    "reading": "sha",
+    "meanings": [
+      "sha"
+    ],
+    "seq": 75,
+    "data": {
+      "script": "hiragana",
+      "group": "youon",
+      "row": "し",
+      "row_label": "し拗音",
+      "col": "a",
+      "strokes_key": "しゃ"
+    }
+  },
+  {
+    "id": "kana-hira-youon-shu-30573085",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "しゅ",
+    "reading": "shu",
+    "meanings": [
+      "shu"
+    ],
+    "seq": 76,
+    "data": {
+      "script": "hiragana",
+      "group": "youon",
+      "row": "し",
+      "row_label": "し拗音",
+      "col": "u",
+      "strokes_key": "しゅ"
+    }
+  },
+  {
+    "id": "kana-hira-youon-sho-30573087",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "しょ",
+    "reading": "sho",
+    "meanings": [
+      "sho"
+    ],
+    "seq": 77,
+    "data": {
+      "script": "hiragana",
+      "group": "youon",
+      "row": "し",
+      "row_label": "し拗音",
+      "col": "o",
+      "strokes_key": "しょ"
+    }
+  },
+  {
+    "id": "kana-hira-youon-cha-30613083",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "ちゃ",
+    "reading": "cha",
+    "meanings": [
+      "cha"
+    ],
+    "seq": 78,
+    "data": {
+      "script": "hiragana",
+      "group": "youon",
+      "row": "ち",
+      "row_label": "ち拗音",
+      "col": "a",
+      "strokes_key": "ちゃ"
+    }
+  },
+  {
+    "id": "kana-hira-youon-chu-30613085",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "ちゅ",
+    "reading": "chu",
+    "meanings": [
+      "chu"
+    ],
+    "seq": 79,
+    "data": {
+      "script": "hiragana",
+      "group": "youon",
+      "row": "ち",
+      "row_label": "ち拗音",
+      "col": "u",
+      "strokes_key": "ちゅ"
+    }
+  },
+  {
+    "id": "kana-hira-youon-cho-30613087",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "ちょ",
+    "reading": "cho",
+    "meanings": [
+      "cho"
+    ],
+    "seq": 80,
+    "data": {
+      "script": "hiragana",
+      "group": "youon",
+      "row": "ち",
+      "row_label": "ち拗音",
+      "col": "o",
+      "strokes_key": "ちょ"
+    }
+  },
+  {
+    "id": "kana-hira-youon-nya-306b3083",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "にゃ",
+    "reading": "nya",
+    "meanings": [
+      "nya"
+    ],
+    "seq": 81,
+    "data": {
+      "script": "hiragana",
+      "group": "youon",
+      "row": "に",
+      "row_label": "に拗音",
+      "col": "a",
+      "strokes_key": "にゃ"
+    }
+  },
+  {
+    "id": "kana-hira-youon-nyu-306b3085",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "にゅ",
+    "reading": "nyu",
+    "meanings": [
+      "nyu"
+    ],
+    "seq": 82,
+    "data": {
+      "script": "hiragana",
+      "group": "youon",
+      "row": "に",
+      "row_label": "に拗音",
+      "col": "u",
+      "strokes_key": "にゅ"
+    }
+  },
+  {
+    "id": "kana-hira-youon-nyo-306b3087",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "にょ",
+    "reading": "nyo",
+    "meanings": [
+      "nyo"
+    ],
+    "seq": 83,
+    "data": {
+      "script": "hiragana",
+      "group": "youon",
+      "row": "に",
+      "row_label": "に拗音",
+      "col": "o",
+      "strokes_key": "にょ"
+    }
+  },
+  {
+    "id": "kana-hira-youon-hya-30723083",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "ひゃ",
+    "reading": "hya",
+    "meanings": [
+      "hya"
+    ],
+    "seq": 84,
+    "data": {
+      "script": "hiragana",
+      "group": "youon",
+      "row": "ひ",
+      "row_label": "ひ拗音",
+      "col": "a",
+      "strokes_key": "ひゃ"
+    }
+  },
+  {
+    "id": "kana-hira-youon-hyu-30723085",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "ひゅ",
+    "reading": "hyu",
+    "meanings": [
+      "hyu"
+    ],
+    "seq": 85,
+    "data": {
+      "script": "hiragana",
+      "group": "youon",
+      "row": "ひ",
+      "row_label": "ひ拗音",
+      "col": "u",
+      "strokes_key": "ひゅ"
+    }
+  },
+  {
+    "id": "kana-hira-youon-hyo-30723087",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "ひょ",
+    "reading": "hyo",
+    "meanings": [
+      "hyo"
+    ],
+    "seq": 86,
+    "data": {
+      "script": "hiragana",
+      "group": "youon",
+      "row": "ひ",
+      "row_label": "ひ拗音",
+      "col": "o",
+      "strokes_key": "ひょ"
+    }
+  },
+  {
+    "id": "kana-hira-youon-mya-307f3083",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "みゃ",
+    "reading": "mya",
+    "meanings": [
+      "mya"
+    ],
+    "seq": 87,
+    "data": {
+      "script": "hiragana",
+      "group": "youon",
+      "row": "み",
+      "row_label": "み拗音",
+      "col": "a",
+      "strokes_key": "みゃ"
+    }
+  },
+  {
+    "id": "kana-hira-youon-myu-307f3085",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "みゅ",
+    "reading": "myu",
+    "meanings": [
+      "myu"
+    ],
+    "seq": 88,
+    "data": {
+      "script": "hiragana",
+      "group": "youon",
+      "row": "み",
+      "row_label": "み拗音",
+      "col": "u",
+      "strokes_key": "みゅ"
+    }
+  },
+  {
+    "id": "kana-hira-youon-myo-307f3087",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "みょ",
+    "reading": "myo",
+    "meanings": [
+      "myo"
+    ],
+    "seq": 89,
+    "data": {
+      "script": "hiragana",
+      "group": "youon",
+      "row": "み",
+      "row_label": "み拗音",
+      "col": "o",
+      "strokes_key": "みょ"
+    }
+  },
+  {
+    "id": "kana-hira-youon-rya-308a3083",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "りゃ",
+    "reading": "rya",
+    "meanings": [
+      "rya"
+    ],
+    "seq": 90,
+    "data": {
+      "script": "hiragana",
+      "group": "youon",
+      "row": "り",
+      "row_label": "り拗音",
+      "col": "a",
+      "strokes_key": "りゃ"
+    }
+  },
+  {
+    "id": "kana-hira-youon-ryu-308a3085",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "りゅ",
+    "reading": "ryu",
+    "meanings": [
+      "ryu"
+    ],
+    "seq": 91,
+    "data": {
+      "script": "hiragana",
+      "group": "youon",
+      "row": "り",
+      "row_label": "り拗音",
+      "col": "u",
+      "strokes_key": "りゅ"
+    }
+  },
+  {
+    "id": "kana-hira-youon-ryo-308a3087",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "りょ",
+    "reading": "ryo",
+    "meanings": [
+      "ryo"
+    ],
+    "seq": 92,
+    "data": {
+      "script": "hiragana",
+      "group": "youon",
+      "row": "り",
+      "row_label": "り拗音",
+      "col": "o",
+      "strokes_key": "りょ"
+    }
+  },
+  {
+    "id": "kana-hira-youon-gya-304e3083",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "ぎゃ",
+    "reading": "gya",
+    "meanings": [
+      "gya"
+    ],
+    "seq": 93,
+    "data": {
+      "script": "hiragana",
+      "group": "youon",
+      "row": "ぎ",
+      "row_label": "ぎ拗音",
+      "col": "a",
+      "strokes_key": "ぎゃ"
+    }
+  },
+  {
+    "id": "kana-hira-youon-gyu-304e3085",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "ぎゅ",
+    "reading": "gyu",
+    "meanings": [
+      "gyu"
+    ],
+    "seq": 94,
+    "data": {
+      "script": "hiragana",
+      "group": "youon",
+      "row": "ぎ",
+      "row_label": "ぎ拗音",
+      "col": "u",
+      "strokes_key": "ぎゅ"
+    }
+  },
+  {
+    "id": "kana-hira-youon-gyo-304e3087",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "ぎょ",
+    "reading": "gyo",
+    "meanings": [
+      "gyo"
+    ],
+    "seq": 95,
+    "data": {
+      "script": "hiragana",
+      "group": "youon",
+      "row": "ぎ",
+      "row_label": "ぎ拗音",
+      "col": "o",
+      "strokes_key": "ぎょ"
+    }
+  },
+  {
+    "id": "kana-hira-youon-ja-30583083",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "じゃ",
+    "reading": "ja",
+    "meanings": [
+      "ja"
+    ],
+    "seq": 96,
+    "data": {
+      "script": "hiragana",
+      "group": "youon",
+      "row": "じ",
+      "row_label": "じ拗音",
+      "col": "a",
+      "strokes_key": "じゃ"
+    }
+  },
+  {
+    "id": "kana-hira-youon-ju-30583085",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "じゅ",
+    "reading": "ju",
+    "meanings": [
+      "ju"
+    ],
+    "seq": 97,
+    "data": {
+      "script": "hiragana",
+      "group": "youon",
+      "row": "じ",
+      "row_label": "じ拗音",
+      "col": "u",
+      "strokes_key": "じゅ"
+    }
+  },
+  {
+    "id": "kana-hira-youon-jo-30583087",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "じょ",
+    "reading": "jo",
+    "meanings": [
+      "jo"
+    ],
+    "seq": 98,
+    "data": {
+      "script": "hiragana",
+      "group": "youon",
+      "row": "じ",
+      "row_label": "じ拗音",
+      "col": "o",
+      "strokes_key": "じょ"
+    }
+  },
+  {
+    "id": "kana-hira-youon-bya-30733083",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "びゃ",
+    "reading": "bya",
+    "meanings": [
+      "bya"
+    ],
+    "seq": 99,
+    "data": {
+      "script": "hiragana",
+      "group": "youon",
+      "row": "び",
+      "row_label": "び拗音",
+      "col": "a",
+      "strokes_key": "びゃ"
+    }
+  },
+  {
+    "id": "kana-hira-youon-byu-30733085",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "びゅ",
+    "reading": "byu",
+    "meanings": [
+      "byu"
+    ],
+    "seq": 100,
+    "data": {
+      "script": "hiragana",
+      "group": "youon",
+      "row": "び",
+      "row_label": "び拗音",
+      "col": "u",
+      "strokes_key": "びゅ"
+    }
+  },
+  {
+    "id": "kana-hira-youon-byo-30733087",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "びょ",
+    "reading": "byo",
+    "meanings": [
+      "byo"
+    ],
+    "seq": 101,
+    "data": {
+      "script": "hiragana",
+      "group": "youon",
+      "row": "び",
+      "row_label": "び拗音",
+      "col": "o",
+      "strokes_key": "びょ"
+    }
+  },
+  {
+    "id": "kana-hira-youon-pya-30743083",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "ぴゃ",
+    "reading": "pya",
+    "meanings": [
+      "pya"
+    ],
+    "seq": 102,
+    "data": {
+      "script": "hiragana",
+      "group": "youon",
+      "row": "ぴ",
+      "row_label": "ぴ拗音",
+      "col": "a",
+      "strokes_key": "ぴゃ"
+    }
+  },
+  {
+    "id": "kana-hira-youon-pyu-30743085",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "ぴゅ",
+    "reading": "pyu",
+    "meanings": [
+      "pyu"
+    ],
+    "seq": 103,
+    "data": {
+      "script": "hiragana",
+      "group": "youon",
+      "row": "ぴ",
+      "row_label": "ぴ拗音",
+      "col": "u",
+      "strokes_key": "ぴゅ"
+    }
+  },
+  {
+    "id": "kana-hira-youon-pyo-30743087",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "ぴょ",
+    "reading": "pyo",
+    "meanings": [
+      "pyo"
+    ],
+    "seq": 104,
+    "data": {
+      "script": "hiragana",
+      "group": "youon",
+      "row": "ぴ",
+      "row_label": "ぴ拗音",
+      "col": "o",
+      "strokes_key": "ぴょ"
+    }
+  },
+  {
+    "id": "kana-kata-basic-a-30a2",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "ア",
+    "reading": "a",
+    "meanings": [
+      "a"
+    ],
+    "seq": 105,
+    "data": {
+      "script": "katakana",
+      "group": "basic",
+      "row": "a",
+      "row_label": "ア行",
+      "col": "a",
+      "strokes_key": "ア"
+    }
+  },
+  {
+    "id": "kana-kata-basic-i-30a4",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "イ",
+    "reading": "i",
+    "meanings": [
+      "i"
+    ],
+    "seq": 106,
+    "data": {
+      "script": "katakana",
+      "group": "basic",
+      "row": "a",
+      "row_label": "ア行",
+      "col": "i",
+      "strokes_key": "イ"
+    }
+  },
+  {
+    "id": "kana-kata-basic-u-30a6",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "ウ",
+    "reading": "u",
+    "meanings": [
+      "u"
+    ],
+    "seq": 107,
+    "data": {
+      "script": "katakana",
+      "group": "basic",
+      "row": "a",
+      "row_label": "ア行",
+      "col": "u",
+      "strokes_key": "ウ"
+    }
+  },
+  {
+    "id": "kana-kata-basic-e-30a8",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "エ",
+    "reading": "e",
+    "meanings": [
+      "e"
+    ],
+    "seq": 108,
+    "data": {
+      "script": "katakana",
+      "group": "basic",
+      "row": "a",
+      "row_label": "ア行",
+      "col": "e",
+      "strokes_key": "エ"
+    }
+  },
+  {
+    "id": "kana-kata-basic-o-30aa",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "オ",
+    "reading": "o",
+    "meanings": [
+      "o"
+    ],
+    "seq": 109,
+    "data": {
+      "script": "katakana",
+      "group": "basic",
+      "row": "a",
+      "row_label": "ア行",
+      "col": "o",
+      "strokes_key": "オ"
+    }
+  },
+  {
+    "id": "kana-kata-basic-ka-30ab",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "カ",
+    "reading": "ka",
+    "meanings": [
+      "ka"
+    ],
+    "seq": 110,
+    "data": {
+      "script": "katakana",
+      "group": "basic",
+      "row": "k",
+      "row_label": "カ行",
+      "col": "a",
+      "strokes_key": "カ"
+    }
+  },
+  {
+    "id": "kana-kata-basic-ki-30ad",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "キ",
+    "reading": "ki",
+    "meanings": [
+      "ki"
+    ],
+    "seq": 111,
+    "data": {
+      "script": "katakana",
+      "group": "basic",
+      "row": "k",
+      "row_label": "カ行",
+      "col": "i",
+      "strokes_key": "キ"
+    }
+  },
+  {
+    "id": "kana-kata-basic-ku-30af",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "ク",
+    "reading": "ku",
+    "meanings": [
+      "ku"
+    ],
+    "seq": 112,
+    "data": {
+      "script": "katakana",
+      "group": "basic",
+      "row": "k",
+      "row_label": "カ行",
+      "col": "u",
+      "strokes_key": "ク"
+    }
+  },
+  {
+    "id": "kana-kata-basic-ke-30b1",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "ケ",
+    "reading": "ke",
+    "meanings": [
+      "ke"
+    ],
+    "seq": 113,
+    "data": {
+      "script": "katakana",
+      "group": "basic",
+      "row": "k",
+      "row_label": "カ行",
+      "col": "e",
+      "strokes_key": "ケ"
+    }
+  },
+  {
+    "id": "kana-kata-basic-ko-30b3",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "コ",
+    "reading": "ko",
+    "meanings": [
+      "ko"
+    ],
+    "seq": 114,
+    "data": {
+      "script": "katakana",
+      "group": "basic",
+      "row": "k",
+      "row_label": "カ行",
+      "col": "o",
+      "strokes_key": "コ"
+    }
+  },
+  {
+    "id": "kana-kata-basic-sa-30b5",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "サ",
+    "reading": "sa",
+    "meanings": [
+      "sa"
+    ],
+    "seq": 115,
+    "data": {
+      "script": "katakana",
+      "group": "basic",
+      "row": "s",
+      "row_label": "サ行",
+      "col": "a",
+      "strokes_key": "サ"
+    }
+  },
+  {
+    "id": "kana-kata-basic-shi-30b7",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "シ",
+    "reading": "shi",
+    "meanings": [
+      "shi"
+    ],
+    "seq": 116,
+    "data": {
+      "script": "katakana",
+      "group": "basic",
+      "row": "s",
+      "row_label": "サ行",
+      "col": "i",
+      "strokes_key": "シ"
+    }
+  },
+  {
+    "id": "kana-kata-basic-su-30b9",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "ス",
+    "reading": "su",
+    "meanings": [
+      "su"
+    ],
+    "seq": 117,
+    "data": {
+      "script": "katakana",
+      "group": "basic",
+      "row": "s",
+      "row_label": "サ行",
+      "col": "u",
+      "strokes_key": "ス"
+    }
+  },
+  {
+    "id": "kana-kata-basic-se-30bb",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "セ",
+    "reading": "se",
+    "meanings": [
+      "se"
+    ],
+    "seq": 118,
+    "data": {
+      "script": "katakana",
+      "group": "basic",
+      "row": "s",
+      "row_label": "サ行",
+      "col": "e",
+      "strokes_key": "セ"
+    }
+  },
+  {
+    "id": "kana-kata-basic-so-30bd",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "ソ",
+    "reading": "so",
+    "meanings": [
+      "so"
+    ],
+    "seq": 119,
+    "data": {
+      "script": "katakana",
+      "group": "basic",
+      "row": "s",
+      "row_label": "サ行",
+      "col": "o",
+      "strokes_key": "ソ"
+    }
+  },
+  {
+    "id": "kana-kata-basic-ta-30bf",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "タ",
+    "reading": "ta",
+    "meanings": [
+      "ta"
+    ],
+    "seq": 120,
+    "data": {
+      "script": "katakana",
+      "group": "basic",
+      "row": "t",
+      "row_label": "タ行",
+      "col": "a",
+      "strokes_key": "タ"
+    }
+  },
+  {
+    "id": "kana-kata-basic-chi-30c1",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "チ",
+    "reading": "chi",
+    "meanings": [
+      "chi"
+    ],
+    "seq": 121,
+    "data": {
+      "script": "katakana",
+      "group": "basic",
+      "row": "t",
+      "row_label": "タ行",
+      "col": "i",
+      "strokes_key": "チ"
+    }
+  },
+  {
+    "id": "kana-kata-basic-tsu-30c4",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "ツ",
+    "reading": "tsu",
+    "meanings": [
+      "tsu"
+    ],
+    "seq": 122,
+    "data": {
+      "script": "katakana",
+      "group": "basic",
+      "row": "t",
+      "row_label": "タ行",
+      "col": "u",
+      "strokes_key": "ツ"
+    }
+  },
+  {
+    "id": "kana-kata-basic-te-30c6",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "テ",
+    "reading": "te",
+    "meanings": [
+      "te"
+    ],
+    "seq": 123,
+    "data": {
+      "script": "katakana",
+      "group": "basic",
+      "row": "t",
+      "row_label": "タ行",
+      "col": "e",
+      "strokes_key": "テ"
+    }
+  },
+  {
+    "id": "kana-kata-basic-to-30c8",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "ト",
+    "reading": "to",
+    "meanings": [
+      "to"
+    ],
+    "seq": 124,
+    "data": {
+      "script": "katakana",
+      "group": "basic",
+      "row": "t",
+      "row_label": "タ行",
+      "col": "o",
+      "strokes_key": "ト"
+    }
+  },
+  {
+    "id": "kana-kata-basic-na-30ca",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "ナ",
+    "reading": "na",
+    "meanings": [
+      "na"
+    ],
+    "seq": 125,
+    "data": {
+      "script": "katakana",
+      "group": "basic",
+      "row": "n",
+      "row_label": "ナ行",
+      "col": "a",
+      "strokes_key": "ナ"
+    }
+  },
+  {
+    "id": "kana-kata-basic-ni-30cb",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "ニ",
+    "reading": "ni",
+    "meanings": [
+      "ni"
+    ],
+    "seq": 126,
+    "data": {
+      "script": "katakana",
+      "group": "basic",
+      "row": "n",
+      "row_label": "ナ行",
+      "col": "i",
+      "strokes_key": "ニ"
+    }
+  },
+  {
+    "id": "kana-kata-basic-nu-30cc",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "ヌ",
+    "reading": "nu",
+    "meanings": [
+      "nu"
+    ],
+    "seq": 127,
+    "data": {
+      "script": "katakana",
+      "group": "basic",
+      "row": "n",
+      "row_label": "ナ行",
+      "col": "u",
+      "strokes_key": "ヌ"
+    }
+  },
+  {
+    "id": "kana-kata-basic-ne-30cd",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "ネ",
+    "reading": "ne",
+    "meanings": [
+      "ne"
+    ],
+    "seq": 128,
+    "data": {
+      "script": "katakana",
+      "group": "basic",
+      "row": "n",
+      "row_label": "ナ行",
+      "col": "e",
+      "strokes_key": "ネ"
+    }
+  },
+  {
+    "id": "kana-kata-basic-no-30ce",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "ノ",
+    "reading": "no",
+    "meanings": [
+      "no"
+    ],
+    "seq": 129,
+    "data": {
+      "script": "katakana",
+      "group": "basic",
+      "row": "n",
+      "row_label": "ナ行",
+      "col": "o",
+      "strokes_key": "ノ"
+    }
+  },
+  {
+    "id": "kana-kata-basic-ha-30cf",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "ハ",
+    "reading": "ha",
+    "meanings": [
+      "ha"
+    ],
+    "seq": 130,
+    "data": {
+      "script": "katakana",
+      "group": "basic",
+      "row": "h",
+      "row_label": "ハ行",
+      "col": "a",
+      "strokes_key": "ハ"
+    }
+  },
+  {
+    "id": "kana-kata-basic-hi-30d2",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "ヒ",
+    "reading": "hi",
+    "meanings": [
+      "hi"
+    ],
+    "seq": 131,
+    "data": {
+      "script": "katakana",
+      "group": "basic",
+      "row": "h",
+      "row_label": "ハ行",
+      "col": "i",
+      "strokes_key": "ヒ"
+    }
+  },
+  {
+    "id": "kana-kata-basic-fu-30d5",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "フ",
+    "reading": "fu",
+    "meanings": [
+      "fu"
+    ],
+    "seq": 132,
+    "data": {
+      "script": "katakana",
+      "group": "basic",
+      "row": "h",
+      "row_label": "ハ行",
+      "col": "u",
+      "strokes_key": "フ"
+    }
+  },
+  {
+    "id": "kana-kata-basic-he-30d8",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "ヘ",
+    "reading": "he",
+    "meanings": [
+      "he"
+    ],
+    "seq": 133,
+    "data": {
+      "script": "katakana",
+      "group": "basic",
+      "row": "h",
+      "row_label": "ハ行",
+      "col": "e",
+      "strokes_key": "ヘ"
+    }
+  },
+  {
+    "id": "kana-kata-basic-ho-30db",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "ホ",
+    "reading": "ho",
+    "meanings": [
+      "ho"
+    ],
+    "seq": 134,
+    "data": {
+      "script": "katakana",
+      "group": "basic",
+      "row": "h",
+      "row_label": "ハ行",
+      "col": "o",
+      "strokes_key": "ホ"
+    }
+  },
+  {
+    "id": "kana-kata-basic-ma-30de",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "マ",
+    "reading": "ma",
+    "meanings": [
+      "ma"
+    ],
+    "seq": 135,
+    "data": {
+      "script": "katakana",
+      "group": "basic",
+      "row": "m",
+      "row_label": "マ行",
+      "col": "a",
+      "strokes_key": "マ"
+    }
+  },
+  {
+    "id": "kana-kata-basic-mi-30df",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "ミ",
+    "reading": "mi",
+    "meanings": [
+      "mi"
+    ],
+    "seq": 136,
+    "data": {
+      "script": "katakana",
+      "group": "basic",
+      "row": "m",
+      "row_label": "マ行",
+      "col": "i",
+      "strokes_key": "ミ"
+    }
+  },
+  {
+    "id": "kana-kata-basic-mu-30e0",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "ム",
+    "reading": "mu",
+    "meanings": [
+      "mu"
+    ],
+    "seq": 137,
+    "data": {
+      "script": "katakana",
+      "group": "basic",
+      "row": "m",
+      "row_label": "マ行",
+      "col": "u",
+      "strokes_key": "ム"
+    }
+  },
+  {
+    "id": "kana-kata-basic-me-30e1",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "メ",
+    "reading": "me",
+    "meanings": [
+      "me"
+    ],
+    "seq": 138,
+    "data": {
+      "script": "katakana",
+      "group": "basic",
+      "row": "m",
+      "row_label": "マ行",
+      "col": "e",
+      "strokes_key": "メ"
+    }
+  },
+  {
+    "id": "kana-kata-basic-mo-30e2",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "モ",
+    "reading": "mo",
+    "meanings": [
+      "mo"
+    ],
+    "seq": 139,
+    "data": {
+      "script": "katakana",
+      "group": "basic",
+      "row": "m",
+      "row_label": "マ行",
+      "col": "o",
+      "strokes_key": "モ"
+    }
+  },
+  {
+    "id": "kana-kata-basic-ya-30e4",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "ヤ",
+    "reading": "ya",
+    "meanings": [
+      "ya"
+    ],
+    "seq": 140,
+    "data": {
+      "script": "katakana",
+      "group": "basic",
+      "row": "y",
+      "row_label": "ヤ行",
+      "col": "a",
+      "strokes_key": "ヤ"
+    }
+  },
+  {
+    "id": "kana-kata-basic-yu-30e6",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "ユ",
+    "reading": "yu",
+    "meanings": [
+      "yu"
+    ],
+    "seq": 141,
+    "data": {
+      "script": "katakana",
+      "group": "basic",
+      "row": "y",
+      "row_label": "ヤ行",
+      "col": "u",
+      "strokes_key": "ユ"
+    }
+  },
+  {
+    "id": "kana-kata-basic-yo-30e8",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "ヨ",
+    "reading": "yo",
+    "meanings": [
+      "yo"
+    ],
+    "seq": 142,
+    "data": {
+      "script": "katakana",
+      "group": "basic",
+      "row": "y",
+      "row_label": "ヤ行",
+      "col": "o",
+      "strokes_key": "ヨ"
+    }
+  },
+  {
+    "id": "kana-kata-basic-ra-30e9",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "ラ",
+    "reading": "ra",
+    "meanings": [
+      "ra"
+    ],
+    "seq": 143,
+    "data": {
+      "script": "katakana",
+      "group": "basic",
+      "row": "r",
+      "row_label": "ラ行",
+      "col": "a",
+      "strokes_key": "ラ"
+    }
+  },
+  {
+    "id": "kana-kata-basic-ri-30ea",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "リ",
+    "reading": "ri",
+    "meanings": [
+      "ri"
+    ],
+    "seq": 144,
+    "data": {
+      "script": "katakana",
+      "group": "basic",
+      "row": "r",
+      "row_label": "ラ行",
+      "col": "i",
+      "strokes_key": "リ"
+    }
+  },
+  {
+    "id": "kana-kata-basic-ru-30eb",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "ル",
+    "reading": "ru",
+    "meanings": [
+      "ru"
+    ],
+    "seq": 145,
+    "data": {
+      "script": "katakana",
+      "group": "basic",
+      "row": "r",
+      "row_label": "ラ行",
+      "col": "u",
+      "strokes_key": "ル"
+    }
+  },
+  {
+    "id": "kana-kata-basic-re-30ec",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "レ",
+    "reading": "re",
+    "meanings": [
+      "re"
+    ],
+    "seq": 146,
+    "data": {
+      "script": "katakana",
+      "group": "basic",
+      "row": "r",
+      "row_label": "ラ行",
+      "col": "e",
+      "strokes_key": "レ"
+    }
+  },
+  {
+    "id": "kana-kata-basic-ro-30ed",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "ロ",
+    "reading": "ro",
+    "meanings": [
+      "ro"
+    ],
+    "seq": 147,
+    "data": {
+      "script": "katakana",
+      "group": "basic",
+      "row": "r",
+      "row_label": "ラ行",
+      "col": "o",
+      "strokes_key": "ロ"
+    }
+  },
+  {
+    "id": "kana-kata-basic-wa-30ef",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "ワ",
+    "reading": "wa",
+    "meanings": [
+      "wa"
+    ],
+    "seq": 148,
+    "data": {
+      "script": "katakana",
+      "group": "basic",
+      "row": "w",
+      "row_label": "ワ行",
+      "col": "a",
+      "strokes_key": "ワ"
+    }
+  },
+  {
+    "id": "kana-kata-basic-wo-30f2",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "ヲ",
+    "reading": "wo",
+    "meanings": [
+      "wo"
+    ],
+    "seq": 149,
+    "data": {
+      "script": "katakana",
+      "group": "basic",
+      "row": "w",
+      "row_label": "ワ行",
+      "col": "o",
+      "strokes_key": "ヲ"
+    }
+  },
+  {
+    "id": "kana-kata-basic-n-30f3",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "ン",
+    "reading": "n",
+    "meanings": [
+      "n"
+    ],
+    "seq": 150,
+    "data": {
+      "script": "katakana",
+      "group": "basic",
+      "row": "n-final",
+      "row_label": "ン",
+      "col": "a",
+      "strokes_key": "ン"
+    }
+  },
+  {
+    "id": "kana-kata-dakuten-ga-30ac",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "ガ",
+    "reading": "ga",
+    "meanings": [
+      "ga"
+    ],
+    "seq": 151,
+    "data": {
+      "script": "katakana",
+      "group": "dakuten",
+      "row": "g",
+      "row_label": "ガ行",
+      "col": "a",
+      "strokes_key": "ガ"
+    }
+  },
+  {
+    "id": "kana-kata-dakuten-gi-30ae",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "ギ",
+    "reading": "gi",
+    "meanings": [
+      "gi"
+    ],
+    "seq": 152,
+    "data": {
+      "script": "katakana",
+      "group": "dakuten",
+      "row": "g",
+      "row_label": "ガ行",
+      "col": "i",
+      "strokes_key": "ギ"
+    }
+  },
+  {
+    "id": "kana-kata-dakuten-gu-30b0",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "グ",
+    "reading": "gu",
+    "meanings": [
+      "gu"
+    ],
+    "seq": 153,
+    "data": {
+      "script": "katakana",
+      "group": "dakuten",
+      "row": "g",
+      "row_label": "ガ行",
+      "col": "u",
+      "strokes_key": "グ"
+    }
+  },
+  {
+    "id": "kana-kata-dakuten-ge-30b2",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "ゲ",
+    "reading": "ge",
+    "meanings": [
+      "ge"
+    ],
+    "seq": 154,
+    "data": {
+      "script": "katakana",
+      "group": "dakuten",
+      "row": "g",
+      "row_label": "ガ行",
+      "col": "e",
+      "strokes_key": "ゲ"
+    }
+  },
+  {
+    "id": "kana-kata-dakuten-go-30b4",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "ゴ",
+    "reading": "go",
+    "meanings": [
+      "go"
+    ],
+    "seq": 155,
+    "data": {
+      "script": "katakana",
+      "group": "dakuten",
+      "row": "g",
+      "row_label": "ガ行",
+      "col": "o",
+      "strokes_key": "ゴ"
+    }
+  },
+  {
+    "id": "kana-kata-dakuten-za-30b6",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "ザ",
+    "reading": "za",
+    "meanings": [
+      "za"
+    ],
+    "seq": 156,
+    "data": {
+      "script": "katakana",
+      "group": "dakuten",
+      "row": "z",
+      "row_label": "ザ行",
+      "col": "a",
+      "strokes_key": "ザ"
+    }
+  },
+  {
+    "id": "kana-kata-dakuten-ji-30b8",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "ジ",
+    "reading": "ji",
+    "meanings": [
+      "ji"
+    ],
+    "seq": 157,
+    "data": {
+      "script": "katakana",
+      "group": "dakuten",
+      "row": "z",
+      "row_label": "ザ行",
+      "col": "i",
+      "strokes_key": "ジ"
+    }
+  },
+  {
+    "id": "kana-kata-dakuten-zu-30ba",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "ズ",
+    "reading": "zu",
+    "meanings": [
+      "zu"
+    ],
+    "seq": 158,
+    "data": {
+      "script": "katakana",
+      "group": "dakuten",
+      "row": "z",
+      "row_label": "ザ行",
+      "col": "u",
+      "strokes_key": "ズ"
+    }
+  },
+  {
+    "id": "kana-kata-dakuten-ze-30bc",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "ゼ",
+    "reading": "ze",
+    "meanings": [
+      "ze"
+    ],
+    "seq": 159,
+    "data": {
+      "script": "katakana",
+      "group": "dakuten",
+      "row": "z",
+      "row_label": "ザ行",
+      "col": "e",
+      "strokes_key": "ゼ"
+    }
+  },
+  {
+    "id": "kana-kata-dakuten-zo-30be",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "ゾ",
+    "reading": "zo",
+    "meanings": [
+      "zo"
+    ],
+    "seq": 160,
+    "data": {
+      "script": "katakana",
+      "group": "dakuten",
+      "row": "z",
+      "row_label": "ザ行",
+      "col": "o",
+      "strokes_key": "ゾ"
+    }
+  },
+  {
+    "id": "kana-kata-dakuten-da-30c0",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "ダ",
+    "reading": "da",
+    "meanings": [
+      "da"
+    ],
+    "seq": 161,
+    "data": {
+      "script": "katakana",
+      "group": "dakuten",
+      "row": "d",
+      "row_label": "ダ行",
+      "col": "a",
+      "strokes_key": "ダ"
+    }
+  },
+  {
+    "id": "kana-kata-dakuten-ji-30c2",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "ヂ",
+    "reading": "ji",
+    "meanings": [
+      "ji",
+      "di"
+    ],
+    "seq": 162,
+    "data": {
+      "script": "katakana",
+      "group": "dakuten",
+      "row": "d",
+      "row_label": "ダ行",
+      "col": "i",
+      "strokes_key": "ヂ"
+    }
+  },
+  {
+    "id": "kana-kata-dakuten-zu-30c5",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "ヅ",
+    "reading": "zu",
+    "meanings": [
+      "zu",
+      "du"
+    ],
+    "seq": 163,
+    "data": {
+      "script": "katakana",
+      "group": "dakuten",
+      "row": "d",
+      "row_label": "ダ行",
+      "col": "u",
+      "strokes_key": "ヅ"
+    }
+  },
+  {
+    "id": "kana-kata-dakuten-de-30c7",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "デ",
+    "reading": "de",
+    "meanings": [
+      "de"
+    ],
+    "seq": 164,
+    "data": {
+      "script": "katakana",
+      "group": "dakuten",
+      "row": "d",
+      "row_label": "ダ行",
+      "col": "e",
+      "strokes_key": "デ"
+    }
+  },
+  {
+    "id": "kana-kata-dakuten-do-30c9",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "ド",
+    "reading": "do",
+    "meanings": [
+      "do"
+    ],
+    "seq": 165,
+    "data": {
+      "script": "katakana",
+      "group": "dakuten",
+      "row": "d",
+      "row_label": "ダ行",
+      "col": "o",
+      "strokes_key": "ド"
+    }
+  },
+  {
+    "id": "kana-kata-dakuten-ba-30d0",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "バ",
+    "reading": "ba",
+    "meanings": [
+      "ba"
+    ],
+    "seq": 166,
+    "data": {
+      "script": "katakana",
+      "group": "dakuten",
+      "row": "b",
+      "row_label": "バ行",
+      "col": "a",
+      "strokes_key": "バ"
+    }
+  },
+  {
+    "id": "kana-kata-dakuten-bi-30d3",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "ビ",
+    "reading": "bi",
+    "meanings": [
+      "bi"
+    ],
+    "seq": 167,
+    "data": {
+      "script": "katakana",
+      "group": "dakuten",
+      "row": "b",
+      "row_label": "バ行",
+      "col": "i",
+      "strokes_key": "ビ"
+    }
+  },
+  {
+    "id": "kana-kata-dakuten-bu-30d6",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "ブ",
+    "reading": "bu",
+    "meanings": [
+      "bu"
+    ],
+    "seq": 168,
+    "data": {
+      "script": "katakana",
+      "group": "dakuten",
+      "row": "b",
+      "row_label": "バ行",
+      "col": "u",
+      "strokes_key": "ブ"
+    }
+  },
+  {
+    "id": "kana-kata-dakuten-be-30d9",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "ベ",
+    "reading": "be",
+    "meanings": [
+      "be"
+    ],
+    "seq": 169,
+    "data": {
+      "script": "katakana",
+      "group": "dakuten",
+      "row": "b",
+      "row_label": "バ行",
+      "col": "e",
+      "strokes_key": "ベ"
+    }
+  },
+  {
+    "id": "kana-kata-dakuten-bo-30dc",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "ボ",
+    "reading": "bo",
+    "meanings": [
+      "bo"
+    ],
+    "seq": 170,
+    "data": {
+      "script": "katakana",
+      "group": "dakuten",
+      "row": "b",
+      "row_label": "バ行",
+      "col": "o",
+      "strokes_key": "ボ"
+    }
+  },
+  {
+    "id": "kana-kata-dakuten-pa-30d1",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "パ",
+    "reading": "pa",
+    "meanings": [
+      "pa"
+    ],
+    "seq": 171,
+    "data": {
+      "script": "katakana",
+      "group": "dakuten",
+      "row": "p",
+      "row_label": "パ行",
+      "col": "a",
+      "strokes_key": "パ"
+    }
+  },
+  {
+    "id": "kana-kata-dakuten-pi-30d4",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "ピ",
+    "reading": "pi",
+    "meanings": [
+      "pi"
+    ],
+    "seq": 172,
+    "data": {
+      "script": "katakana",
+      "group": "dakuten",
+      "row": "p",
+      "row_label": "パ行",
+      "col": "i",
+      "strokes_key": "ピ"
+    }
+  },
+  {
+    "id": "kana-kata-dakuten-pu-30d7",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "プ",
+    "reading": "pu",
+    "meanings": [
+      "pu"
+    ],
+    "seq": 173,
+    "data": {
+      "script": "katakana",
+      "group": "dakuten",
+      "row": "p",
+      "row_label": "パ行",
+      "col": "u",
+      "strokes_key": "プ"
+    }
+  },
+  {
+    "id": "kana-kata-dakuten-pe-30da",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "ペ",
+    "reading": "pe",
+    "meanings": [
+      "pe"
+    ],
+    "seq": 174,
+    "data": {
+      "script": "katakana",
+      "group": "dakuten",
+      "row": "p",
+      "row_label": "パ行",
+      "col": "e",
+      "strokes_key": "ペ"
+    }
+  },
+  {
+    "id": "kana-kata-dakuten-po-30dd",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "ポ",
+    "reading": "po",
+    "meanings": [
+      "po"
+    ],
+    "seq": 175,
+    "data": {
+      "script": "katakana",
+      "group": "dakuten",
+      "row": "p",
+      "row_label": "パ行",
+      "col": "o",
+      "strokes_key": "ポ"
+    }
+  },
+  {
+    "id": "kana-kata-youon-kya-30ad30e3",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "キャ",
+    "reading": "kya",
+    "meanings": [
+      "kya"
+    ],
+    "seq": 176,
+    "data": {
+      "script": "katakana",
+      "group": "youon",
+      "row": "き",
+      "row_label": "キ拗音",
+      "col": "a",
+      "strokes_key": "キャ"
+    }
+  },
+  {
+    "id": "kana-kata-youon-kyu-30ad30e5",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "キュ",
+    "reading": "kyu",
+    "meanings": [
+      "kyu"
+    ],
+    "seq": 177,
+    "data": {
+      "script": "katakana",
+      "group": "youon",
+      "row": "き",
+      "row_label": "キ拗音",
+      "col": "u",
+      "strokes_key": "キュ"
+    }
+  },
+  {
+    "id": "kana-kata-youon-kyo-30ad30e7",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "キョ",
+    "reading": "kyo",
+    "meanings": [
+      "kyo"
+    ],
+    "seq": 178,
+    "data": {
+      "script": "katakana",
+      "group": "youon",
+      "row": "き",
+      "row_label": "キ拗音",
+      "col": "o",
+      "strokes_key": "キョ"
+    }
+  },
+  {
+    "id": "kana-kata-youon-sha-30b730e3",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "シャ",
+    "reading": "sha",
+    "meanings": [
+      "sha"
+    ],
+    "seq": 179,
+    "data": {
+      "script": "katakana",
+      "group": "youon",
+      "row": "し",
+      "row_label": "シ拗音",
+      "col": "a",
+      "strokes_key": "シャ"
+    }
+  },
+  {
+    "id": "kana-kata-youon-shu-30b730e5",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "シュ",
+    "reading": "shu",
+    "meanings": [
+      "shu"
+    ],
+    "seq": 180,
+    "data": {
+      "script": "katakana",
+      "group": "youon",
+      "row": "し",
+      "row_label": "シ拗音",
+      "col": "u",
+      "strokes_key": "シュ"
+    }
+  },
+  {
+    "id": "kana-kata-youon-sho-30b730e7",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "ショ",
+    "reading": "sho",
+    "meanings": [
+      "sho"
+    ],
+    "seq": 181,
+    "data": {
+      "script": "katakana",
+      "group": "youon",
+      "row": "し",
+      "row_label": "シ拗音",
+      "col": "o",
+      "strokes_key": "ショ"
+    }
+  },
+  {
+    "id": "kana-kata-youon-cha-30c130e3",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "チャ",
+    "reading": "cha",
+    "meanings": [
+      "cha"
+    ],
+    "seq": 182,
+    "data": {
+      "script": "katakana",
+      "group": "youon",
+      "row": "ち",
+      "row_label": "チ拗音",
+      "col": "a",
+      "strokes_key": "チャ"
+    }
+  },
+  {
+    "id": "kana-kata-youon-chu-30c130e5",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "チュ",
+    "reading": "chu",
+    "meanings": [
+      "chu"
+    ],
+    "seq": 183,
+    "data": {
+      "script": "katakana",
+      "group": "youon",
+      "row": "ち",
+      "row_label": "チ拗音",
+      "col": "u",
+      "strokes_key": "チュ"
+    }
+  },
+  {
+    "id": "kana-kata-youon-cho-30c130e7",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "チョ",
+    "reading": "cho",
+    "meanings": [
+      "cho"
+    ],
+    "seq": 184,
+    "data": {
+      "script": "katakana",
+      "group": "youon",
+      "row": "ち",
+      "row_label": "チ拗音",
+      "col": "o",
+      "strokes_key": "チョ"
+    }
+  },
+  {
+    "id": "kana-kata-youon-nya-30cb30e3",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "ニャ",
+    "reading": "nya",
+    "meanings": [
+      "nya"
+    ],
+    "seq": 185,
+    "data": {
+      "script": "katakana",
+      "group": "youon",
+      "row": "に",
+      "row_label": "ニ拗音",
+      "col": "a",
+      "strokes_key": "ニャ"
+    }
+  },
+  {
+    "id": "kana-kata-youon-nyu-30cb30e5",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "ニュ",
+    "reading": "nyu",
+    "meanings": [
+      "nyu"
+    ],
+    "seq": 186,
+    "data": {
+      "script": "katakana",
+      "group": "youon",
+      "row": "に",
+      "row_label": "ニ拗音",
+      "col": "u",
+      "strokes_key": "ニュ"
+    }
+  },
+  {
+    "id": "kana-kata-youon-nyo-30cb30e7",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "ニョ",
+    "reading": "nyo",
+    "meanings": [
+      "nyo"
+    ],
+    "seq": 187,
+    "data": {
+      "script": "katakana",
+      "group": "youon",
+      "row": "に",
+      "row_label": "ニ拗音",
+      "col": "o",
+      "strokes_key": "ニョ"
+    }
+  },
+  {
+    "id": "kana-kata-youon-hya-30d230e3",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "ヒャ",
+    "reading": "hya",
+    "meanings": [
+      "hya"
+    ],
+    "seq": 188,
+    "data": {
+      "script": "katakana",
+      "group": "youon",
+      "row": "ひ",
+      "row_label": "ヒ拗音",
+      "col": "a",
+      "strokes_key": "ヒャ"
+    }
+  },
+  {
+    "id": "kana-kata-youon-hyu-30d230e5",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "ヒュ",
+    "reading": "hyu",
+    "meanings": [
+      "hyu"
+    ],
+    "seq": 189,
+    "data": {
+      "script": "katakana",
+      "group": "youon",
+      "row": "ひ",
+      "row_label": "ヒ拗音",
+      "col": "u",
+      "strokes_key": "ヒュ"
+    }
+  },
+  {
+    "id": "kana-kata-youon-hyo-30d230e7",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "ヒョ",
+    "reading": "hyo",
+    "meanings": [
+      "hyo"
+    ],
+    "seq": 190,
+    "data": {
+      "script": "katakana",
+      "group": "youon",
+      "row": "ひ",
+      "row_label": "ヒ拗音",
+      "col": "o",
+      "strokes_key": "ヒョ"
+    }
+  },
+  {
+    "id": "kana-kata-youon-mya-30df30e3",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "ミャ",
+    "reading": "mya",
+    "meanings": [
+      "mya"
+    ],
+    "seq": 191,
+    "data": {
+      "script": "katakana",
+      "group": "youon",
+      "row": "み",
+      "row_label": "ミ拗音",
+      "col": "a",
+      "strokes_key": "ミャ"
+    }
+  },
+  {
+    "id": "kana-kata-youon-myu-30df30e5",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "ミュ",
+    "reading": "myu",
+    "meanings": [
+      "myu"
+    ],
+    "seq": 192,
+    "data": {
+      "script": "katakana",
+      "group": "youon",
+      "row": "み",
+      "row_label": "ミ拗音",
+      "col": "u",
+      "strokes_key": "ミュ"
+    }
+  },
+  {
+    "id": "kana-kata-youon-myo-30df30e7",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "ミョ",
+    "reading": "myo",
+    "meanings": [
+      "myo"
+    ],
+    "seq": 193,
+    "data": {
+      "script": "katakana",
+      "group": "youon",
+      "row": "み",
+      "row_label": "ミ拗音",
+      "col": "o",
+      "strokes_key": "ミョ"
+    }
+  },
+  {
+    "id": "kana-kata-youon-rya-30ea30e3",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "リャ",
+    "reading": "rya",
+    "meanings": [
+      "rya"
+    ],
+    "seq": 194,
+    "data": {
+      "script": "katakana",
+      "group": "youon",
+      "row": "り",
+      "row_label": "リ拗音",
+      "col": "a",
+      "strokes_key": "リャ"
+    }
+  },
+  {
+    "id": "kana-kata-youon-ryu-30ea30e5",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "リュ",
+    "reading": "ryu",
+    "meanings": [
+      "ryu"
+    ],
+    "seq": 195,
+    "data": {
+      "script": "katakana",
+      "group": "youon",
+      "row": "り",
+      "row_label": "リ拗音",
+      "col": "u",
+      "strokes_key": "リュ"
+    }
+  },
+  {
+    "id": "kana-kata-youon-ryo-30ea30e7",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "リョ",
+    "reading": "ryo",
+    "meanings": [
+      "ryo"
+    ],
+    "seq": 196,
+    "data": {
+      "script": "katakana",
+      "group": "youon",
+      "row": "り",
+      "row_label": "リ拗音",
+      "col": "o",
+      "strokes_key": "リョ"
+    }
+  },
+  {
+    "id": "kana-kata-youon-gya-30ae30e3",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "ギャ",
+    "reading": "gya",
+    "meanings": [
+      "gya"
+    ],
+    "seq": 197,
+    "data": {
+      "script": "katakana",
+      "group": "youon",
+      "row": "ぎ",
+      "row_label": "ギ拗音",
+      "col": "a",
+      "strokes_key": "ギャ"
+    }
+  },
+  {
+    "id": "kana-kata-youon-gyu-30ae30e5",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "ギュ",
+    "reading": "gyu",
+    "meanings": [
+      "gyu"
+    ],
+    "seq": 198,
+    "data": {
+      "script": "katakana",
+      "group": "youon",
+      "row": "ぎ",
+      "row_label": "ギ拗音",
+      "col": "u",
+      "strokes_key": "ギュ"
+    }
+  },
+  {
+    "id": "kana-kata-youon-gyo-30ae30e7",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "ギョ",
+    "reading": "gyo",
+    "meanings": [
+      "gyo"
+    ],
+    "seq": 199,
+    "data": {
+      "script": "katakana",
+      "group": "youon",
+      "row": "ぎ",
+      "row_label": "ギ拗音",
+      "col": "o",
+      "strokes_key": "ギョ"
+    }
+  },
+  {
+    "id": "kana-kata-youon-ja-30b830e3",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "ジャ",
+    "reading": "ja",
+    "meanings": [
+      "ja"
+    ],
+    "seq": 200,
+    "data": {
+      "script": "katakana",
+      "group": "youon",
+      "row": "じ",
+      "row_label": "ジ拗音",
+      "col": "a",
+      "strokes_key": "ジャ"
+    }
+  },
+  {
+    "id": "kana-kata-youon-ju-30b830e5",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "ジュ",
+    "reading": "ju",
+    "meanings": [
+      "ju"
+    ],
+    "seq": 201,
+    "data": {
+      "script": "katakana",
+      "group": "youon",
+      "row": "じ",
+      "row_label": "ジ拗音",
+      "col": "u",
+      "strokes_key": "ジュ"
+    }
+  },
+  {
+    "id": "kana-kata-youon-jo-30b830e7",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "ジョ",
+    "reading": "jo",
+    "meanings": [
+      "jo"
+    ],
+    "seq": 202,
+    "data": {
+      "script": "katakana",
+      "group": "youon",
+      "row": "じ",
+      "row_label": "ジ拗音",
+      "col": "o",
+      "strokes_key": "ジョ"
+    }
+  },
+  {
+    "id": "kana-kata-youon-bya-30d330e3",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "ビャ",
+    "reading": "bya",
+    "meanings": [
+      "bya"
+    ],
+    "seq": 203,
+    "data": {
+      "script": "katakana",
+      "group": "youon",
+      "row": "び",
+      "row_label": "ビ拗音",
+      "col": "a",
+      "strokes_key": "ビャ"
+    }
+  },
+  {
+    "id": "kana-kata-youon-byu-30d330e5",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "ビュ",
+    "reading": "byu",
+    "meanings": [
+      "byu"
+    ],
+    "seq": 204,
+    "data": {
+      "script": "katakana",
+      "group": "youon",
+      "row": "び",
+      "row_label": "ビ拗音",
+      "col": "u",
+      "strokes_key": "ビュ"
+    }
+  },
+  {
+    "id": "kana-kata-youon-byo-30d330e7",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "ビョ",
+    "reading": "byo",
+    "meanings": [
+      "byo"
+    ],
+    "seq": 205,
+    "data": {
+      "script": "katakana",
+      "group": "youon",
+      "row": "び",
+      "row_label": "ビ拗音",
+      "col": "o",
+      "strokes_key": "ビョ"
+    }
+  },
+  {
+    "id": "kana-kata-youon-pya-30d430e3",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "ピャ",
+    "reading": "pya",
+    "meanings": [
+      "pya"
+    ],
+    "seq": 206,
+    "data": {
+      "script": "katakana",
+      "group": "youon",
+      "row": "ぴ",
+      "row_label": "ピ拗音",
+      "col": "a",
+      "strokes_key": "ピャ"
+    }
+  },
+  {
+    "id": "kana-kata-youon-pyu-30d430e5",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "ピュ",
+    "reading": "pyu",
+    "meanings": [
+      "pyu"
+    ],
+    "seq": 207,
+    "data": {
+      "script": "katakana",
+      "group": "youon",
+      "row": "ぴ",
+      "row_label": "ピ拗音",
+      "col": "u",
+      "strokes_key": "ピュ"
+    }
+  },
+  {
+    "id": "kana-kata-youon-pyo-30d430e7",
+    "level": "KANA",
+    "type": "kana",
+    "expression": "ピョ",
+    "reading": "pyo",
+    "meanings": [
+      "pyo"
+    ],
+    "seq": 208,
+    "data": {
+      "script": "katakana",
+      "group": "youon",
+      "row": "ぴ",
+      "row_label": "ピ拗音",
+      "col": "o",
+      "strokes_key": "ピョ"
+    }
+  }
+]
