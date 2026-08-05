@@ -13,7 +13,6 @@ import type { Point } from './stroke-score'
 
 export type Profile = {
   id: string
-  household_id: string | null
   display_name: string
   level_current: string
   daily_minutes_target: number
@@ -36,7 +35,7 @@ export function useProfile(userId: string | undefined) {
       const { data, error } = await supabase
         .from('profiles')
         .select(
-          'id, household_id, display_name, level_current, daily_minutes_target, writing_kana_enabled, writing_kanji_enabled, timezone',
+          'id, display_name, level_current, daily_minutes_target, writing_kana_enabled, writing_kanji_enabled, timezone',
         )
         .eq('id', userId!)
         .maybeSingle()

@@ -43,6 +43,53 @@ export const id = {
     backToSignIn: 'Kembali ke halaman masuk',
   },
 
+  setelan: {
+    title: 'Setelan',
+    profil: 'Profil',
+    nameLabel: 'Nama tampilan',
+    nameHint: 'Nama yang tampil di aplikasi.',
+    timezoneLabel: 'Zona waktu',
+    timezoneHint: 'Menentukan kapan "hari ini" berganti untuk kuota dan streak.',
+    writingHeading: 'Latihan menulis',
+    writingKana: 'Latihan menulis kana',
+    writingKanji: 'Latihan menulis kanji',
+    writingHint:
+      'Mematikannya tidak menghapus apa pun — kartu menulis hanya berhenti dijadwalkan.',
+    save: 'Simpan perubahan',
+    savePending: 'Menyimpan…',
+    saved: 'Tersimpan.',
+    aboutLink: 'Tentang Masume & lisensi',
+    signOut: 'Keluar',
+    signOutPending: 'Keluar…',
+    signOutUnsynced:
+      '{n} latihan belum tersinkron dan akan hilang dari perangkat ini. Tetap keluar?',
+    dangerHeading: 'Hapus akun',
+    dangerBody:
+      'Menghapus akun bersifat permanen: seluruh jadwal, riwayat review, dan Lembar Kana ikut terhapus dan tidak bisa dikembalikan.',
+    dangerConfirmLabel: 'Ketik HAPUS untuk mengonfirmasi',
+    dangerConfirmWord: 'HAPUS',
+    dangerSubmit: 'Hapus akun saya',
+    dangerPending: 'Menghapus…',
+  },
+
+  tentang: {
+    title: 'Tentang Masume',
+    subtitle: 'Planner sertifikasi JLPT. 升目 — satu kotak demi satu kotak.',
+    appHeading: 'Aplikasi',
+    appBody:
+      'Kode sumber Masume tersedia di bawah lisensi MIT.',
+    appRepo: 'Kode sumber di GitHub',
+    dataHeading: 'Data urutan goresan',
+    kanjivgBody:
+      'Data urutan goresan berasal dari KanjiVG © Ulrich Apel dan kontributor, dilisensikan di bawah Creative Commons Attribution-ShareAlike 3.0. Masume memakai subset 150 karakter; path goresannya tidak diubah. Data turunannya mengikuti lisensi yang sama.',
+    kanjivgSite: 'Situs KanjiVG',
+    kanjivgLicense: 'Teks lisensi CC BY-SA 3.0',
+    depsHeading: 'Dibangun dengan',
+    depsBody:
+      'Next.js, Supabase, Dexie, ts-fsrs, TanStack Query, dan Serwist — masing-masing di bawah lisensi MIT atau Apache 2.0.',
+    back: 'Kembali',
+  },
+
   errors: {
     auth: {
       invalidCredentials: 'Email atau password salah.',
