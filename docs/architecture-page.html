@@ -1,0 +1,547 @@
+<title>Masume — arsitektur sistem</title>
+
+<style>
+  /* Tokens are the app's own. The architecture doc for a paper-and-ink app should
+     look like paper and ink, so the palette is lifted straight from globals.css
+     rather than invented for the page. */
+  :root {
+    --paper: #e7e1d8;
+    --raised: #faf8f4;
+    --ink: #211d1a;
+    --muted: #5c564e;
+    --faint: #8c857a;
+    --rule: #d9d2c7;
+    --cell: #cec6b8;
+    --shu: #ce3f29;
+    --shu-tint: #f6e3df;
+    --ai: #2f5d8a;
+    --ai-tint: #e4eaf0;
+    --pinus: #2e7263;
+    --oker: #9a6a1f;
+    --grid: rgba(33, 29, 26, 0.045);
+
+    --sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    --mono: ui-monospace, "SF Mono", "Cascadia Mono", Menlo, Consolas, monospace;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --paper: #171512;
+      --raised: #201d19;
+      --ink: #ece7df;
+      --muted: #a69d91;
+      --faint: #8c857a;
+      --rule: #363028;
+      --cell: #3d362c;
+      --shu: #e86a50;
+      --shu-tint: #3a231d;
+      --ai: #7fa6c9;
+      --ai-tint: #262d33;
+      --pinus: #6bb3a0;
+      --oker: #d2a24c;
+      --grid: rgba(236, 231, 223, 0.05);
+    }
+  }
+
+  /* The viewer's toggle must win over the media query in both directions. */
+  :root[data-theme="dark"] {
+    --paper: #171512; --raised: #201d19; --ink: #ece7df; --muted: #a69d91;
+    --faint: #8c857a; --rule: #363028; --cell: #3d362c; --shu: #e86a50;
+    --shu-tint: #3a231d; --ai: #7fa6c9; --ai-tint: #262d33; --pinus: #6bb3a0;
+    --oker: #d2a24c; --grid: rgba(236, 231, 223, 0.05);
+  }
+  :root[data-theme="light"] {
+    --paper: #e7e1d8; --raised: #faf8f4; --ink: #211d1a; --muted: #5c564e;
+    --faint: #8c857a; --rule: #d9d2c7; --cell: #cec6b8; --shu: #ce3f29;
+    --shu-tint: #f6e3df; --ai: #2f5d8a; --ai-tint: #e4eaf0; --pinus: #2e7263;
+    --oker: #9a6a1f; --grid: rgba(33, 29, 26, 0.045);
+  }
+
+  body {
+    margin: 0;
+    background-color: var(--paper);
+    /* 原稿用紙 — the ruled squares the app is named after, holding the page. */
+    background-image:
+      linear-gradient(to right, var(--grid) 1px, transparent 1px),
+      linear-gradient(to bottom, var(--grid) 1px, transparent 1px);
+    background-size: 28px 28px;
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .page {
+    max-width: 78ch;
+    margin: 0 auto;
+    padding: 72px 24px 120px;
+    display: flex;
+    flex-direction: column;
+    gap: 56px;
+  }
+
+  header.masthead { display: flex; flex-direction: column; gap: 14px; }
+  .glyph {
+    font-size: 40px; line-height: 1; color: var(--shu);
+    font-family: "Yu Mincho", "Hiragino Mincho ProN", serif;
+  }
+  h1 { margin: 0; font-size: 34px; line-height: 1.15; letter-spacing: -0.02em; text-wrap: balance; }
+  .standfirst { margin: 0; color: var(--muted); max-width: 62ch; }
+
+  .stamp {
+    display: inline-flex; align-items: center; gap: 8px; align-self: flex-start;
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--muted);
+    border: 1px solid var(--rule); border-radius: 2px; padding: 5px 9px;
+    background: var(--raised);
+  }
+  .stamp b { color: var(--ink); font-weight: 600; }
+
+  section { display: flex; flex-direction: column; gap: 18px; }
+  section > h2 {
+    margin: 0; font-size: 13px; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--muted); font-family: var(--mono); font-weight: 600;
+    padding-bottom: 10px; border-bottom: 1px solid var(--rule);
+    display: flex; align-items: center; gap: 12px;
+  }
+  /* The marker encodes build state: inked = shipped, dashed = not yet. */
+  .cell { width: 11px; height: 11px; border-radius: 1px; flex: none; }
+  .cell.done { background: var(--ink); }
+  .cell.todo { border: 1px dashed var(--cell); }
+  h3 { margin: 8px 0 0; font-size: 19px; line-height: 1.3; letter-spacing: -0.01em; }
+  p { margin: 0; max-width: 66ch; }
+  .lede { font-size: 17px; }
+  strong { font-weight: 650; }
+  code {
+    font-family: var(--mono); font-size: 0.88em;
+    background: var(--raised); border: 1px solid var(--rule);
+    border-radius: 2px; padding: 1px 5px;
+  }
+
+  figure { margin: 0; display: flex; flex-direction: column; gap: 12px; }
+  .frame {
+    background: var(--raised); border: 1px solid var(--rule); border-radius: 3px;
+    padding: 20px 16px; overflow-x: auto;
+  }
+  .frame svg { display: block; max-width: 100%; height: auto; margin: 0 auto; min-width: 620px; }
+  figcaption {
+    font-family: var(--mono); font-size: 12px; line-height: 1.6; color: var(--muted);
+    max-width: 64ch;
+  }
+  figcaption b { color: var(--ink); font-weight: 600; }
+
+  .note {
+    border-left: 2px solid var(--shu); background: var(--shu-tint);
+    padding: 14px 16px; border-radius: 0 3px 3px 0;
+    display: flex; flex-direction: column; gap: 8px;
+  }
+  .note .label {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--shu); font-weight: 600;
+  }
+  .note p { max-width: none; }
+
+  table { border-collapse: collapse; width: 100%; font-size: 14.5px; }
+  .scroller { overflow-x: auto; }
+  th, td {
+    text-align: left; vertical-align: top; padding: 9px 12px 9px 0;
+    border-bottom: 1px solid var(--rule);
+  }
+  th {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--muted); font-weight: 600;
+    border-bottom-color: var(--ink);
+  }
+  td.yes { color: var(--pinus); font-weight: 600; }
+  td.no { color: var(--muted); }
+  tbody tr:last-child td { border-bottom: none; }
+
+  ul { margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 8px; }
+  li { max-width: 64ch; }
+  li::marker { color: var(--faint); }
+
+  footer {
+    border-top: 1px solid var(--rule); padding-top: 20px;
+    font-family: var(--mono); font-size: 12px; color: var(--faint);
+    display: flex; flex-direction: column; gap: 6px;
+  }
+
+  @media (max-width: 640px) {
+    .page { padding: 48px 18px 88px; gap: 44px; }
+    h1 { font-size: 27px; }
+    .frame { padding: 14px 10px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+  }
+</style>
+
+<div class="page">
+
+  <header class="masthead">
+    <div class="glyph" aria-hidden="true">升目</div>
+    <h1>Masume — arsitektur sistem</h1>
+    <p class="standfirst">
+      Planner sertifikasi JLPT untuk tiga orang sekeluarga. Halaman ini menggambarkan
+      bagaimana bagian-bagiannya bertaut, dan diperbarui tiap kali sistemnya berubah —
+      bukan tiap kali seseorang ingat.
+    </p>
+    <span class="stamp">Terverifikasi lawan produksi · <b>5 Agustus 2026</b></span>
+  </header>
+
+  <section>
+    <h2><span class="cell done"></span> Satu fakta yang membentuk semuanya</h2>
+    <p class="lede">
+      <strong>Tidak ada lapisan server.</strong> <code>output: 'export'</code> membuat
+      Vercel hanya menyerahkan berkas statis — tanpa API route, tanpa middleware, tanpa
+      server component yang mengambil data. Setiap baca dan tulis berjalan dari browser
+      langsung ke Supabase.
+    </p>
+
+    <figure>
+      <div class="frame">
+        <svg viewBox="0 0 860 372" role="img"
+             aria-label="Browser berbicara langsung ke Supabase; Vercel hanya menyerahkan berkas statis, dan tidak ada komponen server di antaranya.">
+          <defs>
+            <marker id="a-ink" viewBox="0 0 10 10" refX="9" refY="5"
+                    markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path d="M 0 1 L 9 5 L 0 9 z" fill="currentColor"/>
+            </marker>
+            <marker id="a-shu" viewBox="0 0 10 10" refX="9" refY="5"
+                    markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path d="M 0 1 L 9 5 L 0 9 z" fill="#ce3f29"/>
+            </marker>
+          </defs>
+
+          <g fill="none" stroke="currentColor" stroke-width="1.5">
+            <rect x="24" y="152" width="240" height="72" rx="3"/>
+            <rect x="24" y="266" width="240" height="60" rx="3"/>
+            <rect x="300" y="36" width="248" height="64" rx="3"/>
+          </g>
+
+          <g font-family="ui-monospace, monospace" font-size="12.5" fill="currentColor">
+            <text x="44" y="182">PWA di perangkat</text>
+            <text x="44" y="292">Dexie · IndexedDB</text>
+            <text x="320" y="64">Vercel</text>
+          </g>
+          <g font-family="ui-monospace, monospace" font-size="11" fill="currentColor" opacity="0.62">
+            <text x="44" y="202">Next.js static export</text>
+            <text x="44" y="310">antrean review lokal</text>
+            <text x="320" y="82">menyerahkan berkas, tidak lebih</text>
+          </g>
+
+          <g fill="none" stroke="currentColor" stroke-width="1.5" stroke-dasharray="5 4">
+            <rect x="600" y="118" width="236" height="200" rx="3"/>
+          </g>
+          <text x="616" y="140" font-family="ui-monospace, monospace" font-size="12.5"
+                fill="currentColor" opacity="0.62">Supabase</text>
+          <g fill="none" stroke="currentColor" stroke-width="1.5">
+            <rect x="616" y="152" width="204" height="44" rx="3"/>
+            <rect x="616" y="206" width="204" height="44" rx="3"/>
+            <rect x="616" y="260" width="204" height="44" rx="3"/>
+          </g>
+          <g font-family="ui-monospace, monospace" font-size="12" fill="currentColor">
+            <text x="632" y="179">Auth</text>
+            <text x="632" y="233">Postgres + RLS</text>
+            <text x="632" y="287">Edge Function</text>
+          </g>
+
+          <g stroke="currentColor" stroke-width="1.4" fill="none" marker-end="url(#a-ink)">
+            <polyline points="144,152 144,68 292,68"/>
+          </g>
+          <text x="160" y="58" font-family="ui-monospace, monospace" font-size="11" fill="currentColor">
+            muat sekali
+          </text>
+
+          <g stroke="currentColor" stroke-width="1.4" fill="none"
+             marker-end="url(#a-ink)" marker-start="url(#a-ink)">
+            <line x1="144" y1="226" x2="144" y2="262"/>
+          </g>
+          <text x="158" y="250" font-family="ui-monospace, monospace" font-size="11" fill="currentColor">
+            sesi berjalan di sini
+          </text>
+
+          <line x1="266" y1="196" x2="594" y2="196" stroke="#ce3f29" stroke-width="2.2"
+                fill="none" marker-end="url(#a-shu)" marker-start="url(#a-shu)"/>
+          <text x="430" y="184" text-anchor="middle" font-family="ui-monospace, monospace"
+                font-size="11.5" fill="#ce3f29" font-weight="600">tanpa perantara</text>
+          <text x="430" y="216" text-anchor="middle" font-family="ui-monospace, monospace"
+                font-size="11" fill="currentColor" opacity="0.7">yang menjaga: RLS</text>
+        </svg>
+      </div>
+      <figcaption>
+        Ruang kosong di tengah adalah isi diagramnya. <b>Tidak ada kotak di antara PWA
+        dan Supabase</b> — dan karena itu route guard di klien cuma urusan tampilan;
+        siapa pun bisa melewatinya lewat devtools. Yang benar-benar menjaga data adalah
+        RLS, jadi setiap tabel punya policy eksplisit tanpa kecuali.
+      </figcaption>
+    </figure>
+  </section>
+
+  <section>
+    <h2><span class="cell done"></span> Cara orang mendapat akun</h2>
+    <p>
+      Halaman <code>/daftar</code> selalu menuntut kode undangan, dan kodenya diperiksa
+      <strong>di dalam Edge Function</strong> — tidak pernah di browser, karena apa pun
+      yang diperiksa di browser bisa dilewati. Tapi pintu depan bukan satu-satunya pintu.
+    </p>
+
+    <figure>
+      <div class="frame">
+        <svg viewBox="0 0 860 300" role="img"
+             aria-label="Jalur lewat halaman daftar memeriksa kode di Edge Function, sementara endpoint bawaan Supabase menerima pendaftaran tanpa kode sampai toggle di dashboard dimatikan.">
+          <defs>
+            <marker id="b-ink" viewBox="0 0 10 10" refX="9" refY="5"
+                    markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path d="M 0 1 L 9 5 L 0 9 z" fill="currentColor"/>
+            </marker>
+            <marker id="b-shu" viewBox="0 0 10 10" refX="9" refY="5"
+                    markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path d="M 0 1 L 9 5 L 0 9 z" fill="#ce3f29"/>
+            </marker>
+          </defs>
+
+          <g fill="none" stroke="currentColor" stroke-width="1.5">
+            <rect x="20" y="112" width="132" height="60" rx="3"/>
+            <rect x="212" y="30" width="184" height="56" rx="3"/>
+            <rect x="446" y="30" width="196" height="56" rx="3"/>
+            <rect x="692" y="112" width="148" height="60" rx="3"/>
+          </g>
+          <rect x="212" y="200" width="184" height="56" rx="3"
+                fill="none" stroke="#ce3f29" stroke-width="1.5"/>
+
+          <g font-family="ui-monospace, monospace" font-size="12" fill="currentColor">
+            <text x="36" y="140">Pendaftar</text>
+            <text x="228" y="54">halaman /daftar</text>
+            <text x="462" y="54">Edge Function</text>
+            <text x="708" y="140">akun dibuat</text>
+          </g>
+          <g font-family="ui-monospace, monospace" font-size="11" fill="currentColor" opacity="0.62">
+            <text x="36" y="158">siapa pun</text>
+            <text x="228" y="72">meminta kode</text>
+            <text x="462" y="72">memeriksa kode</text>
+            <text x="708" y="158">auth.users</text>
+          </g>
+          <text x="228" y="224" font-family="ui-monospace, monospace" font-size="12" fill="#ce3f29">
+            /auth/v1/signup
+          </text>
+          <text x="228" y="242" font-family="ui-monospace, monospace" font-size="11" fill="#ce3f29" opacity="0.85">
+            endpoint bawaan Supabase
+          </text>
+
+          <g stroke="currentColor" stroke-width="1.4" fill="none" marker-end="url(#b-ink)">
+            <polyline points="152,130 182,130 182,58 206,58"/>
+            <line x1="396" y1="58" x2="440" y2="58"/>
+            <polyline points="642,58 668,58 668,130 686,130"/>
+          </g>
+          <text x="418" y="46" text-anchor="middle" font-family="ui-monospace, monospace"
+                font-size="10.5" fill="currentColor">kode</text>
+
+          <g stroke="#ce3f29" stroke-width="1.8" fill="none" marker-end="url(#b-shu)">
+            <polyline points="152,154 182,154 182,228 206,228"/>
+            <polyline points="396,228 668,228 668,166 686,166"/>
+          </g>
+          <text x="530" y="218" text-anchor="middle" font-family="ui-monospace, monospace"
+                font-size="11.5" fill="#ce3f29" font-weight="600">tanpa kode sama sekali</text>
+        </svg>
+      </div>
+      <figcaption>
+        Jalur atas terkunci; jalur bawah adalah endpoint milik Supabase sendiri, yang
+        menyala terlepas dari halaman buatan kita dan bisa dipanggil dengan anon key —
+        yang memang publik. <b>Selama toggle “Allow new users to sign up” hidup, kode
+        undangan hanyalah dekorasi.</b> Mematikannya tidak memutus alur undangan: Edge
+        Function memakai admin API, yang tidak tunduk pada setelan itu.
+      </figcaption>
+    </figure>
+
+    <div class="note">
+      <span class="label">Yang tidak dipertaruhkan</span>
+      <p>
+        Bahkan kalau orang asing masuk lewat pintu samping, ia mendapat akun tanpa
+        <code>household_id</code> dan RLS menutup segalanya — ia tak bisa melihat satu
+        baris pun milik kalian. Yang dipertaruhkan bukan data keluarga, melainkan
+        reputasi domain pengirim email, karena tiap percobaan menyuruhnya mengirim.
+      </p>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="cell done"></span> Loop harian, offline lebih dulu</h2>
+    <p>
+      Sesi review tidak menyentuh jaringan sama sekali. Ia membaca dari IndexedDB dan
+      menulis ke antrean lokal; sinkronisasi terjadi belakangan, di latar, atau tidak
+      hari ini. Mengulang di kereta adalah kasus utama, bukan kasus pinggir.
+    </p>
+
+    <figure>
+      <div class="frame">
+        <svg viewBox="0 0 860 300" role="img"
+             aria-label="Sesi membaca kartu dari Dexie dan menulis hasil ke antrean lokal; sinkronisasi mengirimnya ke Supabase dengan kunci idempoten sehingga pengiriman ulang tidak menggandakan.">
+          <defs>
+            <marker id="c-ink" viewBox="0 0 10 10" refX="9" refY="5"
+                    markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path d="M 0 1 L 9 5 L 0 9 z" fill="currentColor"/>
+            </marker>
+            <marker id="c-ai" viewBox="0 0 10 10" refX="9" refY="5"
+                    markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path d="M 0 1 L 9 5 L 0 9 z" fill="#2f5d8a"/>
+            </marker>
+          </defs>
+
+          <g fill="none" stroke="currentColor" stroke-width="1.5">
+            <rect x="310" y="24" width="216" height="60" rx="3"/>
+            <rect x="40" y="164" width="200" height="60" rx="3"/>
+            <rect x="318" y="164" width="200" height="60" rx="3"/>
+            <rect x="620" y="164" width="200" height="60" rx="3"/>
+          </g>
+
+          <g font-family="ui-monospace, monospace" font-size="12" fill="currentColor">
+            <text x="330" y="50">sesi review</text>
+            <text x="58" y="190">Dexie · kartu</text>
+            <text x="336" y="190">antrean lokal</text>
+            <text x="638" y="190">Supabase</text>
+          </g>
+          <g font-family="ui-monospace, monospace" font-size="11" fill="currentColor" opacity="0.62">
+            <text x="330" y="68">ts-fsrs menjadwalkan</text>
+            <text x="58" y="208">jatuh tempo hari ini</text>
+            <text x="336" y="208">kartu + log, satu transaksi</text>
+            <text x="638" y="208">card_states · reviews</text>
+          </g>
+
+          <g stroke="currentColor" stroke-width="1.4" fill="none" marker-end="url(#c-ink)">
+            <polyline points="140,164 140,54 304,54"/>
+            <polyline points="418,84 418,158"/>
+          </g>
+          <text x="156" y="44" font-family="ui-monospace, monospace" font-size="11" fill="currentColor">
+            kartu berikutnya
+          </text>
+          <text x="430" y="126" font-family="ui-monospace, monospace" font-size="11" fill="currentColor">
+            hasil rating
+          </text>
+
+          <line x1="518" y1="182" x2="614" y2="182" stroke="#2f5d8a" stroke-width="2"
+                fill="none" marker-end="url(#c-ai)"/>
+          <text x="566" y="170" text-anchor="middle" font-family="ui-monospace, monospace"
+                font-size="10.5" fill="#2f5d8a" font-weight="600">upsert</text>
+
+          <path d="M 614 210 L 566 210 L 566 258 L 470 258" fill="none" stroke="#2f5d8a"
+                stroke-width="1.6" stroke-dasharray="5 4" marker-end="url(#c-ai)"/>
+          <text x="596" y="278" text-anchor="middle" font-family="ui-monospace, monospace"
+                font-size="11" fill="#2f5d8a">gagal → antrean tetap utuh</text>
+        </svg>
+      </div>
+      <figcaption>
+        Tiap baris di antrean membawa <b>id yang dibuat klien sebelum jaringan terlibat</b>.
+        Itulah seluruh cerita idempotensinya: pengiriman ulang menulis kunci yang sama,
+        constraint unik menyerapnya, dan koneksi yang buruk tidak bisa menggandakan
+        maupun menghilangkan satu review pun. Diuji dengan sesi 20 kartu offline yang
+        tiba lengkap dengan 20 kunci berbeda.
+      </figcaption>
+    </figure>
+  </section>
+
+  <section>
+    <h2><span class="cell done"></span> Siapa boleh melihat apa</h2>
+    <p>
+      Dashboard Keluarga menuntut tiga orang terbaca sejajar, tapi tak ada yang perlu
+      tahu kartu mana yang kamu lupa terus. Jadi segelintir angka yang memang
+      ditampilkan didenormalisasi ke satu tabel ringkas, dan sisanya tetap tertutup.
+    </p>
+
+    <figure>
+      <div class="frame">
+        <svg viewBox="0 0 860 320" role="img"
+             aria-label="Tiga anggota keluarga berbagi satu jendela sempit berisi profil, progres harian, dan ringkasan; tabel lainnya tetap privat per orang.">
+          <rect x="24" y="30" width="812" height="76" rx="3"
+                fill="#e4eaf0" fill-opacity="0.5" stroke="#2f5d8a" stroke-width="1.5"/>
+          <text x="44" y="56" font-family="ui-monospace, monospace" font-size="12"
+                fill="#2f5d8a" font-weight="600">terlihat sekeluarga</text>
+          <text x="44" y="78" font-family="ui-monospace, monospace" font-size="11.5" fill="currentColor">
+            profiles · daily_progress · progress_summary
+          </text>
+          <text x="44" y="96" font-family="ui-monospace, monospace" font-size="11"
+                fill="currentColor" opacity="0.62">
+            nama · streak · hari ini · hitungan kana &amp; kanji
+          </text>
+
+          <g fill="none" stroke="currentColor" stroke-width="1.4" stroke-dasharray="4 4">
+            <line x1="140" y1="106" x2="140" y2="150"/>
+            <line x1="430" y1="106" x2="430" y2="150"/>
+            <line x1="720" y1="106" x2="720" y2="150"/>
+          </g>
+
+          <g fill="none" stroke="#ce3f29" stroke-width="1.5">
+            <rect x="24" y="150" width="232" height="140" rx="3"/>
+            <rect x="314" y="150" width="232" height="140" rx="3"/>
+            <rect x="604" y="150" width="232" height="140" rx="3"/>
+          </g>
+
+          <g font-family="ui-monospace, monospace" font-size="12" fill="#ce3f29" font-weight="600">
+            <text x="44" y="176">Riyadh · privat</text>
+            <text x="334" y="176">Istri · privat</text>
+            <text x="624" y="176">Kakak · privat</text>
+          </g>
+          <g font-family="ui-monospace, monospace" font-size="11" fill="currentColor" opacity="0.75">
+            <text x="44" y="202">goals</text>
+            <text x="44" y="222">card_states</text>
+            <text x="44" y="242">reviews</text>
+            <text x="44" y="262">kana_sheet</text>
+            <text x="334" y="202">goals</text>
+            <text x="334" y="222">card_states</text>
+            <text x="334" y="242">reviews</text>
+            <text x="334" y="262">kana_sheet</text>
+            <text x="624" y="202">goals</text>
+            <text x="624" y="222">card_states</text>
+            <text x="624" y="242">reviews</text>
+            <text x="624" y="262">kana_sheet</text>
+          </g>
+        </svg>
+      </div>
+      <figcaption>
+        Pita biru adalah satu-satunya jendela lintas-anggota, dan sengaja sempit.
+        <b>Tidak ada skor kesiapan di dalamnya</b> — itu satu-satunya angka yang akan
+        mengubah dashboard jadi papan peringkat, dan Dashboard Keluarga bukan kontes.
+      </figcaption>
+    </figure>
+
+    <div class="scroller">
+      <table>
+        <thead>
+          <tr><th>Tabel</th><th>Sekeluarga</th><th>Alasan</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>profiles</code></td><td class="yes">boleh</td><td>Nama dan streak — inti dashboard</td></tr>
+          <tr><td><code>daily_progress</code></td><td class="yes">boleh</td><td>“Hari ini sudah berapa”</td></tr>
+          <tr><td><code>progress_summary</code></td><td class="yes">boleh</td><td>Angka ringkas, tanpa membuka card_states</td></tr>
+          <tr><td><code>goals</code></td><td class="no">tidak</td><td>Tanggal ujian orang lain tidak relevan</td></tr>
+          <tr><td><code>card_states</code>, <code>reviews</code></td><td class="no">tidak</td><td>Tak ada yang perlu tahu apa yang kamu lupa</td></tr>
+          <tr><td><code>kana_sheet</code></td><td class="no">tidak</td><td>Tulisan tangan pribadi</td></tr>
+          <tr><td><code>invites</code></td><td class="no">nol policy</td><td>RLS aktif tanpa policy = tertutup total</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="cell todo"></span> Yang belum dibangun</h2>
+    <p>
+      Disebut terang-terangan supaya diagram di atas tidak terbaca sebagai gambaran
+      pekerjaan yang sudah selesai.
+    </p>
+    <ul>
+      <li>Tabel konten (<code>items</code>, <code>item_examples</code>) dan penyemaian 208 kana ke <code>card_states</code></li>
+      <li>Layar inti: Lembar Kana beserta toggle <em>lembarku / uji aku</em>, modul menulis tiga tahap, sesi review, Hari Ini dengan data sungguhan, Setelan</li>
+      <li>Subsetting font Jepang — 13,5 MB masih terbawa, dan precache offline akan menelannya bulat-bulat</li>
+      <li>Ikon PNG 192/512; manifest baru memuat SVG, dan “Add to Home Screen” belum diuji</li>
+      <li>Toggle pendaftaran publik di dashboard Supabase — sampai itu mati, diagram kedua menggambarkan lubang yang masih terbuka</li>
+    </ul>
+  </section>
+
+  <footer>
+    <span>Sumber kebenaran: <code>docs/ARCHITECTURE.md</code> di repo — berubah di commit yang sama dengan kodenya.</span>
+    <span>Halaman ini adalah rendering dari dokumen itu, diperbarui di URL yang sama.</span>
+  </footer>
+
+</div>
