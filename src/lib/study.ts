@@ -1,0 +1,188 @@
+'use client'
+
+import { db, hydrateCards, recordKanaCell, recordReview, syncPending } from './db'
+import {
+  applyReview,
+  newCardState,
+  type CardMode,
+  type CardStateRow,
+  type UserRating,
+} from './fsrs'
+import { modesFor, type KanaItem } from './curriculum'
+import type { Point } from './stroke-score'
+
+/**
+ * Where the pieces meet: curriculum decides *what*, FSRS decides *when*, Dexie holds
+ * it while offline, and Supabase is where it ends up.
+ *
+ * Every write here goes to the local store first and is queued for upload. Nothing
+ * in a study session waits on the network — that is the point of the offline layer,
+ * and routing one write straight to Supabase would quietly undo it.
+ */
+
+function newId(): string {
+  // Cards and reviews are created offline, so their ids cannot come from the server.
+  return typeof crypto !== 'undefined' && 'randomUUID' in crypto
+    ? crypto.randomUUID()
+    : `${Date.now()}-${Math.random().toString(16).slice(2)}`
+}
+
+/**
+ * Introduces an item: creates the card for each mode that does not have one yet.
+ *
+ * Cards are created at introduction rather than seeded up front. Seeding all 208 kana
+ * as New and due now would make everything due on day one, which is exactly what the
+ * daily quota exists to prevent.
+ */
+export async function ensureCards(
+  userId: string,
+  item: KanaItem,
+  writingEnabled: boolean,
+  now = new Date(),
+): Promise<CardStateRow[]> {
+  const wanted = modesFor(writingEnabled)
+  const existing = await db.cards.where('item_id').equals(item.id).toArray()
+  const have = new Set(existing.filter((c) => c.user_id === userId).map((c) => c.mode))
+
+  const created = wanted
+    .filter((mode) => !have.has(mode))
+    .map((mode) => newCardState({ id: newId(), userId, itemId: item.id, mode }, now))
+
+  if (created.length > 0) {
+    await hydrateCards(created)
+    // New cards are pending upload just like reviewed ones.
+    await db.pendingCards.bulkPut(
+      created.map((c) => ({ id: c.id, queued_at: new Date().toISOString() })),
+    )
+  }
+
+  return [...existing.filter((c) => c.user_id === userId), ...created]
+}
+
+export async function cardFor(
+  userId: string,
+  itemId: string,
+  mode: CardMode,
+): Promise<CardStateRow | undefined> {
+  const all = await db.cards.where('item_id').equals(itemId).toArray()
+  return all.find((c) => c.user_id === userId && c.mode === mode)
+}
+
+export type WritingOutcome = {
+  strokes: Point[][]
+  strokeErrors: number
+  rating: UserRating
+  durationMs?: number
+}
+
+/**
+ * Records a finished writing attempt.
+ *
+ * Two different things are saved, because they answer different questions. The sheet
+ * records *"have I written this?"* and keeps the handwriting; the card records
+ * *"do I still remember it?"* and moves the schedule. They are deliberately separate
+ * tables, and this is the one place both are written at once.
+ *
+ * The rating comes from stroke errors alone — never from the shape score, and never
+ * from asking the learner. Writing is the one mode that cannot be fooled, and that
+ * only holds while nobody is invited to grade themselves.
+ */
+export async function saveWriting(
+  userId: string,
+  item: KanaItem,
+  outcome: WritingOutcome,
+  opts: { writingEnabled?: boolean; countsAsReview?: boolean; now?: Date } = {},
+): Promise<{ reviewed: boolean }> {
+  const now = opts.now ?? new Date()
+
+  await recordKanaCell({
+    user_id: userId,
+    item_id: item.id,
+    strokes: outcome.strokes,
+    written_at: now.toISOString(),
+  })
+
+  await ensureCards(userId, item, opts.writingEnabled ?? true, now)
+  const card = await cardFor(userId, item.id, 'writing')
+  if (!card) return { reviewed: false }
+
+  // Writing a cell that is *not* due may happen any time — filling the sheet in,
+  // or tidying a character up — but it must not touch the schedule. Otherwise the
+  // sheet becomes a way to cram, and the scheduler stops meaning anything.
+  const isDue = new Date(card.due) <= now
+  if (!isDue && !opts.countsAsReview) return { reviewed: false }
+
+  const { card: next, review } = applyReview(card, outcome.rating, {
+    clientReviewId: newId(),
+    now,
+    durationMs: outcome.durationMs,
+    strokeErrors: outcome.strokeErrors,
+  })
+
+  await recordReview(next, review)
+  return { reviewed: true }
+}
+
+/** Records a self-rated review for recognition, recall or listening. */
+export async function saveReview(
+  userId: string,
+  itemId: string,
+  mode: Exclude<CardMode, 'writing'>,
+  rating: UserRating,
+  opts: { durationMs?: number; hintsUsed?: number; now?: Date } = {},
+): Promise<boolean> {
+  const card = await cardFor(userId, itemId, mode)
+  if (!card) return false
+
+  const { card: next, review } = applyReview(card, rating, {
+    clientReviewId: newId(),
+    now: opts.now ?? new Date(),
+    durationMs: opts.durationMs,
+    hintsUsed: opts.hintsUsed,
+  })
+
+  await recordReview(next, review)
+  return true
+}
+
+// ---------------------------------------------------------------------------
+// moving data between here and the server
+// ---------------------------------------------------------------------------
+
+/**
+ * The Supabase client is imported lazily, and only by the two functions that talk to
+ * the network.
+ *
+ * Everything above this line is the study logic itself, and it has no business
+ * depending on a configured client: it runs offline by design, and a top-level
+ * import would make the whole module unusable — including in tests — without
+ * environment variables it never uses.
+ */
+async function client() {
+  const { supabase } = await import('./supabase-client')
+  return supabase
+}
+
+/**
+ * Pulls the user's cards into the local store.
+ *
+ * Everything, not just what is due today: the sheet colours 104 cells by state, and
+ * fetching per-screen would put the network back in the middle of a session.
+ */
+export async function pullCards(userId: string): Promise<number> {
+  const sb = await client()
+  const { data, error } = await sb.from('card_states').select('*').eq('user_id', userId)
+  if (error) throw error
+  const rows = (data ?? []) as CardStateRow[]
+  await hydrateCards(rows)
+  return rows.length
+}
+
+export async function pushPending() {
+  return syncPending((await client()) as never)
+}
+
+/** Local-first read for the sheet: falls back to nothing rather than to the network. */
+export async function localCards(userId: string): Promise<CardStateRow[]> {
+  return db.cards.where('user_id').equals(userId).toArray()
+}

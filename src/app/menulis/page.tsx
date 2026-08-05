@@ -19,7 +19,7 @@ import {
   type SheetRow,
 } from '@/lib/curriculum'
 import { useCardStates, useKanaSheet } from '@/lib/queries'
-import { supabase } from '@/lib/supabase-client'
+import { pushPending, saveWriting } from '@/lib/study'
 
 /**
  * Writing one cell of the sheet, in the context of its row.
@@ -67,25 +67,27 @@ function WritingScreen() {
     setSaving(true)
     setError('')
 
-    // Only the Recall strokes are stored. The sheet is meant to hold writing from
-    // memory; keeping a trace would make it a record of copying.
-    const { error: saveError } = await supabase.from('kana_sheet').upsert(
-      {
-        user_id: user.id,
-        item_id: item.id,
+    try {
+      // Local first, always. Only the Recall strokes are stored — the sheet is meant
+      // to hold writing from memory, and keeping a trace would make it a record of
+      // copying. The schedule moves only if the card was actually due.
+      await saveWriting(user.id, item, {
         strokes: result.strokes,
-        written_at: new Date().toISOString(),
-      },
-      { onConflict: 'user_id,item_id' },
-    )
-
-    if (saveError) {
-      setError(saveError.message)
+        strokeErrors: result.strokeErrors,
+        rating: result.rating,
+      })
+    } catch (e) {
+      setError(e instanceof Error ? e.message : String(e))
       setSaving(false)
       return
     }
 
+    // Uploading is a separate concern: a failure here loses nothing, because the
+    // work is already in the local queue and the next sync will carry it.
+    void pushPending()
+
     await queryClient.invalidateQueries({ queryKey: ['kana_sheet', user.id] })
+    await queryClient.invalidateQueries({ queryKey: ['card_states', user.id] })
     setSaving(false)
 
     // Move to the next unwritten cell in this row, or back to the sheet when the
