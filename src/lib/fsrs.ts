@@ -162,19 +162,39 @@ export function applyReview(
 }
 
 /**
- * The four intervals shown on the rating buttons before the user commits.
+ * What each of the four ratings would do, before the user commits to one.
  *
- * The design writes the next interval under each label so the choice is informed
- * rather than guessed — which means we have to know all four up front, not just the
- * one that gets picked.
+ * `scheduled_days` alone is not enough to label the buttons. A card in learning
+ * steps comes back in minutes, and FSRS reports that as **zero days** — so on day
+ * one, when almost every card is new, all four buttons would read "0 hr" and the
+ * premise of an informed choice collapses. The due date carries the information
+ * the day count throws away, so both are returned and the UI picks the unit.
  */
-export function previewIntervals(row: CardStateRow, now = new Date()) {
+export function previewSchedule(
+  row: CardStateRow,
+  now = new Date(),
+): Record<Grade, { days: number; due: Date }> {
   const preview = scheduler.repeat(toCard(row), now)
+  const at = (rating: Grade) => ({
+    days: preview[rating].card.scheduled_days,
+    due: preview[rating].card.due,
+  })
   return {
-    [Rating.Again]: preview[Rating.Again].card.scheduled_days,
-    [Rating.Hard]: preview[Rating.Hard].card.scheduled_days,
-    [Rating.Good]: preview[Rating.Good].card.scheduled_days,
-    [Rating.Easy]: preview[Rating.Easy].card.scheduled_days,
+    [Rating.Again]: at(Rating.Again),
+    [Rating.Hard]: at(Rating.Hard),
+    [Rating.Good]: at(Rating.Good),
+    [Rating.Easy]: at(Rating.Easy),
+  }
+}
+
+/** Day counts only. Kept for callers that genuinely want days; see the caveat above. */
+export function previewIntervals(row: CardStateRow, now = new Date()) {
+  const preview = previewSchedule(row, now)
+  return {
+    [Rating.Again]: preview[Rating.Again].days,
+    [Rating.Hard]: preview[Rating.Hard].days,
+    [Rating.Good]: preview[Rating.Good].days,
+    [Rating.Easy]: preview[Rating.Easy].days,
   } as Record<Grade, number>
 }
 

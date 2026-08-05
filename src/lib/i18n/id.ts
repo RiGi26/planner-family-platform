@@ -103,6 +103,41 @@ export const id = {
     writingQueued: 'Latihan menulis ({n})',
   },
 
+  sesi: {
+    loading: 'Menyiapkan sesi…',
+    progress: '{done}/{total}',
+    quit: 'Sudahi',
+    scriptHiragana: 'hiragana',
+    scriptKatakana: 'katakana',
+    promptRecognition: 'Bacanya apa?',
+    promptRecall: 'Tulisannya yang mana?',
+    reveal: 'Lihat jawaban',
+    hint: 'Beri petunjuk',
+    rateAgain: 'Lupa',
+    rateHard: 'Sulit',
+    rateGood: 'Ingat',
+    rateEasy: 'Mudah',
+    unitMnt: 'mnt',
+    unitJam: 'jam',
+    unitHr: 'hr',
+    unitBln: 'bln',
+    unitThn: 'thn',
+
+    emptyTitle: 'Tidak ada yang jatuh tempo',
+    emptyBody:
+      'Semua kartumu masih terjadwal ke depan. Datang lagi besok — mengulang lebih awal tidak membuatnya lebih lekat.',
+    emptyCta: 'Kembali ke Hari Ini',
+
+    doneTitle: 'Sesi selesai',
+    doneCount: '{n} kartu',
+    doneBreakdown: '{baru} baru · {ulangan} ulangan',
+    doneForgot: '{n} perlu diulang lagi nanti',
+    doneMinutes: '{n} menit',
+    writingLeft: 'Masih ada {n} kartu menulis',
+    writingCta: 'Lanjut menulis',
+    backHome: 'Selesai',
+  },
+
   onboarding: {
     stepOf: 'Langkah {n} dari 2',
     targetTitle: 'Kapan ujianmu?',
