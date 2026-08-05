@@ -1,9 +1,11 @@
 import { describe, expect, it } from 'vitest'
 import {
   CHARACTER_SIZE,
+  STROKE_WIDTH,
   canvasToCharacter,
   characterToCanvas,
   describe as describeStroke,
+  inkWidth,
   ratingFromStrokeErrors,
   resample,
   scoreCharacter,
@@ -189,5 +191,26 @@ describe('canvasToCharacter', () => {
     const s = scoreStroke(converted, KAWA[2]!, 2)
     expect(s.reversed).toBe(false)
     expect(s.score).toBeGreaterThan(0.95)
+  })
+})
+
+describe('inkWidth', () => {
+  /**
+   * The template is drawn in KanjiVG space at `STROKE_WIDTH`, and the ink in canvas
+   * pixels at `inkWidth(size)`. Tracing only feels precise when those land on the
+   * same width on screen, and the two live in different coordinate systems — so the
+   * agreement is asserted rather than assumed.
+   */
+  it('renders ink at the same on-screen width as the template', () => {
+    for (const size of [200, 300, 420]) {
+      const templateOnScreen = STROKE_WIDTH * (size / CHARACTER_SIZE)
+      expect(inkWidth(size)).toBeCloseTo(templateOnScreen, 6)
+    }
+  })
+
+  it('keeps ink visible in a sheet cell, where the true proportion is sub-pixel', () => {
+    // 3 units on a 44px cell is about 1.2px, which all but disappears.
+    expect((STROKE_WIDTH * 44) / CHARACTER_SIZE).toBeLessThan(1.5)
+    expect(inkWidth(44)).toBe(1.5)
   })
 })

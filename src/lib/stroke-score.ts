@@ -26,6 +26,27 @@ const SAMPLES = 24
 /** KanjiVG's square. Every threshold below is expressed against it. */
 export const CHARACTER_SIZE = 109
 
+/**
+ * KanjiVG's own stroke weight, in character units.
+ *
+ * Every surface that draws a character shares it: the faint template, the strokes
+ * already accepted, the learner's ink, and the finished cell on the sheet. Tracing
+ * is only honest when the guide and the ink are the same weight — a guide drawn
+ * heavier leaves grey showing on both sides of a stroke that was actually perfect,
+ * and one drawn lighter hides how far off the ink really was.
+ */
+export const STROKE_WIDTH = 3
+
+/**
+ * That weight scaled to a canvas of `canvasSize` px.
+ *
+ * The floor keeps ink visible in a 44px sheet cell, where the true proportion works
+ * out to barely over a pixel.
+ */
+export function inkWidth(canvasSize: number, min = 1.5): number {
+  return Math.max(min, (STROKE_WIDTH * canvasSize) / CHARACTER_SIZE)
+}
+
 /** Distance (in character units) at which a stroke scores zero — about a fifth of the square. */
 const MAX_DEVIATION = 20
 

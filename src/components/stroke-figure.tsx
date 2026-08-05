@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { KVG_SIZE, kvgCharacter } from '@/lib/kvg'
+import { STROKE_WIDTH } from '@/lib/stroke-score'
 import { clsx } from '@/lib/clsx'
 
 /**
@@ -84,9 +85,13 @@ export function StrokeFigure({
     >
       <g
         fill="none"
-        stroke={template ? 'var(--color-canvas-ink)' : 'var(--color-canvas-ink)'}
-        strokeOpacity={template ? 0.16 : 1}
-        strokeWidth={template ? 5 : 4.5}
+        stroke="var(--color-canvas-ink)"
+        // A thinner template covers less area, so the tint is lifted to keep it
+        // reading at the same strength it did when it was drawn heavier.
+        strokeOpacity={template ? 0.2 : 1}
+        // Drawn in KanjiVG space, so this is the shared weight verbatim — no
+        // scaling. The learner's ink resolves to the same width in canvas pixels.
+        strokeWidth={STROKE_WIDTH}
         strokeLinecap="round"
         strokeLinejoin="round"
       >

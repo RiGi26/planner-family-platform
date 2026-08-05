@@ -2,7 +2,7 @@
 
 import { clsx } from '@/lib/clsx'
 import type { CellStatus, KanaItem } from '@/lib/curriculum'
-import { characterToCanvas, type Point } from '@/lib/stroke-score'
+import { characterToCanvas, inkWidth, type Point } from '@/lib/stroke-score'
 
 /**
  * One square of the Kana Sheet.
@@ -77,9 +77,9 @@ export function KanaCell({ item, status, strokes, hidden = false, size = 56, onS
               d={toCellPath(stroke, size)}
               fill="none"
               stroke="var(--color-canvas-ink)"
-              // Same 3-units-on-109 proportion the canvas uses, so a cell shows the
+              // The same weight the writing canvas uses, so a cell shows the
               // handwriting shrunk rather than a heavier version of it.
-              strokeWidth={Math.max(1.5, (size * 3) / 109)}
+              strokeWidth={inkWidth(size)}
               strokeLinecap="round"
               strokeLinejoin="round"
             />

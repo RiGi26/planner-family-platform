@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { clsx } from '@/lib/clsx'
-import { canvasToCharacter, type Point } from '@/lib/stroke-score'
+import { canvasToCharacter, inkWidth, type Point } from '@/lib/stroke-score'
 
 /**
  * A square of practice paper you can write on.
@@ -221,10 +221,9 @@ export function InkCanvas({
         <g
           fill="none"
           stroke="var(--color-canvas-ink)"
-          // KanjiVG's own canonical weight is 3 units on a 109 square. Matching it
-          // means traced ink sits inside the template rather than spilling over it,
-          // which is what tracing is supposed to look like.
-          strokeWidth={Math.max(3, (size * 3) / 109)}
+          // The same weight the template and the sheet cells use, so a stroke laid
+          // exactly on the guide covers it exactly.
+          strokeWidth={inkWidth(size)}
           strokeLinecap="round"
           strokeLinejoin="round"
         >
