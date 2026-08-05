@@ -112,15 +112,20 @@ Deno.serve(async (req) => {
 
   // Claim first. The conditional UPDATE inside claim_invite is atomic, so two people
   // racing for the last use cannot both win.
+  //
+  // Two result shapes are accepted on purpose: claim_invite used to return the
+  // household row the invite carried, and returns a plain boolean since the app
+  // was generalized. This function deploys before the migration lands, so for a
+  // window it must speak both dialects.
   const { data: claimed, error: claimError } = await admin.rpc('claim_invite', { p_code: code })
   if (claimError) {
     console.error('claim_invite failed', claimError.message)
     return json({ error: 'Terjadi gangguan. Coba lagi sebentar lagi.' }, 500, origin)
   }
-  if (!Array.isArray(claimed) || claimed.length === 0) {
+  const claimOk = claimed === true || (Array.isArray(claimed) && claimed.length > 0)
+  if (!claimOk) {
     return json({ error: INVITE_REJECTED }, 403, origin)
   }
-  const householdId = claimed[0]?.household_id ?? null
 
   const { data: invited, error: inviteError } = await admin.auth.admin.inviteUserByEmail(email, {
     data: { display_name: displayName },
@@ -144,19 +149,7 @@ Deno.serve(async (req) => {
     )
   }
 
-  // The signup trigger has already created the profile row; this puts it in the right
-  // household, which is why the household is carried on the invite in the first place.
-  if (householdId) {
-    const { error: linkError } = await admin
-      .from('profiles')
-      .update({ household_id: householdId })
-      .eq('id', invited.user.id)
-    if (linkError) {
-      // Not fatal: the account exists and works, only the Family Dashboard would be
-      // empty. Better to let them in and fix the link than to fail the signup.
-      console.error('household link failed', linkError.message)
-    }
-  }
-
+  // The signup trigger has already created the profile row; there is nothing left
+  // to link. An account is just an account now.
   return json({ ok: true, email }, 200, origin)
 })
