@@ -10,8 +10,21 @@ import { createClient, type SupportedStorage } from '@supabase/supabase-js'
  * any Claude API key are not, and must never appear outside an Edge Function.
  */
 
-const url = process.env.NEXT_PUBLIC_SUPABASE_URL
-const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+/**
+ * Strips the invisible characters that env pipelines love to add.
+ *
+ * A UTF-8 BOM on the front of a URL is the worst kind of bug: `﻿https://…` is
+ * not a valid absolute URL, so `fetch` silently treats it as a *relative* path and
+ * sends the request to your own origin instead. Nothing throws, nothing is logged
+ * on the server that never received it, and the only symptom is a generic error on
+ * screen. This cost us an afternoon; the guard below costs a millisecond.
+ */
+function cleanEnv(value: string | undefined): string {
+  return (value ?? '').replace(/^﻿/, '').replace(/\\r|\\n/g, '').trim()
+}
+
+const url = cleanEnv(process.env.NEXT_PUBLIC_SUPABASE_URL)
+const anonKey = cleanEnv(process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY)
 
 if (!url || !anonKey) {
   throw new Error(
@@ -19,6 +32,17 @@ if (!url || !anonKey) {
       'Static export inlines them at build time, so a missing value fails the build rather than the request.',
   )
 }
+
+// Fail loudly at startup rather than misrouting every request at runtime.
+if (!/^https:\/\/[a-z0-9-]+\.supabase\.co$/.test(url)) {
+  throw new Error(
+    `NEXT_PUBLIC_SUPABASE_URL tidak berbentuk URL Supabase yang sah: ${JSON.stringify(url)}. ` +
+      'Cek apakah nilainya membawa BOM, spasi, atau newline dari pipeline env.',
+  )
+}
+
+/** The project's function endpoint, built from the same validated origin. */
+export const functionsUrl = (name: string) => `${url}/functions/v1/${name}`
 
 /**
  * Session storage, deliberately isolated behind its own object.

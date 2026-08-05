@@ -4,6 +4,7 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { AuthLink, AuthShell, Field, FormMessage, SubmitButton } from '@/components/auth-form'
 import { authErrorMessage } from '@/lib/auth-errors'
+import { functionsUrl } from '@/lib/supabase-client'
 
 /**
  * Signup, by invitation only.
@@ -18,7 +19,9 @@ import { authErrorMessage } from '@/lib/auth-errors'
  * only thing holding the service role key.
  */
 
-const FUNCTIONS_URL = `${process.env.NEXT_PUBLIC_SUPABASE_URL}/functions/v1/redeem-invite`
+// Built from the validated origin in supabase-client rather than from the raw env
+// var, so a malformed value cannot quietly turn this into a same-origin request.
+const FUNCTIONS_URL = functionsUrl('redeem-invite')
 
 export default function SignUpPage() {
   const [pending, setPending] = useState(false)
