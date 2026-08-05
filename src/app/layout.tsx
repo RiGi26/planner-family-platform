@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from 'next'
 import { IBM_Plex_Mono, Zen_Kaku_Gothic_New, Zen_Old_Mincho } from 'next/font/google'
 import { AuthProvider } from '@/components/auth-provider'
 import { QueryProvider } from '@/components/query-provider'
+import { SwUpdateReloader } from '@/components/sw-update'
 import { SyncProvider } from '@/components/sync-provider'
 import { t } from '@/lib/i18n'
 import './globals.css'
@@ -56,6 +57,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="id" suppressHydrationWarning>
       <body className={`${gothic.variable} ${mincho.variable} ${mono.variable}`}>
+        {/* Outside the providers: it owns nothing and reads nothing, it only
+            watches for a deploy claiming this page mid-session. */}
+        <SwUpdateReloader />
         <QueryProvider>
           <AuthProvider>
             {/* Inside AuthProvider because it reads the session; wraps everything
