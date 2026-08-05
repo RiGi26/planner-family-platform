@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { clsx } from '@/lib/clsx'
+import { useT } from '@/lib/i18n'
 
 /**
  * Navigation uses kanji glyphs rather than line icons, so every tap is also one more
@@ -12,18 +13,21 @@ import { clsx } from '@/lib/clsx'
  * bar at the bottom would sit exactly where the thumb lands.
  */
 const TABS = [
-  { href: '/', glyph: '今', label: 'Hari Ini' },
-  { href: '/kana/', glyph: 'あ', label: 'Kana' },
-  { href: '/menulis/', glyph: '筆', label: 'Menulis' },
-  { href: '/keluarga/', glyph: '家', label: 'Keluarga' },
+  { href: '/', glyph: '今', key: 'hariIni' },
+  { href: '/kana/', glyph: 'あ', key: 'kana' },
+  { href: '/menulis/', glyph: '筆', key: 'menulis' },
+  // 設 from 設定 — the family tab this replaced pointed at a screen that no
+  // longer exists in a single-user app.
+  { href: '/setelan/', glyph: '設', key: 'setelan' },
 ] as const
 
 export function BottomNav() {
   const pathname = usePathname()
+  const t = useT()
 
   return (
     <nav
-      aria-label="Navigasi utama"
+      aria-label={t.nav.label}
       className="fixed inset-x-0 bottom-0 z-40 border-t border-rule bg-paper-raised"
       style={{ paddingBottom: 'var(--spacing-safe-bottom)' }}
     >
@@ -45,7 +49,7 @@ export function BottomNav() {
                 <span aria-hidden className="text-[20px] leading-none">
                   {tab.glyph}
                 </span>
-                <span className="text-[10px] tracking-[0.08em] uppercase">{tab.label}</span>
+                <span className="text-[10px] tracking-[0.08em] uppercase">{t.nav[tab.key]}</span>
               </Link>
             </li>
           )

@@ -11,54 +11,25 @@
  * accounts.
  */
 
+import { t } from './i18n'
+
 type Matcher = { test: RegExp; message: string }
 
 const MATCHERS: Matcher[] = [
-  {
-    test: /invalid login credentials|invalid_credentials/i,
-    message: 'Email atau password salah.',
-  },
-  {
-    test: /email not confirmed|email_not_confirmed/i,
-    message: 'Emailmu belum dikonfirmasi. Cek kotak masuk untuk tautan konfirmasinya.',
-  },
-  {
-    test: /user already registered|already been registered/i,
-    message: 'Email ini sudah terdaftar. Coba masuk, atau pakai tautan lupa password.',
-  },
-  {
-    test: /password should be at least (\d+)/i,
-    message: 'Password terlalu pendek.',
-  },
-  {
-    test: /(pwned|leaked|compromised) password/i,
-    message:
-      'Password ini pernah muncul di kebocoran data publik. Pilih yang lain — bukan berarti akunmu bocor.',
-  },
-  {
-    test: /same as the old password|should be different/i,
-    message: 'Password barunya masih sama dengan yang lama.',
-  },
-  {
-    test: /token has expired|expired|invalid.*token|otp_expired/i,
-    message: 'Tautannya sudah kedaluwarsa. Minta tautan baru, ya.',
-  },
+  { test: /invalid login credentials|invalid_credentials/i, message: t.errors.auth.invalidCredentials },
+  { test: /email not confirmed|email_not_confirmed/i, message: t.errors.auth.emailNotConfirmed },
+  { test: /user already registered|already been registered/i, message: t.errors.auth.alreadyRegistered },
+  { test: /password should be at least (\d+)/i, message: t.errors.auth.passwordTooShort },
+  { test: /(pwned|leaked|compromised) password/i, message: t.errors.auth.passwordPwned },
+  { test: /same as the old password|should be different/i, message: t.errors.auth.passwordSameAsOld },
+  { test: /token has expired|expired|invalid.*token|otp_expired/i, message: t.errors.auth.linkExpired },
   {
     test: /email rate limit|over_email_send_rate_limit|too many requests|rate limit/i,
-    message: 'Terlalu banyak percobaan. Tunggu beberapa menit sebelum mencoba lagi.',
+    message: t.errors.auth.rateLimited,
   },
-  {
-    test: /signups not allowed|signup_disabled/i,
-    message: 'Pendaftaran mandiri ditutup. Kamu perlu kode undangan.',
-  },
-  {
-    test: /unable to validate email|invalid format/i,
-    message: 'Alamat emailnya tidak valid.',
-  },
-  {
-    test: /failed to fetch|networkerror|network request failed/i,
-    message: 'Tidak bisa terhubung. Cek koneksimu lalu coba lagi.',
-  },
+  { test: /signups not allowed|signup_disabled/i, message: t.errors.auth.signupsDisabled },
+  { test: /unable to validate email|invalid format/i, message: t.errors.auth.invalidEmail },
+  { test: /failed to fetch|networkerror|network request failed/i, message: t.errors.auth.offline },
 ]
 
 export function authErrorMessage(error: unknown): string {
@@ -78,5 +49,5 @@ export function authErrorMessage(error: unknown): string {
   // Nothing matched. Say so plainly rather than showing an API string that means
   // nothing to the reader — and log the original so it can be added above.
   if (raw) console.warn('[auth] unmapped error:', raw)
-  return 'Terjadi gangguan. Coba lagi sebentar lagi.'
+  return t.errors.auth.fallback
 }

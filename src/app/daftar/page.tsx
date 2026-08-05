@@ -4,6 +4,7 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { AuthLink, AuthShell, Field, FormMessage, SubmitButton } from '@/components/auth-form'
 import { authErrorMessage } from '@/lib/auth-errors'
+import { useT } from '@/lib/i18n'
 import { functionsUrl } from '@/lib/supabase-client'
 
 /**
@@ -24,6 +25,7 @@ import { functionsUrl } from '@/lib/supabase-client'
 const FUNCTIONS_URL = functionsUrl('redeem-invite')
 
 export default function SignUpPage() {
+  const t = useT()
   const [pending, setPending] = useState(false)
   const [error, setError] = useState('')
   const [sentTo, setSentTo] = useState('')
@@ -70,25 +72,21 @@ export default function SignUpPage() {
   if (sentTo) {
     return (
       <AuthShell
-        title="Cek emailmu"
+        title={t.daftar.sentTitle}
         subtitle={
           <>
-            Undangan sudah dikirim ke <strong className="text-ink">{sentTo}</strong>. Buka tautannya
-            untuk menetapkan password, lalu kamu langsung masuk.
+            {t.daftar.sentBefore}
+            <strong className="text-ink">{sentTo}</strong>
+            {t.daftar.sentAfter}
           </>
         }
-        footer={
-          <p>
-            Tidak ada di kotak masuk? Cek folder spam. Kalau tetap tidak ada setelah beberapa menit,
-            minta kode undangan baru.
-          </p>
-        }
+        footer={<p>{t.daftar.sentFooter}</p>}
       >
         <Link
           href="/masuk/"
           className="flex min-h-[52px] w-full items-center justify-center rounded-[3px] border border-rule px-4 text-[15px] text-ink"
         >
-          Kembali ke halaman masuk
+          {t.daftar.backToSignIn}
         </Link>
       </AuthShell>
     )
@@ -96,11 +94,11 @@ export default function SignUpPage() {
 
   return (
     <AuthShell
-      title="Daftar"
-      subtitle="Pendaftaran hanya lewat undangan. Kamu akan menetapkan password dari tautan yang kami kirim."
+      title={t.daftar.title}
+      subtitle={t.daftar.subtitle}
       footer={
         <p>
-          Sudah punya akun? <AuthLink href="/masuk/">Masuk</AuthLink>
+          {t.daftar.haveAccount} <AuthLink href="/masuk/">{t.daftar.signIn}</AuthLink>
         </p>
       }
     >
@@ -108,17 +106,17 @@ export default function SignUpPage() {
         <FormMessage kind="error">{error}</FormMessage>
 
         <Field
-          label="Nama tampilan"
+          label={t.daftar.nameLabel}
           name="displayName"
           required
           maxLength={60}
           autoComplete="name"
-          placeholder="Nama panggilanmu"
-          hint="Yang dilihat anggota keluarga lain di dashboard."
+          placeholder={t.daftar.namePlaceholder}
+          hint={t.daftar.nameHint}
         />
 
         <Field
-          label="Email"
+          label={t.daftar.emailLabel}
           name="email"
           type="email"
           required
@@ -126,11 +124,11 @@ export default function SignUpPage() {
           inputMode="email"
           autoCapitalize="none"
           autoCorrect="off"
-          placeholder="kamu@contoh.com"
+          placeholder={t.daftar.emailPlaceholder}
         />
 
         <Field
-          label="Kode undangan"
+          label={t.daftar.codeLabel}
           name="code"
           required
           autoComplete="off"
@@ -138,11 +136,11 @@ export default function SignUpPage() {
           autoCorrect="off"
           spellCheck={false}
           className="font-[family-name:var(--font-plex-mono)] tracking-[0.12em] uppercase"
-          placeholder="XXXX-XXXX-XXXX"
+          placeholder={t.daftar.codePlaceholder}
         />
 
-        <SubmitButton pending={pending} pendingLabel="Mengirim undangan…">
-          Kirim undangan
+        <SubmitButton pending={pending} pendingLabel={t.daftar.submitPending}>
+          {t.daftar.submit}
         </SubmitButton>
       </form>
     </AuthShell>
