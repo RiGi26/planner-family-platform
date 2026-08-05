@@ -1,0 +1,94 @@
+'use client'
+
+import { clsx } from '@/lib/clsx'
+import type { CellStatus, KanaItem } from '@/lib/curriculum'
+import type { Point } from '@/lib/stroke-score'
+
+/**
+ * One square of the Kana Sheet.
+ *
+ * The rule the whole screen rests on: **a cell never shows the character.** Position
+ * is the question — row k, column a — and the learner derives か from it. A glyph
+ * printed in an unwritten cell would make the sheet a cheat sheet.
+ *
+ * A written cell shows the learner's own handwriting, not a typeset glyph. After a
+ * few weeks that adds up to a complete chart in their own hand, and the change from
+ * week one to week six is visible.
+ */
+
+export type CellProps = {
+  item: KanaItem
+  status: CellStatus
+  /** Captured stroke points in character space, from the Recall stage only. */
+  strokes?: Point[][]
+  /** Test mode blanks every cell without deleting anything. */
+  hidden?: boolean
+  size?: number
+  onSelect?: (item: KanaItem) => void
+}
+
+/**
+ * Character space is 1024 wide with the y axis flipped (hanzi-writer's convention),
+ * so rendering has to undo exactly what `canvasToCharacter` did.
+ */
+function toCellPath(stroke: Point[], size: number): string {
+  return stroke
+    .map((p, i) => {
+      const x = (p.x * size) / 1024
+      const y = ((900 - p.y) * size) / 1024
+      return `${i === 0 ? 'M' : 'L'} ${x.toFixed(1)} ${y.toFixed(1)}`
+    })
+    .join(' ')
+}
+
+export function KanaCell({ item, status, strokes, hidden = false, size = 56, onSelect }: CellProps) {
+  const written = !hidden && strokes && strokes.length > 0
+  const label = hidden
+    ? 'sel tersembunyi — mode uji'
+    : written
+      ? `sudah ditulis, ${status}`
+      : `belum ditulis, baris ${item.data.row}`
+
+  return (
+    <button
+      type="button"
+      onClick={() => onSelect?.(item)}
+      aria-label={label}
+      style={{ width: size, height: size }}
+      className={clsx(
+        'relative flex items-center justify-center rounded-[2px] transition-colors',
+        written ? 'border border-rule bg-canvas' : 'border border-dashed border-cell-empty',
+        // Due cells get a ring, never a revealed character. Saying "review this" by
+        // showing the answer would defeat the point of asking.
+        status === 'due' && 'ring-2 ring-ai ring-offset-1 ring-offset-paper',
+      )}
+    >
+      {written ? (
+        <svg
+          viewBox={`0 0 ${size} ${size}`}
+          width={size}
+          height={size}
+          aria-hidden
+          className="pointer-events-none"
+        >
+          {strokes.map((stroke, i) => (
+            <path
+              key={i}
+              d={toCellPath(stroke, size)}
+              fill="none"
+              stroke="var(--color-canvas-ink)"
+              strokeWidth={Math.max(2, size / 16)}
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          ))}
+        </svg>
+      ) : null}
+    </button>
+  )
+}
+
+/** A position on the chart that has no character — drawn as nothing, not as a box. */
+export function KanaGap({ size = 56 }: { size?: number }) {
+  return <span aria-hidden style={{ width: size, height: size }} className="block" />
+}
