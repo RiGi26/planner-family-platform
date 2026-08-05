@@ -6,9 +6,11 @@ drifts the moment someone forgets to update it.
 
 GitHub renders the Mermaid blocks below directly.
 
-**Last verified against production:** 5 August 2026 — auth flow end to end (invite →
-email → set password → session), Edge Function origin allowlist, offline sync tests,
-and both signup doors probed directly.
+**Last verified against production:** 5 August 2026, after the generalisation —
+migrations `0005`+`0006` applied (households and `progress_summary` gone, every
+policy own-rows-only), `redeem-invite` v3 and `delete-account` v1 deployed, auth
+flow end to end (invite → email → set password → session), Edge Function origin
+allowlists, offline sync tests, and both signup doors probed directly.
 
 ---
 
@@ -38,7 +40,7 @@ flowchart LR
     subgraph supabase["Supabase"]
         auth["Auth / GoTrue"]
         db[("Postgres<br/>+ RLS")]
-        fn["Edge Function<br/>redeem-invite"]
+        fn["Edge Functions<br/>redeem-invite · delete-account"]
     end
 
     resend["Resend<br/>SMTP"]
@@ -48,7 +50,7 @@ flowchart LR
     pwa <-->|"baca &amp; tulis lokal"| dexie
     pwa -->|"sinkron saat online"| db
     pwa -->|"masuk · sesi"| auth
-    pwa -->|"tebus kode undangan"| fn
+    pwa -->|"tebus kode · hapus akun"| fn
     fn -->|"service role, admin API"| auth
     fn -->|"claim_invite"| db
     auth -->|"kirim undangan &amp; reset"| resend
@@ -62,23 +64,25 @@ flowchart LR
 | Static export | One build serves Vercel *and* drops into a Capacitor WebView in Phase 1/2 without a rewrite |
 | Dexie | Reviewing on a train is the main use case, not an edge case |
 | Service worker | Home-screen install, offline shell |
-| Edge Function | The only thing that may hold the service role key |
+| Edge Functions | The only things that may hold the service role key — one to enter (`redeem-invite`), one to leave (`delete-account`) |
 | Resend | Supabase's built-in SMTP is capped at 2 emails/hour and documented as test-only |
 
 ---
 
 ## 2. Getting an account
 
-Two doors exist, and only one is ours.
+Registration is self-serve, but gated: **the invite code is the credential**. That
+is the whole auth story of signing up — which is why `verify_jwt` is off on
+`redeem-invite` (someone signing up cannot possibly present a JWT yet), and why the
+code is checked **inside the Edge Function**, never in the browser, because anything
+checked in the browser can be walked past. Opening registration to the public —
+dropping the code — is a later phase, and needs rate limiting and bot protection
+first.
 
-The page always demands an invite code, and the code is checked **inside the Edge
-Function** — never in the browser, because anything checked in the browser can be
-walked past.
-
-But `/auth/v1/signup` is Supabase's own endpoint and answers regardless of our page,
-so the invite code is only meaningful while **"Allow new users to sign up" is off**.
-
-Both doors were probed directly on 5 August 2026:
+`/auth/v1/signup` is Supabase's own endpoint and answers regardless of our page, so
+**"Allow new users to sign up" stays off** in the dashboard; the admin API inside
+the Edge Function is the only way a user row can come into existence. Both doors
+were probed directly on 5 August 2026:
 
 | Door | Probe | Result |
 |---|---|---|
@@ -104,18 +108,17 @@ sequenceDiagram
     Note over F: origin allowlist,<br/>lalu validasi bentuk
     F->>DB: claim_invite(kode)
     alt kode tidak berlaku / habis / kedaluwarsa
-        DB-->>F: nol baris
+        DB-->>F: false
         F-->>P: 403 — satu pesan untuk semua sebab
     else kode sah
-        DB-->>F: household_id
+        DB-->>F: true
         F->>A: inviteUserByEmail
         A->>M: kirim undangan
         alt pengiriman gagal
             F->>DB: release_invite — undangan tidak hangus
             F-->>P: 502
         else terkirim
-            A-->>DB: trigger membuat profiles + progress_summary
-            F->>DB: tautkan profil ke household
+            A-->>DB: trigger handle_new_user membuat profiles
             F-->>P: 200
         end
     end
@@ -130,15 +133,36 @@ sequenceDiagram
 - **No password passes through the Edge Function.** It sends an invitation; the
   recipient sets a password from the emailed link. Email verification becomes part of
   the flow rather than a step that can be skipped.
-- **`claim_invite` is a conditional UPDATE**, so two people racing for the last use
-  cannot both win.
+- **`claim_invite` is a conditional UPDATE returning a boolean**, so two people
+  racing for the last use cannot both win — and since the generalisation there is no
+  household to return or link. The signup trigger creates the profile row and the
+  function's work is done; an account is just an account.
 - **One rejection message for every reason.** Telling an unauthenticated caller
   apart "no such code" from "already used" hands them a way to probe the table one
   guess at a time.
 
 ---
 
-## 3. The daily loop, offline first
+## 3. Leaving: delete-account
+
+Both stores require it — App Store guideline 5.1.1(v) and Google Play's
+data-deletion policy both say an account created in the app must be deletable from
+the app. `delete-account` is that path, reached from Setelan behind a typed
+confirmation.
+
+Its security model is one sentence: **the JWT is both the authentication and the
+target.** `verify_jwt` is on at the gateway, the function resolves the caller from
+their own token (`getUser()` as defense in depth), and no user id is accepted from
+the body — so the caller can only ever delete themselves. The service-role client
+then calls `admin.deleteUser`, and every user-keyed table (`profiles`, `goals`,
+`card_states`, `reviews`, `daily_progress`, `kana_sheet`) carries
+`ON DELETE CASCADE` to `auth.users`, so the data goes with the account atomically —
+nothing left behind to sweep up later. The client finishes the job on its side:
+Dexie `clearAll()` wipes IndexedDB before the local sign-out.
+
+---
+
+## 4. The daily loop, offline first
 
 The session never touches the network. It reads from IndexedDB and writes to a local
 queue; syncing happens later, in the background, or not today.
@@ -183,40 +207,71 @@ is last-write-wins on `last_review`.
 
 ---
 
-## 4. Who can see what
+## 5. Who can see what
 
-The Family Dashboard needs three people readable side by side, but nobody needs to
-know which cards you keep forgetting. So the handful of numbers the dashboard shows
-are denormalised into `progress_summary`, and everything else stays private.
+Since the generalisation the answer is uniform: **your own rows, nothing else.**
+Migration `0005` dropped the family machinery — the `households` table, the
+denormalised `progress_summary` that existed only so family members could read each
+other's numbers, the `household_id` columns, and the `current_household_id()`
+helper — and collapsed every policy to owner-only. Shorter policies are harder to
+get wrong.
 
 ```mermaid
 erDiagram
-    households ||--o{ profiles : "berisi"
     profiles ||--o{ goals : "punya"
     profiles ||--o{ card_states : "punya"
     card_states ||--o{ reviews : "menghasilkan"
     profiles ||--o{ daily_progress : "punya"
     profiles ||--o{ kana_sheet : "menulis"
-    profiles ||--|| progress_summary : "diringkas ke"
-    households ||--o{ invites : "mengundang ke"
+    invites {
+        text code PK
+        smallint max_uses
+        smallint used_count
+    }
 ```
 
-| Tabel | Sekeluarga boleh lihat | Alasan |
+| Tabel | Siapa boleh lihat | Policy |
 |---|---|---|
-| `profiles` | ✅ | Nama dan streak — inti Family Dashboard |
-| `daily_progress` | ✅ | "Hari ini sudah berapa" |
-| `progress_summary` | ✅ | Satu-satunya jendela lintas-anggota, sengaja sempit |
-| `goals` | ❌ | Tanggal ujian orang lain tidak relevan |
-| `card_states`, `reviews` | ❌ | Tak ada yang perlu tahu kartu mana yang kamu lupa terus |
-| `kana_sheet` | ❌ | Itu tulisan tangan pribadi |
-| `invites` | ❌ **nol policy** | RLS aktif tanpa policy = tertutup total; hanya service role |
+| `profiles` | Pemiliknya saja | `id = auth.uid()` |
+| `goals`, `card_states`, `reviews`, `daily_progress`, `kana_sheet` | Pemiliknya saja | `user_id = auth.uid()` |
+| `invites` | **Tidak seorang pun** — nol policy | RLS aktif tanpa policy = tertutup total; hanya service role di Edge Function |
 
-`current_household_id()` must be `security definer`, or the policy on `profiles`
-calls itself while evaluating `household_id` and recurses until Postgres gives up.
+`invites` stands alone in the diagram on purpose: since `0005` it references
+nothing — a code is a bearer credential for a signup, not a membership in anything.
 
 ---
 
-## 5. Traps this system has already fallen into
+## 6. One dictionary, every string
+
+All UI strings live in `src/lib/i18n/id.ts` as a typed dictionary —
+`Dictionary = typeof id`, so the Indonesian file *is* the schema. Components read it
+through `useT()`; module-scope code (error tables, manifest, metadata) imports `t`
+directly.
+
+The payoff is the shape of a future locale: a second language is a sibling file
+declared `satisfies Dictionary` — the compiler lists every missing or extra key —
+and the only file that changes behaviour is `src/lib/i18n/index.ts`, where `useT()`
+starts picking a dictionary by locale. No component gets touched.
+
+---
+
+## 7. Files first, then production
+
+`supabase/functions/` and `supabase/migrations/` are **the source of truth**.
+Changing a function means editing the file, committing, then deploying that file's
+content verbatim; schema changes ride the same rule — the migration file is written
+to the repo first, then applied under the same name. Never from an editor buffer,
+never straight into the dashboard.
+
+The rule exists because it was broken once: `redeem-invite` was deployed from a
+session buffer and `0004` applied the same way, leaving the only door into the app
+living exclusively in production with no reviewable, diffable, revertible copy
+anywhere. Reconstructing them from live introspection took a session; the rule is
+cheaper.
+
+---
+
+## 8. Traps this system has already fallen into
 
 Kept because each one cost real time and none of them announce themselves.
 
@@ -230,14 +285,13 @@ Kept because each one cost real time and none of them announce themselves.
 
 ---
 
-## 6. What is not built yet
+## 9. What is not built yet
 
 Stated plainly so the diagrams are not read as a description of finished work.
 
-- Content tables (`items`, `item_examples`) — migration `0002` in PRD terms, not written
-- Kana seeding into `card_states`
-- The core screens: Lembar Kana, the three-stage writing module, the review session,
-  Hari Ini with real data, Setelan
+- The review session
+- Hari Ini with real data
+- The listening mode
 - Japanese font subsetting — 13.5 MB currently ships, which the offline precache
   would swallow whole
 - PNG icons at 192/512; the manifest currently ships an SVG only, and

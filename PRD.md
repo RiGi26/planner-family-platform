@@ -1,8 +1,8 @@
 # PRD — JLPT Certification Planner
 
 **Nama:** Masume (升目) — kotak-kotak pada kertas 原稿用紙, satu karakter per petak. Diputuskan 5 Agustus 2026, menggantikan working title "Goukaku" (§11.2 ditutup).
-**Versi:** 2.0 — konsolidasi
-**Tanggal:** 4 Agustus 2026
+**Versi:** 2.1 — generalisasi ke aplikasi umum (model household dihapus)
+**Tanggal:** 5 Agustus 2026
 **Status:** Fase 0 siap dibangun. Satu item blocking (§11.1).
 
 ---
@@ -28,7 +28,7 @@
 
 ### 1.1 Masalah
 
-Tiga orang dewasa dengan kesibukan penuh mau lulus sertifikat JLPT N5 → N4 → N3 dalam rangka pindah ke Jepang. Aplikasi belajar bahasa yang ada (Anki, Duolingo, Bunpro) menjawab *"bagaimana cara menghafal"*, bukan **"apa yang harus saya kerjakan hari ini supaya lulus ujian tanggal X"**. Tanpa jawaban itu, belajar mandiri kehilangan arah: tidak ada cara tahu sedang tertinggal atau tidak, sampai terlambat.
+Pembelajar JLPT yang menyiapkan ujian secara mandiri — sambil bekerja, kuliah, atau mengurus usaha — mau lulus sertifikat pada tanggal ujian yang sudah ditentukan. Aplikasi belajar bahasa yang ada (Anki, Duolingo, Bunpro) menjawab *"bagaimana cara menghafal"*, bukan **"apa yang harus saya kerjakan hari ini supaya lulus ujian tanggal X"**. Tanpa jawaban itu, belajar mandiri kehilangan arah: tidak ada cara tahu sedang tertinggal atau tidak, sampai terlambat.
 
 ### 1.2 Solusi
 
@@ -36,21 +36,23 @@ Planner sertifikasi yang menghitung mundur dari tanggal ujian ke kuota harian, l
 
 ### 1.3 Pengguna
 
-Tiga orang dalam satu keluarga, semuanya mulai dari pre-N5:
+Target user: **pembelajar JLPT umum** — aplikasi ini disiapkan untuk rilis publik di Play Store/App Store. Pendaftaran tetap berkode undangan sampai fase rilis publik tiba (§2.3).
 
-| User | Konteks | Implikasi desain |
+Pengguna pertamanya tiga orang dalam satu keluarga, semuanya mulai dari pre-N5. Mereka bukan lagi definisi produk, tapi profilnya tetap jadi acuan desain karena mewakili spektrum pemakaian yang harus dilayani:
+
+| User awal | Konteks | Implikasi desain |
 |---|---|---|
 | Riyadh | Kerja full-time + side project + vlog | Sesi pendek terpotong-potong, mobile, sering offline |
 | Istri | Pegang usaha sendiri | Kuota lebih ringan (~30 menit/hari), writing kanji opsional |
 | Kakak | — | Pace ditentukan sendiri |
 
-Target tanggal ujian **berbeda per orang** — tiap akun punya `target_exam_date` sendiri. Yang dibagi hanya konten dan dashboard, bukan jadwal.
+Target tanggal ujian **berbeda per orang** — tiap akun punya `target_exam_date` sendiri. Konten identik untuk semua akun; jadwal, kuota, dan progress sepenuhnya milik masing-masing akun (§5.3).
 
 ### 1.4 Definisi berhasil (Fase 0)
 
 Fase 0 dianggap stabil dan siap naik ke Fase 1 kalau:
 
-1. Ketiganya pakai ≥ 5 hari/minggu selama 4 minggu berturut-turut **tanpa disuruh**
+1. Tiap pengguna aktif memakai ≥ 5 hari/minggu selama 4 minggu berturut-turut **tanpa disuruh**
 2. Modul kana selesai (semua ≥ 95% akurat) tanpa perlu aplikasi lain
 3. Zero data loss — tidak pernah ada review yang hilang karena offline atau app ke-close
 4. Sesi review 20 kartu selesai < 4 menit
@@ -76,12 +78,11 @@ Konten bisa maju tanpa menunggu platform, dan sebaliknya. Yang mengikat cuma sat
 
 ### 2.2 Fase 0 — masuk scope
 
-- Auth + 3 akun keluarga, sesi permanen
+- Auth: pendaftaran mandiri berkode undangan, sesi permanen, keluar + hapus akun via Setelan
 - Goal Engine: pilih tanggal ujian → kuota harian otomatis, re-balance kalau bolong
 - Curriculum Path: Kana → N5 (vocab + kanji + grammar), dengan gate
 - Daily Engine: FSRS untuk 4 tipe kartu (recognition, recall, writing, listening)
 - Writing practice: demo → trace → recall, untuk kana dan kanji N5
-- Family Dashboard: streak + progress bertiga
 - Offline-first: review jalan tanpa internet, sync saat online
 
 ### 2.3 Fase 0 — di luar scope
@@ -90,11 +91,12 @@ Konten bisa maju tanpa menunggu platform, dan sebaliknya. Yang mengikat cuma sat
 - Konten N4 dan N3
 - Push notification & nudge WhatsApp (Fonnte)
 - Native shell (Capacitor), App Store / Play Store
-- Multi-tenant / user di luar keluarga
+- **Pendaftaran publik terbuka** (tanpa kode undangan) — arsitektur multi-user sudah kenyataan sejak generalisasi (§5.3), tapi pintunya tetap undangan sampai fase rilis store; membukanya butuh rate-limit + proteksi bot (§9.3)
+- Monetisasi
 
 ### 2.4 Kenapa PWA dulu
 
-Untuk 3 orang, store distribution tidak menambah nilai apa pun — hanya menambah biaya, ketergantungan pada mesin macOS, dan risiko penolakan review Apple Guideline 4.2 (yang menuntut aplikasi punya fitur dan UI melampaui situs web yang dikemas ulang). PWA memberi semua yang dibutuhkan — ikon home screen, offline, fullscreen — dengan nol friksi.
+Untuk basis pengguna awal sekecil ini, store distribution tidak menambah nilai apa pun — hanya menambah biaya, ketergantungan pada mesin macOS, dan risiko penolakan review Apple Guideline 4.2 (yang menuntut aplikasi punya fitur dan UI melampaui situs web yang dikemas ulang). PWA memberi semua yang dibutuhkan — ikon home screen, offline, fullscreen — dengan nol friksi.
 
 **Konsekuensi:** semua keputusan teknis di §3 dipilih supaya kompatibel dengan Capacitor. Naik ke Fase 1/2 menambah lapisan, bukan menulis ulang.
 
@@ -120,7 +122,7 @@ Tapi TWA tidak punya padanan di iOS. Karena iOS sudah dikunci di Fase 2, memakai
 | SRS | **ts-fsrs** | 5.4.1 | FSRS, algoritma Anki modern. Aktif (rilis Mei 2026) |
 | Offline DB | Dexie (IndexedDB) | 4.4.4 | Antrean review offline, sync saat online |
 | PWA / SW | **@serwist/next** | 9.5.12 | ⚠️ **Bukan `next-pwa`** — rilis terakhir Agustus 2022, praktis mati. Serwist penerusnya |
-| Writing | hanzi-writer + @k1low/hanzi-writer-data-jp | 3.7.3 / 0.8.0 | Lihat §3.3 |
+| Writing | **KanjiVG** (data goresan, diekstrak build-time ke `src/data/kvg-strokes.json`) | — | Lihat §3.3 dan §7.2 |
 | TTS | Web Speech API | native | Gratis, ada voice Jepang. Upgrade ke VOICEVOX kalau kurang |
 | Chart | Recharts | latest | Progress & readiness viz |
 | Tanggal | date-fns | 4.4.0 | Goal Engine banyak aritmatika tanggal |
@@ -138,17 +140,11 @@ Tidak ada Next.js API routes, tidak ada server component yang fetch data, **tida
 
 ### 3.3 Data stroke order
 
-Rencana awal memakai **KanjiVG**. Setelah diverifikasi, package yang matang justru `@k1low/hanzi-writer-data-jp` — datanya diturunkan dari **Make Me a Hanzi + animCJK**, bukan KanjiVG, tapi formatnya sudah persis format Hanzi Writer (`{strokes: [SVG paths], medians: [[x,y]...]}`) sehingga langsung pakai tanpa konversi.
+Sumber data goresan: **KanjiVG** (© Ulrich Apel, CC BY-SA 3.0 — kewajiban lisensinya di §7.2). Rencana awal sempat berbelok ke `@k1low/hanzi-writer-data-jp` karena package-nya matang, tapi datanya diturunkan dari font Cina (Make Me a Hanzi + animCJK): diaudit terhadap KanjiVG, **21 dari 150 karakter kana berbeda jumlah goresan** — semuanya karakter berloop tertutup yang dipecah jadi dua goresan padahal tulisan tangan Jepang menariknya satu. Keputusannya pindah total ke KanjiVG, bukan menambal tabel manual; `@k1low/hanzi-writer-data-jp` sudah dibuang dari dependensi.
 
-Hasil verifikasi coverage terhadap dataset kita:
+Keunggulan teknis KanjiVG: path-nya **garis tengah (centreline)**, bukan outline — satu dataset yang sama menggambar karakter, menganimasikan demo, dan jadi kerangka penilaian goresan. `npm run verify:strokes` melaporkan 150/150 cocok dengan pengajaran Jepang.
 
-| | Dibutuhkan | Tersedia |
-|---|---|---|
-| Kana (termasuk dakuten & handakuten) | 142 | **142** |
-| Kanji N5 | 79 | **79** |
-| Small kana (ゃゅょっ) untuk youon | 8 | **8** |
-
-⚠️ **Package penuh 19,7 MB / 6.710 file.** Jangan di-bundle utuh. Ekstrak **hanya 229 karakter** yang dipakai sebagai build step → **304 KB**. Itu 65× lebih kecil, dan cukup ringan untuk dimuat sekaligus agar tersedia offline.
+⚠️ **Jangan bundle dataset utuh.** Skrip `scripts/fetch-kanjivg.mjs` (jalan sebagai `prebuild`) mengekstrak hanya karakter yang dipakai ke `src/data/kvg-strokes.json` — cukup ringan untuk dimuat sekaligus agar tersedia offline.
 
 ---
 
@@ -156,13 +152,18 @@ Hasil verifikasi coverage terhadap dataset kita:
 
 ### 4.1 Kenapa email + password
 
-Untuk tiga akun keluarga yang login sekali lalu tetap login:
+Untuk akun yang login sekali lalu tetap login:
 
 - **Magic link** butuh email bolak-balik setiap login. SMTP bawaan Supabase dibatasi ketat dan memang hanya untuk testing — kalau email tidak sampai, tidak ada yang bisa masuk
 - **OAuth Google** enak di web, tapi menambah konfigurasi native yang lumayan di Capacitor nanti
 - **Email + password** tidak bergantung pada pengiriman email sama sekali. Friksi mengetik password muncul sekali seumur pemakaian, karena sesinya permanen
 
-Tiga akun dibuat langsung dari dashboard Supabase (Authentication → Users → Add user). Tidak perlu halaman signup di Fase 0, dan tidak ada jalan masuk yang tidak disengaja.
+**Pendaftaran mandiri, berkode undangan.** Halaman `/daftar` meminta nama, email, dan kode undangan; kodenya diverifikasi di Edge Function `redeem-invite` (bukan di browser). **Kode undangan itulah kredensialnya** — karena itu `verify_jwt` dimatikan di function ini: pendaftar belum mungkin punya JWT. Password tidak pernah melewati function; user membuatnya sendiri lewat tautan email undangan (`inviteUserByEmail` → `/atur-password/`), sehingga verifikasi email inheren di alurnya, bukan langkah yang bisa dilompati. Pendaftaran publik tanpa kode = fase nanti (§2.3).
+
+**Keluar dan hapus akun** dari halaman `/setelan/`:
+
+- **Keluar** — sync antrean dulu (konfirmasi kalau masih ada antrean), bersihkan seluruh IndexedDB (`clearAll`), lalu `signOut` lokal
+- **Hapus akun** — konfirmasi ketik `HAPUS`, lalu Edge Function `delete-account` (`verify_jwt` on; JWT sekaligus autentikasi dan target — caller hanya bisa menghapus dirinya sendiri) memanggil `admin.deleteUser`; seluruh data ikut terhapus lewat FK cascade. Ini wajib untuk store: App Store guideline 5.1.1(v) dan kebijakan data deletion Google Play
 
 ### 4.2 Sesi permanen — cara kerja
 
@@ -230,15 +231,13 @@ items, item_examples                  card_states, reviews, goals,
                                       profiles, daily_progress
 ```
 
-Konten identik untuk bertiga; yang berbeda hanya progress. Ini membuat RLS sederhana: tabel konten `SELECT` untuk semua authenticated user, tabel state difilter `user_id = auth.uid()`.
+Konten identik untuk semua user; yang berbeda hanya progress. Ini membuat RLS sederhana: tabel konten `SELECT` untuk semua authenticated user, tabel state difilter `user_id = auth.uid()`.
 
-### 5.2 Tabel state (migration 0001 — siap jalan)
-
-**`households`** — lihat §5.3
+### 5.2 Tabel state (migration 0001, disesuaikan 0005+0006 — applied di produksi)
 
 **`profiles`** (1:1 dengan `auth.users`, dibuat otomatis oleh trigger saat signup)
 ```
-id, household_id, display_name,
+id, display_name,
 level_current (KANA|N5..N1), daily_minutes_target,
 writing_kana_enabled, writing_kanji_enabled,
 timezone, created_at, updated_at
@@ -287,28 +286,17 @@ PRIMARY KEY (user_id, item_id)
 ```
 `strokes` menyimpan titik-titik goresan yang sudah ditangkap kanvas. Sengaja terpisah dari `card_states` karena mengukur hal berbeda: `kana_sheet` menjawab *"sudah pernah ditulis?"*, `card_states` menjawab *"masih ingat?"*. Ukurannya kecil — 104 sel per skrip, sekali tulis.
 
-### 5.3 Household & Family Dashboard
-
-Family Dashboard secara teknis **mustahil** dengan RLS `user_id = auth.uid()` saja — bertiga harus bisa saling melihat progress. Solusi minimalnya: satu kolom `household_id` di `profiles` plus helper function `current_household_id()`.
-
-Helper itu harus `security definer`, kalau tidak policy di `profiles` memanggil dirinya sendiri saat mengevaluasi `household_id` → rekursi tak berujung.
-
-Pembagian aksesnya:
-
-| Tabel | Satu keluarga bisa lihat | Alasan |
-|---|---|---|
-| `profiles`, `daily_progress` | ✅ | Inti Family Dashboard |
-| `goals` | ❌ | Target tanggal orang lain tidak relevan; yang ditampilkan progress, bukan targetnya |
-| `card_states`, `reviews` | ❌ | Tidak ada yang perlu tahu kartu mana yang kamu lupa terus |
-
-Menulis tetap hanya ke baris sendiri, apa pun tabelnya.
-
-Setelah tiga akun dibuat, jalankan sekali:
-```sql
-insert into public.households (name) values ('Keluarga') returning id;
-update public.profiles set household_id = '<household-id>';
+**`invites`** — kode undangan (migration 0004+0005)
 ```
-Tanpa ini Family Dashboard kosong.
+code (PK), label, max_uses, used_count, expires_at, created_at
+```
+RLS aktif dengan **nol policy** — deny-all yang disengaja. Tidak ada client role yang bisa membaca atau menulis kode undangan; satu-satunya konsumen adalah service role di dalam Edge Function `redeem-invite`, lewat fungsi `claim_invite(p_code) → boolean` / `release_invite(p_code)` yang execute-nya di-revoke dari `public`, `anon`, dan `authenticated`.
+
+### 5.3 Model akun
+
+Semua data user bersifat **own-rows-only**: setiap policy RLS memfilter `id = auth.uid()` (profiles) atau `user_id = auth.uid()` (tabel lainnya), tanpa satu pun jendela lintas-user. Satu akun = satu pulau data; tidak ada konsep keanggotaan, grup, atau household.
+
+Section lama tentang household & Family Dashboard dihapus karena fiturnya dibatalkan saat aplikasi digeneralisasi — tabel `households`, `progress_summary`, kolom `household_id`, dan helper `current_household_id()` sudah dicabut dari DB oleh migrasi 0005. Keputusan + alasan: `notes/masume/keputusan/2026-08-05-generalisasi-aplikasi-umum.md`.
 
 ### 5.4 RLS adalah batas keamanan
 
@@ -325,7 +313,7 @@ Yang benar-benar melindungi data adalah RLS. Karena itu setiap tabel di migratio
 
 Ini bukan nice-to-have. Review di jalan atau saat sinyal jelek adalah use case utama, dan kriteria sukses #3 bergantung penuh padanya.
 
-### 5.6 Tabel konten (migration 0002 — pending)
+### 5.6 Tabel konten (migrasi berikutnya — belum ditulis; nomor 0002 sudah terpakai untuk lockdown function)
 
 ```
 items          id, level, type(kana|vocab|kanji|grammar),
@@ -397,9 +385,9 @@ Toggle per-user: kana writing wajib untuk semua; kanji writing opsional (istri d
 
 > **Catatan ekspektasi:** JLPT sama sekali tidak menguji tulis tangan — semua pilihan ganda. Writing di sini untuk (a) memory reinforcement, dan (b) kehidupan nyata di Jepang yang masih penuh formulir tulis tangan. Jangan sampai fitur ini memakan waktu yang seharusnya untuk materi yang diuji.
 
-### 6.5 Family Dashboard
+### 6.5 Family Dashboard — DIBATALKAN
 
-Tiga progress bar independen (target berbeda), streak masing-masing, status hari ini. Read-only, tanpa leaderboard atau kompetisi — accountability lewat visibilitas, bukan ranking. Ini keluarga, bukan kontes.
+Dibatalkan 5 Agustus 2026 saat aplikasi digeneralisasi menjadi aplikasi umum: fitur ini satu-satunya alasan adanya jendela data lintas-user, dan tanpa model household tidak ada lagi yang perlu saling melihat progress (§5.3).
 
 ### 6.6 Lembar Kana
 
@@ -477,9 +465,14 @@ Bagian dakuten/handakuten (25) dan youon (33) memakai grid terpisah di bawahnya 
 | Vocab, kanji, 20 grammar | OpenJLPT ← JMdict, KANJIDIC2, Waller (tanos.co.uk), Tatoeba | CC BY-SA 4.0 | Atribusi + ShareAlike **kalau didistribusikan** |
 | 29 grammar | Disusun sendiri | — | — |
 | Kana | Disusun sendiri dari struktur gojuon baku | — | — |
-| Stroke data | @k1low/hanzi-writer-data-jp | Arphic PL + LGPL v3+ + Unicode | Sertakan folder `licenses/` |
+| Stroke data | **KanjiVG** © Ulrich Apel | **CC BY-SA 3.0** | Atribusi + ShareAlike — **sudah dipenuhi** (lihat bawah) |
 
-ShareAlike hanya mengikat **dataset**, bukan kode aplikasi. Untuk pemakaian keluarga tidak ada kewajiban apa pun; baru relevan di Fase 3.
+ShareAlike mengikat **dataset**, bukan kode aplikasi — dan data turunan `src/data/kvg-strokes.json` (hasil ekstraksi KanjiVG) ikut berlisensi CC BY-SA 3.0. Karena repo ini publik, kewajiban atribusi **sudah aktif sekarang**, dan dipenuhi di dua tempat:
+
+- `licenses/kanjivg/COPYING` — teks lisensi CC BY-SA 3.0 penuh + README sumber
+- Halaman `/tentang/` — atribusi KanjiVG in-app (plus lisensi MIT app dan daftar dependensi), bisa diakses tanpa login
+
+`@k1low/hanzi-writer-data-jp` **sudah tidak dipakai** (§3.3); arsip lisensinya tersisa di `licenses/hanzi-writer-data-jp/` sebagai jejak historis.
 
 ### 7.3 Catatan grammar
 
@@ -497,8 +490,15 @@ Tiap entry ditandai `"source": "openjlpt"` atau `"compiled"`. Cukup untuk Sprint
 |---|---|---|
 | **1** | Setup, auth, migration 0001, seed konten, FSRS engine, modul kana + writing canvas + Lembar Kana (§6.6) | Bisa belajar kana sampai tuntas |
 | **2** | Goal Engine, Curriculum Path + gate, N5 vocab & grammar, TTS listening | Kuota harian jalan otomatis |
-| **3** | N5 kanji + writing, Family Dashboard, offline sync | Tiga orang pakai harian |
+| **3** | N5 kanji + writing, ~~Family Dashboard~~ (dibatalkan — §6.5), offline sync | Dipakai harian oleh user awal |
 | **4** | Polish, perbaikan dari pemakaian nyata | Kriteria sukses §1.4 terpenuhi |
+
+**Selesai di luar rencana sprint** (generalisasi, 5 Agustus 2026):
+
+- Halaman `/setelan/` — edit display_name/timezone/toggle menulis, keluar (sync → clearAll → signOut), hapus akun
+- Halaman `/tentang/` — atribusi lisensi, bisa diakses tanpa login
+- Edge Function `delete-account` (§4.1)
+- i18n dictionary — seluruh string UI di `src/lib/i18n/id.ts` (§9.3 untuk bahasa kedua)
 
 ### 8.2 Yang berubah di Fase 1 (Android)
 
@@ -532,7 +532,7 @@ Batasannya: CI bagus untuk memproduksi build, tapi tidak bisa menggantikan Mac u
 
 ### 9.1 Supabase free tier
 
-Batasnya: 500 MB database, 1 GB file storage, 5 GB egress, 50.000 MAU, 500.000 invokasi Edge Function, maks 2 project aktif. Untuk kalian bertiga tidak akan tersentuh — dataset kita ~320 KB dan tabel `reviews` tiga orang setahun hanya ratusan ribu baris kecil.
+Batasnya: 500 MB database, 1 GB file storage, 5 GB egress, 50.000 MAU, 500.000 invokasi Edge Function, maks 2 project aktif. Untuk basis pengguna awal yang kecil tidak akan tersentuh — dataset kita ~320 KB dan tabel `reviews` segelintir user setahun hanya ratusan ribu baris kecil. Batas ini baru perlu ditinjau ulang menjelang rilis publik (§9.3).
 
 Yang perlu diwaspadai cuma **auto-pause setelah 7 hari tanpa aktivitas database** — project offline sampai di-resume manual dari dashboard.
 
@@ -546,10 +546,21 @@ Akun developer personal yang dibuat setelah 13 November 2023 harus menjalankan c
 
 Dua hal yang meringankan:
 
-1. **Internal Testing track tidak kena aturan ini.** Untuk bertiga di Fase 1, sama sekali bukan masalah
+1. **Internal Testing track tidak kena aturan ini.** Untuk segelintir user awal di Fase 1, sama sekali bukan masalah
 2. **Akun organization dikecualikan.** Kalau ada badan usaha terdaftar yang bisa dipakai (Japan Arena?), daftar sebagai organization sejak awal
 
 Tipe akun ditentukan sekali saat registrasi dan repot diubah belakangan. Menunda keputusan ini sampai Fase 3 berarti terjebak mencari 12 tester asli persis saat mau rilis.
+
+### 9.3 Kebutuhan go-public yang BELUM dikerjakan
+
+Daftar prasyarat rilis publik yang sudah teridentifikasi tapi belum disentuh — supaya tidak baru ketahuan saat submit ke store:
+
+- **Rate-limit + proteksi bot** di jalur pendaftaran — begitu kode undangan dilepas, `redeem-invite` jadi endpoint publik yang tiap panggilannya mengirim email
+- **Subset font Jepang** — 13,5 MB masih terbawa; precache offline akan menelannya bulat-bulat
+- **Ikon PNG 192/512** — manifest baru memuat SVG; "Add to Home Screen" belum diuji
+- **Privacy policy URL** — wajib untuk store listing di kedua store
+- **Tipe akun Play Console** — personal vs organization (§9.2), masih terbuka (§11)
+- **i18n bahasa kedua** — infrastrukturnya siap (file sibling `satisfies Dictionary`, hanya `src/lib/i18n/index.ts` yang berubah), tapi kamusnya belum ditulis
 
 ---
 
@@ -557,7 +568,9 @@ Tipe akun ditentukan sekali saat registrasi dan repot diubah belakangan. Menunda
 
 | Risiko | Mitigasi |
 |---|---|
-| Salah satu berhenti pakai di minggu 3 | Kuota realistis dari awal > ambisius lalu menyerah. Dashboard membuat drop-off terlihat cepat |
+| User berhenti pakai di minggu 3 | Kuota realistis dari awal > ambisius lalu menyerah. Layar progress sendiri membuat drop-off terlihat cepat |
+| Pendaftaran dibuka publik tanpa proteksi → bot membakar kuota email + tabel undangan di-probe | Jangan buka publik sebelum rate-limit + proteksi bot terpasang (§9.3); sementara itu kode undangan tetap satu-satunya pintu |
+| Store menolak karena kelengkapan listing (privacy policy URL, ikon, data safety) | Checklist §9.3 dikerjakan sebelum submit, bukan saat submit |
 | Writing memakan waktu materi ujian | Toggle per-user; kanji writing default off kecuali dinyalakan |
 | Grammar N5 hanya 49 poin (target ~80) | Cukup untuk Sprint 2. Lengkapi sambil jalan |
 | Web Speech API voice Jepang jelek/absen di sebagian device | Deteksi voice saat load; kalau tidak ada, sembunyikan mode listening dan tandai untuk upgrade VOICEVOX |
@@ -570,7 +583,7 @@ Tipe akun ditentukan sekali saat registrasi dan repot diubah belakangan. Menunda
 
 ## 11. Keputusan terbuka
 
-1. **Schema database N3 Japan Arena** — 🔴 blocking untuk migration 0002 (tabel konten). Semua hal lain sudah bisa jalan
+1. **Schema database N3 Japan Arena** — 🔴 blocking untuk migrasi tabel konten (§5.6). Semua hal lain sudah bisa jalan
 2. ~~**Nama aplikasi**~~ — ✅ **Masume (升目)**, diputuskan 5 Agustus 2026. Dipilih karena menamai primitif inti app ini: tiap layar dibangun dari petak yang sama. "Goukaku" ditinggalkan karena 合格 adalah kata generik di dunia bimbel Jepang — setara menamai app ini "Lulus Ujian", jadi tak bisa dicari dan tak bisa dimiliki.
 3. **Tipe akun Google Play Console** — personal atau organization (§9.2). Keputusan Fase 1, tapi diambil sekali dan sulit diubah
 4. **Tanggal ujian masing-masing** — diisi saat onboarding, bukan keputusan sekarang
@@ -581,7 +594,8 @@ Tipe akun ditentukan sekali saat registrasi dan repot diubah belakangan. Menunda
 
 | File | Isi |
 |---|---|
-| `0001_auth_and_user_state.sql` | Migration siap jalan: households, profiles, goals, card_states, reviews, daily_progress + RLS + index + trigger |
+| `supabase/migrations/0001–0006` | Rantai migrasi ter-apply: 0001 auth + state user · 0002 lockdown execute function · 0003 pisah policy tulis dari SELECT · 0004 invites (deny-all) · 0005 generalisasi (hapus households + progress_summary, RLS own-only, `claim_invite → boolean`) · 0006 kunci `rls_auto_enable`. **Aturan anti-drift: tulis file di repo dulu, baru apply** |
+| `supabase/functions/` | Source of truth Edge Functions (`redeem-invite`, `delete-account`) — deploy hanya dari file ini, tidak pernah langsung ke dashboard |
 | `supabase-client.ts` | Client Supabase dengan storage adapter yang bisa ditukar, plus auth helper |
 | `kana.json` · `vocab_n5.json` · `kanji_n5.json` · `grammar_n5.json` | Dataset Fase 0 |
 | `PROMPT-CLAUDE-DESIGN.md` | Brief desain UI — dokumen terpisah, dipakai di Claude Design |
