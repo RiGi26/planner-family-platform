@@ -4,6 +4,7 @@ import { createContext, useContext, useEffect, useState } from 'react'
 import type { Session, User } from '@supabase/supabase-js'
 import { useRouter } from 'next/navigation'
 import { clearAll, db } from '@/lib/db'
+import { t } from '@/lib/i18n'
 import { supabase } from '@/lib/supabase-client'
 
 /**
@@ -132,7 +133,7 @@ export function RequireAuth({ children }: { children: React.ReactNode }) {
   if (loading) {
     return (
       <div className="flex min-h-dvh items-center justify-center">
-        <span className="sr-only">Memuat</span>
+        <span className="sr-only">{t.common.loading}</span>
         <span aria-hidden className="animate-pulse text-[28px] text-ink-faint">
           升
         </span>

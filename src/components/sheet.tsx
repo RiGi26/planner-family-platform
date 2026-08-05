@@ -1,4 +1,5 @@
 import { clsx } from '@/lib/clsx'
+import { fmt, t } from '@/lib/i18n'
 
 /**
  * 原稿用紙 — the one primitive the whole app is built from.
@@ -56,7 +57,7 @@ export function Sheet({
   return (
     <div
       role="img"
-      aria-label={label ?? `${safeDone} dari ${safeTotal} selesai`}
+      aria-label={label ?? fmt(t.common.sheetLabel, { done: safeDone, total: safeTotal })}
       className={clsx('grid w-fit gap-[2px]', className)}
       style={{ gridTemplateColumns: `repeat(${Math.max(1, cols)}, ${size}px)` }}
     >
@@ -100,7 +101,7 @@ export function Ticks({
   return (
     <div
       role="img"
-      aria-label={label ?? `${done.filter(Boolean).length} dari ${total} hari`}
+      aria-label={label ?? fmt(t.common.ticksLabel, { done: done.filter(Boolean).length, total })}
       className={clsx('flex gap-[3px]', className)}
     >
       {Array.from({ length: total }, (_, i) => (

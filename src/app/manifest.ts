@@ -1,4 +1,5 @@
 import type { MetadataRoute } from 'next'
+import { t } from '@/lib/i18n'
 
 // Metadata routes are treated as dynamic by default. Under `output: 'export'` there
 // is nothing to serve them at request time, so this has to be declared static or the
@@ -19,10 +20,9 @@ export const dynamic = 'force-static'
  */
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: 'Masume — planner sertifikasi JLPT',
-    short_name: 'Masume',
-    description:
-      'Hitung mundur dari tanggal ujian ke kuota harian, lalu jalankan kuota itu lewat satu mesin SRS.',
+    name: t.meta.manifestName,
+    short_name: t.meta.title,
+    description: t.meta.manifestDescription,
     lang: 'id',
     start_url: '/',
     scope: '/',

@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation'
 import { AuthShell, Field, FormMessage, SubmitButton } from '@/components/auth-form'
 import { useSession } from '@/components/auth-provider'
 import { authErrorMessage } from '@/lib/auth-errors'
+import { useT } from '@/lib/i18n'
 import { supabase } from '@/lib/supabase-client'
 
 /**
@@ -19,6 +20,7 @@ import { supabase } from '@/lib/supabase-client'
  * rather than deciding too early that the link was bad.
  */
 export default function SetPasswordPage() {
+  const t = useT()
   const router = useRouter()
   const { session, loading } = useSession()
   const [pending, setPending] = useState(false)
@@ -43,11 +45,11 @@ export default function SetPasswordPage() {
     const confirm = String(form.get('confirm') ?? '')
 
     if (password !== confirm) {
-      setError('Dua password yang kamu ketik belum sama.')
+      setError(t.aturPassword.mismatch)
       return
     }
     if (password.length < 8) {
-      setError('Password minimal 8 karakter.')
+      setError(t.aturPassword.tooShort)
       return
     }
 
@@ -69,21 +71,18 @@ export default function SetPasswordPage() {
 
   if (linkDead) {
     return (
-      <AuthShell
-        title="Tautannya sudah tidak berlaku"
-        subtitle="Tautan undangan dan atur-ulang hanya bisa dipakai sekali dan punya masa berlaku. Minta yang baru, ya."
-      >
+      <AuthShell title={t.aturPassword.deadTitle} subtitle={t.aturPassword.deadSubtitle}>
         <Link
           href="/lupa-password/"
           className="flex min-h-[52px] w-full items-center justify-center rounded-[3px] bg-shu px-4 text-[15px] font-medium text-paper-raised"
         >
-          Minta tautan baru
+          {t.aturPassword.requestNew}
         </Link>
         <Link
           href="/masuk/"
           className="mt-3 flex min-h-[52px] w-full items-center justify-center rounded-[3px] border border-rule px-4 text-[15px] text-ink"
         >
-          Kembali ke halaman masuk
+          {t.authShared.backToSignIn}
         </Link>
       </AuthShell>
     )
@@ -91,7 +90,7 @@ export default function SetPasswordPage() {
 
   if (loading || !session) {
     return (
-      <AuthShell title="Sebentar…" subtitle="Memeriksa tautanmu.">
+      <AuthShell title={t.aturPassword.checkingTitle} subtitle={t.aturPassword.checkingSubtitle}>
         <span aria-hidden className="block animate-pulse text-center text-[28px] text-ink-faint">
           升
         </span>
@@ -101,11 +100,12 @@ export default function SetPasswordPage() {
 
   return (
     <AuthShell
-      title="Atur password"
+      title={t.aturPassword.title}
       subtitle={
         <>
-          Untuk akun <strong className="text-ink">{session.user.email}</strong>. Setelah ini kamu
-          langsung masuk, dan tetap masuk sampai keluar sendiri.
+          {t.aturPassword.subtitleBefore}
+          <strong className="text-ink">{session.user.email}</strong>
+          {t.aturPassword.subtitleAfter}
         </>
       }
     >
@@ -113,7 +113,7 @@ export default function SetPasswordPage() {
         <FormMessage kind="error">{error}</FormMessage>
 
         <Field
-          label="Password baru"
+          label={t.aturPassword.newPasswordLabel}
           name="password"
           type="password"
           required
@@ -121,11 +121,11 @@ export default function SetPasswordPage() {
           // Marks this as a new password so phone keychains offer to generate and
           // save one, instead of autofilling the old one.
           autoComplete="new-password"
-          hint="Minimal 8 karakter. Pakai password manager kalau ada — kamu hanya perlu mengetiknya sekali."
+          hint={t.aturPassword.newPasswordHint}
         />
 
         <Field
-          label="Ulangi password"
+          label={t.aturPassword.confirmLabel}
           name="confirm"
           type="password"
           required
@@ -133,8 +133,8 @@ export default function SetPasswordPage() {
           autoComplete="new-password"
         />
 
-        <SubmitButton pending={pending} pendingLabel="Menyimpan…">
-          Simpan dan masuk
+        <SubmitButton pending={pending} pendingLabel={t.aturPassword.submitPending}>
+          {t.aturPassword.submit}
         </SubmitButton>
       </form>
     </AuthShell>

@@ -5,9 +5,11 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import { AuthLink, AuthShell, Field, FormMessage, SubmitButton } from '@/components/auth-form'
 import { useSession } from '@/components/auth-provider'
 import { authErrorMessage } from '@/lib/auth-errors'
+import { useT } from '@/lib/i18n'
 import { supabase } from '@/lib/supabase-client'
 
 function SignInForm() {
+  const t = useT()
   const router = useRouter()
   const params = useSearchParams()
   const { session, loading } = useSession()
@@ -46,15 +48,15 @@ function SignInForm() {
 
   return (
     <AuthShell
-      title="Masuk"
-      subtitle="Sekali masuk, tetap masuk — sampai kamu keluar sendiri."
+      title={t.masuk.title}
+      subtitle={t.masuk.subtitle}
       footer={
         <>
           <p>
-            Punya kode undangan? <AuthLink href="/daftar/">Daftar di sini</AuthLink>
+            {t.masuk.haveInvite} <AuthLink href="/daftar/">{t.masuk.signUpHere}</AuthLink>
           </p>
           <p className="mt-4">
-            <AuthLink href="/lupa-password/">Lupa password</AuthLink>
+            <AuthLink href="/lupa-password/">{t.masuk.forgotPassword}</AuthLink>
           </p>
         </>
       }
@@ -63,7 +65,7 @@ function SignInForm() {
         <FormMessage kind="error">{error}</FormMessage>
 
         <Field
-          label="Email"
+          label={t.authShared.emailLabel}
           name="email"
           type="email"
           required
@@ -71,11 +73,11 @@ function SignInForm() {
           inputMode="email"
           autoCapitalize="none"
           autoCorrect="off"
-          placeholder="kamu@contoh.com"
+          placeholder={t.authShared.emailPlaceholder}
         />
 
         <Field
-          label="Password"
+          label={t.masuk.passwordLabel}
           name="password"
           type="password"
           required
@@ -84,8 +86,8 @@ function SignInForm() {
           autoComplete="current-password"
         />
 
-        <SubmitButton pending={pending} pendingLabel="Masuk…">
-          Masuk
+        <SubmitButton pending={pending} pendingLabel={t.masuk.submitPending}>
+          {t.masuk.submit}
         </SubmitButton>
       </form>
     </AuthShell>

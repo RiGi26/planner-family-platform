@@ -2,6 +2,7 @@
 
 import { clsx } from '@/lib/clsx'
 import type { CellStatus, KanaItem } from '@/lib/curriculum'
+import { fmt, t } from '@/lib/i18n'
 import { characterToCanvas, inkWidth, type Point } from '@/lib/stroke-score'
 
 /**
@@ -44,10 +45,10 @@ function toCellPath(stroke: Point[], size: number): string {
 export function KanaCell({ item, status, strokes, hidden = false, size = 56, onSelect }: CellProps) {
   const written = !hidden && strokes && strokes.length > 0
   const label = hidden
-    ? 'sel tersembunyi — mode uji'
+    ? t.kana.cellHidden
     : written
-      ? `sudah ditulis, ${status}`
-      : `belum ditulis, baris ${item.data.row}`
+      ? fmt(t.kana.cellWritten, { status })
+      : fmt(t.kana.cellUnwritten, { row: item.data.row })
 
   return (
     <button

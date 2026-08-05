@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { clsx } from '@/lib/clsx'
+import { t } from '@/lib/i18n'
 import { canvasToCharacter, inkWidth, type Point } from '@/lib/stroke-score'
 
 /**
@@ -210,7 +211,7 @@ export function InkCanvas({
         height={size}
         viewBox={`0 0 ${size} ${size}`}
         role="application"
-        aria-label="Kanvas menulis"
+        aria-label={t.menulis.canvasLabel}
         onPointerDown={start}
         onPointerMove={move}
         onPointerUp={end}
@@ -241,7 +242,7 @@ export function InkCanvas({
         disabled={disabled || strokes.length === 0}
         className="mt-3 min-h-tap w-full rounded-[3px] border border-rule px-4 text-[14px] text-ink-muted disabled:opacity-40"
       >
-        Hapus
+        {t.menulis.clear}
       </button>
     </div>
   )

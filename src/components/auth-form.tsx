@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import { useId, useState } from 'react'
 import { clsx } from '@/lib/clsx'
+import { t } from '@/lib/i18n'
 
 /**
  * Shared pieces for the four auth screens.
@@ -92,7 +93,7 @@ export function Field({
             // locked out of an account they never mistyped in the first place.
             className="absolute inset-y-0 right-0 px-3 text-[12px] text-ink-muted"
           >
-            {reveal ? 'Sembunyikan' : 'Lihat'}
+            {reveal ? t.authShared.hide : t.authShared.reveal}
           </button>
         ) : null}
       </div>
@@ -145,7 +146,7 @@ export function FormMessage({ kind, children }: { kind: 'error' | 'success'; chi
 export function SubmitButton({
   pending,
   children,
-  pendingLabel = 'Sebentar…',
+  pendingLabel = t.authShared.pendingDefault,
 }: {
   pending: boolean
   children: React.ReactNode

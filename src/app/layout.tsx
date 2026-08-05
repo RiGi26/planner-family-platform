@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from 'next'
 import { IBM_Plex_Mono, Zen_Kaku_Gothic_New, Zen_Old_Mincho } from 'next/font/google'
 import { AuthProvider } from '@/components/auth-provider'
 import { QueryProvider } from '@/components/query-provider'
+import { t } from '@/lib/i18n'
 import './globals.css'
 
 // next/font/google downloads these at build time and serves them from our own origin.
@@ -32,10 +33,10 @@ const mono = IBM_Plex_Mono({
 })
 
 export const metadata: Metadata = {
-  title: 'Masume',
-  description: 'Planner sertifikasi JLPT — hitung mundur dari tanggal ujian ke kuota harian.',
+  title: t.meta.title,
+  description: t.meta.description,
   manifest: '/manifest.webmanifest',
-  appleWebApp: { capable: true, statusBarStyle: 'default', title: 'Masume' },
+  appleWebApp: { capable: true, statusBarStyle: 'default', title: t.meta.title },
 }
 
 export const viewport: Viewport = {

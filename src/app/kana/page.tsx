@@ -21,6 +21,7 @@ import {
   VOWELS,
   YOUON_VOWELS,
 } from '@/lib/curriculum'
+import { fmt, useT } from '@/lib/i18n'
 import { useCardStates, useKanaSheet } from '@/lib/queries'
 import type { Point } from '@/lib/stroke-score'
 
@@ -130,6 +131,7 @@ function Section({
 }
 
 export default function KanaSheetPage() {
+  const t = useT()
   const { user } = useSession()
   const router = useRouter()
   const [script, setScript] = useState<Script>('hiragana')
@@ -172,9 +174,10 @@ export default function KanaSheetPage() {
         style={{ paddingTop: 'calc(var(--spacing-safe-top) + 12px)' }}
       >
         <header className="flex items-baseline justify-between">
-          <h1 className="text-[13px] tracking-[0.14em] text-ink-muted uppercase">Lembar Kana</h1>
+          <h1 className="text-[13px] tracking-[0.14em] text-ink-muted uppercase">{t.kana.title}</h1>
           <span className="tnum text-[13px] text-ink">
-            {overall.strong} <span className="text-ink-faint">/ {overall.total} kuat</span>
+            {overall.strong}{' '}
+            <span className="text-ink-faint">{fmt(t.kana.strongCount, { total: overall.total })}</span>
           </span>
         </header>
 
@@ -190,7 +193,7 @@ export default function KanaSheetPage() {
                   script === s ? 'bg-ink text-paper-raised' : 'text-ink-muted',
                 )}
               >
-                {s === 'hiragana' ? 'ひらがな' : 'カタカナ'}
+                {s === 'hiragana' ? t.kana.hiragana : t.kana.katakana}
               </button>
             ))}
           </div>
@@ -206,20 +209,20 @@ export default function KanaSheetPage() {
                 : 'border-rule bg-paper-raised text-ink-muted',
             )}
           >
-            {testMode ? 'uji aku' : 'lembarku'}
+            {testMode ? t.kana.testModeOn : t.kana.testModeOff}
           </button>
         </div>
 
         {testMode ? (
           <p className="mt-3 text-[13px] leading-relaxed text-ink-muted">
-            Semua sel dikosongkan tampilannya. Tidak ada yang terhapus — isi ulang dari
-            ingatan, lalu kembali ke <strong className="text-ink">lembarku</strong> untuk
-            melihat tulisanmu lagi.
+            {t.kana.testModeNoteBefore}
+            <strong className="text-ink">{t.kana.testModeNoteStrong}</strong>
+            {t.kana.testModeNoteAfter}
           </p>
         ) : null}
 
         <Section
-          title="五十音 · gojūon"
+          title={t.kana.gojuonHeading}
           count={`${label('basic').strong} / ${label('basic').total}`}
         >
           <Grid
@@ -234,7 +237,7 @@ export default function KanaSheetPage() {
         </Section>
 
         <Section
-          title="dakuten · handakuten"
+          title={t.kana.dakutenHeading}
           count={`${label('dakuten').strong} / ${label('dakuten').total}`}
         >
           <Grid
@@ -248,7 +251,7 @@ export default function KanaSheetPage() {
           />
         </Section>
 
-        <Section title="youon" count={`${label('youon').strong} / ${label('youon').total}`}>
+        <Section title={t.kana.youonHeading} count={`${label('youon').strong} / ${label('youon').total}`}>
           <Grid
             rows={youon(script)}
             cols={YOUON_VOWELS}
@@ -260,10 +263,7 @@ export default function KanaSheetPage() {
           />
         </Section>
 
-        <p className="mt-10 text-[12px] leading-relaxed text-ink-faint">
-          Sel kosong berarti belum pernah kamu tulis. Cincin biru berarti jatuh tempo
-          diulang — bukan berarti karakternya ditampilkan. Posisi yang jadi soal.
-        </p>
+        <p className="mt-10 text-[12px] leading-relaxed text-ink-faint">{t.kana.legend}</p>
       </main>
 
       <BottomNav />

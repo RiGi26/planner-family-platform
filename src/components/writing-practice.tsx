@@ -5,6 +5,7 @@ import { InkCanvas } from '@/components/ink-canvas'
 import { StrokeFigure, StrokeStartMarkers } from '@/components/stroke-figure'
 import { clsx } from '@/lib/clsx'
 import { consonantOf, type KanaItem } from '@/lib/curriculum'
+import { fmt, useT } from '@/lib/i18n'
 import { kvgCharacter, medians, strokeCount } from '@/lib/kvg'
 import {
   describe as describeStroke,
@@ -29,12 +30,6 @@ import {
 
 export type Stage = 'demo' | 'jiplak' | 'ingat'
 
-const STAGE_LABEL: Record<Stage, string> = {
-  demo: 'Demo',
-  jiplak: 'Jiplak',
-  ingat: 'Ingat',
-}
-
 /** Below this, a traced stroke is in the wrong place rather than merely untidy. */
 const TRACE_ACCEPT = 0.55
 
@@ -56,6 +51,12 @@ export function WritingPractice({
   size?: number
   onFinished: (result: WritingResult) => void
 }) {
+  const t = useT()
+  const STAGE_LABEL: Record<Stage, string> = {
+    demo: t.menulis.stageDemo,
+    jiplak: t.menulis.stageJiplak,
+    ingat: t.menulis.stageIngat,
+  }
   const character = item.data.strokes_key
   const data = useMemo(() => kvgCharacter(character), [character])
   const total = strokeCount(character)
@@ -133,7 +134,7 @@ export function WritingPractice({
   if (!data) {
     return (
       <p className="rounded-[3px] bg-oker-tint px-3 py-3 text-[13px] text-oker">
-        Data goresan untuk {item.expression} belum tersedia di perangkat ini.
+        {fmt(t.menulis.noStrokeData, { char: item.expression })}
       </p>
     )
   }
@@ -146,7 +147,9 @@ export function WritingPractice({
         <span className="tnum text-[12px] tracking-[0.14em] text-ink-muted uppercase">
           {consonantOf(item.reading)} · {item.data.col}
         </span>
-        <span className="tnum text-[12px] text-ink-muted">{total} goresan</span>
+        <span className="tnum text-[12px] text-ink-muted">
+          {fmt(t.menulis.strokeCount, { n: total })}
+        </span>
       </div>
 
       <div className="flex w-full rounded-[3px] border border-rule bg-paper-raised p-[3px]">
@@ -232,19 +235,18 @@ export function WritingPractice({
               onClick={() => setDemoKey((k) => k + 1)}
               className="min-h-tap flex-1 rounded-[3px] border border-rule text-[13px] text-ink-muted"
             >
-              Ulang
+              {t.menulis.demoReplay}
             </button>
           </div>
           <p className="text-center text-[12px] leading-relaxed text-ink-muted">
-            Tonton sebanyak yang perlu. 0,5× disediakan karena orang dewasa kalah di arah,
-            bukan di bentuk.
+            {t.menulis.demoNote}
           </p>
           <button
             type="button"
             onClick={() => go('jiplak')}
             className="min-h-tap rounded-[3px] bg-shu px-4 text-[15px] font-medium text-paper-raised"
           >
-            Lanjut ke jiplak
+            {t.menulis.toTrace}
           </button>
         </div>
       ) : null}
@@ -253,10 +255,12 @@ export function WritingPractice({
         <div className="flex w-full flex-col gap-3">
           <div className="flex items-center justify-between">
             <span className="tnum text-[12px] text-ink-muted">
-              goresan {Math.min(traced + 1, total)}/{total}
+              {fmt(t.menulis.traceProgress, { current: Math.min(traced + 1, total), total })}
             </span>
             {mistakes > 0 ? (
-              <span className="tnum text-[12px] text-oker">{mistakes}× diulang</span>
+              <span className="tnum text-[12px] text-oker">
+                {fmt(t.menulis.traceRepeats, { n: mistakes })}
+              </span>
             ) : null}
           </div>
 
@@ -265,9 +269,7 @@ export function WritingPractice({
               {traceNote}
             </p>
           ) : (
-            <p className="text-center text-[12px] text-ink-muted">
-              Goresan yang meleset ditolak dan dijelaskan — yang sudah benar tidak hilang.
-            </p>
+            <p className="text-center text-[12px] text-ink-muted">{t.menulis.traceNote}</p>
           )}
 
           <button
@@ -276,7 +278,7 @@ export function WritingPractice({
             disabled={traced < total}
             className="min-h-tap rounded-[3px] bg-shu px-4 text-[15px] font-medium text-paper-raised disabled:bg-rule disabled:text-ink-muted"
           >
-            {traced < total ? 'Selesaikan jiplakannya dulu' : 'Lanjut ke ingat'}
+            {traced < total ? t.menulis.finishTraceFirst : t.menulis.toRecall}
           </button>
         </div>
       ) : null}
@@ -284,19 +286,21 @@ export function WritingPractice({
       {stage === 'ingat' ? (
         <div className="flex w-full flex-col gap-3">
           <p className="text-center text-[12px] leading-relaxed text-ink-muted">
-            Tanpa contoh. Tidak ada yang dinilai sampai kamu selesai.
+            {t.menulis.recallNote}
           </p>
 
           {checked ? (
             <div className="rounded-[3px] border border-rule bg-paper-raised px-4 py-4">
               <div className="flex items-baseline justify-between">
-                <span className="text-[12px] tracking-[0.12em] text-ink-muted uppercase">Bentuk</span>
+                <span className="text-[12px] tracking-[0.12em] text-ink-muted uppercase">
+                  {t.menulis.shapeLabel}
+                </span>
                 <span className="tnum text-[24px] text-ink">{checked.shapePercent}%</span>
               </div>
               {checked.note ? (
                 <p className="mt-2 text-[13px] leading-relaxed text-ink-muted">{checked.note}</p>
               ) : (
-                <p className="mt-2 text-[13px] text-pinus">Urutan dan arahnya benar.</p>
+                <p className="mt-2 text-[13px] text-pinus">{t.menulis.cleanWrite}</p>
               )}
             </div>
           ) : null}
@@ -307,7 +311,7 @@ export function WritingPractice({
             disabled={recall.length === 0}
             className="min-h-tap rounded-[3px] bg-shu px-4 text-[15px] font-medium text-paper-raised disabled:bg-rule disabled:text-ink-muted"
           >
-            {checked ? 'Simpan ke lembar' : 'Bandingkan'}
+            {checked ? t.menulis.saveToSheet : t.menulis.compare}
           </button>
         </div>
       ) : null}

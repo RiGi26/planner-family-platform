@@ -18,6 +18,7 @@ import {
   type Script,
   type SheetRow,
 } from '@/lib/curriculum'
+import { useT } from '@/lib/i18n'
 import { useCardStates, useKanaSheet } from '@/lib/queries'
 import { pushPending, saveWriting } from '@/lib/study'
 
@@ -34,6 +35,7 @@ function rowsFor(script: Script): SheetRow[] {
 }
 
 function WritingScreen() {
+  const t = useT()
   const params = useSearchParams()
   const router = useRouter()
   const { user } = useSession()
@@ -108,16 +110,13 @@ function WritingScreen() {
         className="mx-auto flex min-h-dvh max-w-lg flex-col justify-center gap-4 px-5"
         style={{ paddingTop: 'var(--spacing-safe-top)' }}
       >
-        <h1 className="text-[20px] font-bold text-ink">Pilih sel dulu</h1>
-        <p className="text-[14px] leading-relaxed text-ink-muted">
-          Layar ini menulis satu petak dari Lembar Kana. Buka lembarnya dan ketuk petak
-          yang mau kamu isi.
-        </p>
+        <h1 className="text-[20px] font-bold text-ink">{t.menulis.pickTitle}</h1>
+        <p className="text-[14px] leading-relaxed text-ink-muted">{t.menulis.pickBody}</p>
         <Link
           href="/kana/"
           className="flex min-h-tap items-center justify-center rounded-[3px] bg-shu px-4 text-[15px] font-medium text-paper-raised"
         >
-          Buka Lembar Kana
+          {t.menulis.pickCta}
         </Link>
       </main>
     )
@@ -130,7 +129,7 @@ function WritingScreen() {
     >
       <header className="flex items-center justify-between">
         <Link href="/kana/" className="min-h-tap -my-3 inline-flex items-center text-[13px] text-ai">
-          ← Lembar
+          {t.menulis.backToSheet}
         </Link>
         {/* Axis, not the 行 name — see the note in WritingPractice. */}
         <span className="tnum text-[12px] text-ink-muted">
@@ -177,7 +176,7 @@ function WritingScreen() {
 
       {saving ? (
         <p role="status" className="mt-4 text-center text-[13px] text-ink-muted">
-          Menyimpan…
+          {t.menulis.saving}
         </p>
       ) : null}
     </main>

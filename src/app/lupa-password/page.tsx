@@ -4,6 +4,7 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { AuthLink, AuthShell, Field, FormMessage, SubmitButton } from '@/components/auth-form'
 import { authErrorMessage } from '@/lib/auth-errors'
+import { useT } from '@/lib/i18n'
 import { supabase } from '@/lib/supabase-client'
 
 /**
@@ -14,6 +15,7 @@ import { supabase } from '@/lib/supabase-client'
  * find out who has one.
  */
 export default function ForgotPasswordPage() {
+  const t = useT()
   const [pending, setPending] = useState(false)
   const [error, setError] = useState('')
   const [sent, setSent] = useState(false)
@@ -45,15 +47,15 @@ export default function ForgotPasswordPage() {
   if (sent) {
     return (
       <AuthShell
-        title="Cek emailmu"
-        subtitle="Kalau alamat itu terdaftar, tautan untuk mengatur ulang password sudah dikirim. Tautannya berlaku terbatas."
-        footer={<p>Tidak ada di kotak masuk? Cek folder spam.</p>}
+        title={t.lupaPassword.sentTitle}
+        subtitle={t.lupaPassword.sentSubtitle}
+        footer={<p>{t.lupaPassword.sentFooter}</p>}
       >
         <Link
           href="/masuk/"
           className="flex min-h-[52px] w-full items-center justify-center rounded-[3px] border border-rule px-4 text-[15px] text-ink"
         >
-          Kembali ke halaman masuk
+          {t.authShared.backToSignIn}
         </Link>
       </AuthShell>
     )
@@ -61,11 +63,12 @@ export default function ForgotPasswordPage() {
 
   return (
     <AuthShell
-      title="Lupa password"
-      subtitle="Masukkan emailmu, kami kirim tautan untuk mengatur password baru."
+      title={t.lupaPassword.title}
+      subtitle={t.lupaPassword.subtitle}
       footer={
         <p>
-          Ingat lagi? <AuthLink href="/masuk/">Kembali ke halaman masuk</AuthLink>
+          {t.lupaPassword.remembered}{' '}
+          <AuthLink href="/masuk/">{t.authShared.backToSignIn}</AuthLink>
         </p>
       }
     >
@@ -73,7 +76,7 @@ export default function ForgotPasswordPage() {
         <FormMessage kind="error">{error}</FormMessage>
 
         <Field
-          label="Email"
+          label={t.authShared.emailLabel}
           name="email"
           type="email"
           required
@@ -81,11 +84,11 @@ export default function ForgotPasswordPage() {
           inputMode="email"
           autoCapitalize="none"
           autoCorrect="off"
-          placeholder="kamu@contoh.com"
+          placeholder={t.authShared.emailPlaceholder}
         />
 
-        <SubmitButton pending={pending} pendingLabel="Mengirim…">
-          Kirim tautan
+        <SubmitButton pending={pending} pendingLabel={t.lupaPassword.submitPending}>
+          {t.lupaPassword.submit}
         </SubmitButton>
       </form>
     </AuthShell>

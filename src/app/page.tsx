@@ -1,6 +1,7 @@
 import { RequireAuth } from '@/components/auth-provider'
 import { BottomNav } from '@/components/bottom-nav'
 import { Sheet, Ticks } from '@/components/sheet'
+import { fmt, t } from '@/lib/i18n'
 
 /**
  * Hari Ini — the on-track state.
@@ -24,10 +25,10 @@ const DEMO = {
   quotaTotal: 62,
   minutes: 12,
   tracks: [
-    { label: 'Kana', glyph: 'あ', count: 12 },
-    { label: 'Kosakata', glyph: '語', count: 26 },
-    { label: 'Kanji', glyph: '字', count: 14 },
-    { label: 'Tata bahasa', glyph: '文', count: 10 },
+    { label: t.hariIni.trackKana, glyph: 'あ', count: 12 },
+    { label: t.hariIni.trackVocab, glyph: '語', count: 26 },
+    { label: t.hariIni.trackKanji, glyph: '字', count: 14 },
+    { label: t.hariIni.trackGrammar, glyph: '文', count: 10 },
   ],
   week: [true, true, true, false, true, true, true],
   writingQueued: 8,
@@ -43,7 +44,9 @@ export default function TodayPage() {
         style={{ paddingTop: 'calc(var(--spacing-safe-top) + 12px)' }}
       >
         <header className="flex items-baseline justify-between">
-          <h1 className="text-[13px] tracking-[0.14em] text-ink-muted uppercase">Hari Ini</h1>
+          <h1 className="text-[13px] tracking-[0.14em] text-ink-muted uppercase">
+            {t.hariIni.title}
+          </h1>
           <span className="tnum text-[12px] text-ink-faint">{DEMO.weekday}</span>
         </header>
 
@@ -51,14 +54,18 @@ export default function TodayPage() {
           <span className="text-[13px] text-ink-muted">
             {DEMO.level} · {DEMO.examDate}
           </span>
-          <span className="tnum text-[13px] text-ink">{DEMO.daysLeft} hari</span>
+          <span className="tnum text-[13px] text-ink">
+            {fmt(t.hariIni.daysLeft, { n: DEMO.daysLeft })}
+          </span>
         </div>
 
         <section className="mt-7">
           <div className="flex items-baseline justify-between">
-            <h2 className="text-[12px] tracking-[0.14em] text-ink-muted uppercase">Kuota hari ini</h2>
+            <h2 className="text-[12px] tracking-[0.14em] text-ink-muted uppercase">
+              {t.hariIni.quotaHeading}
+            </h2>
             <span className="rounded-[2px] bg-pinus-tint px-2 py-[3px] text-[11px] tracking-[0.08em] text-pinus uppercase">
-              On track
+              {t.hariIni.onTrack}
             </span>
           </div>
 
@@ -67,7 +74,7 @@ export default function TodayPage() {
             <span className="text-ink-faint"> / {DEMO.quotaTotal}</span>
           </p>
           <p className="mt-1 text-[13px] text-ink-muted">
-            {left} kartu sisa · ±{DEMO.minutes} menit
+            {fmt(t.hariIni.remaining, { n: left, m: DEMO.minutes })}
           </p>
 
           <Sheet
@@ -76,7 +83,7 @@ export default function TodayPage() {
             columns={16}
             size={16}
             className="mt-4"
-            label={`${DEMO.quotaDone} dari ${DEMO.quotaTotal} kartu selesai`}
+            label={fmt(t.hariIni.quotaSheetLabel, { done: DEMO.quotaDone, total: DEMO.quotaTotal })}
           />
         </section>
 
@@ -96,10 +103,12 @@ export default function TodayPage() {
 
         <section className="mt-8">
           <div className="flex items-baseline justify-between">
-            <h2 className="text-[12px] tracking-[0.14em] text-ink-muted uppercase">7 hari terakhir</h2>
+            <h2 className="text-[12px] tracking-[0.14em] text-ink-muted uppercase">
+              {t.hariIni.weekHeading}
+            </h2>
             {/* A gap in the week is shown and not commented on. */}
             <span className="tnum text-[12px] text-ink-muted">
-              {DEMO.week.filter(Boolean).length} dari 7
+              {fmt(t.hariIni.weekCount, { n: DEMO.week.filter(Boolean).length })}
             </span>
           </div>
           <Ticks done={DEMO.week} className="mt-3" />
@@ -119,14 +128,16 @@ export default function TodayPage() {
             始
           </span>
           <span className="text-left">
-            <span className="block text-[15px] leading-tight font-medium">Mulai sesi</span>
+            <span className="block text-[15px] leading-tight font-medium">
+              {t.hariIni.startSession}
+            </span>
             <span className="tnum block text-[11px] opacity-80">
-              {left} kartu · recognition &amp; recall
+              {fmt(t.hariIni.startSessionDetail, { n: left })}
             </span>
           </span>
         </a>
         <p className="mt-2 text-center text-[12px] text-ink-muted">
-          Latihan menulis ({DEMO.writingQueued})
+          {fmt(t.hariIni.writingQueued, { n: DEMO.writingQueued })}
         </p>
       </div>
 

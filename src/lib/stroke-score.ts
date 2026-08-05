@@ -18,6 +18,8 @@
  * count of wrong strokes, not from this percentage — see `ratingFromStrokeErrors`.
  */
 
+import { fmt, t } from './i18n'
+
 export type Point = { x: number; y: number }
 
 /** How many points each stroke is resampled to before comparison. */
@@ -241,8 +243,6 @@ export function scoreCharacter(userStrokes: Point[][], medians: Point[][]): Char
 // diagnosis
 // ---------------------------------------------------------------------------
 
-const ORDINAL = ['pertama', 'kedua', 'ketiga', 'keempat', 'kelima', 'keenam', 'ketujuh', 'kedelapan']
-
 /**
  * Plain-language direction of a reference stroke, used for the "should be" clause.
  *
@@ -254,14 +254,14 @@ function referenceDirection(reference: Point[] | undefined): string | null {
   if (!reference || reference.length < 2) return null
   const angle = heading(resample(reference))
   const a = ((angle % 360) + 360) % 360
-  if (a < 22.5 || a >= 337.5) return 'ditarik ke kanan'
-  if (a < 67.5) return 'menyapu turun ke kanan'
-  if (a < 112.5) return 'ditarik lurus ke bawah'
-  if (a < 157.5) return 'menyapu turun ke kiri'
-  if (a < 202.5) return 'ditarik ke kiri'
-  if (a < 247.5) return 'menyapu naik ke kiri'
-  if (a < 292.5) return 'ditarik lurus ke atas'
-  return 'menyapu naik ke kanan'
+  if (a < 22.5 || a >= 337.5) return t.coaching.dirRight
+  if (a < 67.5) return t.coaching.dirDownRight
+  if (a < 112.5) return t.coaching.dirDown
+  if (a < 157.5) return t.coaching.dirDownLeft
+  if (a < 202.5) return t.coaching.dirLeft
+  if (a < 247.5) return t.coaching.dirUpLeft
+  if (a < 292.5) return t.coaching.dirUp
+  return t.coaching.dirUpRight
 }
 
 /**
@@ -269,13 +269,13 @@ function referenceDirection(reference: Point[] | undefined): string | null {
  * mentioned — a list of four small faults is not coaching, it is nagging.
  */
 export function describe(s: StrokeScore, reference?: Point[]): string {
-  const nth = ORDINAL[s.index] ?? `ke-${s.index + 1}`
+  const nth = t.coaching.ordinals[s.index] ?? fmt(t.coaching.nthFallback, { n: s.index + 1 })
   const should = referenceDirection(reference)
 
   if (s.reversed) {
     return should
-      ? `Goresan ${nth} ditarik dari arah yang berlawanan — seharusnya ${should}.`
-      : `Goresan ${nth} ditarik dari arah yang berlawanan.`
+      ? fmt(t.coaching.reversedWithDir, { nth, dir: should })
+      : fmt(t.coaching.reversed, { nth })
   }
 
   const angle = Math.abs(s.angleDelta)
@@ -297,25 +297,25 @@ export function describe(s: StrokeScore, reference?: Point[]): string {
 
   switch (ranked[0]!.kind) {
     case 'angle': {
-      const tilt = s.angleDelta > 0 ? 'terlalu mendatar' : 'sedikit terlalu tegak'
+      const tilt = s.angleDelta > 0 ? t.coaching.tooFlat : t.coaching.tooUpright
       return should
-        ? `Goresan ${nth} ${tilt} — di sini goresannya ${should}.`
-        : `Goresan ${nth} ${tilt}.`
+        ? fmt(t.coaching.angleWithDir, { nth, tilt, dir: should })
+        : fmt(t.coaching.angle, { nth, tilt })
     }
     case 'length':
       return s.lengthRatio < 1
-        ? `Goresan ${nth} kurang panjang.`
-        : `Goresan ${nth} kelewat panjang.`
+        ? fmt(t.coaching.tooShort, { nth })
+        : fmt(t.coaching.tooLong, { nth })
     default: {
       const horizontal = Math.abs(s.offset.x) > Math.abs(s.offset.y)
       const where = horizontal
         ? s.offset.x > 0
-          ? 'ke kanan'
-          : 'ke kiri'
+          ? t.coaching.offsetRight
+          : t.coaching.offsetLeft
         : s.offset.y > 0
-          ? 'ke bawah'
-          : 'ke atas'
-      return `Goresan ${nth} agak bergeser ${where}.`
+          ? t.coaching.offsetDown
+          : t.coaching.offsetUp
+      return fmt(t.coaching.offset, { nth, where })
     }
   }
 }
