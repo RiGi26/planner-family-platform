@@ -108,9 +108,14 @@ function SessionScreen() {
 
       // The quota is a promise made once a day. Recording it here is what lets
       // Hari Ini show delivery against it rather than a moving target.
+      //
+      // Measured in CARDS, deliberately, because `new_done` and `review_done`
+      // are. `quota.newPerDay` counts *items* — PRD §6.1 divides `sisa_item` —
+      // and one item becomes two cards in the fast lane, so storing it here
+      // would have Hari Ini reporting six answers against a target of three.
       const rows = await localProgress(user.id)
       if (!rows.some((r) => r.date === today)) {
-        await bumpProgress(user.id, { quotaTarget: quota.totalToday }, { timezone })
+        await bumpProgress(user.id, { quotaTarget: built.queue.length }, { timezone })
       }
 
       setLoaded({ queue: built.queue, canvas: built.canvas, quotaTotal: built.queue.length })
