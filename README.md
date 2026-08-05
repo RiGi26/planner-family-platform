@@ -1,6 +1,10 @@
-# Goukaku 合格
+# Masume 升目
 
-A JLPT certification planner for three people in one family.
+*Masume* are the ruled squares on Japanese manuscript paper — the cells you write
+into, one character per box.
+
+A JLPT certification planner for three people in one family. The name is the app's
+core primitive: every screen is built from the same grid of cells, filling with ink.
 
 Every language app answers *how do I memorise this*. None of them answer **what do I
 have to do today so that I pass on the sixth of December**. That second question is

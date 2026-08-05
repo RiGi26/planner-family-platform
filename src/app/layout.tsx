@@ -31,10 +31,10 @@ const mono = IBM_Plex_Mono({
 })
 
 export const metadata: Metadata = {
-  title: 'Goukaku',
+  title: 'Masume',
   description: 'Planner sertifikasi JLPT — hitung mundur dari tanggal ujian ke kuota harian.',
   manifest: '/manifest.webmanifest',
-  appleWebApp: { capable: true, statusBarStyle: 'default', title: 'Goukaku' },
+  appleWebApp: { capable: true, statusBarStyle: 'default', title: 'Masume' },
 }
 
 export const viewport: Viewport = {

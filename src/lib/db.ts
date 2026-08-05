@@ -29,7 +29,7 @@ type PendingCard = { id: string; queued_at: string }
 
 type Meta = { key: string; value: string }
 
-class GoukakuDB extends Dexie {
+class MasumeDB extends Dexie {
   cards!: EntityTable<CardStateRow, 'id'>
   reviewQueue!: EntityTable<ReviewRow, 'client_review_id'>
   pendingCards!: EntityTable<PendingCard, 'id'>
@@ -38,7 +38,9 @@ class GoukakuDB extends Dexie {
   meta!: EntityTable<Meta, 'key'>
 
   constructor() {
-    super('goukaku')
+    // Renaming this orphans every existing local database, so it can only be done
+    // while no one has data yet. That is true today and will not be again.
+    super('masume')
     this.version(1).stores({
       cards: 'id, user_id, item_id, due, mode, [user_id+due]',
       reviewQueue: 'client_review_id, user_id, reviewed_at',
@@ -50,7 +52,7 @@ class GoukakuDB extends Dexie {
   }
 }
 
-export const db = new GoukakuDB()
+export const db = new MasumeDB()
 
 // ---------------------------------------------------------------------------
 // reads — everything the session needs, all local

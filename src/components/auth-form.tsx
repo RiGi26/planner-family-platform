@@ -32,11 +32,12 @@ export function AuthShell({
       }}
     >
       <div className="mb-8">
+        {/* 升 — the measure that gives 升目 its name. Mincho, so the stroke ends show. */}
         <span
           aria-hidden
           className="font-[family-name:var(--font-zen-mincho)] text-[32px] leading-none text-shu"
         >
-          合
+          升
         </span>
         <h1 className="mt-4 text-[24px] leading-tight font-bold text-ink">{title}</h1>
         {subtitle ? <p className="mt-2 text-[14px] leading-relaxed text-ink-muted">{subtitle}</p> : null}

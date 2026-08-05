@@ -1,6 +1,6 @@
 -- 0001_auth_and_user_state.sql
 --
--- Per-user state for Goukaku. Content tables (items, item_examples) arrive in 0002.
+-- Per-user state for Masume. Content tables (items, item_examples) arrive in 0002.
 --
 -- The split is deliberate: content is identical for everyone and read-only, state is
 -- per-person and read-write. That keeps RLS simple — content is SELECT for any

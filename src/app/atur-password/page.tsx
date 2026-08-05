@@ -93,7 +93,7 @@ export default function SetPasswordPage() {
     return (
       <AuthShell title="Sebentar…" subtitle="Memeriksa tautanmu.">
         <span aria-hidden className="block animate-pulse text-center text-[28px] text-ink-faint">
-          合
+          升
         </span>
       </AuthShell>
     )

@@ -1,6 +1,6 @@
 # PRD — JLPT Certification Planner
 
-**Working title:** Goukaku (合格)
+**Nama:** Masume (升目) — kotak-kotak pada kertas 原稿用紙, satu karakter per petak. Diputuskan 5 Agustus 2026, menggantikan working title "Goukaku" (§11.2 ditutup).
 **Versi:** 2.0 — konsolidasi
 **Tanggal:** 4 Agustus 2026
 **Status:** Fase 0 siap dibangun. Satu item blocking (§11.1).
@@ -571,7 +571,7 @@ Tipe akun ditentukan sekali saat registrasi dan repot diubah belakangan. Menunda
 ## 11. Keputusan terbuka
 
 1. **Schema database N3 Japan Arena** — 🔴 blocking untuk migration 0002 (tabel konten). Semua hal lain sudah bisa jalan
-2. **Nama aplikasi** — "Goukaku" hanya working title
+2. ~~**Nama aplikasi**~~ — ✅ **Masume (升目)**, diputuskan 5 Agustus 2026. Dipilih karena menamai primitif inti app ini: tiap layar dibangun dari petak yang sama. "Goukaku" ditinggalkan karena 合格 adalah kata generik di dunia bimbel Jepang — setara menamai app ini "Lulus Ujian", jadi tak bisa dicari dan tak bisa dimiliki.
 3. **Tipe akun Google Play Console** — personal atau organization (§9.2). Keputusan Fase 1, tapi diambil sekali dan sulit diubah
 4. **Tanggal ujian masing-masing** — diisi saat onboarding, bukan keputusan sekarang
 

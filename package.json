@@ -1,5 +1,5 @@
 {
-  "name": "goukaku",
+  "name": "masume",
   "version": "0.1.0",
   "private": true,
   "description": "JLPT certification planner — counts backwards from the exam date to a daily quota, then runs that quota through a single FSRS engine.",

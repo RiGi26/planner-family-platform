@@ -106,7 +106,7 @@ export function RequireAuth({ children }: { children: React.ReactNode }) {
       <div className="flex min-h-dvh items-center justify-center">
         <span className="sr-only">Memuat</span>
         <span aria-hidden className="animate-pulse text-[28px] text-ink-faint">
-          合
+          升
         </span>
       </div>
     )
