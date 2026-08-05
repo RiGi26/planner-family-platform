@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { InkCanvas } from '@/components/ink-canvas'
 import { clsx } from '@/lib/clsx'
-import type { KanaItem } from '@/lib/curriculum'
+import { consonantOf, type KanaItem } from '@/lib/curriculum'
 import { characterJson, charDataLoader, mediansAsPoints, strokeCount } from '@/lib/strokes'
 import { ratingFromStrokeErrors, scoreCharacter, type Point } from '@/lib/stroke-score'
 
@@ -142,9 +142,12 @@ export function WritingPractice({
 
   return (
     <div className="flex flex-col items-center gap-4">
+      {/* Axis and column, not the 行 name. For any column-a cell the 行 label *is*
+          the answer — か行 beside column a hands over か — and Recall is exactly the
+          stage where that must not happen. */}
       <div className="flex w-full items-center justify-between">
-        <span className="text-[12px] tracking-[0.14em] text-ink-muted uppercase">
-          {item.data.row_label} · kolom {item.data.col}
+        <span className="tnum text-[12px] tracking-[0.14em] text-ink-muted uppercase">
+          {consonantOf(item.reading)} · {item.data.col}
         </span>
         <span className="tnum text-[12px] text-ink-muted">{total} goresan</span>
       </div>

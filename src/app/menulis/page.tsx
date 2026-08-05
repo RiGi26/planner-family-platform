@@ -130,8 +130,9 @@ function WritingScreen() {
         <Link href="/kana/" className="min-h-tap -my-3 inline-flex items-center text-[13px] text-ai">
           ← Lembar
         </Link>
+        {/* Axis, not the 行 name — see the note in WritingPractice. */}
         <span className="tnum text-[12px] text-ink-muted">
-          {row.label} · {written}/{inRow}
+          {row.axis} · {written}/{inRow}
         </span>
       </header>
 

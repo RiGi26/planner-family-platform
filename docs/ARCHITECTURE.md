@@ -243,5 +243,27 @@ Stated plainly so the diagrams are not read as a description of finished work.
 - PNG icons at 192/512; the manifest currently ships an SVG only, and
   "Add to Home Screen" is untested
 
+### Blocking the writing module: stroke counts disagree with Japanese teaching
+
+`@k1low/hanzi-writer-data-jp` derives from Make Me a Hanzi and animCJK, which decompose
+strokes from Chinese font outlines rather than from how kana is taught. Spot-checked
+against the bundled data:
+
+| Character | Dataset | Taught in Japan |
+|---|---|---|
+| あ | 4 | 3 |
+| ん | 1 | 1 |
+| か | 3 | 3 |
+| ふ | 4 | 4 |
+
+か, ふ and ん agree; あ does not. For an app whose writing module exists to teach
+stroke order, telling a learner あ has four strokes is teaching something false — and
+it is exactly the kind of error a beginner cannot catch.
+
+**Until all 150 characters are checked against a Japanese reference, the writing
+module should not be presented as authoritative on stroke count.** The tracing and
+scoring mechanics are unaffected; what is in doubt is the reference data they grade
+against.
+
 Closed since the first version of this document: public signup is now disabled, and
 diagram 2 is drawn accordingly.

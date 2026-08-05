@@ -61,7 +61,7 @@ export type SheetRow = {
 }
 
 /** `ka` → `k`, `kya` → `ky`, `a` → `—`, `n` → `n`. */
-function consonantOf(reading: string): string {
+export function consonantOf(reading: string): string {
   const stripped = reading.replace(/[aiueo]$/, '')
   return stripped === '' ? '—' : stripped
 }
