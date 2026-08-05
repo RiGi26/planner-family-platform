@@ -172,19 +172,29 @@ export function InkCanvas({
       // still let the browser start a scroll from around it and cancel the stroke.
       style={{ width: size, touchAction: 'none', overscrollBehavior: 'contain' }}
     >
-      {/* Paper, guides and any template sit behind the ink, sharing the same box. */}
+      {/* Paper, guides and any template sit behind the ink, sharing the same box.
+          Everything in here is absolutely positioned and clipped: the guides and the
+          template are siblings, and normal flow would stack them vertically — which
+          once pushed the trace template clean out of the canvas, floating under the
+          page as a giant watermark. */}
       <div
-        className="pointer-events-none absolute inset-x-0 top-0 rounded-[3px] bg-canvas"
+        className="pointer-events-none absolute inset-x-0 top-0 overflow-hidden rounded-[3px] bg-canvas"
         style={{ width: size, height: size }}
       >
-        <svg viewBox={`0 0 ${size} ${size}`} width={size} height={size} aria-hidden>
+        <svg
+          viewBox={`0 0 ${size} ${size}`}
+          width={size}
+          height={size}
+          aria-hidden
+          className="absolute inset-0"
+        >
           {/* 田 guides — the standard Japanese practice sheet. */}
           <g stroke="var(--color-canvas-rule)" strokeWidth="1" strokeDasharray="4 5">
             <line x1={size / 2} y1={0} x2={size / 2} y2={size} />
             <line x1={0} y1={size / 2} x2={size} y2={size / 2} />
           </g>
         </svg>
-        {children}
+        <div className="absolute inset-0">{children}</div>
       </div>
 
       <svg
