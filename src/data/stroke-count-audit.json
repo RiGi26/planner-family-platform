@@ -1,0 +1,117 @@
+{
+  "diperiksa_pada": "2026-08-05",
+  "sumber": "KanjiVG (github.com/KanjiVG/kanjivg)",
+  "ringkasan": {
+    "cocok": 129,
+    "berbeda": 21,
+    "tak_terperiksa": 0
+  },
+  "berbeda": [
+    {
+      "char": "あ",
+      "kita": 4,
+      "kanjivg": 3
+    },
+    {
+      "char": "お",
+      "kita": 4,
+      "kanjivg": 3
+    },
+    {
+      "char": "す",
+      "kita": 3,
+      "kanjivg": 2
+    },
+    {
+      "char": "ず",
+      "kita": 5,
+      "kanjivg": 4
+    },
+    {
+      "char": "な",
+      "kita": 5,
+      "kanjivg": 4
+    },
+    {
+      "char": "ぬ",
+      "kita": 4,
+      "kanjivg": 2
+    },
+    {
+      "char": "ね",
+      "kita": 3,
+      "kanjivg": 2
+    },
+    {
+      "char": "の",
+      "kita": 2,
+      "kanjivg": 1
+    },
+    {
+      "char": "は",
+      "kita": 4,
+      "kanjivg": 3
+    },
+    {
+      "char": "ば",
+      "kita": 6,
+      "kanjivg": 5
+    },
+    {
+      "char": "ぱ",
+      "kita": 5,
+      "kanjivg": 4
+    },
+    {
+      "char": "ほ",
+      "kita": 5,
+      "kanjivg": 4
+    },
+    {
+      "char": "ぼ",
+      "kita": 7,
+      "kanjivg": 6
+    },
+    {
+      "char": "ぽ",
+      "kita": 6,
+      "kanjivg": 5
+    },
+    {
+      "char": "ま",
+      "kita": 4,
+      "kanjivg": 3
+    },
+    {
+      "char": "み",
+      "kita": 3,
+      "kanjivg": 2
+    },
+    {
+      "char": "む",
+      "kita": 4,
+      "kanjivg": 3
+    },
+    {
+      "char": "め",
+      "kita": 3,
+      "kanjivg": 2
+    },
+    {
+      "char": "ょ",
+      "kita": 3,
+      "kanjivg": 2
+    },
+    {
+      "char": "よ",
+      "kita": 3,
+      "kanjivg": 2
+    },
+    {
+      "char": "る",
+      "kita": 2,
+      "kanjivg": 1
+    }
+  ],
+  "tak_terperiksa": []
+}

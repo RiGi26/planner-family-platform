@@ -13,7 +13,8 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",
-    "strokes": "node scripts/extract-stroke-data.mjs"
+    "strokes": "node scripts/extract-stroke-data.mjs",
+    "verify:strokes": "node scripts/verify-stroke-counts.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.58.0",
