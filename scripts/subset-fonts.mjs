@@ -51,16 +51,20 @@ const UA =
 /** Everything the app can render outside Japanese: Latin, digits, punctuation. */
 const ASCII = Array.from({ length: 0x7e - 0x20 + 1 }, (_, i) => String.fromCharCode(0x20 + i)).join('')
 
-/** Typographic marks that appear in copy and in the arithmetic the planner prints. */
-const TYPOGRAPHIC = '—–…·×÷±→←✓°“”‘’′″©'
-
 /**
- * CJK punctuation, kana and ideographs. Deliberately greedy: it also sweeps code
- * comments, so a handful of glyphs that only exist in prose get included. Five
- * extra characters cost bytes measured in the tens; one missing character shows a
- * learner a system font in the middle of a Japanese word.
+ * Sweep every non-ASCII character, not just the Japanese ranges.
+ *
+ * The first version of this looked only for kana and ideographs, and the heading
+ * `五十音 · gojūon` slipped straight through it: the `ū` is Latin Extended-A, so
+ * it fell back to a system font mid-word. It *looked* fine, which is the whole
+ * problem — a wrong face on one letter is not something anyone notices, and the
+ * check that was supposed to catch drift had the same blind spot as the builder.
+ *
+ * Deliberately greedy: it also sweeps code comments, so a few glyphs that exist
+ * only in prose get included. Tens of bytes against a silently wrong glyph is not
+ * a close call.
  */
-const JAPANESE = /[　-ヿ㐀-䶿一-鿿＀-￯]/gu
+const NON_ASCII = /[^\x00-\x7F]/gu
 
 const TEXT_EXT = new Set(['.ts', '.tsx', '.json', '.css'])
 
@@ -74,12 +78,23 @@ function walk(dir, found = []) {
 }
 
 function collectGlyphs() {
-  const set = new Set([...ASCII, ...TYPOGRAPHIC])
+  const set = new Set(ASCII)
   for (const file of walk(SRC)) {
-    const text = readFileSync(file, 'utf8')
-    for (const m of text.matchAll(JAPANESE)) set.add(m[0])
+    for (const m of readFileSync(file, 'utf8').matchAll(NON_ASCII)) set.add(m[0])
   }
-  return [...set].sort()
+
+  // `text-transform: uppercase` renders a glyph that appears nowhere in the
+  // source: the heading is written `gojūon` and drawn `GOJŪON`. Folding both
+  // cases in covers every uppercase class without having to know which strings
+  // wear one.
+  for (const ch of [...set]) {
+    set.add(ch.toLocaleUpperCase('id'))
+    set.add(ch.toLocaleLowerCase('id'))
+  }
+
+  // Case folding can produce multi-character results (ß → SS); those are already
+  // covered by their parts, and a two-character "glyph" would confuse the count.
+  return [...set].filter((c) => [...c].length === 1).sort()
 }
 
 async function subset(family, weight, text) {
@@ -120,9 +135,9 @@ async function subset(family, weight, text) {
 
 const glyphs = collectGlyphs()
 const text = glyphs.join('')
-const japaneseCount = glyphs.filter((c) => c.match(JAPANESE)).length
+const nonAscii = glyphs.filter((c) => c.codePointAt(0) > 0x7f).length
 
-console.log(`Glyph terkumpul: ${glyphs.length} (${japaneseCount} Jepang, ${glyphs.length - japaneseCount} latin/tanda baca)`)
+console.log(`Glyph terkumpul: ${glyphs.length} (${nonAscii} non-ASCII, ${glyphs.length - nonAscii} ASCII)`)
 
 if (!existsSync(OUT_DIR)) mkdirSync(OUT_DIR, { recursive: true })
 

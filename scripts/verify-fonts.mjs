@@ -23,11 +23,11 @@ const ROOT = join(HERE, '..')
 const SRC = join(ROOT, 'src')
 const MANIFEST = join(ROOT, 'public', 'fonts', 'glyphs.json')
 
-// Kept identical to subset-fonts.mjs on purpose: if the two ever disagree about
-// what counts as a glyph, this check passes while the fonts are wrong.
+// Kept identical to subset-fonts.mjs on purpose: when the two disagree about what
+// counts as a glyph, this check passes while the fonts are wrong — which is
+// exactly how `ū` in `gojūon` shipped as a system-font fallback.
 const ASCII = Array.from({ length: 0x7e - 0x20 + 1 }, (_, i) => String.fromCharCode(0x20 + i)).join('')
-const TYPOGRAPHIC = '—–…·×÷±→←✓°“”‘’′″©'
-const JAPANESE = /[　-ヿ㐀-䶿一-鿿＀-￯]/gu
+const NON_ASCII = /[^\x00-\x7F]/gu
 const TEXT_EXT = new Set(['.ts', '.tsx', '.json', '.css'])
 
 function walk(dir, found = []) {
@@ -40,11 +40,16 @@ function walk(dir, found = []) {
 }
 
 function collectGlyphs() {
-  const set = new Set([...ASCII, ...TYPOGRAPHIC])
+  const set = new Set(ASCII)
   for (const file of walk(SRC)) {
-    for (const m of readFileSync(file, 'utf8').matchAll(JAPANESE)) set.add(m[0])
+    for (const m of readFileSync(file, 'utf8').matchAll(NON_ASCII)) set.add(m[0])
   }
-  return [...set].sort()
+  // text-transform: uppercase draws glyphs that appear nowhere in the source.
+  for (const ch of [...set]) {
+    set.add(ch.toLocaleUpperCase('id'))
+    set.add(ch.toLocaleLowerCase('id'))
+  }
+  return [...set].filter((c) => [...c].length === 1).sort()
 }
 
 if (!existsSync(MANIFEST)) {
