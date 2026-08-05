@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Masume">
+  <!--
+    The app drawn as the thing it is made of: 升目, manuscript cells filling with ink.
+    Pure geometry on purpose — a glyph would need a font embedded, and the grid says
+    more about this app than the character would anyway.
+
+    Six cells inked, one active in shu, two still empty. Which is what any given day
+    actually looks like.
+  -->
+  <rect width="512" height="512" fill="#E7E1D8"/>
+  <g transform="translate(76 76)">
+    <!-- done -->
+    <rect x="0"   y="0"   width="104" height="104" rx="4" fill="#211D1A"/>
+    <rect x="128" y="0"   width="104" height="104" rx="4" fill="#211D1A"/>
+    <rect x="256" y="0"   width="104" height="104" rx="4" fill="#211D1A"/>
+    <rect x="0"   y="128" width="104" height="104" rx="4" fill="#211D1A"/>
+    <rect x="128" y="128" width="104" height="104" rx="4" fill="#211D1A"/>
+    <rect x="256" y="128" width="104" height="104" rx="4" fill="#211D1A"/>
+    <!-- the cell you are on -->
+    <rect x="0"   y="256" width="104" height="104" rx="4" fill="none" stroke="#CE3F29" stroke-width="14"/>
+    <!-- still to come -->
+    <rect x="128" y="256" width="104" height="104" rx="4" fill="none" stroke="#CEC6B8" stroke-width="10" stroke-dasharray="22 16"/>
+    <rect x="256" y="256" width="104" height="104" rx="4" fill="none" stroke="#CEC6B8" stroke-width="10" stroke-dasharray="22 16"/>
+  </g>
+</svg>

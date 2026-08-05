@@ -20,3 +20,4 @@ next-env.d.ts
 .vercel
 .claude/settings.local.json
 .playwright-mcp/
+.vercel
