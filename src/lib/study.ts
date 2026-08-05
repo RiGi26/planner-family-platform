@@ -1,6 +1,8 @@
 'use client'
 
 import { db, hydrateCards, recordKanaCell, recordReview, syncPending } from './db'
+import { localDate } from './day'
+import type { DailyProgressRow } from './progress'
 import {
   applyReview,
   newCardState,
@@ -143,6 +145,49 @@ export async function saveReview(
 
   await recordReview(next, review)
   return true
+}
+
+/**
+ * Adds today's work to the daily record.
+ *
+ * Bumped once per answered card locally, but pushed as one row per day: the
+ * queue is keyed by date, so sixty-two answers collapse into a single upsert.
+ * That beats both alternatives — "upsert at the end of the session" loses any
+ * session someone walks away from, and "upsert per card" puts sixty-two network
+ * writes inside a screen that is designed never to touch the network.
+ *
+ * Read-modify-write inside one transaction, because two answers a second apart
+ * would otherwise both read `n` and both write `n + 1`.
+ */
+export async function bumpProgress(
+  userId: string,
+  delta: { new?: number; review?: number; ms?: number; quotaTarget?: number },
+  opts: { timezone: string; now?: Date },
+): Promise<DailyProgressRow> {
+  const now = opts.now ?? new Date()
+  const date = localDate(now, opts.timezone)
+
+  return db.transaction('rw', db.dailyProgress, db.pendingProgress, async () => {
+    const existing = await db.dailyProgress.get(date)
+    const ms = (existing?.ms ?? 0) + (delta.ms ?? 0)
+
+    const row: DailyProgressRow = {
+      user_id: userId,
+      date,
+      new_done: (existing?.new_done ?? 0) + (delta.new ?? 0),
+      review_done: (existing?.review_done ?? 0) + (delta.review ?? 0),
+      ms,
+      minutes: Math.round(ms / 60_000),
+      // The quota is a promise made once at the start of the day; new_done and
+      // review_done are the delivery against it. Recomputing it at noon is how
+      // "no debt pile" quietly turns into "the target follows you around".
+      quota_target: existing?.quota_target ?? delta.quotaTarget ?? 0,
+    }
+
+    await db.dailyProgress.put(row)
+    await db.pendingProgress.put({ id: date, queued_at: now.toISOString() })
+    return row
+  })
 }
 
 // ---------------------------------------------------------------------------

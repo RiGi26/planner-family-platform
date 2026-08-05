@@ -2,6 +2,7 @@
 
 import Dexie, { type EntityTable } from 'dexie'
 import type { CardStateRow, ReviewRow } from './fsrs'
+import type { DailyProgressRow } from './progress'
 
 /**
  * The offline layer.
@@ -35,11 +36,14 @@ class MasumeDB extends Dexie {
   pendingCards!: EntityTable<PendingCard, 'id'>
   kanaSheet!: EntityTable<KanaSheetEntry, 'item_id'>
   pendingKana!: EntityTable<PendingCard, 'id'>
+  dailyProgress!: EntityTable<DailyProgressRow, 'date'>
+  pendingProgress!: EntityTable<PendingCard, 'id'>
   meta!: EntityTable<Meta, 'key'>
 
   constructor() {
     // Renaming this orphans every existing local database, so it can only be done
     // while no one has data yet. That is true today and will not be again.
+    // Adding a *version* is safe — existing stores carry forward untouched.
     super('masume')
     this.version(1).stores({
       cards: 'id, user_id, item_id, due, mode, [user_id+due]',
@@ -48,6 +52,13 @@ class MasumeDB extends Dexie {
       kanaSheet: 'item_id, user_id, written_at',
       pendingKana: 'id, queued_at',
       meta: 'key',
+    })
+    // Keyed by date alone, not [user_id+date]: SyncProvider wipes the whole
+    // database when the account changes, so this store only ever holds one user.
+    // user_id still rides on the row because the server's primary key needs it.
+    this.version(2).stores({
+      dailyProgress: 'date, user_id',
+      pendingProgress: 'id, queued_at',
     })
   }
 }
@@ -75,12 +86,18 @@ export async function countDue(userId: string, at = new Date()) {
 }
 
 export async function pendingCount() {
-  const [reviews, cards, kana] = await Promise.all([
+  const [reviews, cards, kana, progress] = await Promise.all([
     db.reviewQueue.count(),
     db.pendingCards.count(),
     db.pendingKana.count(),
+    db.pendingProgress.count(),
   ])
-  return { reviews, cards, kana, total: reviews + cards + kana }
+  return { reviews, cards, kana, progress, total: reviews + cards + kana + progress }
+}
+
+/** The seven days ending today, for the streak strip. Local read, no network. */
+export async function localProgress(userId: string): Promise<DailyProgressRow[]> {
+  return db.dailyProgress.where('user_id').equals(userId).toArray()
 }
 
 // ---------------------------------------------------------------------------
@@ -123,6 +140,7 @@ export type SyncResult = {
   pushedReviews: number
   pushedCards: number
   pushedKana: number
+  pushedProgress: number
   ok: boolean
   error?: string
 }
@@ -145,7 +163,13 @@ type SupabaseLike = {
  * key the database will deduplicate on.
  */
 export async function syncPending(client: SupabaseLike): Promise<SyncResult> {
-  const result: SyncResult = { pushedReviews: 0, pushedCards: 0, pushedKana: 0, ok: true }
+  const result: SyncResult = {
+    pushedReviews: 0,
+    pushedCards: 0,
+    pushedKana: 0,
+    pushedProgress: 0,
+    ok: true,
+  }
 
   try {
     const pendingCardIds = (await db.pendingCards.toArray()).map((p) => p.id)
@@ -186,6 +210,29 @@ export async function syncPending(client: SupabaseLike): Promise<SyncResult> {
         if (error) throw new Error(error.message)
         await db.pendingKana.bulkDelete(pendingKanaIds)
         result.pushedKana = entries.length
+      }
+    }
+
+    // Last on purpose. Nothing references these rows, and a failure here loses a
+    // summary that can be rebuilt from `reviews` — unlike the three blocks above.
+    const pendingProgressIds = (await db.pendingProgress.toArray()).map((p) => p.id)
+    if (pendingProgressIds.length > 0) {
+      const local = (await db.dailyProgress.bulkGet(pendingProgressIds)).filter(
+        Boolean,
+      ) as DailyProgressRow[]
+      if (local.length > 0) {
+        // `ms` is a local accumulator; the server column is whole `minutes`.
+        const rows = local.map(({ ms: _ms, ...row }) => row)
+        const { error } = await client.from('daily_progress').upsert(rows, {
+          // No ignoreDuplicates here, deliberately, and the contrast with `reviews`
+          // above is the point: a review is an append-only fact, so a re-send must
+          // be a no-op. Daily progress is a running total, so a re-send carries the
+          // NEWER numbers and has to overwrite.
+          onConflict: 'user_id,date',
+        })
+        if (error) throw new Error(error.message)
+        await db.pendingProgress.bulkDelete(pendingProgressIds)
+        result.pushedProgress = rows.length
       }
     }
 
