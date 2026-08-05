@@ -1,6 +1,6 @@
 'use client'
 
-import { useCallback, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { clsx } from '@/lib/clsx'
 import { canvasToCharacter, type Point } from '@/lib/stroke-score'
 
@@ -14,6 +14,25 @@ import { canvasToCharacter, type Point } from '@/lib/stroke-score'
  *
  * The paper stays paper-coloured in dark mode. People write on paper, not on ink —
  * and this is the one lit surface in a night-time session, on purpose.
+ *
+ * THREE THINGS THIS COMPONENT GETS RIGHT ON PURPOSE, all found by writing on a real
+ * phone rather than by reading the code:
+ *
+ * 1. The page must not scroll mid-stroke. `touch-action: none` on the drawing
+ *    surface alone was not enough — the browser could still start a scroll from the
+ *    wrapper, and the moment it does it fires `pointercancel` and the stroke is cut
+ *    in half. The wrapper opts out too, and a non-passive `touchmove` listener
+ *    refuses the gesture outright for the browsers that ignore `touch-action` on SVG.
+ *
+ * 2. Live ink is drawn imperatively. Re-rendering React on every pointermove means
+ *    60–120 renders a second over a path that keeps growing, which on a phone reads
+ *    exactly as the stutter it is. The in-progress stroke updates one `d` attribute
+ *    through a ref, and React only hears about it when the stroke ends.
+ *
+ * 3. The canvas rectangle is measured once per stroke. `getBoundingClientRect()` on
+ *    every move forces a synchronous layout, which is the same stutter from a
+ *    different direction. Measuring at pointerdown is safe precisely because the
+ *    page cannot scroll underneath us — point 1 is what makes point 3 correct.
  */
 
 export type InkCanvasProps = {
@@ -32,6 +51,9 @@ export type InkCanvasProps = {
   className?: string
 }
 
+const toPath = (pts: Point[]) =>
+  pts.map((p, i) => `${i === 0 ? 'M' : 'L'} ${p.x.toFixed(1)} ${p.y.toFixed(1)}`).join(' ')
+
 export function InkCanvas({
   size,
   onStrokeEnd,
@@ -41,54 +63,75 @@ export function InkCanvas({
   hideClear = false,
   className,
 }: InkCanvasProps) {
+  const wrapRef = useRef<HTMLDivElement | null>(null)
   const svgRef = useRef<SVGSVGElement | null>(null)
-  const drawing = useRef(false)
-  const current = useRef<Point[]>([])
-  const [strokes, setStrokes] = useState<Point[][]>([])
-  const [live, setLive] = useState<Point[]>([])
+  const liveRef = useRef<SVGPathElement | null>(null)
 
-  const pointFrom = useCallback((e: React.PointerEvent) => {
-    const rect = svgRef.current?.getBoundingClientRect()
-    if (!rect) return { x: 0, y: 0 }
-    return { x: e.clientX - rect.left, y: e.clientY - rect.top }
+  const drawing = useRef(false)
+  const rect = useRef<DOMRect | null>(null)
+  const current = useRef<Point[]>([])
+
+  const [strokes, setStrokes] = useState<Point[][]>([])
+
+  /**
+   * Refuses the scroll gesture for browsers that ignore `touch-action` on an SVG.
+   * Has to be registered non-passively; React's onTouchMove is passive and cannot
+   * call preventDefault.
+   */
+  useEffect(() => {
+    const el = wrapRef.current
+    if (!el) return
+    const block = (e: TouchEvent) => {
+      if (drawing.current) e.preventDefault()
+    }
+    el.addEventListener('touchmove', block, { passive: false })
+    return () => el.removeEventListener('touchmove', block)
   }, [])
 
-  function start(e: React.PointerEvent) {
+  const paint = useCallback(() => {
+    if (liveRef.current) liveRef.current.setAttribute('d', toPath(current.current))
+  }, [])
+
+  function start(e: React.PointerEvent<SVGSVGElement>) {
     if (disabled) return
+    e.preventDefault()
     // Capture keeps the stroke alive when a finger slides past the edge, which
-    // otherwise ends the stroke halfway through a sweeping harai.
+    // otherwise ends it halfway through a sweeping harai.
     e.currentTarget.setPointerCapture(e.pointerId)
+
+    // Measured once — see note 3 above.
+    rect.current = e.currentTarget.getBoundingClientRect()
     drawing.current = true
-    current.current = [pointFrom(e)]
-    setLive(current.current)
+    current.current = [{ x: e.clientX - rect.current.left, y: e.clientY - rect.current.top }]
+    paint()
   }
 
-  function move(e: React.PointerEvent) {
-    if (!drawing.current) return
-    const p = pointFrom(e)
+  function move(e: React.PointerEvent<SVGSVGElement>) {
+    if (!drawing.current || !rect.current) return
+    e.preventDefault()
+
+    const p = { x: e.clientX - rect.current.left, y: e.clientY - rect.current.top }
     const last = current.current[current.current.length - 1]
     // Drop points that have barely moved: they add nothing to the shape and make
     // the scorer's resampling noisier.
     if (last && Math.hypot(p.x - last.x, p.y - last.y) < 1.5) return
-    current.current = [...current.current, p]
-    setLive(current.current)
+
+    current.current.push(p)
+    paint()
   }
 
-  function end(e: React.PointerEvent) {
+  function end(e: React.PointerEvent<SVGSVGElement>) {
     if (!drawing.current) return
     drawing.current = false
+    rect.current = null
     e.currentTarget.releasePointerCapture?.(e.pointerId)
-
-    // A tap with no travel is not a stroke.
-    if (current.current.length < 2) {
-      current.current = []
-      setLive([])
-      return
-    }
 
     const drawn = current.current
     current.current = []
-    setLive([])
+    paint()
+
+    // A tap with no travel is not a stroke.
+    if (drawn.length < 2) return
 
     const inCharacterSpace = drawn.map((p) => canvasToCharacter(p, size))
     if (validateStroke && !validateStroke(inCharacterSpace, strokes.length)) {
@@ -104,21 +147,22 @@ export function InkCanvas({
 
   function clear() {
     setStrokes([])
-    setLive([])
     current.current = []
+    paint()
     onStrokeEnd?.([])
   }
 
-  const path = (pts: Point[]) =>
-    pts.map((p, i) => `${i === 0 ? 'M' : 'L'} ${p.x.toFixed(1)} ${p.y.toFixed(1)}`).join(' ')
-
   return (
-    <div className={clsx('relative', className)} style={{ width: size }}>
-      {/* Paper, guides and any template sit behind the ink, sharing the same box.
-          The paper stays paper-coloured in dark mode: people write on paper, not on
-          ink, and this is the one lit surface in a night-time session. */}
+    <div
+      ref={wrapRef}
+      className={clsx('relative', className)}
+      // The wrapper opts out too. Blocking the gesture only on the drawing surface
+      // still let the browser start a scroll from around it and cancel the stroke.
+      style={{ width: size, touchAction: 'none', overscrollBehavior: 'contain' }}
+    >
+      {/* Paper, guides and any template sit behind the ink, sharing the same box. */}
       <div
-        className="absolute inset-x-0 top-0 rounded-[3px] bg-canvas"
+        className="pointer-events-none absolute inset-x-0 top-0 rounded-[3px] bg-canvas"
         style={{ width: size, height: size }}
       >
         <svg viewBox={`0 0 ${size} ${size}`} width={size} height={size} aria-hidden>
@@ -142,22 +186,24 @@ export function InkCanvas({
         onPointerMove={move}
         onPointerUp={end}
         onPointerCancel={end}
-        // Without this, dragging a finger down the canvas triggers pull-to-refresh
-        // and the stroke is lost along with the page.
         style={{ touchAction: 'none' }}
         className="relative rounded-[3px] border border-canvas-rule bg-transparent"
       >
         <g
           fill="none"
           stroke="var(--color-canvas-ink)"
-          strokeWidth={Math.max(4, size / 28)}
+          // KanjiVG's own canonical weight is 3 units on a 109 square. Matching it
+          // means traced ink sits inside the template rather than spilling over it,
+          // which is what tracing is supposed to look like.
+          strokeWidth={Math.max(3, (size * 3) / 109)}
           strokeLinecap="round"
           strokeLinejoin="round"
         >
           {strokes.map((s, i) => (
-            <path key={i} d={path(s)} />
+            <path key={i} d={toPath(s)} />
           ))}
-          {live.length > 1 ? <path d={path(live)} /> : null}
+          {/* The stroke in progress. Updated through the ref, never through state. */}
+          <path ref={liveRef} d="" />
         </g>
       </svg>
 

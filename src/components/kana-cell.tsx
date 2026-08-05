@@ -77,7 +77,9 @@ export function KanaCell({ item, status, strokes, hidden = false, size = 56, onS
               d={toCellPath(stroke, size)}
               fill="none"
               stroke="var(--color-canvas-ink)"
-              strokeWidth={Math.max(2, size / 16)}
+              // Same 3-units-on-109 proportion the canvas uses, so a cell shows the
+              // handwriting shrunk rather than a heavier version of it.
+              strokeWidth={Math.max(1.5, (size * 3) / 109)}
               strokeLinecap="round"
               strokeLinejoin="round"
             />
