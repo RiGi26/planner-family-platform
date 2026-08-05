@@ -186,7 +186,52 @@
     color: var(--ink);
     font-family: var(--font-gothic);
     -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
+  }
+
+  /* Android paints a grey rectangle over anything tapped. In a review session that
+     is twenty grey flashes, and it fights the paper the whole screen is made of.
+     Removed here and replaced below by feedback we control. */
+  button,
+  a,
+  label,
+  input,
+  select {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /**
+   * The press.
+   *
+   * A rating tap had no acknowledgement at all: the card simply became the next
+   * card, and on a slow phone that is indistinguishable from a tap that missed.
+   * Twenty times a session, that uncertainty is most of what makes an interface
+   * feel cheap.
+   *
+   * 70ms, and only on transform — long enough to register as contact, short
+   * enough that it has finished before the next card paints. The handler fires on
+   * the same tap either way, so this costs nothing against the four-minute budget.
+   */
+  button:not(:disabled),
+  a[class*='min-h-'] {
+    transition: transform 70ms cubic-bezier(0.2, 0, 0, 1);
+  }
+
+  button:not(:disabled):active,
+  a[class*='min-h-']:active {
+    transform: scale(0.97);
+  }
+
+  /* Headings break where a person would break them, not where the box ends. */
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
   }
 
   /* Below 16px iOS zooms the viewport when an input takes focus, which throws the

@@ -206,17 +206,27 @@ function SessionScreen() {
       </header>
 
       {/* The prompt node is never remounted with a key — only its text changes.
-          Remounting forces a full layout on every card. */}
-      <section className="flex flex-1 flex-col items-center justify-center gap-6">
+          Remounting forces a full layout on every card.
+
+          `min-h-0` is what lets this shrink inside the flex column instead of
+          pushing the rating buttons off the bottom, and the internal scroll is
+          the escape hatch on a short phone: the page stays fixed, this box
+          scrolls. Without both, a 96px glyph plus an answer plus 64px buttons
+          clips on anything smaller than the test device. */}
+      <section className="flex min-h-0 flex-1 flex-col items-center justify-center gap-6 overflow-y-auto py-4">
         <p className="text-[12px] tracking-[0.14em] text-ink-muted uppercase">
           {isRecognition ? t.sesi.promptRecognition : t.sesi.promptRecall}
         </p>
 
         {isRecognition ? (
-          <p className="text-[96px] leading-none text-ink">{card.item.expression}</p>
+          <p className="text-[88px] leading-none text-ink sm:text-[120px]">
+            {card.item.expression}
+          </p>
         ) : (
           <div className="flex flex-col items-center gap-3">
-            <p className="tnum text-[56px] leading-none text-ink">{card.item.reading}</p>
+            <p className="tnum text-[52px] leading-none text-ink sm:text-[72px]">
+              {card.item.reading}
+            </p>
             {/* Without this the prompt is unanswerable: "a" could be あ or ア. */}
             <span className="rounded-[2px] bg-paper-sunken px-2 py-[3px] text-[11px] tracking-[0.08em] text-ink-muted uppercase">
               {card.item.data.script === 'hiragana' ? t.sesi.scriptHiragana : t.sesi.scriptKatakana}
@@ -227,9 +237,13 @@ function SessionScreen() {
         {state.revealed ? (
           <div className="animate-reveal flex flex-col items-center gap-2">
             {isRecognition ? (
-              <p className="tnum text-[40px] leading-none text-shu">{card.item.reading}</p>
+              <p className="tnum text-[40px] leading-none text-shu sm:text-[56px]">
+                {card.item.reading}
+              </p>
             ) : (
-              <p className="text-[72px] leading-none text-shu">{card.item.expression}</p>
+              <p className="text-[64px] leading-none text-shu sm:text-[88px]">
+                {card.item.expression}
+              </p>
             )}
           </div>
         ) : !isRecognition ? (
@@ -285,7 +299,7 @@ function Summary({ state, canvas }: { state: SessionState; canvas: SessionCard[]
         className="mx-auto flex min-h-dvh max-w-lg flex-col justify-center gap-4 px-5"
         style={{ paddingTop: 'var(--spacing-safe-top)' }}
       >
-        <h1 className="text-[24px] leading-tight font-bold text-ink">{t.sesi.emptyTitle}</h1>
+        <h1 className="text-[24px] leading-tight font-bold text-ink sm:text-[30px]">{t.sesi.emptyTitle}</h1>
         <p className="text-[14px] leading-relaxed text-ink-muted">{t.sesi.emptyBody}</p>
         <Link
           href="/"
@@ -305,9 +319,9 @@ function Summary({ state, canvas }: { state: SessionState; canvas: SessionCard[]
       <span aria-hidden className="font-mincho text-[40px] leading-none text-shu">
         済
       </span>
-      <h1 className="mt-2 text-[24px] leading-tight font-bold text-ink">{t.sesi.doneTitle}</h1>
+      <h1 className="mt-2 text-[24px] leading-tight font-bold text-ink sm:text-[30px]">{t.sesi.doneTitle}</h1>
 
-      <p className="tnum text-[40px] leading-none text-ink">
+      <p className="tnum text-[40px] leading-none text-ink sm:text-[52px]">
         {fmt(t.sesi.doneCount, { n: counts.total })}
       </p>
       <p className="tnum text-[13px] text-ink-muted">

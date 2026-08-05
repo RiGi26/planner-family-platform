@@ -98,7 +98,12 @@ function OnboardingScreen() {
     })
 
     if (rpcError) {
-      setError(rpcError.message)
+      // Never the raw message. A stale session whose account was deleted elsewhere
+      // reaches this line and Postgres answers `violates foreign key constraint
+      // "goals_user_id_fkey"` — a sentence that tells the reader nothing and tells
+      // an attacker the schema. The detail belongs in the console.
+      console.error('[mulai] set_active_goal gagal', rpcError)
+      setError(t.errors.auth.fallback)
       setSaving(false)
       return
     }
@@ -131,7 +136,7 @@ function OnboardingScreen() {
 
       {step === 1 ? (
         <>
-          <h1 className="mt-3 text-[24px] leading-tight font-bold text-ink">
+          <h1 className="mt-3 text-[24px] leading-tight font-bold text-ink sm:text-[30px]">
             {t.onboarding.targetTitle}
           </h1>
           <p className="mt-2 text-[14px] leading-relaxed text-ink-muted">
@@ -183,7 +188,10 @@ function OnboardingScreen() {
                       s.tooSoon
                         ? 'border-rule bg-paper-sunken opacity-60'
                         : active
-                          ? 'border-shu bg-paper-raised'
+                          ? // Ink, not shu: shu marks the one primary action on a
+                            // screen, and that is already the Lanjut button. A
+                            // chosen date is state, and state is drawn in ink.
+                            'border-ink bg-paper-raised ring-1 ring-ink'
                           : 'border-rule bg-paper-raised',
                     )}
                   >
@@ -212,14 +220,14 @@ function OnboardingScreen() {
 
       {step === 2 && quota && plan && chosen ? (
         <>
-          <h1 className="mt-3 text-[24px] leading-tight font-bold text-ink">
+          <h1 className="mt-3 text-[24px] leading-tight font-bold text-ink sm:text-[30px]">
             {t.onboarding.quotaTitle}
           </h1>
           <p className="mt-2 text-[14px] leading-relaxed text-ink-muted">
             {t.onboarding.quotaSubtitle}
           </p>
 
-          <p className="tnum mt-8 text-[40px] leading-none text-ink">{quota.newPerDay}</p>
+          <p className="tnum mt-8 text-[40px] leading-none text-ink sm:text-[52px]">{quota.newPerDay}</p>
           <p className="mt-1 text-[14px] text-ink-muted">
             {fmt(t.onboarding.perDay, { n: quota.newPerDay })}
           </p>
