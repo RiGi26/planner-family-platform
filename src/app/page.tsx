@@ -1,5 +1,6 @@
 import { RequireAuth } from '@/components/auth-provider'
 import { BottomNav } from '@/components/bottom-nav'
+import { RequireGoal } from '@/components/require-goal'
 import { Sheet, Ticks } from '@/components/sheet'
 import { fmt, t } from '@/lib/i18n'
 
@@ -34,11 +35,11 @@ const DEMO = {
   writingQueued: 8,
 }
 
-export default function TodayPage() {
+function TodayScreen() {
   const left = DEMO.quotaTotal - DEMO.quotaDone
 
   return (
-    <RequireAuth>
+    <>
       <main
         className="mx-auto max-w-lg px-5 pb-40"
         style={{ paddingTop: 'calc(var(--spacing-safe-top) + 12px)' }}
@@ -142,6 +143,18 @@ export default function TodayPage() {
       </div>
 
       <BottomNav />
+    </>
+  )
+}
+
+export default function TodayPage() {
+  return (
+    <RequireAuth>
+      {/* A quota with no exam date is a number with no source, so this screen
+          waits for onboarding rather than inventing one. */}
+      <RequireGoal>
+        <TodayScreen />
+      </RequireGoal>
     </RequireAuth>
   )
 }

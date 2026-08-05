@@ -103,6 +103,35 @@ export const id = {
     writingQueued: 'Latihan menulis ({n})',
   },
 
+  onboarding: {
+    stepOf: 'Langkah {n} dari 2',
+    targetTitle: 'Kapan ujianmu?',
+    targetSubtitle:
+      'JLPT digelar dua kali setahun, Minggu pertama Juli dan Desember. Pilih yang kamu tuju.',
+    levelHeading: 'Level',
+    sittingHeading: 'Tanggal ujian',
+    daysAway: '{n} hari lagi',
+    tooSoon: 'Terlalu dekat — sisa harinya sudah masuk masa pemantapan {buffer} hari.',
+    next: 'Lanjut',
+    back: 'Kembali',
+
+    quotaTitle: 'Ini yang perlu kamu kerjakan',
+    quotaSubtitle: 'Angkanya dibuka, supaya kamu bisa melihat dari mana asalnya.',
+    perDay: '{n} kartu baru per hari',
+    arithmetic: '{items} item ÷ {days} hari belajar',
+    bufferNote:
+      'Kartu baru berhenti dirilis {buffer} hari sebelum ujian — sisanya khusus pemantapan.',
+    trackRow: '{items} item · {days} hari',
+    minutesNote: '±{n} menit sehari',
+    unrealisticTitle: 'Pace ini tidak realistis',
+    unrealisticBody:
+      'Dengan tempo segini kamu harus menghafal {n} kartu baru tiap hari. Bisa, tapi berat. Pertimbangkan sitting berikutnya.',
+    pickAnother: 'Pilih tanggal lain',
+    start: 'Mulai',
+    starting: 'Menyiapkan…',
+    offline: 'Butuh koneksi untuk menyimpan targetmu. Sambungkan dulu, ya.',
+  },
+
   kana: {
     title: 'Lembar Kana',
     strongCount: '/ {total} kuat',

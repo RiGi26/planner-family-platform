@@ -27,6 +27,39 @@ export type KanaSheetRow = {
   written_at: string
 }
 
+export type Goal = {
+  id: string
+  target_level: string
+  /** `YYYY-MM-DD`. Read it with `parseExamDate`, never `new Date(iso)`. */
+  target_exam_date: string
+  /** The pace agreed to when this goal was set. Null for goals predating 0007. */
+  baseline_new_per_day: number | null
+}
+
+/**
+ * The one active goal, or null when onboarding has not happened yet.
+ *
+ * `maybeSingle()` rather than `single()`: "no goal yet" is the expected state for
+ * a new account, not an error, and RequireGoal has to be able to tell the
+ * difference between "there is none" and "we could not ask".
+ */
+export function useGoal(userId: string | undefined) {
+  return useQuery({
+    queryKey: ['goal', userId],
+    enabled: Boolean(userId),
+    queryFn: async (): Promise<Goal | null> => {
+      const { data, error } = await supabase
+        .from('goals')
+        .select('id, target_level, target_exam_date, baseline_new_per_day')
+        .eq('user_id', userId!)
+        .eq('is_active', true)
+        .maybeSingle()
+      if (error) throw error
+      return data
+    },
+  })
+}
+
 export function useProfile(userId: string | undefined) {
   return useQuery({
     queryKey: ['profile', userId],
