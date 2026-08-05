@@ -1,0 +1,59 @@
+Goukaku — attribution notice
+============================
+
+This repository is public, which means the data in it is being distributed. The
+obligations below follow from that, and they apply to the datasets rather than to
+the application code.
+
+
+Stroke order data — src/data/strokes.json
+-----------------------------------------
+
+Extracted from @k1low/hanzi-writer-data-jp, which derives its data from:
+
+  - Make Me A Hanzi (https://github.com/skishore/makemeahanzi), which in turn
+    extracted glyph outlines from fonts released by Arphic Technology Co., Ltd.
+    under the Arphic Public License in 1999.
+  - animCJK (https://github.com/parsimonhi/animCJK), licensed LGPL v3 or later.
+  - The Unihan database, under the Unicode Copyright and Permission Notice.
+
+Full licence texts are reproduced in licenses/hanzi-writer-data-jp/.
+
+Only the 150 characters this app renders were extracted; the data is otherwise
+unmodified.
+
+
+Kana dataset — src/data/kana.json
+---------------------------------
+
+Compiled for this project from the standard gojūon structure, and generated
+deterministically by scripts/generate-kana.mjs. No third-party dataset was copied.
+
+
+Vocabulary, kanji and grammar datasets — not yet in this repository
+------------------------------------------------------------------
+
+Planned for Phase 0 Sprint 2. When they land, they will derive from OpenJLPT, which
+draws on:
+
+  - JMdict / EDICT (Electronic Dictionary Research and Development Group),
+    Creative Commons Attribution-ShareAlike 4.0
+  - KANJIDIC2 (EDRDG), Creative Commons Attribution-ShareAlike 4.0
+  - Jonathan Waller's JLPT level tables (tanos.co.uk),
+    Creative Commons Attribution 3.0
+  - Tatoeba example sentences, Creative Commons Attribution 2.0 France
+
+Grammar points not present in OpenJLPT are written for this project and marked
+"source": "compiled" in the data, as opposed to "source": "openjlpt". They are not
+copied from Bunpro, JLPT Sensei, or any other commercial source.
+
+
+Licensing of the datasets in this repository
+--------------------------------------------
+
+The derived datasets under src/data/ are distributed under Creative Commons
+Attribution-ShareAlike 4.0 International (CC BY-SA 4.0), which is what the
+ShareAlike terms of the upstream sources require once the data is redistributed.
+
+The application source code is separate and is licensed under the MIT licence; see
+LICENSE.
