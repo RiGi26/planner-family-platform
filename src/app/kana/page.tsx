@@ -1,6 +1,7 @@
 'use client'
 
-import { useMemo, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { RequireAuth, useSession } from '@/components/auth-provider'
 import { BottomNav } from '@/components/bottom-nav'
 import { KanaCell, KanaGap } from '@/components/kana-cell'
@@ -14,6 +15,7 @@ import {
   youon,
   type ItemStates,
   type KanaGroup,
+  type KanaItem,
   type Script,
   type SheetRow,
   VOWELS,
@@ -39,9 +41,10 @@ type GridProps = {
   strokes: Map<string, Point[][]> | undefined
   hidden: boolean
   size: number
+  onSelect: (item: KanaItem) => void
 }
 
-function Grid({ rows, cols, states, strokes, hidden, size }: GridProps) {
+function Grid({ rows, cols, states, strokes, hidden, size, onSelect }: GridProps) {
   return (
     <div className="w-fit">
       <div
@@ -66,6 +69,7 @@ function Grid({ rows, cols, states, strokes, hidden, size }: GridProps) {
             strokes={strokes}
             hidden={hidden}
             size={size}
+            onSelect={onSelect}
           />
         ))}
       </div>
@@ -79,6 +83,7 @@ function FragmentRow({
   strokes,
   hidden,
   size,
+  onSelect,
 }: Omit<GridProps, 'rows' | 'cols'> & { row: SheetRow }) {
   return (
     <>
@@ -96,6 +101,7 @@ function FragmentRow({
             hidden={hidden}
             status={cellStatus(states.get(cell.item.id) ?? [])}
             strokes={strokes?.get(cell.item.id)}
+            onSelect={onSelect}
           />
         ),
       )}
@@ -125,6 +131,7 @@ function Section({
 
 export default function KanaSheetPage() {
   const { user } = useSession()
+  const router = useRouter()
   const [script, setScript] = useState<Script>('hiragana')
   // "uji aku" blanks every cell without deleting anything, so the sheet can be
   // refilled as a test. Once cells are visible the chart stops being a test — the
@@ -147,6 +154,13 @@ export default function KanaSheetPage() {
   const overall = progress.reduce(
     (acc, p) => ({ strong: acc.strong + p.strong, total: acc.total + p.total }),
     { strong: 0, total: 0 },
+  )
+
+  // Tapping a cell opens its row for writing. A 56px cell cannot be written in with
+  // a 40–50px fingertip, so the cell is a target, not a canvas.
+  const openCell = useCallback(
+    (item: KanaItem) => router.push(`/menulis/?item=${encodeURIComponent(item.id)}`),
+    [router],
   )
 
   const label = (g: KanaGroup) => progress.find((p) => p.group === g)!
@@ -215,6 +229,7 @@ export default function KanaSheetPage() {
             strokes={sheet}
             hidden={testMode}
             size={56}
+            onSelect={openCell}
           />
         </Section>
 
@@ -229,6 +244,7 @@ export default function KanaSheetPage() {
             strokes={sheet}
             hidden={testMode}
             size={52}
+            onSelect={openCell}
           />
         </Section>
 
@@ -240,6 +256,7 @@ export default function KanaSheetPage() {
             strokes={sheet}
             hidden={testMode}
             size={52}
+            onSelect={openCell}
           />
         </Section>
 
