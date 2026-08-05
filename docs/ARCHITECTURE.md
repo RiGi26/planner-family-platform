@@ -7,7 +7,8 @@ drifts the moment someone forgets to update it.
 GitHub renders the Mermaid blocks below directly.
 
 **Last verified against production:** 5 August 2026 — auth flow end to end (invite →
-email → set password → session), Edge Function origin allowlist, offline sync tests.
+email → set password → session), Edge Function origin allowlist, offline sync tests,
+and both signup doors probed directly.
 
 ---
 
@@ -72,12 +73,21 @@ Two doors exist, and only one is ours.
 
 The page always demands an invite code, and the code is checked **inside the Edge
 Function** — never in the browser, because anything checked in the browser can be
-walked past. But `/auth/v1/signup` is Supabase's own endpoint and answers regardless
-of our page, so **"Allow new users to sign up" must be off in the dashboard** or the
-invite code is decoration.
+walked past.
 
-Turning it off does not affect invitations: the Edge Function uses the admin API,
-which is not subject to that setting.
+But `/auth/v1/signup` is Supabase's own endpoint and answers regardless of our page,
+so the invite code is only meaningful while **"Allow new users to sign up" is off**.
+
+Both doors were probed directly on 5 August 2026:
+
+| Door | Probe | Result |
+|---|---|---|
+| `/auth/v1/signup` | POST with a deliberately short password | `422 signup_disabled` — closed |
+| Edge Function → admin API | invite an address that already has an account | `409 already registered` — still reaching GoTrue, so unaffected |
+
+The second probe is the one worth keeping: it proves closing the side door did not
+close the front one. A `signup_disabled` there would have meant invitations were
+broken too, and nobody would have found out until the next person tried to join.
 
 ```mermaid
 sequenceDiagram
@@ -214,7 +224,7 @@ Kept because each one cost real time and none of them announce themselves.
 |---|---|---|
 | **BOM in a Vercel env var** | PowerShell prepends U+FEFF when piping to a native command. A URL starting with a BOM is not absolute, so `fetch` treats it as *relative* and sends every request to our own origin. Supabase logs stay empty because nothing arrives. | `cleanEnv()` strips it and the URL shape is validated at startup; `functionsUrl()` derives from the validated origin |
 | **`detectSessionInUrl: false`** | Every invitation and reset link lands on a page that can only conclude it was already used | Explicitly on, with a comment saying why |
-| **Public signup left enabled** | Invite code becomes decoration; anyone can POST to `/auth/v1/signup` | Dashboard toggle — verify with a probe, do not assume |
+| **Public signup left enabled** | Invite code becomes decoration; anyone can POST to `/auth/v1/signup`. It stayed on for hours because it was assumed rather than checked | Toggle is off, and the probe that proves it is written down above so it can be re-run rather than remembered |
 | **`revoke ... from public`** | Not enough on Supabase: `anon` and `authenticated` also get direct grants, so a function stays callable after the revoke appears to have closed it | Named explicitly in `0002`, verified with `has_function_privilege` |
 | **`for all` policies** | Also cover SELECT, leaving two permissive SELECT policies that both run per row | Split into INSERT/UPDATE/DELETE in `0003` |
 
@@ -232,3 +242,6 @@ Stated plainly so the diagrams are not read as a description of finished work.
   would swallow whole
 - PNG icons at 192/512; the manifest currently ships an SVG only, and
   "Add to Home Screen" is untested
+
+Closed since the first version of this document: public signup is now disabled, and
+diagram 2 is drawn accordingly.
