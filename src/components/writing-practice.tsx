@@ -1,23 +1,30 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { InkCanvas } from '@/components/ink-canvas'
+import { StrokeFigure, StrokeStartMarkers } from '@/components/stroke-figure'
 import { clsx } from '@/lib/clsx'
 import { consonantOf, type KanaItem } from '@/lib/curriculum'
-import { characterJson, charDataLoader, mediansAsPoints, strokeCount } from '@/lib/strokes'
-import { ratingFromStrokeErrors, scoreCharacter, type Point } from '@/lib/stroke-score'
+import { kvgCharacter, medians, strokeCount } from '@/lib/kvg'
+import {
+  describe as describeStroke,
+  ratingFromStrokeErrors,
+  scoreCharacter,
+  scoreStroke,
+  type Point,
+} from '@/lib/stroke-score'
 
 /**
  * Demo → Jiplak → Ingat.
  *
- * The difference in feedback between the middle and last stage is the whole design.
- * Trace corrects every stroke as it happens; Recall withholds everything until the
- * character is finished. If Recall corrected as you went it would stop being recall
- * — you would just be following the corrections.
+ * The difference in feedback between the last two stages is the whole design. Trace
+ * corrects every stroke as it happens; Recall withholds everything until the
+ * character is finished. A Recall stage that corrected as you went would stop being
+ * recall — you would just be following the corrections.
  *
- * That is also why the two stages use different machinery. hanzi-writer's quiz mode
- * rejects a wrong stroke the moment it is drawn, which is exactly right for tracing
- * and exactly wrong for recalling.
+ * Stroke data is KanjiVG, which follows Japanese handwriting convention. The library
+ * this replaced brought data derived from Chinese font outlines, and taught あ as
+ * four strokes where it is three.
  */
 
 export type Stage = 'demo' | 'jiplak' | 'ingat'
@@ -28,12 +35,15 @@ const STAGE_LABEL: Record<Stage, string> = {
   ingat: 'Ingat',
 }
 
+/** Below this, a traced stroke is in the wrong place rather than merely untidy. */
+const TRACE_ACCEPT = 0.55
+
 export type WritingResult = {
   strokes: Point[][]
   strokeErrors: number
   shapePercent: number
   note: string | null
-  /** Derived from stroke errors alone — never from the shape score, never from the user. */
+  /** From stroke errors alone — never the shape score, never the user's opinion. */
   rating: 1 | 2 | 3
 }
 
@@ -46,93 +56,66 @@ export function WritingPractice({
   size?: number
   onFinished: (result: WritingResult) => void
 }) {
+  const character = item.data.strokes_key
+  const data = useMemo(() => kvgCharacter(character), [character])
+  const total = strokeCount(character)
+
   const [stage, setStage] = useState<Stage>('demo')
   const [speed, setSpeed] = useState(1)
-  const [traceMistakes, setTraceMistakes] = useState(0)
+  const [demoKey, setDemoKey] = useState(0)
+
+  const [traced, setTraced] = useState(0)
+  const [mistakes, setMistakes] = useState(0)
   const [traceNote, setTraceNote] = useState<string | null>(null)
-  const [traceDone, setTraceDone] = useState(false)
-  const [recallStrokes, setRecallStrokes] = useState<Point[][]>([])
+
+  const [recall, setRecall] = useState<Point[][]>([])
   const [checked, setChecked] = useState<WritingResult | null>(null)
 
-  const character = item.data.strokes_key
-  const total = strokeCount(character)
-  const json = characterJson(character)
+  // Sampling needs the browser's SVG geometry, so it cannot run during render on
+  // the server. Under static export this component only ever mounts client-side.
+  const reference = useMemo(() => (stage === 'demo' ? [] : medians(character)), [character, stage])
 
-  const mountRef = useRef<HTMLDivElement | null>(null)
-  const writerRef = useRef<{ animateCharacter: (o?: unknown) => void; quiz: (o?: unknown) => void; cancelQuiz: () => void } | null>(null)
+  const validate = useCallback(
+    (stroke: Point[], index: number) => {
+      const expected = reference[index]
+      if (!expected) return true
 
-  // hanzi-writer touches the DOM directly, so it can only be created in the browser
-  // and has to be torn down by hand when the stage or character changes.
-  useEffect(() => {
-    if (stage === 'ingat' || !mountRef.current) return
-    let cancelled = false
-    const host = mountRef.current
-    host.innerHTML = ''
-
-    import('hanzi-writer').then(({ default: HanziWriter }) => {
-      if (cancelled) return
-      const writer = HanziWriter.create(host, character, {
-        width: size,
-        height: size,
-        padding: Math.round(size * 0.08),
-        showCharacter: stage === 'demo',
-        showOutline: true,
-        strokeColor: '#211D1A',
-        outlineColor: '#C9C0B2',
-        drawingColor: '#211D1A',
-        highlightColor: '#CE3F29',
-        strokeAnimationSpeed: speed,
-        delayBetweenStrokes: 320,
-        charDataLoader,
-      })
-      writerRef.current = writer as never
-
-      if (stage === 'demo') {
-        writer.animateCharacter()
-      } else {
-        setTraceMistakes(0)
-        setTraceDone(false)
+      const s = scoreStroke(stroke, expected, index)
+      if (s.score >= TRACE_ACCEPT && !s.reversed) {
+        setTraced(index + 1)
         setTraceNote(null)
-        writer.quiz({
-          // Adults learning to write miss on direction more than on shape, so the
-          // grader stays forgiving on shape and lets direction do the teaching.
-          leniency: 1.2,
-          showHintAfterMisses: 3,
-          acceptBackwardsStrokes: false,
-          onMistake: (s: { strokeNum: number }) => {
-            setTraceMistakes((m) => m + 1)
-            setTraceNote(`Goresan ${s.strokeNum + 1} belum pas — perhatikan arah dan urutannya.`)
-          },
-          onCorrectStroke: () => setTraceNote(null),
-          onComplete: () => setTraceDone(true),
-        })
+        return true
       }
-    })
 
-    return () => {
-      cancelled = true
-      writerRef.current?.cancelQuiz?.()
-      writerRef.current = null
-      host.innerHTML = ''
-    }
-  }, [stage, character, size, speed])
+      // Rejected, but explained. The learner repeats this stroke; nothing already
+      // written is thrown away.
+      setMistakes((m) => m + 1)
+      setTraceNote(describeStroke(s, expected))
+      return false
+    },
+    [reference],
+  )
+
+  function reset() {
+    setTraced(0)
+    setMistakes(0)
+    setTraceNote(null)
+  }
 
   function check() {
-    const medians = mediansAsPoints(character)
-    const score = scoreCharacter(recallStrokes, medians)
-    // Stroke errors carry over from Trace; Recall itself never interrupts to count.
-    const errors = Math.max(traceMistakes, recallStrokes.length === total ? 0 : total - recallStrokes.length)
-    const result: WritingResult = {
-      strokes: recallStrokes,
+    const score = scoreCharacter(recall, reference)
+    const missing = Math.max(0, total - recall.length)
+    const errors = mistakes + missing
+    setChecked({
+      strokes: recall,
       strokeErrors: errors,
       shapePercent: score.percent,
       note: score.note,
       rating: ratingFromStrokeErrors(errors),
-    }
-    setChecked(result)
+    })
   }
 
-  if (!json) {
+  if (!data) {
     return (
       <p className="rounded-[3px] bg-oker-tint px-3 py-3 text-[13px] text-oker">
         Data goresan untuk {item.expression} belum tersedia di perangkat ini.
@@ -142,9 +125,8 @@ export function WritingPractice({
 
   return (
     <div className="flex flex-col items-center gap-4">
-      {/* Axis and column, not the 行 name. For any column-a cell the 行 label *is*
-          the answer — か行 beside column a hands over か — and Recall is exactly the
-          stage where that must not happen. */}
+      {/* Axis and column, not the 行 name: for any column-a cell the 行 label *is*
+          the answer, and Recall is the stage that must not give it away. */}
       <div className="flex w-full items-center justify-between">
         <span className="tnum text-[12px] tracking-[0.14em] text-ink-muted uppercase">
           {consonantOf(item.reading)} · {item.data.col}
@@ -157,7 +139,11 @@ export function WritingPractice({
           <button
             key={s}
             type="button"
-            onClick={() => setStage(s)}
+            onClick={() => {
+              setStage(s)
+              if (s === 'jiplak') reset()
+              if (s === 'demo') setDemoKey((k) => k + 1)
+            }}
             className={clsx(
               'min-h-tap flex-1 rounded-[2px] text-[13px] transition-colors',
               stage === s ? 'bg-ink text-paper-raised' : 'text-ink-muted',
@@ -168,14 +154,40 @@ export function WritingPractice({
         ))}
       </div>
 
-      {stage === 'ingat' ? (
-        <InkCanvas size={size} onStrokeEnd={setRecallStrokes} disabled={Boolean(checked)} />
-      ) : (
+      {stage === 'demo' ? (
         <div
-          ref={mountRef}
-          style={{ width: size, height: size, touchAction: 'none' }}
-          className="rounded-[3px] border border-canvas-rule bg-canvas"
-        />
+          className="relative rounded-[3px] border border-canvas-rule bg-canvas"
+          style={{ width: size, height: size }}
+        >
+          <StrokeFigure
+            key={demoKey}
+            character={character}
+            size={size}
+            animate
+            speed={speed}
+          />
+          <StrokeStartMarkers character={character} size={size} />
+        </div>
+      ) : (
+        <InkCanvas
+          size={size}
+          onStrokeEnd={stage === 'ingat' ? setRecall : undefined}
+          validateStroke={stage === 'jiplak' ? validate : undefined}
+          disabled={Boolean(checked)}
+          hideClear={stage === 'jiplak'}
+        >
+          {stage === 'jiplak' ? (
+            <>
+              {/* The whole character, faint, to trace over — plus the strokes
+                  already accepted, so progress is visible without a counter. */}
+              <StrokeFigure character={character} size={size} template />
+              <div className="absolute inset-0">
+                <StrokeFigure character={character} size={size} upTo={traced} />
+              </div>
+              <StrokeStartMarkers character={character} size={size} upTo={traced + 1} />
+            </>
+          ) : null}
+        </InkCanvas>
       )}
 
       {stage === 'demo' ? (
@@ -185,7 +197,10 @@ export function WritingPractice({
               <button
                 key={s}
                 type="button"
-                onClick={() => setSpeed(s)}
+                onClick={() => {
+                  setSpeed(s)
+                  setDemoKey((k) => k + 1)
+                }}
                 className={clsx(
                   'min-h-tap flex-1 rounded-[3px] border text-[13px]',
                   speed === s ? 'border-ink text-ink' : 'border-rule text-ink-muted',
@@ -194,14 +209,24 @@ export function WritingPractice({
                 {s}×
               </button>
             ))}
+            <button
+              type="button"
+              onClick={() => setDemoKey((k) => k + 1)}
+              className="min-h-tap flex-1 rounded-[3px] border border-rule text-[13px] text-ink-muted"
+            >
+              Ulang
+            </button>
           </div>
-          <p className="text-center text-[12px] text-ink-muted">
-            Tonton sebanyak yang perlu. Kecepatan 0,5× karena orang dewasa kalah di arah,
+          <p className="text-center text-[12px] leading-relaxed text-ink-muted">
+            Tonton sebanyak yang perlu. 0,5× disediakan karena orang dewasa kalah di arah,
             bukan di bentuk.
           </p>
           <button
             type="button"
-            onClick={() => setStage('jiplak')}
+            onClick={() => {
+              setStage('jiplak')
+              reset()
+            }}
             className="min-h-tap rounded-[3px] bg-shu px-4 text-[15px] font-medium text-paper-raised"
           >
             Lanjut ke jiplak
@@ -211,29 +236,40 @@ export function WritingPractice({
 
       {stage === 'jiplak' ? (
         <div className="flex w-full flex-col gap-3">
+          <div className="flex items-center justify-between">
+            <span className="tnum text-[12px] text-ink-muted">
+              goresan {Math.min(traced + 1, total)}/{total}
+            </span>
+            {mistakes > 0 ? (
+              <span className="tnum text-[12px] text-oker">{mistakes}× diulang</span>
+            ) : null}
+          </div>
+
           {traceNote ? (
-            <p role="status" className="rounded-[3px] bg-shu-tint px-3 py-2 text-[13px] text-shu">
+            <p role="status" className="rounded-[3px] bg-shu-tint px-3 py-2 text-[13px] leading-relaxed text-shu">
               {traceNote}
             </p>
-          ) : null}
-          <p className="text-center text-[12px] text-ink-muted">
-            Goresan yang salah tidak dihapus — hanya ditolak, dan kamu ulangi goresan itu.
-          </p>
+          ) : (
+            <p className="text-center text-[12px] text-ink-muted">
+              Goresan yang meleset ditolak dan dijelaskan — yang sudah benar tidak hilang.
+            </p>
+          )}
+
           <button
             type="button"
             onClick={() => setStage('ingat')}
-            disabled={!traceDone}
+            disabled={traced < total}
             className="min-h-tap rounded-[3px] bg-shu px-4 text-[15px] font-medium text-paper-raised disabled:bg-rule disabled:text-ink-muted"
           >
-            {traceDone ? 'Lanjut ke ingat' : 'Selesaikan jiplakannya dulu'}
+            {traced < total ? 'Selesaikan jiplakannya dulu' : 'Lanjut ke ingat'}
           </button>
         </div>
       ) : null}
 
       {stage === 'ingat' ? (
         <div className="flex w-full flex-col gap-3">
-          <p className="text-center text-[12px] text-ink-muted">
-            Tanpa contoh. Tulis dari ingatan — tidak ada yang dinilai sampai kamu selesai.
+          <p className="text-center text-[12px] leading-relaxed text-ink-muted">
+            Tanpa contoh. Tidak ada yang dinilai sampai kamu selesai.
           </p>
 
           {checked ? (
@@ -253,7 +289,7 @@ export function WritingPractice({
           <button
             type="button"
             onClick={checked ? () => onFinished(checked) : check}
-            disabled={recallStrokes.length === 0}
+            disabled={recall.length === 0}
             className="min-h-tap rounded-[3px] bg-shu px-4 text-[15px] font-medium text-paper-raised disabled:bg-rule disabled:text-ink-muted"
           >
             {checked ? 'Simpan ke lembar' : 'Bandingkan'}

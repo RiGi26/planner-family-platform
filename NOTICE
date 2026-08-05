@@ -6,21 +6,21 @@ obligations below follow from that, and they apply to the datasets rather than t
 the application code.
 
 
-Stroke order data — src/data/strokes.json
------------------------------------------
+Stroke order data — src/data/kvg-strokes.json
+---------------------------------------------
 
-Extracted from @k1low/hanzi-writer-data-jp, which derives its data from:
+Extracted from KanjiVG (https://kanjivg.tagaini.net/), by Ulrich Apel and
+contributors, licensed under Creative Commons Attribution-ShareAlike 3.0.
 
-  - Make Me A Hanzi (https://github.com/skishore/makemeahanzi), which in turn
-    extracted glyph outlines from fonts released by Arphic Technology Co., Ltd.
-    under the Arphic Public License in 1999.
-  - animCJK (https://github.com/parsimonhi/animCJK), licensed LGPL v3 or later.
-  - The Unihan database, under the Unicode Copyright and Permission Notice.
+Only the 150 characters this app draws were extracted, and only the stroke path
+data; the paths themselves are unmodified.
 
-Full licence texts are reproduced in licenses/hanzi-writer-data-jp/.
+KanjiVG was chosen over @k1low/hanzi-writer-data-jp because the latter derives from
+Chinese font outlines and disagrees with Japanese handwriting convention on 21 of
+those 150 characters. See docs/ARCHITECTURE.md.
 
-Only the 150 characters this app renders were extracted; the data is otherwise
-unmodified.
+The superseded licence texts for that package remain in
+licenses/hanzi-writer-data-jp/ for reference; no data from it ships any more.
 
 
 Kana dataset — src/data/kana.json

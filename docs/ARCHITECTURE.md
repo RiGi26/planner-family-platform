@@ -243,27 +243,28 @@ Stated plainly so the diagrams are not read as a description of finished work.
 - PNG icons at 192/512; the manifest currently ships an SVG only, and
   "Add to Home Screen" is untested
 
-### Blocking the writing module: stroke counts disagree with Japanese teaching
+### Resolved: stroke counts now match Japanese teaching, 150 of 150
 
-`@k1low/hanzi-writer-data-jp` derives from Make Me a Hanzi and animCJK, which decompose
-strokes from Chinese font outlines rather than from how kana is taught. Spot-checked
-against the bundled data:
+`@k1low/hanzi-writer-data-jp` derives from Make Me a Hanzi and animCJK, which
+decompose strokes from Chinese font outlines. Audited against KanjiVG, **21 of 150
+characters disagreed** — and not randomly: every one had a closed loop, which that
+data splits into two strokes where Japanese handwriting draws one.
 
-| Character | Dataset | Taught in Japan |
-|---|---|---|
-| あ | 4 | 3 |
-| ん | 1 | 1 |
-| か | 3 | 3 |
-| ふ | 4 | 4 |
+    あ 4→3   お 4→3   す 3→2   な 5→4   ぬ 4→2   ね 3→2   の 2→1
+    は 4→3   ほ 5→4   ま 4→3   み 3→2   む 4→3   め 3→2   よ 3→2
+    る 2→1   + dakuten forms ず ば ぱ ぼ ぽ ょ
 
-か, ふ and ん agree; あ does not. For an app whose writing module exists to teach
-stroke order, telling a learner あ has four strokes is teaching something false — and
-it is exactly the kind of error a beginner cannot catch.
+The fix was to move to KanjiVG outright rather than patch a table by hand. Its paths
+are **centrelines**, not outlines, so one dataset now draws the character, animates
+it, and serves as the skeleton the scorer grades against — with nothing to keep in
+sync and one dependency fewer. `npm run verify:strokes` reports 150 of 150 matching.
 
-**Until all 150 characters are checked against a Japanese reference, the writing
-module should not be presented as authoritative on stroke count.** The tracing and
-scoring mechanics are unaffected; what is in doubt is the reference data they grade
-against.
+Two direction bugs surfaced during the move and were fixed with it. The old data
+needed a y flip, and both the offset wording ("ke atas" / "ke bawah") and the
+reference-direction phrases had been written against the flipped axis — so every one
+of them described the opposite of what it meant. KanjiVG uses ordinary SVG
+orientation, and the coordinate contract is now stated at the top of
+`stroke-score.ts`.
 
 Closed since the first version of this document: public signup is now disabled, and
 diagram 2 is drawn accordingly.

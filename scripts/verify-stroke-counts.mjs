@@ -71,9 +71,9 @@ async function mapLimit(items, limit, fn) {
   return out
 }
 
-const strokesPath = join(DATA, 'strokes.json')
+const strokesPath = join(DATA, 'kvg-strokes.json')
 if (!existsSync(strokesPath)) {
-  console.error('src/data/strokes.json belum ada — jalankan "npm run strokes" dulu.')
+  console.error('src/data/kvg-strokes.json belum ada — jalankan "npm run kvg" dulu.')
   process.exit(1)
 }
 

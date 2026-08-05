@@ -2,7 +2,7 @@
 
 import { clsx } from '@/lib/clsx'
 import type { CellStatus, KanaItem } from '@/lib/curriculum'
-import type { Point } from '@/lib/stroke-score'
+import { characterToCanvas, type Point } from '@/lib/stroke-score'
 
 /**
  * One square of the Kana Sheet.
@@ -28,14 +28,14 @@ export type CellProps = {
 }
 
 /**
- * Character space is 1024 wide with the y axis flipped (hanzi-writer's convention),
- * so rendering has to undo exactly what `canvasToCharacter` did.
+ * Stored strokes live in KanjiVG's 109-unit square, in ordinary SVG orientation, so
+ * drawing them back is a plain scale with no flip — `characterToCanvas` is the same
+ * mapping the writing canvas uses in reverse.
  */
 function toCellPath(stroke: Point[], size: number): string {
   return stroke
     .map((p, i) => {
-      const x = (p.x * size) / 1024
-      const y = ((900 - p.y) * size) / 1024
+      const { x, y } = characterToCanvas(p, size)
       return `${i === 0 ? 'M' : 'L'} ${x.toFixed(1)} ${y.toFixed(1)}`
     })
     .join(' ')

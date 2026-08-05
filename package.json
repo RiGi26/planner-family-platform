@@ -5,7 +5,7 @@
   "description": "JLPT certification planner — counts backwards from the exam date to a daily quota, then runs that quota through a single FSRS engine.",
   "license": "MIT",
   "scripts": {
-    "prebuild": "node scripts/extract-stroke-data.mjs",
+    "prebuild": "node scripts/fetch-kanjivg.mjs",
     "dev": "next dev",
     "build": "next build",
     "start": "npx serve out",
@@ -13,8 +13,8 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",
-    "strokes": "node scripts/extract-stroke-data.mjs",
-    "verify:strokes": "node scripts/verify-stroke-counts.mjs"
+    "verify:strokes": "node scripts/verify-stroke-counts.mjs",
+    "kvg": "node scripts/fetch-kanjivg.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.58.0",
@@ -22,14 +22,12 @@
     "date-fns": "4.4.0",
     "dexie": "4.4.4",
     "dexie-react-hooks": "^1.1.7",
-    "hanzi-writer": "3.7.3",
     "next": "^15.5.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "ts-fsrs": "5.4.1"
   },
   "devDependencies": {
-    "@k1low/hanzi-writer-data-jp": "0.8.0",
     "@serwist/next": "9.5.12",
     "@tailwindcss/postcss": "^4.1.0",
     "@types/node": "^22.10.0",

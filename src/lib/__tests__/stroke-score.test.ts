@@ -1,6 +1,9 @@
 import { describe, expect, it } from 'vitest'
 import {
+  CHARACTER_SIZE,
   canvasToCharacter,
+  characterToCanvas,
+  describe as describeStroke,
   ratingFromStrokeErrors,
   resample,
   scoreCharacter,
@@ -8,19 +11,22 @@ import {
   type Point,
 } from '../stroke-score'
 
-/** Three roughly vertical strokes, like 川. */
+/**
+ * Three roughly vertical strokes, like 川, in KanjiVG's 109-unit square.
+ * Ordinary SVG orientation: a downward stroke has y increasing.
+ */
 const KAWA: Point[][] = [
   [
-    { x: 240, y: 750 },
-    { x: 215, y: 300 },
+    { x: 25, y: 22 },
+    { x: 21, y: 70 },
   ],
   [
-    { x: 500, y: 780 },
-    { x: 500, y: 380 },
+    { x: 53, y: 18 },
+    { x: 53, y: 80 },
   ],
   [
-    { x: 780, y: 800 },
-    { x: 780, y: 200 },
+    { x: 83, y: 15 },
+    { x: 83, y: 90 },
   ],
 ]
 
@@ -31,8 +37,8 @@ describe('resample', () => {
   it('returns exactly n points and keeps both endpoints', () => {
     const out = resample(KAWA[2]!, 10)
     expect(out).toHaveLength(10)
-    expect(out[0]).toEqual({ x: 780, y: 800 })
-    expect(out[9]).toEqual({ x: 780, y: 200 })
+    expect(out[0]).toEqual({ x: 83, y: 15 })
+    expect(out[9]).toEqual({ x: 83, y: 90 })
   })
 
   it('spaces points evenly regardless of how the raw samples clustered', () => {
@@ -62,10 +68,19 @@ describe('scoreCharacter', () => {
   })
 
   it('stays quiet about writing that is merely a little shaky', () => {
-    const shaky = KAWA.map((s) => jitter(s, 4, -3))
+    // Half a unit on a 109 square — roughly a 1.5px wobble on a 300px canvas.
+    const shaky = KAWA.map((s) => jitter(s, 0.5, -0.35))
     const result = scoreCharacter(shaky, KAWA)
     expect(result.percent).toBeGreaterThanOrEqual(95)
     expect(result.note).toBeNull()
+  })
+
+  it('marks a visibly wobbly write down without calling it wrong', () => {
+    // Five px of wobble on a 300px canvas: still recognisable, no longer perfect.
+    const wobbly = KAWA.map((s) => jitter(s, 1.8, -1.2))
+    const result = scoreCharacter(wobbly, KAWA)
+    expect(result.percent).toBeGreaterThan(85)
+    expect(result.percent).toBeLessThan(95)
   })
 
   it('detects a stroke drawn in the wrong direction', () => {
@@ -86,7 +101,7 @@ describe('scoreCharacter', () => {
 
   it('names the tilted stroke, not one of the clean ones', () => {
     // Stroke 2 leans hard to the right; the other two are untouched.
-    const tilted = [KAWA[0]!, [{ x: 500, y: 780 }, { x: 660, y: 380 }], KAWA[2]!]
+    const tilted = [KAWA[0]!, [{ x: 53, y: 18 }, { x: 70, y: 80 }], KAWA[2]!]
     const result = scoreCharacter(tilted, KAWA)
     expect(result.worst?.index).toBe(1)
     expect(result.note).toMatch(/kedua/)
@@ -94,7 +109,7 @@ describe('scoreCharacter', () => {
   })
 
   it('flags a stroke that stops short', () => {
-    const short = [KAWA[0]!, KAWA[1]!, [{ x: 780, y: 800 }, { x: 780, y: 620 }]]
+    const short = [KAWA[0]!, KAWA[1]!, [{ x: 83, y: 15 }, { x: 83, y: 37 }]]
     const result = scoreCharacter(short, KAWA)
     expect(result.worst?.index).toBe(2)
     expect(result.worst!.lengthRatio).toBeLessThan(0.5)
@@ -118,11 +133,18 @@ describe('scoreCharacter', () => {
 
 describe('scoreStroke', () => {
   it('reports the offset direction of a displaced stroke', () => {
-    const moved = jitter(KAWA[1]!, 90, 0)
+    const moved = jitter(KAWA[1]!, 10, 0)
     const s = scoreStroke(moved, KAWA[1]!, 1)
-    expect(s.offset.x).toBeCloseTo(90, 0)
+    expect(s.offset.x).toBeCloseTo(10, 0)
     expect(s.offset.y).toBeCloseTo(0, 0)
     expect(s.reversed).toBe(false)
+  })
+
+  it('names the offset direction in screen terms, with y growing downwards', () => {
+    const lower = scoreStroke(jitter(KAWA[1]!, 0, 9), KAWA[1]!, 1)
+    expect(describeStroke(lower)).toMatch(/ke bawah/)
+    const higher = scoreStroke(jitter(KAWA[1]!, 0, -9), KAWA[1]!, 1)
+    expect(describeStroke(higher)).toMatch(/ke atas/)
   })
 })
 
@@ -137,22 +159,33 @@ describe('ratingFromStrokeErrors', () => {
 })
 
 describe('canvasToCharacter', () => {
-  it('flips the y axis, so a downward canvas stroke reads as downward in character space', () => {
-    const top = canvasToCharacter({ x: 0, y: 0 }, 358)
-    const bottom = canvasToCharacter({ x: 0, y: 358 }, 358)
-    expect(top.y).toBeGreaterThan(bottom.y)
+  it('keeps the y axis pointing the same way as the canvas', () => {
+    // KanjiVG uses ordinary SVG orientation, so down on the canvas is down in
+    // character space. The previous data source needed a flip here, and getting it
+    // wrong scored every vertical stroke as drawn backwards.
+    const top = canvasToCharacter({ x: 0, y: 0 }, 300)
+    const bottom = canvasToCharacter({ x: 0, y: 300 }, 300)
+    expect(bottom.y).toBeGreaterThan(top.y)
   })
 
-  it('scales the canvas into the 1024 grid', () => {
-    const right = canvasToCharacter({ x: 358, y: 0 }, 358)
-    expect(right.x).toBeCloseTo(1024, 0)
+  it('scales the canvas into the 109 square', () => {
+    const corner = canvasToCharacter({ x: 300, y: 300 }, 300)
+    expect(corner.x).toBeCloseTo(CHARACTER_SIZE, 5)
+    expect(corner.y).toBeCloseTo(CHARACTER_SIZE, 5)
+  })
+
+  it('round-trips through characterToCanvas', () => {
+    const original = { x: 42, y: 77 }
+    const back = canvasToCharacter(characterToCanvas(original, 300), 300)
+    expect(back.x).toBeCloseTo(original.x, 5)
+    expect(back.y).toBeCloseTo(original.y, 5)
   })
 
   it('keeps a traced stroke matching its reference after conversion', () => {
-    // Draw stroke 3 of 川 on a 358px canvas by inverting the transform, then convert
-    // back. A sign error anywhere in the pipeline shows up here as `reversed`.
-    const canvasStroke = KAWA[2]!.map((p) => ({ x: (p.x * 358) / 1024, y: ((900 - p.y) * 358) / 1024 }))
-    const converted = canvasStroke.map((p) => canvasToCharacter(p, 358))
+    // Draw stroke 3 of 川 on a 300px canvas, then convert back. A sign error
+    // anywhere in the pipeline shows up here as `reversed`.
+    const canvasStroke = KAWA[2]!.map((p) => characterToCanvas(p, 300))
+    const converted = canvasStroke.map((p) => canvasToCharacter(p, 300))
     const s = scoreStroke(converted, KAWA[2]!, 2)
     expect(s.reversed).toBe(false)
     expect(s.score).toBeGreaterThan(0.95)

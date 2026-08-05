@@ -10,10 +10,9 @@
  * real job is diagnosis, not the number.
  *
  * COORDINATE CONTRACT
- * Both `userStrokes` and `medians` must already be in the character's own 1024x1024
- * space. hanzi-writer renders with `transform: scale(1,-1) translate(0,-900)`, so a
- * canvas point has to be mapped through the same transform before it gets here.
- * Use `canvasToCharacter()` for that.
+ * Both `userStrokes` and `medians` must already be in KanjiVG's 109x109 space, in
+ * ordinary SVG orientation — x grows right, **y grows down**. Use
+ * `canvasToCharacter()` to map a canvas point into it.
  *
  * Nothing here touches the schedule. FSRS rating in writing mode comes from the
  * count of wrong strokes, not from this percentage — see `ratingFromStrokeErrors`.
@@ -24,8 +23,11 @@ export type Point = { x: number; y: number }
 /** How many points each stroke is resampled to before comparison. */
 const SAMPLES = 24
 
-/** Distance (in character units) at which a stroke scores zero. */
-const MAX_DEVIATION = 190
+/** KanjiVG's square. Every threshold below is expressed against it. */
+export const CHARACTER_SIZE = 109
+
+/** Distance (in character units) at which a stroke scores zero — about a fifth of the square. */
+const MAX_DEVIATION = 20
 
 /** Below this score a stroke is worth remarking on. Above it, the writing is fine. */
 const NOTEWORTHY = 0.9
@@ -220,7 +222,13 @@ export function scoreCharacter(userStrokes: Point[][], medians: Point[][]): Char
 
 const ORDINAL = ['pertama', 'kedua', 'ketiga', 'keempat', 'kelima', 'keenam', 'ketujuh', 'kedelapan']
 
-/** Plain-language direction of a reference stroke, used for the "should be" clause. */
+/**
+ * Plain-language direction of a reference stroke, used for the "should be" clause.
+ *
+ * Read in SVG orientation, where y grows downwards — so 90° points *down*, not up.
+ * Under the previous data source the y axis was flipped, and this mapping described
+ * every stroke as going the opposite way.
+ */
 function referenceDirection(reference: Point[] | undefined): string | null {
   if (!reference || reference.length < 2) return null
   const angle = heading(resample(reference))
@@ -257,7 +265,9 @@ export function describe(s: StrokeScore, reference?: Point[]): string {
   const ranked = (
     [
       { kind: 'angle', magnitude: angle / 30 },
-      { kind: 'offset', magnitude: offset / 60 },
+      // Roughly 6% of the square — the point at which a stroke visibly sits in the
+      // wrong place rather than merely wobbling.
+      { kind: 'offset', magnitude: offset / 6.5 },
       { kind: 'length', magnitude: lengthOff / 0.25 },
     ] as const
   )
@@ -307,14 +317,20 @@ export function ratingFromStrokeErrors(errors: number): 1 | 2 | 3 {
 }
 
 /**
- * Maps a canvas point to the character's coordinate space.
+ * Maps a canvas point into KanjiVG's 109-unit square.
  *
- * hanzi-writer draws into a 1024-unit box and flips the y axis
- * (`scale(1,-1) translate(0,-900)`), so a raw canvas coordinate compared directly
- * against a median would be upside down — and would score every vertical stroke as
- * reversed.
+ * A plain scale, with no flip: KanjiVG uses ordinary SVG orientation, so canvas and
+ * character space already agree on which way is down. The previous data source
+ * needed a y flip here, and getting it wrong scored every vertical stroke as drawn
+ * backwards.
  */
 export function canvasToCharacter(p: Point, canvasSize: number): Point {
-  const scale = 1024 / canvasSize
-  return { x: p.x * scale, y: 900 - p.y * scale }
+  const scale = CHARACTER_SIZE / canvasSize
+  return { x: p.x * scale, y: p.y * scale }
+}
+
+/** The inverse, for drawing stored strokes back onto a canvas of any size. */
+export function characterToCanvas(p: Point, canvasSize: number): Point {
+  const scale = canvasSize / CHARACTER_SIZE
+  return { x: p.x * scale, y: p.y * scale }
 }

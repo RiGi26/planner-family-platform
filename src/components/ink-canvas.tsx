@@ -18,23 +18,27 @@ import { canvasToCharacter, type Point } from '@/lib/stroke-score'
 
 export type InkCanvasProps = {
   size: number
-  /** Faint template shown behind the ink, for the Trace stage. */
-  templatePaths?: string[]
   onStrokeEnd?: (strokes: Point[][]) => void
+  /**
+   * Trace stage only. Return false to reject the stroke just drawn — the ink is
+   * removed and the learner writes it again. Correction, not erasure: the reason is
+   * shown beside the canvas rather than by wiping the whole attempt.
+   */
+  validateStroke?: (stroke: Point[], index: number) => boolean
+  /** Anything to draw behind the ink: a faint template, guides, markers. */
+  children?: React.ReactNode
   disabled?: boolean
+  hideClear?: boolean
   className?: string
-}
-
-export type InkCanvasHandle = {
-  clear: () => void
-  strokes: Point[][]
 }
 
 export function InkCanvas({
   size,
-  templatePaths,
   onStrokeEnd,
+  validateStroke,
+  children,
   disabled = false,
+  hideClear = false,
   className,
 }: InkCanvasProps) {
   const svgRef = useRef<SVGSVGElement | null>(null)
@@ -82,10 +86,19 @@ export function InkCanvas({
       return
     }
 
-    const next = [...strokes, current.current]
-    setStrokes(next)
+    const drawn = current.current
     current.current = []
     setLive([])
+
+    const inCharacterSpace = drawn.map((p) => canvasToCharacter(p, size))
+    if (validateStroke && !validateStroke(inCharacterSpace, strokes.length)) {
+      // Rejected: the ink never lands, so the stroke count stays honest and the
+      // learner repeats that stroke rather than starting the character again.
+      return
+    }
+
+    const next = [...strokes, drawn]
+    setStrokes(next)
     onStrokeEnd?.(next.map((s) => s.map((p) => canvasToCharacter(p, size))))
   }
 
@@ -99,10 +112,25 @@ export function InkCanvas({
   const path = (pts: Point[]) =>
     pts.map((p, i) => `${i === 0 ? 'M' : 'L'} ${p.x.toFixed(1)} ${p.y.toFixed(1)}`).join(' ')
 
-  const guide = size / 2
-
   return (
-    <div className={clsx('relative', className)}>
+    <div className={clsx('relative', className)} style={{ width: size }}>
+      {/* Paper, guides and any template sit behind the ink, sharing the same box.
+          The paper stays paper-coloured in dark mode: people write on paper, not on
+          ink, and this is the one lit surface in a night-time session. */}
+      <div
+        className="absolute inset-x-0 top-0 rounded-[3px] bg-canvas"
+        style={{ width: size, height: size }}
+      >
+        <svg viewBox={`0 0 ${size} ${size}`} width={size} height={size} aria-hidden>
+          {/* 田 guides — the standard Japanese practice sheet. */}
+          <g stroke="var(--color-canvas-rule)" strokeWidth="1" strokeDasharray="4 5">
+            <line x1={size / 2} y1={0} x2={size / 2} y2={size} />
+            <line x1={0} y1={size / 2} x2={size} y2={size / 2} />
+          </g>
+        </svg>
+        {children}
+      </div>
+
       <svg
         ref={svgRef}
         width={size}
@@ -117,26 +145,8 @@ export function InkCanvas({
         // Without this, dragging a finger down the canvas triggers pull-to-refresh
         // and the stroke is lost along with the page.
         style={{ touchAction: 'none' }}
-        className="rounded-[3px] border border-canvas-rule bg-canvas"
+        className="relative rounded-[3px] border border-canvas-rule bg-transparent"
       >
-        {/* 田 guides — the standard Japanese practice sheet. */}
-        <g stroke="var(--color-canvas-rule)" strokeWidth="1" strokeDasharray="4 5">
-          <line x1={guide} y1={0} x2={guide} y2={size} />
-          <line x1={0} y1={guide} x2={size} y2={guide} />
-        </g>
-
-        {templatePaths?.length ? (
-          <g
-            transform={`scale(${size / 1024}, ${-size / 1024}) translate(0, -900)`}
-            fill="var(--color-canvas-ink)"
-            opacity="0.14"
-          >
-            {templatePaths.map((d, i) => (
-              <path key={i} d={d} />
-            ))}
-          </g>
-        ) : null}
-
         <g
           fill="none"
           stroke="var(--color-canvas-ink)"
@@ -151,14 +161,16 @@ export function InkCanvas({
         </g>
       </svg>
 
-      <button
-        type="button"
-        onClick={clear}
-        disabled={disabled || strokes.length === 0}
-        className="mt-3 min-h-tap w-full rounded-[3px] border border-rule px-4 text-[14px] text-ink-muted disabled:opacity-40"
-      >
-        Hapus
-      </button>
+      {hideClear ? null : (
+        <button
+          type="button"
+          onClick={clear}
+          disabled={disabled || strokes.length === 0}
+          className="mt-3 min-h-tap w-full rounded-[3px] border border-rule px-4 text-[14px] text-ink-muted disabled:opacity-40"
+        >
+          Hapus
+        </button>
+      )}
     </div>
   )
 }
