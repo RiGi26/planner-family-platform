@@ -24,6 +24,10 @@ export const metadata: Metadata = {
   title: t.meta.title,
   description: t.meta.description,
   manifest: '/manifest.webmanifest',
+  // iOS ignores the manifest's icons entirely and looks for this link, so an
+  // app installed from Safari would otherwise get a screenshot of the page as
+  // its home-screen icon.
+  icons: { apple: '/apple-touch-icon.png' },
   appleWebApp: { capable: true, statusBarStyle: 'default', title: t.meta.title },
 }
 

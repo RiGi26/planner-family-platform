@@ -31,13 +31,22 @@ export default function manifest(): MetadataRoute.Manifest {
     background_color: '#E7E1D8',
     theme_color: '#E7E1D8',
     categories: ['education'],
+    /**
+     * Chrome refuses the install prompt without a raster icon of at least 192px,
+     * so an SVG-only manifest meant the app could be used and never installed.
+     *
+     * `any` and `maskable` are separate entries on purpose. Declaring one icon as
+     * `"any maskable"` tells Android it may crop that art to a circle *and* use
+     * the same file untouched elsewhere — so it gets shrunk-with-padding in the
+     * places that do not crop, and the artwork loses a fifth of its size for a
+     * safety margin it does not need there.
+     */
     icons: [
-      {
-        src: '/icon.svg',
-        sizes: 'any',
-        type: 'image/svg+xml',
-        purpose: 'any',
-      },
+      { src: '/icon-192.png', sizes: '192x192', type: 'image/png', purpose: 'any' },
+      { src: '/icon-512.png', sizes: '512x512', type: 'image/png', purpose: 'any' },
+      { src: '/icon-maskable-512.png', sizes: '512x512', type: 'image/png', purpose: 'maskable' },
+      // Last: browsers that can use it prefer it, and the rasters above cover the rest.
+      { src: '/icon.svg', sizes: 'any', type: 'image/svg+xml', purpose: 'any' },
     ],
   }
 }

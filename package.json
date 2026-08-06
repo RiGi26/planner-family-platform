@@ -17,7 +17,8 @@
     "verify:fonts": "node scripts/verify-fonts.mjs",
     "kvg": "node scripts/fetch-kanjivg.mjs",
     "kana": "node scripts/generate-kana.mjs",
-    "fonts": "node scripts/subset-fonts.mjs"
+    "fonts": "node scripts/subset-fonts.mjs",
+    "icons": "node scripts/render-icons.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.58.0",
