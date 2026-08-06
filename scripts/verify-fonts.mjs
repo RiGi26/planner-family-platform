@@ -29,6 +29,7 @@ const MANIFEST = join(ROOT, 'public', 'fonts', 'glyphs.json')
 const ASCII = Array.from({ length: 0x7e - 0x20 + 1 }, (_, i) => String.fromCharCode(0x20 + i)).join('')
 const NON_ASCII = /[^\x00-\x7F]/gu
 const TEXT_EXT = new Set(['.ts', '.tsx', '.json', '.css'])
+const DATASET = /_n5\.json$/
 
 function walk(dir, found = []) {
   for (const entry of readdirSync(dir)) {
@@ -39,9 +40,10 @@ function walk(dir, found = []) {
   return found
 }
 
-function collectGlyphs() {
+function collectGlyphs(includeDatasets) {
   const set = new Set(ASCII)
   for (const file of walk(SRC)) {
+    if (!includeDatasets && DATASET.test(file)) continue
     for (const m of readFileSync(file, 'utf8').matchAll(NON_ASCII)) set.add(m[0])
   }
   // text-transform: uppercase draws glyphs that appear nowhere in the source.
@@ -57,25 +59,33 @@ if (!existsSync(MANIFEST)) {
   process.exit(1)
 }
 
-const shipped = new Set([...JSON.parse(readFileSync(MANIFEST, 'utf8')).glyphs])
-const wanted = collectGlyphs()
-const missing = wanted.filter((c) => !shipped.has(c))
+const manifest = JSON.parse(readFileSync(MANIFEST, 'utf8'))
 
-console.log(`terpasang : ${shipped.size} glyph`)
-console.log(`dibutuhkan: ${wanted.length} glyph`)
-
-if (missing.length > 0) {
-  console.error(`\n${missing.length} glyph BELUM tercakup subset:`)
-  console.error(`  ${missing.join(' ')}`)
-  console.error('\nJalankan "npm run fonts" lalu commit ulang berkas di public/fonts/.')
-  process.exit(1)
+// Two sets, mirroring the builder: the gothic body face carries everything
+// including the datasets; mincho and mono carry only the UI sweep. Each is
+// checked against its own manifest, because a UI glyph missing from the small
+// set would fall back silently in exactly the way this script exists to catch.
+let failed = false
+for (const [label, shippedText, wanted] of [
+  ['full (gothic)', manifest.glyphs, collectGlyphs(true)],
+  ['ui (mincho/mono)', manifest.uiGlyphs ?? '', collectGlyphs(false)],
+]) {
+  const shipped = new Set([...shippedText])
+  const missing = wanted.filter((c) => !shipped.has(c))
+  console.log(`${label}: terpasang ${shipped.size} · dibutuhkan ${wanted.length}`)
+  if (missing.length > 0) {
+    failed = true
+    console.error(`  ${missing.length} glyph BELUM tercakup: ${missing.slice(0, 40).join(' ')}`)
+  }
+  const unused = [...shipped].filter((c) => !wanted.includes(c))
+  if (unused.length > 0) {
+    console.log(`  catatan: ${unused.length} glyph terpasang tapi tak dipakai lagi`)
+  }
 }
 
-// A shrinking set is not an error — copy gets deleted — but it is worth saying,
-// because it is free bytes sitting in every install.
-const unused = [...shipped].filter((c) => !wanted.includes(c))
-if (unused.length > 0) {
-  console.log(`catatan   : ${unused.length} glyph terpasang tapi tak dipakai lagi`)
+if (failed) {
+  console.error('\nJalankan "npm run fonts" lalu commit ulang berkas di public/fonts/.')
+  process.exit(1)
 }
 
 console.log('\nsemua glyph tercakup.')
