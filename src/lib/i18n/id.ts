@@ -101,6 +101,15 @@ export const id = {
     startSession: 'Mulai sesi',
     startSessionDetail: '{n} kartu · recognition & recall',
     writingQueued: 'Latihan menulis ({n})',
+
+    behind: 'Tertinggal',
+    behindDetail: '{n} kartu lewat dari hari sebelumnya',
+    doneHeading: 'Kuota hari ini tuntas',
+    doneDetail: 'Sisanya milikmu. Kartu berikutnya datang besok.',
+    kanaStrength: 'Kana kuat',
+    kanaStrengthValue: '{strong} / {total}',
+    noQuotaYet: 'Belum ada yang dijadwalkan hari ini.',
+    startFirst: 'Mulai belajar',
   },
 
   sesi: {
