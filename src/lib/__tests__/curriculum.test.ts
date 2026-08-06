@@ -7,12 +7,12 @@ import {
   gojuon,
   groupByItem,
   kanaGate,
-  modesFor,
   nextToIntroduce,
   remainingNew,
   sheetProgress,
   youon,
 } from '../curriculum'
+import { modesForItem, type Item } from '../items'
 import { State, newCardState, type CardStateRow } from '../fsrs'
 
 const now = new Date('2026-08-05T09:00:00Z')
@@ -190,9 +190,46 @@ describe('sheetProgress', () => {
   })
 })
 
-describe('modesFor', () => {
-  it('adds a writing card only when writing is switched on', () => {
-    expect(modesFor(true)).toEqual(['recognition', 'recall', 'writing'])
-    expect(modesFor(false)).toEqual(['recognition', 'recall'])
+describe('modesForItem', () => {
+  const prefs = { kanaWriting: true, kanjiWriting: false, listening: false }
+  const of = (type: Item['type']): Item => ({
+    id: `x-${type}`,
+    level: 'N5',
+    type,
+    expression: 'x',
+    reading: 'x',
+    meanings: ['x'],
+    seq: 1,
+    data: {},
+  })
+
+  it('gives kana a writing card only when kana writing is on', () => {
+    expect(modesForItem(of('kana'), prefs)).toEqual(['recognition', 'recall', 'writing'])
+    expect(modesForItem(of('kana'), { ...prefs, kanaWriting: false })).toEqual([
+      'recognition',
+      'recall',
+    ])
+  })
+
+  it('gives vocabulary a listening card only when listening is available', () => {
+    expect(modesForItem(of('vocab'), prefs)).toEqual(['recognition', 'recall'])
+    expect(modesForItem(of('vocab'), { ...prefs, listening: true })).toEqual([
+      'recognition',
+      'recall',
+      'listening',
+    ])
+  })
+
+  it('keeps kanji writing behind its own toggle, off by default', () => {
+    expect(modesForItem(of('kanji'), prefs)).toEqual(['recognition', 'recall'])
+    expect(modesForItem(of('kanji'), { ...prefs, kanjiWriting: true })).toEqual([
+      'recognition',
+      'recall',
+      'writing',
+    ])
+  })
+
+  it('gives grammar recognition only', () => {
+    expect(modesForItem(of('grammar'), prefs)).toEqual(['recognition'])
   })
 })

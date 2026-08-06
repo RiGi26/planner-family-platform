@@ -1,5 +1,6 @@
 import kana from '@/data/kana.json'
 import { State, type CardStateRow } from './fsrs'
+import type { Item } from './items'
 
 /**
  * The kana curriculum, and the shape of the sheet it is written on.
@@ -10,14 +11,8 @@ import { State, type CardStateRow } from './fsrs'
  * i, u or e; ん stands alone) and must never carry the answer into the cell.
  */
 
-export type KanaItem = {
-  id: string
-  level: string
-  type: string
-  expression: string
-  reading: string
-  meanings: string[]
-  seq: number
+/** A kana item is the generic Item with its `data` narrowed to the sheet's needs. */
+export type KanaItem = Item & {
   data: {
     script: 'hiragana' | 'katakana'
     group: 'basic' | 'dakuten' | 'youon'
@@ -237,8 +232,5 @@ export function kanaGate(states: ItemStates, now = new Date()): Gate {
   return { strong, total: items.length, ratio, open: ratio >= KANA_GATE_RATIO, remaining }
 }
 
-/** Which card modes a kana item should have, given the user's writing preference. */
-export function modesFor(writingEnabled: boolean): CardStateRow['mode'][] {
-  // Listening is Sprint 2 — it needs the vocabulary dataset and a voice check.
-  return writingEnabled ? ['recognition', 'recall', 'writing'] : ['recognition', 'recall']
-}
+// modesFor moved to items.ts as modesForItem — the rule is per item type now,
+// not per screen, and kana is just one branch of it.

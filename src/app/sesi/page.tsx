@@ -106,9 +106,14 @@ function SessionScreen() {
       const allowance = Math.max(0, quota.newPerDay - introducedToday)
 
       const fresh = nextToIntroduce(states, allowance)
+      const prefs = {
+        kanaWriting: profile?.writing_kana_enabled ?? true,
+        kanjiWriting: profile?.writing_kanji_enabled ?? false,
+        listening: false,
+      }
       const introduced: Awaited<ReturnType<typeof ensureCards>> = []
       for (const item of fresh) {
-        const made = await ensureCards(user.id, item, profile?.writing_kana_enabled ?? true)
+        const made = await ensureCards(user.id, item, prefs)
         // ensureCards is idempotent and returns every mode, including ones that
         // already existed; only the genuinely new rows belong in this batch.
         introduced.push(...made.filter((c) => c.reps === 0 && !states.has(c.item_id)))

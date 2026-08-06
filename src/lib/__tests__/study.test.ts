@@ -8,6 +8,8 @@ import { cardFor, ensureCards, saveReview, saveWriting } from '../study'
 const USER = '11111111-1111-1111-1111-111111111111'
 const now = new Date('2026-08-05T09:00:00Z')
 const item = KANA[0]!
+const WRITING_ON = { kanaWriting: true, kanjiWriting: false, listening: false }
+const WRITING_OFF = { kanaWriting: false, kanjiWriting: false, listening: false }
 
 const strokes = [
   [
@@ -23,34 +25,34 @@ beforeEach(async () => {
 
 describe('ensureCards', () => {
   it('creates one card per mode, and queues them for upload', async () => {
-    const cards = await ensureCards(USER, item, true, now)
+    const cards = await ensureCards(USER, item, WRITING_ON, now)
     expect(cards.map((c) => c.mode).sort()).toEqual(['recall', 'recognition', 'writing'])
     expect(cards.every((c) => c.state === State.New)).toBe(true)
     expect(await pendingCount()).toMatchObject({ cards: 3 })
   })
 
   it('leaves the writing card out when writing is switched off', async () => {
-    const cards = await ensureCards(USER, item, false, now)
+    const cards = await ensureCards(USER, item, WRITING_OFF, now)
     expect(cards.map((c) => c.mode).sort()).toEqual(['recall', 'recognition'])
   })
 
   it('is idempotent — calling twice does not duplicate a card', async () => {
-    await ensureCards(USER, item, true, now)
-    const again = await ensureCards(USER, item, true, now)
+    await ensureCards(USER, item, WRITING_ON, now)
+    const again = await ensureCards(USER, item, WRITING_ON, now)
     expect(again).toHaveLength(3)
     expect(await db.cards.count()).toBe(3)
   })
 
   it('adds only the missing mode when writing is switched on later', async () => {
-    await ensureCards(USER, item, false, now)
-    const after = await ensureCards(USER, item, true, now)
+    await ensureCards(USER, item, WRITING_OFF, now)
+    const after = await ensureCards(USER, item, WRITING_ON, now)
     expect(after).toHaveLength(3)
     expect(await db.cards.count()).toBe(3)
   })
 
   it('keeps one user’s cards out of another’s', async () => {
-    await ensureCards(USER, item, true, now)
-    await ensureCards('someone-else', item, true, now)
+    await ensureCards(USER, item, WRITING_ON, now)
+    await ensureCards('someone-else', item, WRITING_ON, now)
     expect(await db.cards.count()).toBe(6)
     expect((await cardFor(USER, item.id, 'writing'))?.user_id).toBe(USER)
   })
@@ -147,7 +149,7 @@ describe('saveReview', () => {
   })
 
   it('moves only the mode it was given', async () => {
-    await ensureCards(USER, item, true, now)
+    await ensureCards(USER, item, WRITING_ON, now)
     await saveReview(USER, item.id, 'recognition', 3, { now })
 
     expect((await cardFor(USER, item.id, 'recognition'))!.reps).toBe(1)
@@ -156,7 +158,7 @@ describe('saveReview', () => {
   })
 
   it('records hints used in recall', async () => {
-    await ensureCards(USER, item, true, now)
+    await ensureCards(USER, item, WRITING_ON, now)
     await saveReview(USER, item.id, 'recall', 3, { now, hintsUsed: 2 })
     expect((await db.reviewQueue.toArray())[0]).toMatchObject({ hints_used: 2 })
   })

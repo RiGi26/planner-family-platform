@@ -1,4 +1,4 @@
-import type { KanaItem } from './curriculum'
+import type { Item } from './items'
 import type { CardMode, CardStateRow, UserRating } from './fsrs'
 
 /**
@@ -12,7 +12,7 @@ import type { CardMode, CardStateRow, UserRating } from './fsrs'
 
 export type SessionCard = {
   card: CardStateRow
-  item: KanaItem
+  item: Item
   /** Introduced today. Counted against the new-card quota, not the review count. */
   isNew: boolean
 }
@@ -44,7 +44,7 @@ export type BuildQueueInput = {
   due: CardStateRow[]
   /** Cards `ensureCards()` just created for items being introduced today. */
   introduced: CardStateRow[]
-  items: Map<string, KanaItem>
+  items: Map<string, Item>
 }
 
 export type BuiltQueue = {

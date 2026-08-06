@@ -10,7 +10,7 @@ import {
   type CardStateRow,
   type UserRating,
 } from './fsrs'
-import { modesFor, type KanaItem } from './curriculum'
+import { modesForItem, type Item, type ModePrefs } from './items'
 import type { Point } from './stroke-score'
 
 /**
@@ -38,11 +38,11 @@ function newId(): string {
  */
 export async function ensureCards(
   userId: string,
-  item: KanaItem,
-  writingEnabled: boolean,
+  item: Item,
+  prefs: ModePrefs,
   now = new Date(),
 ): Promise<CardStateRow[]> {
-  const wanted = modesFor(writingEnabled)
+  const wanted = modesForItem(item, prefs)
   const existing = await db.cards.where('item_id').equals(item.id).toArray()
   const have = new Set(existing.filter((c) => c.user_id === userId).map((c) => c.mode))
 
@@ -91,7 +91,7 @@ export type WritingOutcome = {
  */
 export async function saveWriting(
   userId: string,
-  item: KanaItem,
+  item: Item,
   outcome: WritingOutcome,
   opts: { writingEnabled?: boolean; countsAsReview?: boolean; now?: Date } = {},
 ): Promise<{ reviewed: boolean }> {
@@ -104,7 +104,15 @@ export async function saveWriting(
     written_at: now.toISOString(),
   })
 
-  await ensureCards(userId, item, opts.writingEnabled ?? true, now)
+  // Reaching this function at all means writing is on for this item's type: it
+  // only runs from a finished canvas.
+  const writing = opts.writingEnabled ?? true
+  await ensureCards(
+    userId,
+    item,
+    { kanaWriting: writing, kanjiWriting: item.type === 'kanji' && writing, listening: false },
+    now,
+  )
   const card = await cardFor(userId, item.id, 'writing')
   if (!card) return { reviewed: false }
 
