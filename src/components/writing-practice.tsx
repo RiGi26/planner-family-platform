@@ -4,8 +4,9 @@ import { useCallback, useMemo, useState } from 'react'
 import { InkCanvas } from '@/components/ink-canvas'
 import { StrokeFigure, StrokeStartMarkers } from '@/components/stroke-figure'
 import { clsx } from '@/lib/clsx'
-import { consonantOf, type KanaItem } from '@/lib/curriculum'
+import { consonantOf } from '@/lib/curriculum'
 import { fmt, useT } from '@/lib/i18n'
+import type { Item } from '@/lib/items'
 import { kvgCharacter, medians, strokeCount } from '@/lib/kvg'
 import {
   describe as describeStroke,
@@ -47,7 +48,7 @@ export function WritingPractice({
   size = 300,
   onFinished,
 }: {
-  item: KanaItem
+  item: Item
   size?: number
   onFinished: (result: WritingResult) => void
 }) {
@@ -57,7 +58,7 @@ export function WritingPractice({
     jiplak: t.menulis.stageJiplak,
     ingat: t.menulis.stageIngat,
   }
-  const character = item.data.strokes_key
+  const character = item.data.strokes_key as string
   const data = useMemo(() => kvgCharacter(character), [character])
   const total = strokeCount(character)
 
@@ -141,11 +142,14 @@ export function WritingPractice({
 
   return (
     <div className="flex flex-col items-center gap-4">
-      {/* Axis and column, not the 行 name: for any column-a cell the 行 label *is*
-          the answer, and Recall is the stage that must not give it away. */}
+      {/* For kana: axis and column, not the 行 name — for any column-a cell the
+          行 label *is* the answer, and Recall must not give it away. For kanji
+          there is no position; the meaning is the prompt you write it from. */}
       <div className="flex w-full items-center justify-between">
         <span className="tnum text-[12px] tracking-[0.14em] text-ink-muted uppercase">
-          {consonantOf(item.reading)} · {item.data.col}
+          {item.type === 'kana'
+            ? `${consonantOf(item.reading)} · ${item.data.col as string}`
+            : (item.meanings[0] ?? '')}
         </span>
         <span className="tnum text-[12px] text-ink-muted">
           {fmt(t.menulis.strokeCount, { n: total })}

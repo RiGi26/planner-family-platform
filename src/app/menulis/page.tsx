@@ -1,6 +1,6 @@
 'use client'
 
-import { Suspense, useMemo, useState } from 'react'
+import { Suspense, useEffect, useMemo, useState } from 'react'
 import Link from 'next/link'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useQueryClient } from '@tanstack/react-query'
@@ -8,7 +8,6 @@ import { RequireAuth, useSession } from '@/components/auth-provider'
 import { KanaCell, KanaGap } from '@/components/kana-cell'
 import { WritingPractice, type WritingResult } from '@/components/writing-practice'
 import {
-  KANA,
   cellStatus,
   dakuten,
   gojuon,
@@ -18,7 +17,9 @@ import {
   type Script,
   type SheetRow,
 } from '@/lib/curriculum'
+import { dueCards } from '@/lib/db'
 import { useT } from '@/lib/i18n'
+import { itemMapFor, type Item } from '@/lib/items'
 import { useCardStates, useKanaSheet, useProfile } from '@/lib/queries'
 import { bumpProgress, pushPending, saveWriting } from '@/lib/study'
 
@@ -44,7 +45,23 @@ function WritingScreen() {
   const [error, setError] = useState('')
 
   const itemId = params.get('item')
-  const item = useMemo(() => KANA.find((i) => i.id === itemId) ?? null, [itemId])
+  // Async, because the item may be a kanji living in a dynamically-imported
+  // dataset — KANA.find() was the lookup that made a kanji writing card
+  // unanswerable forever.
+  const [item, setItem] = useState<Item | null | undefined>(undefined)
+  useEffect(() => {
+    if (!itemId) {
+      setItem(null)
+      return
+    }
+    let live = true
+    void itemMapFor([itemId]).then((m) => {
+      if (live) setItem(m.get(itemId) ?? null)
+    })
+    return () => {
+      live = false
+    }
+  }, [itemId])
 
   const { data: cards } = useCardStates(user?.id)
   const { data: sheet } = useKanaSheet(user?.id)
@@ -52,9 +69,10 @@ function WritingScreen() {
   const states = useMemo(() => groupByItem(cards ?? []), [cards])
 
   const row = useMemo(() => {
-    if (!item) return null
+    if (!item || item.type !== 'kana') return null
+    const kana = item as KanaItem
     return (
-      rowsFor(item.data.script).find((r) =>
+      rowsFor(kana.data.script).find((r) =>
         r.cells.some((c) => c.kind === 'cell' && c.item.id === item.id),
       ) ?? null
     )
@@ -104,6 +122,17 @@ function WritingScreen() {
     await queryClient.invalidateQueries({ queryKey: ['card_states', user.id] })
     setSaving(false)
 
+    // A kanji has no row to walk: the relay runs through whatever kanji writing
+    // cards are still due, then home.
+    if (item.type === 'kanji') {
+      const nextDue = (await dueCards(user.id)).find(
+        (c) => c.mode === 'writing' && c.item_id.startsWith('kanji-') && c.item_id !== item.id,
+      )
+      if (nextDue) router.replace(`/menulis/?item=${encodeURIComponent(nextDue.item_id)}`)
+      else router.push('/')
+      return
+    }
+
     // Move to the next unwritten cell in this row, or back to the sheet when the
     // row is done.
     const next = row?.cells.find(
@@ -114,6 +143,55 @@ function WritingScreen() {
     } else {
       router.push('/kana/')
     }
+  }
+
+  // Still resolving the item — a kanji dataset import may be in flight.
+  if (itemId && item === undefined) return null
+
+  if (item && item.type === 'kanji') {
+    // A kanji has no gojūon position, so the sheet chrome falls away: the
+    // prompt is the meaning and readings — what you would write it FROM — and
+    // the practice module below shows the character itself in Demo and Trace.
+    const kun = ((item.data.kunyomi as string[] | undefined) ?? []).join('・')
+    const on = ((item.data.onyomi as string[] | undefined) ?? []).join('・')
+    return (
+      <main
+        className="mx-auto max-w-lg px-5 pb-16"
+        style={{ paddingTop: 'calc(var(--spacing-safe-top) + 12px)' }}
+      >
+        <header className="flex items-center justify-between">
+          <Link href="/" className="min-h-tap -my-3 inline-flex items-center text-[13px] text-ai">
+            {t.menulis.kanjiBack}
+          </Link>
+          <span className="text-[12px] tracking-[0.12em] text-ink-muted uppercase">
+            {t.menulis.kanjiHeading}
+          </span>
+        </header>
+
+        <div className="mt-5 rounded-[3px] border border-rule bg-paper-raised px-4 py-3">
+          <p className="text-[16px] leading-snug text-ink">{item.meanings.join('; ')}</p>
+          <p className="mt-1 text-[13px] text-ink-muted">
+            {[kun && `訓 ${kun}`, on && `音 ${on}`].filter(Boolean).join(' ／ ')}
+          </p>
+        </div>
+
+        {error ? (
+          <p role="alert" className="mt-4 rounded-[3px] bg-oker-tint px-3 py-2 text-[13px] text-oker">
+            {error}
+          </p>
+        ) : null}
+
+        <div className="mt-6">
+          <WritingPractice key={item.id} item={item} size={300} onFinished={save} />
+        </div>
+
+        {saving ? (
+          <p role="status" className="mt-4 text-center text-[13px] text-ink-muted">
+            {t.menulis.saving}
+          </p>
+        ) : null}
+      </main>
+    )
   }
 
   if (!itemId || !item || !row) {

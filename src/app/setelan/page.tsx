@@ -274,16 +274,10 @@ function SettingsScreen() {
         <SectionHeading>{t.setelan.writingHeading}</SectionHeading>
         <div className="mb-2">
           <ToggleRow label={t.setelan.writingKana} checked={writingKana} onChange={touch(setWritingKana)} />
-          {/* Disabled until Sprint 3 builds the screen that can actually open a
-              kanji — a card that can never be answered must not be creatable
-              from here. modesForItem() ignores the pref too, as the second
-              guard for stale bundles. */}
           <ToggleRow
             label={t.setelan.writingKanji}
             checked={writingKanji}
             onChange={touch(setWritingKanji)}
-            disabled
-            note={t.setelan.writingKanjiSoon}
           />
         </div>
         <p className="mb-5 text-[12px] leading-relaxed text-ink-muted">{t.setelan.writingHint}</p>

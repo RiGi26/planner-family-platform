@@ -213,6 +213,8 @@ export const id = {
   },
 
   menulis: {
+    kanjiBack: 'Ke Hari Ini',
+    kanjiHeading: 'Menulis kanji',
     pickTitle: 'Pilih sel dulu',
     pickBody:
       'Layar ini menulis satu petak dari Lembar Kana. Buka lembarnya dan ketuk petak yang mau kamu isi.',
@@ -301,8 +303,6 @@ export const id = {
     writingHeading: 'Latihan menulis',
     writingKana: 'Latihan menulis kana',
     writingKanji: 'Latihan menulis kanji',
-    writingKanjiSoon:
-      'Datang di pembaruan berikutnya — dinonaktifkan sampai layar latihannya ada.',
     writingHint:
       'Mematikannya tidak menghapus apa pun — kartu menulis hanya berhenti dijadwalkan.',
     save: 'Simpan perubahan',
