@@ -19,8 +19,8 @@ import {
   type SheetRow,
 } from '@/lib/curriculum'
 import { useT } from '@/lib/i18n'
-import { useCardStates, useKanaSheet } from '@/lib/queries'
-import { pushPending, saveWriting } from '@/lib/study'
+import { useCardStates, useKanaSheet, useProfile } from '@/lib/queries'
+import { bumpProgress, pushPending, saveWriting } from '@/lib/study'
 
 /**
  * Writing one cell of the sheet, in the context of its row.
@@ -48,6 +48,7 @@ function WritingScreen() {
 
   const { data: cards } = useCardStates(user?.id)
   const { data: sheet } = useKanaSheet(user?.id)
+  const { data: profile } = useProfile(user?.id)
   const states = useMemo(() => groupByItem(cards ?? []), [cards])
 
   const row = useMemo(() => {
@@ -73,11 +74,20 @@ function WritingScreen() {
       // Local first, always. Only the Recall strokes are stored — the sheet is meant
       // to hold writing from memory, and keeping a trace would make it a record of
       // copying. The schedule moves only if the card was actually due.
-      await saveWriting(user.id, item, {
+      const { reviewed } = await saveWriting(user.id, item, {
         strokes: result.strokes,
         strokeErrors: result.strokeErrors,
         rating: result.rating,
       })
+
+      // Writing is work, and until now none of it reached the daily record: a day
+      // spent entirely on the Kana Sheet showed up as an empty square in the
+      // streak, which the strip is explicitly not supposed to do. Only counted
+      // when the card was actually due — filling a cell early is practice, not a
+      // review, and the quota never promised it.
+      if (reviewed) {
+        await bumpProgress(user.id, { review: 1 }, { timezone: profile?.timezone ?? 'Asia/Jakarta' })
+      }
     } catch (e) {
       setError(e instanceof Error ? e.message : String(e))
       setSaving(false)
