@@ -100,9 +100,14 @@ function TodayScreen() {
 
   const todayRow = progressRows.find((r) => r.date === today)
   const done = (todayRow?.new_done ?? 0) + (todayRow?.review_done ?? 0)
-  // The target was promised once this morning; before a session has run there is
-  // nothing promised yet, so fall back to what is actually waiting.
-  const target = todayRow?.quota_target ?? due.filter((c) => c.mode !== 'writing').length
+  // The target is today's promise; before a session has run there is nothing
+  // promised yet, so fall back to what is actually waiting. Clamped to `done`
+  // as the second layer under bumpProgress's revise-upward rule: whatever
+  // history a row carries, this screen never reads "4 / 0".
+  const target = Math.max(
+    todayRow?.quota_target ?? due.filter((c) => c.mode !== 'writing').length,
+    done,
+  )
   const remaining = Math.max(0, target - done)
 
   const state = dayState({ dueRemaining: remaining, overdue, quota, doneToday: done })

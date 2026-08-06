@@ -54,7 +54,13 @@ export function modesForItem(item: Item, prefs: ModePrefs): CardMode[] {
     case 'vocab':
       return prefs.listening ? ['recognition', 'recall', 'listening'] : ['recognition', 'recall']
     case 'kanji':
-      return prefs.kanjiWriting ? ['recognition', 'recall', 'writing'] : ['recognition', 'recall']
+      // Sprint 3: honour prefs.kanjiWriting again once /menulis/ can actually
+      // open a kanji. Until that screen exists, a kanji writing card would be
+      // unanswerable forever while FSRS keeps scheduling it — so the pref is
+      // deliberately ignored here, not only greyed out in Setelan, because a
+      // stale device with the old bundle could still carry prefs.kanjiWriting
+      // as true.
+      return ['recognition', 'recall']
     case 'grammar':
       return ['recognition']
   }

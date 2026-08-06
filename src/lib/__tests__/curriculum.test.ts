@@ -220,12 +220,14 @@ describe('modesForItem', () => {
     ])
   })
 
-  it('keeps kanji writing behind its own toggle, off by default', () => {
+  it('ignores the kanji writing pref until the screen that can answer it exists', () => {
+    // Sprint 3 flips this back. Until /menulis/ can open a kanji, a kanji
+    // writing card would be unanswerable forever while FSRS keeps scheduling
+    // it — so even an explicitly-true pref must create no writing card.
     expect(modesForItem(of('kanji'), prefs)).toEqual(['recognition', 'recall'])
     expect(modesForItem(of('kanji'), { ...prefs, kanjiWriting: true })).toEqual([
       'recognition',
       'recall',
-      'writing',
     ])
   })
 

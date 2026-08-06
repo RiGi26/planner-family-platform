@@ -194,10 +194,13 @@ export async function bumpProgress(
       ms,
       new_done_items: (existing?.new_done_items ?? 0) + (delta.newItems ?? 0),
       minutes: Math.round(ms / 60_000),
-      // The quota is a promise made once at the start of the day; new_done and
-      // review_done are the delivery against it. Recomputing it at noon is how
-      // "no debt pile" quietly turns into "the target follows you around".
-      quota_target: existing?.quota_target ?? delta.quotaTarget ?? 0,
+      // The quota is a promise; new_done and review_done are the delivery
+      // against it. The promise may be revised UP when new work appears — a row
+      // born from writing practice carries 0, and the session that builds a
+      // real queue later must be able to raise it, or the day reads "4 / 0".
+      // It never goes down: lowering a promise mid-day is how "no debt pile"
+      // quietly turns into "the target follows you around".
+      quota_target: Math.max(existing?.quota_target ?? 0, delta.quotaTarget ?? 0),
     }
 
     await db.dailyProgress.put(row)

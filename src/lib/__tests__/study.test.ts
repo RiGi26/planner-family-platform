@@ -3,7 +3,7 @@ import { beforeEach, describe, expect, it } from 'vitest'
 import { clearAll, db, pendingCount } from '../db'
 import { KANA } from '../curriculum'
 import { State } from '../fsrs'
-import { cardFor, ensureCards, saveReview, saveWriting } from '../study'
+import { bumpProgress, cardFor, ensureCards, saveReview, saveWriting } from '../study'
 
 const USER = '11111111-1111-1111-1111-111111111111'
 const now = new Date('2026-08-05T09:00:00Z')
@@ -161,5 +161,33 @@ describe('saveReview', () => {
     await ensureCards(USER, item, WRITING_ON, now)
     await saveReview(USER, item.id, 'recall', 3, { now, hintsUsed: 2 })
     expect((await db.reviewQueue.toArray())[0]).toMatchObject({ hints_used: 2 })
+  })
+})
+
+describe('bumpProgress quota_target', () => {
+  const tz = { timezone: 'Asia/Jakarta', now }
+
+  it("lets a later session raise the day's promise on a row born without one", async () => {
+    // The owner's real sequence: writing practice creates the row first, so it
+    // carries no target — then a session builds a queue and must be able to
+    // raise the promise, or the day reads "4 / 0" forever.
+    await bumpProgress(USER, { review: 1 }, tz)
+    const raised = await bumpProgress(USER, { quotaTarget: 5 }, tz)
+    expect(raised.quota_target).toBe(5)
+  })
+
+  it('never lowers a promise already made', async () => {
+    await bumpProgress(USER, { quotaTarget: 8 }, tz)
+    const later = await bumpProgress(USER, { quotaTarget: 3 }, tz)
+    expect(later.quota_target).toBe(8)
+  })
+
+  it('raises across repeat session builds as new work appears', async () => {
+    // Morning: empty visit records nothing. Afternoon: cards come due, the
+    // session rebuilds and records done-so-far + queue.
+    await bumpProgress(USER, { quotaTarget: 0 }, tz)
+    await bumpProgress(USER, { new: 2 }, tz)
+    const evening = await bumpProgress(USER, { quotaTarget: 2 + 4 }, tz)
+    expect(evening.quota_target).toBe(6)
   })
 })

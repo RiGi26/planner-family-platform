@@ -167,16 +167,24 @@ function SessionScreen() {
       const items = await itemMapFor([...due, ...introduced].map((c) => c.item_id))
       const built = buildQueue({ due, introduced, items })
 
-      // The quota is a promise made once a day. Recording it here is what lets
-      // Hari Ini show delivery against it rather than a moving target.
+      // The quota is a promise, recorded so Hari Ini can show delivery against
+      // it. Measured in CARDS, because `new_done` and `review_done` are —
+      // `quota.newPerDay` counts *items*, and one item becomes two or three
+      // cards in the fast lane.
       //
-      // Measured in CARDS, deliberately, because `new_done` and `review_done`
-      // are. `quota.newPerDay` counts *items* — PRD §6.1 divides `sisa_item` —
-      // and one item becomes two cards in the fast lane, so storing it here
-      // would have Hari Ini reporting six answers against a target of three.
-      const rows = await localProgress(user.id)
-      if (!rows.some((r) => r.date === today)) {
-        await bumpProgress(user.id, { quotaTarget: built.queue.length }, { timezone })
+      // Recorded as done-so-far + today's queue, every time a queue is built:
+      // the old "only if no row exists yet" guard froze the promise at 0 for a
+      // day whose row was born from writing practice, and the screen read
+      // "4 / 0". bumpProgress only ever revises the target upward.
+      if (built.queue.length > 0) {
+        const rows = await localProgress(user.id)
+        const todayRow = rows.find((r) => r.date === today)
+        const doneSoFar = (todayRow?.new_done ?? 0) + (todayRow?.review_done ?? 0)
+        await bumpProgress(
+          user.id,
+          { quotaTarget: doneSoFar + built.queue.length },
+          { timezone },
+        )
       }
 
       setLoaded({ queue: built.queue, canvas: built.canvas, quotaTotal: built.queue.length })

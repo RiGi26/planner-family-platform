@@ -45,19 +45,34 @@ function ToggleRow({
   label,
   checked,
   onChange,
+  disabled = false,
+  note,
 }: {
   label: string
   checked: boolean
   onChange: (next: boolean) => void
+  disabled?: boolean
+  note?: string
 }) {
   return (
-    <label className="flex min-h-tap cursor-pointer items-center justify-between gap-3 py-1">
-      <span className="text-[14px] text-ink">{label}</span>
+    <label
+      className={clsx(
+        'flex min-h-tap items-center justify-between gap-3 py-1',
+        disabled ? 'cursor-not-allowed' : 'cursor-pointer',
+      )}
+    >
+      <span className={clsx('text-[14px]', disabled ? 'text-ink-muted' : 'text-ink')}>
+        {label}
+        {note ? (
+          <span className="mt-[2px] block text-[12px] leading-relaxed text-ink-faint">{note}</span>
+        ) : null}
+      </span>
       <input
         type="checkbox"
         checked={checked}
+        disabled={disabled}
         onChange={(e) => onChange(e.target.checked)}
-        className="h-5 w-5 accent-shu"
+        className="h-5 w-5 accent-shu disabled:opacity-40"
       />
     </label>
   )
@@ -259,10 +274,16 @@ function SettingsScreen() {
         <SectionHeading>{t.setelan.writingHeading}</SectionHeading>
         <div className="mb-2">
           <ToggleRow label={t.setelan.writingKana} checked={writingKana} onChange={touch(setWritingKana)} />
+          {/* Disabled until Sprint 3 builds the screen that can actually open a
+              kanji — a card that can never be answered must not be creatable
+              from here. modesForItem() ignores the pref too, as the second
+              guard for stale bundles. */}
           <ToggleRow
             label={t.setelan.writingKanji}
             checked={writingKanji}
             onChange={touch(setWritingKanji)}
+            disabled
+            note={t.setelan.writingKanjiSoon}
           />
         </div>
         <p className="mb-5 text-[12px] leading-relaxed text-ink-muted">{t.setelan.writingHint}</p>
