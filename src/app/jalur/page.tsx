@@ -311,7 +311,11 @@ function JalurScreen() {
   return (
     <>
       <main
-        className="mx-auto max-w-lg px-5 pb-32"
+        // pb-44, not pb-32: the floating CTA (~60px) sits ABOVE the bottom nav
+        // (~80px), so anything under ~140px leaves the page's last line — the
+        // "unit berikutnya" note after the list — permanently under the CTA at
+        // full scroll. Measured, not guessed: note bottom 672 vs CTA top 660.
+        className="mx-auto max-w-lg px-5 pb-44"
         style={{ paddingTop: 'calc(var(--spacing-safe-top) + 12px)' }}
       >
         {open ? (
