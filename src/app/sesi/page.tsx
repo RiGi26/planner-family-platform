@@ -86,7 +86,12 @@ function SessionScreen() {
    * introducing lazily, would make the queue length change under the counter.
    */
   useEffect(() => {
-    if (!user || !goal || voice === undefined || started.current) return
+    // `profile === undefined` means the query is still in flight — building
+    // without it silently uses default prefs, and a person whose kanji-writing
+    // toggle is on gets no writing cards whenever the profile loads a beat
+    // after the goal. null (no profile row) may proceed: defaults are correct
+    // for an account that genuinely has none.
+    if (!user || !goal || profile === undefined || voice === undefined || started.current) return
     started.current = true
 
     void (async () => {
