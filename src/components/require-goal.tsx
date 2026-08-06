@@ -2,7 +2,7 @@
 
 import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { useSession } from '@/components/auth-provider'
+import { isLeaving, useSession } from '@/components/auth-provider'
 import { t } from '@/lib/i18n'
 import { useGoal } from '@/lib/queries'
 
@@ -28,7 +28,9 @@ export function RequireGoal({ children }: { children: React.ReactNode }) {
 
   const missing = isSuccess && goal === null
   useEffect(() => {
-    if (missing) router.replace('/mulai/')
+    // Same reason as RequireAuth: never add a second navigation to one already
+    // in flight.
+    if (missing && !isLeaving()) router.replace('/mulai/')
   }, [missing, router])
 
   if (isLoading) {

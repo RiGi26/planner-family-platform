@@ -23,6 +23,14 @@ export type DailyProgressRow = {
    * surfaces as `minutes`. Stripped before upload — the server has no column.
    */
   ms: number
+  /**
+   * Items introduced today, local-only, and deliberately not the same thing as
+   * `new_done`: that counts answered cards, this counts kana released. One item
+   * becomes two cards, and the session needs to know how much of the day's
+   * allowance it has already handed out — a number that has to survive a reload,
+   * which a component ref does not. Stripped before upload with `ms`.
+   */
+  new_done_items?: number
 }
 
 /**

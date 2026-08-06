@@ -221,8 +221,10 @@ export async function syncPending(client: SupabaseLike): Promise<SyncResult> {
         Boolean,
       ) as DailyProgressRow[]
       if (local.length > 0) {
-        // `ms` is a local accumulator; the server column is whole `minutes`.
-        const rows = local.map(({ ms: _ms, ...row }) => row)
+        // `ms` and `new_done_items` are local bookkeeping; the server has
+        // neither column, and PostgREST rejects the whole batch over an unknown
+        // field rather than ignoring it.
+        const rows = local.map(({ ms: _ms, new_done_items: _items, ...row }) => row)
         const { error } = await client.from('daily_progress').upsert(rows, {
           // No ignoreDuplicates here, deliberately, and the contrast with `reviews`
           // above is the point: a review is an append-only fact, so a re-send must

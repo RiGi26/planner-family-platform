@@ -161,7 +161,14 @@ export async function saveReview(
  */
 export async function bumpProgress(
   userId: string,
-  delta: { new?: number; review?: number; ms?: number; quotaTarget?: number },
+  delta: {
+    new?: number
+    review?: number
+    ms?: number
+    quotaTarget?: number
+    /** Kana released today. Local-only; see DailyProgressRow.new_done_items. */
+    newItems?: number
+  },
   opts: { timezone: string; now?: Date },
 ): Promise<DailyProgressRow> {
   const now = opts.now ?? new Date()
@@ -177,6 +184,7 @@ export async function bumpProgress(
       new_done: (existing?.new_done ?? 0) + (delta.new ?? 0),
       review_done: (existing?.review_done ?? 0) + (delta.review ?? 0),
       ms,
+      new_done_items: (existing?.new_done_items ?? 0) + (delta.newItems ?? 0),
       minutes: Math.round(ms / 60_000),
       // The quota is a promise made once at the start of the day; new_done and
       // review_done are the delivery against it. Recomputing it at noon is how

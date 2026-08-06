@@ -79,6 +79,30 @@ export function useSession() {
 }
 
 /**
+ * Set while a deliberate sign-out is in flight.
+ *
+ * Signing out wipes the local database and then hard-navigates, because deleting
+ * a Dexie database closes it under every open hook. But the session disappearing
+ * also makes RequireAuth start its own client-side redirect — so two navigations
+ * to the same screen are committed at once, one a document request and one a
+ * router fetch of the route's `.txt` payload. iPhone Safari resolves that race by
+ * painting the payload: a screenful of `1:"$Sreact.fragment"` instead of the
+ * login form.
+ *
+ * A module-level flag rather than state: it has to be readable during the render
+ * that the sign-out triggers, before any effect could set it.
+ */
+let leaving = false
+
+export function beginSignOut() {
+  leaving = true
+}
+
+export function isLeaving() {
+  return leaving
+}
+
+/**
  * Wraps a page that needs a signed-in user.
  *
  * This is presentation only. With a static export there is no server to enforce
@@ -92,6 +116,9 @@ export function RequireAuth({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     if (loading) return
+    // A sign-out is already navigating. Adding a second, client-side navigation
+    // to the same screen is what put a route payload on someone's screen.
+    if (isLeaving()) return
     if (recovering) {
       router.replace('/atur-password/')
       return

@@ -94,13 +94,27 @@ function SessionScreen() {
         ...(goal.baseline_new_per_day ? { baselineNewPerDay: goal.baseline_new_per_day } : {}),
       })
 
-      const fresh = nextToIntroduce(states, quota.newPerDay)
+      // How many of today's allowance has already been handed out.
+      //
+      // `started` is a ref, so it only guards one mount: a reload, a second tab,
+      // or coming back to the session later started the whole allowance again,
+      // and someone who opened the session three times in a day was handed three
+      // days of new material. The count has to outlive the component, so it
+      // lives in the same daily row everything else about today lives in.
+      const introducedToday = (await localProgress(user.id)).find((r) => r.date === today)
+        ?.new_done_items ?? 0
+      const allowance = Math.max(0, quota.newPerDay - introducedToday)
+
+      const fresh = nextToIntroduce(states, allowance)
       const introduced: Awaited<ReturnType<typeof ensureCards>> = []
       for (const item of fresh) {
         const made = await ensureCards(user.id, item, profile?.writing_kana_enabled ?? true)
         // ensureCards is idempotent and returns every mode, including ones that
         // already existed; only the genuinely new rows belong in this batch.
         introduced.push(...made.filter((c) => c.reps === 0 && !states.has(c.item_id)))
+      }
+      if (fresh.length > 0) {
+        await bumpProgress(user.id, { newItems: fresh.length }, { timezone })
       }
 
       const due = await dueCards(user.id)

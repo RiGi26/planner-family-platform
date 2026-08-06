@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { useQueryClient } from '@tanstack/react-query'
 import { Field, FormMessage } from '@/components/auth-form'
-import { RequireAuth, useSession } from '@/components/auth-provider'
+import { beginSignOut, RequireAuth, useSession } from '@/components/auth-provider'
 import { BottomNav } from '@/components/bottom-nav'
 import { clsx } from '@/lib/clsx'
 import { clearAll, pendingCount, syncPending } from '@/lib/db'
@@ -137,15 +137,25 @@ function SettingsScreen() {
       // Best effort: push what we can while we still have a session. What cannot be
       // pushed is about to be wiped, and the user gets to veto that.
       if (navigator.onLine) await syncPending(supabase)
+
+      // Only work the person actually did. `pendingCount().total` also counts
+      // card-state and daily-summary rows, which are bookkeeping — warning
+      // "42 latihan akan hilang" after a session that answered six cards is
+      // both wrong and frightening.
       const pending = await pendingCount()
-      if (pending.total > 0) {
-        const proceed = window.confirm(fmt(t.setelan.signOutUnsynced, { n: pending.total }))
+      const unsavedWork = pending.reviews + pending.kana
+      if (unsavedWork > 0) {
+        const proceed = window.confirm(fmt(t.setelan.signOutUnsynced, { n: unsavedWork }))
         if (!proceed) {
           setSigningOut(false)
           return
         }
       }
 
+      // Claim the navigation before the session disappears, so the route guards
+      // stay out of the way — two navigations to the login screen at once is
+      // what painted a route payload over it on iPhone Safari.
+      beginSignOut()
       await clearAll()
       await signOutLocal()
     } catch (e) {
@@ -156,7 +166,9 @@ function SettingsScreen() {
 
     // Hard navigation on purpose: clearAll() deletes the Dexie database out from
     // under every open hook, and a fresh document is the only clean slate.
-    window.location.assign('/masuk/')
+    // replace, not assign: Back must not return to a screen whose account is
+    // gone, where the guards would only bounce the user forward again.
+    window.location.replace('/masuk/')
   }
 
   async function deleteAccount() {
@@ -189,7 +201,9 @@ function SettingsScreen() {
       return
     }
 
-    window.location.assign('/masuk/')
+    // replace, not assign: Back must not return to a screen whose account is
+    // gone, where the guards would only bounce the user forward again.
+    window.location.replace('/masuk/')
   }
 
   return (
