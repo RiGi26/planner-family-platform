@@ -1,9 +1,9 @@
 # PRD — JLPT Certification Planner
 
 **Nama:** Masume (升目) — kotak-kotak pada kertas 原稿用紙, satu karakter per petak. Diputuskan 5 Agustus 2026, menggantikan working title "Goukaku" (§11.2 ditutup).
-**Versi:** 2.1 — generalisasi ke aplikasi umum (model household dihapus)
-**Tanggal:** 5 Agustus 2026
-**Status:** Fase 0 siap dibangun. Satu item blocking (§11.1).
+**Versi:** 2.2 — Sprint 1 tuntas (onboarding, sesi review, Hari Ini berdata, PWA installable)
+**Tanggal:** 6 Agustus 2026
+**Status:** Fase 0 berjalan — Sprint 1 **SELESAI** (§8.1), Sprint 2 berikutnya. Satu item blocking (§11.1).
 
 ---
 
@@ -233,7 +233,7 @@ items, item_examples                  card_states, reviews, goals,
 
 Konten identik untuk semua user; yang berbeda hanya progress. Ini membuat RLS sederhana: tabel konten `SELECT` untuk semua authenticated user, tabel state difilter `user_id = auth.uid()`.
 
-### 5.2 Tabel state (migration 0001, disesuaikan 0005+0006 — applied di produksi)
+### 5.2 Tabel state (migration 0001, disesuaikan 0005+0006+0007 — applied di produksi)
 
 **`profiles`** (1:1 dengan `auth.users`, dibuat otomatis oleh trigger saat signup)
 ```
@@ -246,9 +246,14 @@ timezone, created_at, updated_at
 
 **`goals`**
 ```
-id, user_id, target_level, target_exam_date, is_active, created_at
+id, user_id, target_level, target_exam_date, is_active,
+baseline_new_per_day, created_at
 ```
 Unique partial index memastikan maksimal satu goal aktif per orang; goal lama tersimpan sebagai riwayat.
+
+`baseline_new_per_day` (nullable, migrasi 0007) menyimpan pace yang **disetujui saat goal dibuat**, supaya peringatan "pace tidak realistis" (§6.1) punya pembanding. Kolomnya duduk di `goals`, bukan `profiles`: baseline itu milik target ini — geser tanggal ujian, baseline ikut direset. Goal yang lahir sebelum 0007 sengaja dibiarkan NULL tanpa backfill; `computeQuota` membaca NULL sebagai "tidak ada pembanding", yang memang keadaan sebenarnya.
+
+**Mengganti goal aktif wajib lewat RPC `set_active_goal(text, date, integer)`** (`security invoker`, EXECUTE dicabut dari `public`+`anon`). Karena `goals_one_active_per_user` adalah unique index **parsial** (`WHERE is_active`), kedua urutan dari client salah: *insert lalu deactivate* langsung melanggar index dan gagal, sementara *deactivate lalu insert* meninggalkan jendela tanpa goal aktif — dan di jendela itu `RequireGoal` melempar user balik ke onboarding padahal riwayatnya sudah separuh tertulis. PostgREST tidak punya transaksi lintas-request, jadi atomisitasnya harus tinggal di database.
 
 **`card_states`** — state FSRS
 ```
@@ -279,6 +284,15 @@ PRIMARY KEY (user_id, date)
 ```
 Streak sengaja **tidak** disimpan sebagai kolom. Dihitung dari tabel ini saat dibutuhkan, supaya tidak pernah bisa melenceng dari data aslinya.
 
+`date` adalah tanggal **lokal** menurut `profiles.timezone`, diturunkan lewat `src/lib/day.ts` (Intl, bukan `toISOString().slice(0,10)` — di WIB yang terakhir berganti hari pukul 07.00, jadi sesi jam 9 malam mendarat di baris BESOK dan streak menunjukkan bolong pada hari yang justru dikerjakan).
+
+⚠️ **Satuan `quota_target` adalah KARTU, bukan item.** `newPerDay` dari Goal Engine menghitung *item*, sedangkan `new_done` menghitung *kartu* — dan satu item kana melahirkan dua kartu di jalur cepat (recognition + recall). Menyimpan target dalam item membuat baris harian membandingkan dua satuan berbeda, sehingga hari yang tuntas terlihat 200% selesai. Yang disimpan sekarang adalah jumlah kartu antrean.
+
+Dua kolom hanya hidup di Dexie dan **dibuang sebelum upload** (servernya tidak punya kolomnya, dan PostgREST menolak seluruh batch atas field tak dikenal, bukan mengabaikannya):
+
+- `ms` — akumulator milidetik. Membulatkan tiap kartu ke menit utuh menghasilkan nol untuk semua kartu; pecahannya ditampung di sini dan hanya muncul sebagai `minutes`
+- `new_done_items` — item yang **dilepas** hari ini, sengaja bukan `new_done` (yang menghitung kartu dijawab). Ini yang menjaga jatah kartu baru tetap habis sekali sehari walau halamannya di-reload
+
 **`kana_sheet`** — tulisan tangan tersimpan (lihat §6.6)
 ```
 user_id, item_id, strokes(jsonb), written_at
@@ -306,14 +320,33 @@ Yang benar-benar melindungi data adalah RLS. Karena itu setiap tabel di migratio
 
 ### 5.5 Strategi offline
 
-1. Saat buka app: fetch kartu due hari ini → simpan ke Dexie
-2. Review dijalankan sepenuhnya dari Dexie; hasil masuk antrean lokal
-3. Sync ke Supabase saat online (background sync / saat app aktif lagi)
+Database lokal `masume` (Dexie) kini di **versi 2**. Versi 1 memegang `cards`, `reviewQueue`, `pendingCards`, `kanaSheet`, `pendingKana`, `meta`; versi 2 menambah `dailyProgress` + `pendingProgress`. Menambah versi aman — store lama terbawa apa adanya; yang tidak boleh adalah mengganti *nama* database, karena itu meng-orphan seluruh data lokal yang sudah ada.
+
+1. Saat buka app: `SyncProvider` menjalankan **push dulu, baru pull** — `pushPending()` → `pullCards()` → `pullProgress()`
+2. Sesi review dijalankan sepenuhnya dari Dexie; hasilnya masuk antrean lokal, tanpa satu pun panggilan jaringan
+3. Sync berjalan lagi saat koneksi kembali dan saat app kembali ke depan (`watchForSync`) — bukan interval polling, karena cuma dua momen itu yang mengubah jawabannya
 4. Konflik: `reviews` append-only sehingga merge trivial; `card_states` last-write-wins berdasarkan `last_review`
+
+**Urutan push-lalu-pull itu wajib, bukan selera.** `pullCards` menghidrasi dengan `bulkPut`, jadi pull yang jalan duluan menimpa state kartu yang belum terunggah — diam-diam membuang review yang barusan dijawab. Mengosongkan antrean lebih dulu membuat server jadi salinan yang lebih baru sebelum kita menerimanya balik.
+
+`syncPending` punya **empat blok**, dikirim berurutan karena `reviews` mereferensi `card_states`:
+
+| # | Tabel | onConflict | Catatan |
+|---|---|---|---|
+| 1 | `card_states` | `user_id,item_id,mode` | Kartu duluan — review menunjuk ke sini |
+| 2 | `reviews` | `user_id,client_review_id` + `ignoreDuplicates` | Fakta append-only: kiriman ulang harus jadi no-op |
+| 3 | `kana_sheet` | `user_id,item_id` | Satu sel, satu baris |
+| 4 | `daily_progress` | `user_id,date`, **tanpa** `ignoreDuplicates` | Rekap berjalan: kiriman ulang membawa angka LEBIH BARU dan harus menimpa |
+
+Kontras blok 2 vs blok 4 itu justru intinya, dan gampang salah disalin. Terakhir sengaja `daily_progress`: tidak ada yang mereferensinya, dan kegagalan di sini hanya kehilangan rekap yang bisa dibangun ulang dari `reviews`.
+
+**Sisi tarik `daily_progress` sempat tidak ada.** Antrean cuma punya sisi dorong, sehingga strip streak membaca nol di perangkat mana pun yang tidak menulis barisnya sendiri — HP baru menampilkan seminggu kotak kosong di atas hari-hari yang nyata dikerjakan. `pullProgress()` menutup itu; `mergeProgress()` memenangkan baris lokal, karena salinan lokal bisa memegang hitungan yang belum terunggah.
 
 Ini bukan nice-to-have. Review di jalan atau saat sinyal jelek adalah use case utama, dan kriteria sukses #3 bergantung penuh padanya.
 
-### 5.6 Tabel konten (migrasi berikutnya — belum ditulis; nomor 0002 sudah terpakai untuk lockdown function)
+**Bukti (5–6 Agustus 2026):** 6 kartu dijawab tanpa jaringan → antrean lokal → online → tepat 6 baris review dengan 6 `client_review_id` unik; sinkron diulang 3× tetap 6 baris (idempoten).
+
+### 5.6 Tabel konten (belum ditulis — nomor berikutnya yang bebas adalah 0008)
 
 ```
 items          id, level, type(kana|vocab|kanji|grammar),
@@ -342,7 +375,14 @@ kuota_baru     = ceil(sisa_item / hari_tersisa)
 
 Buffer 21 hari di akhir: berhenti melepas kartu baru, murni review — supaya materi terakhir sempat mengendap sebelum ujian.
 
-**Re-balance:** kalau bolong, sisa item dibagi ulang ke sisa hari. Tidak ada tumpukan hutang. Kalau `kuota_baru` melewati batas wajar (> 2× target awal), sistem memberi peringatan jujur: *"Dengan pace ini, target Desember tidak realistis. Geser ke Juli?"* — planner harus jujur, bukan memotivasi dengan angka bohong.
+**Re-balance:** kalau bolong, sisa item dibagi ulang ke sisa hari. Tidak ada tumpukan hutang. Kalau `kuota_baru` melewati batas wajar (> 2× `baseline_new_per_day`), sistem memberi peringatan jujur: *"Dengan pace ini, target Desember tidak realistis. Geser ke Juli?"* — planner harus jujur, bukan memotivasi dengan angka bohong.
+
+**Onboarding — `/mulai/`.** Dua langkah dalam **satu route**, dengan nomor langkah di state komponen. Bukan dua halaman: `output: 'export'` membuat tiap route jadi dokumen terpisah, jadi memecah langkah berarti memuat ulang seluruh app di tengah alur dan kehilangan pilihan yang belum disimpan.
+
+- **Langkah 1** — chip level N5–N1 + daftar sitting JLPT resmi dari `src/lib/exam-dates.ts`. Tanggal ujian **tidak diketik bebas**: JLPT digelar Minggu pertama Juli dan Desember, dan input tanggal bebas mengizinkan orang merencanakan ke hari yang tidak ada ujiannya — setelah itu setiap angka yang dicetak planner adalah kebohongan yang diucapkan dengan percaya diri. Sitting yang jatuh **di dalam buffer 21 hari** tetap ditampilkan tapi dinonaktifkan, karena tidak tersisa ruang untuk melepas materi baru
+- **Langkah 2** — aritmetika §6.1 dibuka terang lewat `planTracks`: per track, berapa item dan berapa hari. Yang ditampilkan hanya track yang **sudah punya konten** — untuk sekarang kana saja. Menjanjikan jadwal N5 di layar sementara datanya belum ada adalah overclaim
+
+Goal ditulis **langsung lewat RPC `set_active_goal`**, bukan lewat antrean offline. Ini satu-satunya tulisan di app yang menuntut koneksi, dan sengaja: sesi tidak bisa dimulai tanpa target, jadi mengantrekannya cuma menunda kegagalan ke tempat yang lebih membingungkan.
 
 ### 6.2 Curriculum Path
 
@@ -370,6 +410,22 @@ Satu antrean per hari: kartu due (review) + kartu baru sejumlah kuota. Empat mod
 | listening | audio (TTS) | arti | self-rate |
 
 **Writing → FSRS rating otomatis:** 0 salah = Good · 1–2 = Hard · 3+ = Again. Ini satu-satunya mode yang tidak butuh self-assessment, dan karena itu paling jujur.
+
+Logika antreannya murni — tanpa Dexie, React, atau jaringan — dan tinggal di `src/lib/session.ts` (`buildQueue`, `reduceSession`, `hintBudget`, `formatInterval`, `tally`). Layar yang mengambil baris dan menerapkan efeknya; file itu hanya memutuskan apa yang berikutnya dan apa artinya. Pemisahan itulah yang membuat *"apa yang terjadi kalau orang berhenti di kartu keempat belas"* jadi test, bukan tebakan.
+
+**Urutan antrean.** Ulangan dulu, yang paling lama jatuh tempo di depan — review adalah hutang, dan orang yang berhenti di tengah seharusnya sudah membayarnya alih-alih bertemu materi baru yang toh akan dilupakan. Setelah itu kartu baru **dikelompokkan per mode**: semua recognition hari ini sebelum semua recall. Menaruh recognition あ persis di sebelah recall あ membuat recall dijawab dari kartu sebelumnya, bukan dari ingatan — dan recall berhenti mengukur apa pun.
+
+**Kartu writing dipisah dari antrean sesi.** Pemisahnya adalah **biaya interaksi, bukan nama mode**: recognition adalah satu ketukan, writing adalah kanvas selama tiga puluh detik satu goresan demi satu goresan, dan mencampur keduanya membatalkan target "sesi 20 kartu < 4 menit" (§1.4 #4). Tapi membuang writing dari alur harian lebih buruk lagi — FSRS tetap menjadwalkannya seperti kartu lain, jadi tumpukannya menggunung tak terlihat sampai jadwalnya berhenti berarti. Karena itu kartu kanvas dikeluarkan ke `canvas` dan **diserahkan lewat layar ringkasan ke `/menulis/`**. Aturannya dikodekan sebagai konstanta `CANVAS_MODES`, jadi Sprint 2 tinggal menaruh `listening` di sisi cepat dan writing kanji di sisi kanvas tanpa mengubah apa pun di file itu.
+
+**Rating Lupa mengulang kartu SEKALI di ekor** — sekali, bukan loop. Malam yang buruk harus tetap bisa selesai.
+
+**Interval di bawah tombol rating dibaca dari `previewSchedule()`**, yang mengembalikan `{days, due}`, lalu diformat `formatInterval()` dari `due`. `previewIntervals()` (hanya `scheduled_days`) mengembalikan **nol untuk kartu yang masih di learning steps** — kartu hari pertama jatuh tempo beberapa menit lagi dengan hitungan hari 0, sehingga keempat tombol menulis "0 hr" dan tak satu pun memberi tahu apa bedanya.
+
+**Aturan hint: `hintBudget` = jumlah grapheme jawaban − 1.** Petunjuk tidak pernah boleh membuka sel terakhir — hint yang melengkapi jawaban adalah reveal yang menyamar, dan diam-diam menaikkan rating yang lalu diberikan user ke dirinya sendiri. Untuk kana satu karakter, jatahnya nol dan tombolnya tidak ditawarkan sama sekali; sel penunjuk panjang jawaban tetap tampil, karena "satu karakter" sudah jadi informasi yang dipegang pembelajar dari promptnya. Youon dapat satu. Kosakata Sprint 2 dapat beberapa, tanpa perubahan di sini.
+
+**Kartu yang tergeletak > 120 detik berhenti dihitung sebagai jawaban** (`MAX_CARD_MS`). Orang yang menaruh HP di tengah kartu lalu kembali sejam kemudian tidak menghabiskan sejam untuk mengingat あ, dan membiarkan angka itu masuk `duration_ms` meracuni estimasi per-kartu yang dipakai planner untuk menebak lama satu hari.
+
+Layar sesi **tidak memasang BottomNav** dan **tidak punya transisi antar-kartu** — hanya fade 120 ms pada jawaban. Dua puluh kartu × dua belas detik tidak menyisakan ruang untuk animasi: fade 200 ms dua kali per kartu = delapan detik dihabiskan untuk apa-apa.
 
 ### 6.4 Writing practice
 
@@ -486,12 +542,37 @@ Tiap entry ditandai `"source": "openjlpt"` atau `"compiled"`. Cukup untuk Sprint
 
 ### 8.1 Sprint Fase 0
 
-| Sprint | Isi | Selesai kalau |
-|---|---|---|
-| **1** | Setup, auth, migration 0001, seed konten, FSRS engine, modul kana + writing canvas + Lembar Kana (§6.6) | Bisa belajar kana sampai tuntas |
-| **2** | Goal Engine, Curriculum Path + gate, N5 vocab & grammar, TTS listening | Kuota harian jalan otomatis |
-| **3** | N5 kanji + writing, ~~Family Dashboard~~ (dibatalkan — §6.5), offline sync | Dipakai harian oleh user awal |
-| **4** | Polish, perbaikan dari pemakaian nyata | Kriteria sukses §1.4 terpenuhi |
+| Sprint | Isi | Selesai kalau | Status |
+|---|---|---|---|
+| **1** | Setup, auth, migration 0001, seed konten, FSRS engine, modul kana + writing canvas + Lembar Kana (§6.6) | Bisa belajar kana sampai tuntas | ✅ **SELESAI** 6 Agustus 2026 |
+| **2** | Goal Engine, Curriculum Path + gate, N5 vocab & grammar, TTS listening | Kuota harian jalan otomatis | Berikutnya |
+| **3** | N5 kanji + writing, ~~Family Dashboard~~ (dibatalkan — §6.5), offline sync | Dipakai harian oleh user awal | — |
+| **4** | Polish, perbaikan dari pemakaian nyata | Kriteria sukses §1.4 terpenuhi | — |
+
+#### Sprint 1 — SELESAI
+
+Definisi selesainya adalah kalimat ini: **satu orang bisa belajar kana dari nol sampai tuntas di HP, offline.** Per 6 Agustus 2026 kalimat itu benar dari ujung ke ujung — daftar lewat kode undangan, tetapkan target ujian, lalu setiap hari dapat kuota, sesi review, latihan menulis, dan Lembar Kana, tanpa aplikasi lain dan tanpa jaringan setelah muatan pertama.
+
+Yang benar-benar dibangun:
+
+| Bagian | Isi |
+|---|---|
+| **Onboarding `/mulai/`** | Dua langkah satu route, sitting JLPT resmi dari `exam-dates.ts`, sitting dalam buffer 21 hari ditampilkan tapi mati, rencana per-track dari `planTracks`, goal ditulis lewat RPC `set_active_goal` (§6.1) |
+| **Sesi review `/sesi/`** | Recognition + recall, antrean murni di `src/lib/session.ts`, ulangan-dulu lalu kartu baru per mode, Lupa mengulang sekali di ekor, interval tombol dari `previewSchedule()`, kartu writing diserahkan ke `/menulis/` (§6.3) |
+| **Hari Ini `/`** | Objek DEMO dibuang; baca IndexedDB lewat `useLiveQuery`. Tiga keadaan dari `dayState()`: on-track (badge pinus), tertinggal (badge oker + "N kartu lewat"), selesai (hanko 済, CTA hilang). Grid 4 track diganti satu baris "Kana kuat X/208" |
+| **Modul lib baru** | `exam-dates.ts` · `day.ts` (tanggal lokal per timezone lewat Intl) · `progress.ts` (`weekTicks`, `dayState`, `overdueBefore`, `shouldStamp`, `mergeProgress`) · `session.ts`; `fsrs.previewSchedule()`; `study.bumpProgress()` + `study.pullProgress()` |
+| **Offline** | Dexie naik ke versi 2 (`dailyProgress` + `pendingProgress`), blok keempat `syncPending` untuk `daily_progress`, `SyncProvider` baru yang push-lalu-pull (§5.5) |
+| **Database** | Migrasi 0007 — `goals.baseline_new_per_day` + RPC `set_active_goal` (§5.2). Total migrasi 0001–0007 |
+| **PWA** | Font Jepang di-subset (6 berkas, 138 KB), ikon PNG 192/512 + maskable terpisah + apple-touch-icon, aturan service worker navigasi-dulu (§9.3) |
+
+Komponen baru yang menopangnya: `SyncProvider` (sebelumnya `pullCards` dan `watchForSync` **nol pemanggil**, sehingga perangkat kedua selalu kosong; guard akun `guardLocalData` ikut pindah ke sini dari auth-provider supaya urutannya terjamin, bukan bergantung keberuntungan urutan efek React), `SwUpdateReloader`, dan `RequireGoal` — yang sengaja hanya dipasang di `/` dan `/sesi/`, bukan di `/kana/`, `/menulis/`, atau `/setelan/`, supaya orang yang gagal menyelesaikan onboarding tidak terkunci dari jalan keluarnya.
+
+**Bukti verifikasi:**
+
+- 149 test lolos (`vitest`), `tsc` bersih
+- **Offline end-to-end:** 6 kartu dijawab tanpa jaringan → antrean lokal → online → tepat 6 review dengan 6 `client_review_id` unik; sinkron diulang 3× tetap 6 baris. Ini bukti langsung untuk kriteria sukses §1.4 #3 (zero data loss)
+- 10 syarat installable PWA terpenuhi: manifest, ikon raster 192 + 512, maskable terpisah, apple-touch-icon, service worker, HTTPS, `display: standalone`
+- UAT tiga keadaan Hari Ini di akun nyata; data dipulihkan persis setelahnya
 
 **Selesai di luar rencana sprint** (generalisasi, 5 Agustus 2026):
 
@@ -556,11 +637,17 @@ Tipe akun ditentukan sekali saat registrasi dan repot diubah belakangan. Menunda
 Daftar prasyarat rilis publik yang sudah teridentifikasi tapi belum disentuh — supaya tidak baru ketahuan saat submit ke store:
 
 - **Rate-limit + proteksi bot** di jalur pendaftaran — begitu kode undangan dilepas, `redeem-invite` jadi endpoint publik yang tiap panggilannya mengirim email
-- **Subset font Jepang** — 13,5 MB masih terbawa; precache offline akan menelannya bulat-bulat
-- **Ikon PNG 192/512** — manifest baru memuat SVG; "Add to Home Screen" belum diuji
+- **Dataset Sprint 2** — `vocab_n5.json`, `kanji_n5.json`, `grammar_n5.json` sudah ada sebagai berkas tapi belum ada tabel konten di DB (§5.6, menunggu §11.1) dan belum tersentuh engine. Kana satu-satunya track berisi
+- **Mode listening** — kolom keempat di tabel §6.3 masih rencana; `MODE_RANK` sudah menyediakan tempatnya, tapi tidak ada layar yang membangkitkan kartunya
 - **Privacy policy URL** — wajib untuk store listing di kedua store
 - **Tipe akun Play Console** — personal vs organization (§9.2), masih terbuka (§11)
 - **i18n bahasa kedua** — infrastrukturnya siap (file sibling `satisfies Dictionary`, hanya `src/lib/i18n/index.ts` yang berubah), tapi kamusnya belum ditulis
+- **Native shell Capacitor** — Fase 1/2 (§8.2, §8.3); storage adapter sudah dipisah sejak sekarang (§4.4)
+
+**Lunas 6 Agustus 2026:**
+
+- ~~**Subset font Jepang**~~ — ✅ di-subset lewat `scripts/subset-fonts.mjs` (Google Fonts CSS API `text=`), hasilnya di-commit di `public/fonts/`: **6 berkas, 138 KB**, turun dari 865 berkas / 13,2 MB. `next/font/google` dihapus dari layout, diganti `@font-face` sungguhan di `globals.css`. Ini sekaligus perbaikan bug, bukan sekadar optimasi: `--font-gothic` menamai family literal sementara `next/font` mendaftarkan nama ber-hash, jadi tidak ada yang cocok — seluruh app selama berminggu-minggu dirender dengan system-ui dan 13,2 MB font itu diunduh serta di-precache untuk menggambar nol karakter. Dijaga `npm run fonts` + `npm run verify:fonts`
+- ~~**Ikon PNG 192/512**~~ — ✅ `icon-192.png`, `icon-512.png`, `icon-maskable-512.png`, dan `apple-touch-icon.png` di-commit, dihasilkan `npm run icons` (`scripts/render-icons.mjs`). Manifest memuat entri `any` dan `maskable` **terpisah**: menyatakan satu ikon sebagai `"any maskable"` memberi tahu Android bahwa gambar itu boleh dipotong bulat *sekaligus* dipakai apa adanya di tempat lain — hasilnya menyusut berpadding di tempat yang tidak memotong. "Add to Home Screen" sudah diuji, 10 syarat installable terpenuhi
 
 ---
 
@@ -570,7 +657,7 @@ Daftar prasyarat rilis publik yang sudah teridentifikasi tapi belum disentuh —
 |---|---|
 | User berhenti pakai di minggu 3 | Kuota realistis dari awal > ambisius lalu menyerah. Layar progress sendiri membuat drop-off terlihat cepat |
 | Pendaftaran dibuka publik tanpa proteksi → bot membakar kuota email + tabel undangan di-probe | Jangan buka publik sebelum rate-limit + proteksi bot terpasang (§9.3); sementara itu kode undangan tetap satu-satunya pintu |
-| Store menolak karena kelengkapan listing (privacy policy URL, ikon, data safety) | Checklist §9.3 dikerjakan sebelum submit, bukan saat submit |
+| Store menolak karena kelengkapan listing (privacy policy URL, data safety) | Checklist §9.3 dikerjakan sebelum submit, bukan saat submit — ikon dan installability sudah lunas 6 Agustus 2026 |
 | Writing memakan waktu materi ujian | Toggle per-user; kanji writing default off kecuali dinyalakan |
 | Grammar N5 hanya 49 poin (target ~80) | Cukup untuk Sprint 2. Lengkapi sambil jalan |
 | Web Speech API voice Jepang jelek/absen di sebagian device | Deteksi voice saat load; kalau tidak ada, sembunyikan mode listening dan tandai untuk upgrade VOICEVOX |
@@ -594,7 +681,9 @@ Daftar prasyarat rilis publik yang sudah teridentifikasi tapi belum disentuh —
 
 | File | Isi |
 |---|---|
-| `supabase/migrations/0001–0006` | Rantai migrasi ter-apply: 0001 auth + state user · 0002 lockdown execute function · 0003 pisah policy tulis dari SELECT · 0004 invites (deny-all) · 0005 generalisasi (hapus households + progress_summary, RLS own-only, `claim_invite → boolean`) · 0006 kunci `rls_auto_enable`. **Aturan anti-drift: tulis file di repo dulu, baru apply** |
+| `supabase/migrations/0001–0007` | Rantai migrasi ter-apply: 0001 auth + state user · 0002 lockdown execute function · 0003 pisah policy tulis dari SELECT · 0004 invites (deny-all) · 0005 generalisasi (hapus households + progress_summary, RLS own-only, `claim_invite → boolean`) · 0006 kunci `rls_auto_enable` · 0007 `goals.baseline_new_per_day` + RPC `set_active_goal`. **Aturan anti-drift: tulis file di repo dulu, baru apply** |
+| `src/lib/session.ts` · `progress.ts` · `day.ts` · `exam-dates.ts` | Logika murni Sprint 1 — antrean sesi, keadaan hari, tanggal lokal per timezone, kalender JLPT. Semuanya bertest di `src/lib/__tests__/` |
+| `scripts/subset-fonts.mjs` · `render-icons.mjs` | `npm run fonts` / `npm run icons` — hasilnya di-commit di `public/`, diverifikasi `npm run verify:fonts` |
 | `supabase/functions/` | Source of truth Edge Functions (`redeem-invite`, `delete-account`) — deploy hanya dari file ini, tidak pernah langsung ke dashboard |
 | `supabase-client.ts` | Client Supabase dengan storage adapter yang bisa ditukar, plus auth helper |
 | `kana.json` · `vocab_n5.json` · `kanji_n5.json` · `grammar_n5.json` | Dataset Fase 0 |

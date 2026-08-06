@@ -6,11 +6,19 @@ drifts the moment someone forgets to update it.
 
 GitHub renders the Mermaid blocks below directly.
 
-**Last verified against production:** 5 August 2026, after the generalisation —
-migrations `0005`+`0006` applied (households and `progress_summary` gone, every
-policy own-rows-only), `redeem-invite` v3 and `delete-account` v1 deployed, auth
-flow end to end (invite → email → set password → session), Edge Function origin
-allowlists, offline sync tests, and both signup doors probed directly.
+**Last verified against production:** 6 August 2026, after Sprint 1 — migration
+`0007` applied (`goals.baseline_new_per_day`, `set_active_goal` RPC), onboarding
+and the review session live on masume.vercel.app, 149 tests green and `tsc`
+clean, an end-to-end offline run (six cards answered with no network, six unique
+`client_review_id` rows landing after reconnect, re-synced three times with no
+duplicates), the ten PWA installability conditions met, and Hari Ini's three
+states walked on a real account with the data restored afterwards.
+
+Verified 5 August 2026 and still standing: migrations `0005`+`0006` (households
+and `progress_summary` gone, every policy own-rows-only), `redeem-invite` v3 and
+`delete-account` v1 deployed, auth flow end to end (invite → email → set password
+→ session), Edge Function origin allowlists, and both signup doors probed
+directly.
 
 ---
 
@@ -66,6 +74,34 @@ flowchart LR
 | Service worker | Home-screen install, offline shell |
 | Edge Functions | The only things that may hold the service role key — one to enter (`redeem-invite`), one to leave (`delete-account`) |
 | Resend | Supabase's built-in SMTP is capped at 2 emails/hour and documented as test-only |
+
+### The screens
+
+Eleven routes, each its own document — `output: 'export'` means there is no such
+thing as a shared server-rendered shell, and a route boundary costs a full
+reload.
+
+| Route | What it is | Guard |
+|---|---|---|
+| `/` | Hari Ini — the day's quota, the streak strip, one CTA | auth + goal |
+| `/mulai/` | Onboarding: level, exam sitting, the plan it implies | auth |
+| `/sesi/` | Review session — recognition and recall | auth + goal |
+| `/menulis/` | Writing practice: demo → trace → recall on canvas | auth |
+| `/kana/` | Lembar Kana, the gojūon sheet you fill in yourself | auth |
+| `/setelan/` | Profile, sign out, delete account | auth |
+| `/masuk/` · `/daftar/` | Sign in · redeem an invite code | public |
+| `/lupa-password/` · `/atur-password/` | Reset request · set a password from an emailed link | public |
+| `/tentang/` | Licence attribution — reachable without an account by design | public |
+
+`RequireGoal` sits on exactly two of them: `/` and `/sesi/`. Both print quotas,
+and a quota with no target is a number with no source. It is deliberately **not**
+on `/kana/`, `/menulis/` or `/setelan/` — those work fine before onboarding, and
+putting Setelan behind it would trap anyone who cannot finish onboarding,
+including someone who needs to sign out and try another account.
+
+Onboarding is two steps inside **one** route, with the step number in component
+state. That is the export constraint showing through: two routes would mean
+reloading the whole app mid-flow and dropping the choice not yet saved.
 
 ---
 
@@ -179,9 +215,10 @@ sequenceDiagram
     participant D as Dexie
     participant S as Supabase
 
-    Note over App,D: buka app — saat online
-    App->>S: ambil kartu jatuh tempo
-    S-->>App: card_states
+    Note over App,S: SyncProvider — saat masuk, saat online lagi
+    App->>S: pushPending (antrean lokal)
+    App->>S: pullCards + pullProgress
+    S-->>App: card_states · daily_progress
     App->>D: simpan lokal
 
     Note over U,D: sesi berjalan, koneksi tidak dipakai
@@ -189,12 +226,14 @@ sequenceDiagram
         D-->>App: kartu berikutnya
         U->>App: rating (atau otomatis, untuk menulis)
         App->>App: ts-fsrs menghitung jadwal baru
-        App->>D: satu transaksi — kartu + antrean log
+        App->>D: satu transaksi — kartu + antrean log + bumpProgress
     end
 
     Note over App,S: online kembali / app kembali ke depan
     App->>S: upsert card_states
     App->>S: upsert reviews (onConflict client_review_id, ignoreDuplicates)
+    App->>S: upsert kana_sheet
+    App->>S: upsert daily_progress (onConflict user_id,date — TANPA ignoreDuplicates)
     alt gagal
         Note over D: antrean tetap utuh — percobaan berikutnya mendarat tepat sekali
     else berhasil
@@ -202,8 +241,151 @@ sequenceDiagram
     end
 ```
 
+### The local store
+
+Dexie database `masume`, now at **version 2**. Version 1 holds `cards`,
+`reviewQueue`, `pendingCards`, `kanaSheet`, `pendingKana`, `meta`; version 2 adds
+`dailyProgress` and `pendingProgress`. Adding a version is safe — existing stores
+carry forward untouched. Renaming the *database* is not: it orphans every local
+copy that exists, which is only survivable while nobody has data yet.
+
+`dailyProgress` is keyed by `date` alone rather than `[user_id+date]`, because
+`SyncProvider` wipes the whole database when the account changes, so the store only
+ever holds one user. `user_id` still rides on the row, because the server's primary
+key needs it.
+
+Two of its columns never leave the device and are stripped before upload — the
+server has no such columns, and PostgREST rejects the whole batch over an unknown
+field rather than ignoring it:
+
+- `ms` — a millisecond accumulator. Rounding each card to whole minutes yields zero
+  for every card, so the fraction is carried here and only surfaces as `minutes`.
+- `new_done_items` — items *released* today, deliberately not the same number as
+  `new_done`, which counts cards answered. One item becomes two cards, and the
+  session has to know how much of the day's allowance it already handed out.
+
+### SyncProvider: push, then pull
+
+`SyncProvider` owns the lifecycle of the local database — wipe it when the account
+changes, fill it from the server, drain it back when the connection allows. Until
+it existed, `pullCards` and `watchForSync` **had no caller anywhere in the app**:
+Dexie was only ever populated by work done on that same device, so signing in on a
+second phone showed an empty review queue over cards that were perfectly real and
+living on the first one.
+
+**The order is push, then pull, always.** `pullCards` hydrates with `bulkPut`, so a
+pull that runs first overwrites card states that have not been uploaded yet —
+silently discarding reviews the user already answered. Draining the queue first
+makes the server the newer copy before we accept it back.
+
+The account guard (`guardLocalData`) moved here from `AuthProvider` for the same
+class of reason. They used to be two independent effects, and React runs child
+effects before parent effects, so the guard could wipe cards a pull had just
+written. Ordering by luck is not ordering.
+
+`watchForSync` fires on regaining connectivity and on returning to the foreground.
+Not a polling interval — those are the only two moments that change the answer.
+
+### The four sync blocks
+
+`syncPending` pushes in a fixed order, because `reviews` reference `card_states`.
+
+| # | Table | onConflict | Why |
+|---|---|---|---|
+| 1 | `card_states` | `user_id,item_id,mode` | Cards first; reviews point at them |
+| 2 | `reviews` | `user_id,client_review_id` + `ignoreDuplicates` | An append-only fact: a re-send must be a no-op |
+| 3 | `kana_sheet` | `user_id,item_id` | One cell, one row |
+| 4 | `daily_progress` | `user_id,date`, **no** `ignoreDuplicates` | A running total: a re-send carries the NEWER numbers and has to overwrite |
+
+The contrast between blocks 2 and 4 is the thing to keep hold of, and the thing
+most likely to be copied wrong. `daily_progress` goes last on purpose: nothing
+references those rows, and losing one costs a summary that can be rebuilt from
+`reviews` — unlike the three above it.
+
+`pullProgress` is the other half. The queue had a push side and no pull side, so
+the streak strip read zero on any device that had not personally written the rows:
+a new phone showed a week of empty squares over days the person had actually
+studied. `mergeProgress` lets local rows win, because the local copy may hold
+counts that have not been uploaded yet.
+
 Conflict handling: `reviews` is append-only so merging is trivial; `card_states`
 is last-write-wins on `last_review`.
+
+### Days are local days
+
+`daily_progress.date` is a **local** calendar date, derived through `src/lib/day.ts`
+with `Intl` and the learner's own `profiles.timezone`. `toISOString().slice(0, 10)`
+is the obvious answer and the wrong one: in Asia/Jakarta it rolls over at 07:00, so
+a session at 9pm lands on tomorrow's row and the streak shows a gap on a day that
+was actually studied. The bug is visible only between midnight and 7am WIB — which
+is to say, never during the hours anyone would test it.
+
+`overdueBefore` counts in calendar days for the same reason: a card due at 11pm
+yesterday is a card from yesterday, even when it is only nine hours old.
+
+### The session queue
+
+`src/lib/session.ts` is pure — no Dexie, no React, no network. The screen fetches
+the rows and applies the effects; the module decides only what comes next and what
+that answer means. That split is what makes "what happens if someone quits on card
+fourteen" a test rather than a guess.
+
+**Reviews first**, oldest due first: a review is a debt, and someone who stops
+halfway should have paid it rather than met new material they will then forget.
+**New cards grouped by mode**, so every recognition in today's batch comes before
+any of its recalls — put recognition あ next to recall あ and the recall is answered
+from the previous card rather than from memory.
+
+Writing cards are split out into `canvas` and handed to `/menulis/` from the summary
+screen. The split is by **interaction cost, not mode name**, and it lives in a
+`CANVAS_MODES` constant: a recognition card is a tap, a writing card is a canvas for
+thirty seconds a stroke at a time, and mixing them breaks the four-minute session
+outright. Dropping writing from the daily flow entirely would be worse, because FSRS
+schedules those cards like any other and they would pile up unseen until the
+schedule stopped meaning anything. Sprint 2 adds `listening` to the fast side and
+kanji writing to the canvas side; nothing else in the file changes.
+
+Two smaller rules with sharp edges:
+
+- **`hintBudget` = grapheme count − 1**, never the last hidden cell. A hint that
+  completes the answer is a reveal in disguise, and it quietly inflates the rating
+  the user then gives themselves. A one-character kana gets zero, so the button is
+  not offered at all.
+- **Again replays a card once, at the tail** — once, not a loop. A bad night has to
+  be able to end.
+
+### What the shell serves
+
+The static payload is part of the offline story, so it belongs here.
+
+**Fonts are self-hosted and subset.** `scripts/subset-fonts.mjs` pulls exactly the
+glyphs the app uses through the Google Fonts CSS API (`text=`), and the result is
+committed: six woff2 files, 138 KB, down from 865 files and 13.2 MB.
+`next/font/google` is gone from the layout, replaced by real `@font-face` rules in
+`globals.css`. That was a bug fix rather than a size optimisation — see the traps
+table. Only the body face is preloaded; preloading all six would repeat the mistake
+at a smaller scale. `npm run fonts` regenerates, `npm run verify:fonts` checks.
+
+**Icons are committed rasters**, produced by `npm run icons`
+(`scripts/render-icons.mjs`): `icon-192.png`, `icon-512.png`,
+`icon-maskable-512.png`, `apple-touch-icon.png`. Chrome refuses the install prompt
+without a raster of at least 192px, so an SVG-only manifest meant the app could be
+used and never installed. `any` and `maskable` are **separate entries**: declaring
+one icon `"any maskable"` tells Android it may crop that art to a circle *and* use
+the same file untouched elsewhere, so it gets shrunk-with-padding in the places that
+do not crop. iOS ignores the manifest's icons entirely and reads the
+`apple-touch-icon` link, without which an installed app gets a screenshot of the
+page as its home-screen icon.
+
+**The service worker claims navigations first.** In `src/sw.ts` the navigation rule
+sits ahead of `defaultCache` — a `NetworkFirst` handler filling a `pages` cache —
+plus a `fetch` listener that redirects any `.txt` URL committed as a document to the
+route it belongs to. The precache holds 50 entries and **no HTML at all**, so every
+navigation fell through to runtime caching where the only page-shaped caches were
+`pages-rsc` and `pages-rsc-prefetch`; nothing was left that could answer with a
+document. Claiming navigations first closes that off by construction, and it also
+fixes offline navigation, which never worked: a route opened once now opens again on
+a train.
 
 ---
 
@@ -239,6 +421,18 @@ erDiagram
 `invites` stands alone in the diagram on purpose: since `0005` it references
 nothing — a code is a bearer credential for a signup, not a membership in anything.
 
+**Switching the active goal is an RPC, not two client writes.**
+`goals_one_active_per_user` is a *partial* unique index (`WHERE is_active`), which
+makes both orderings wrong from the browser: insert-then-deactivate violates the
+index and fails outright, and deactivate-then-insert leaves a window with no active
+goal at all — during which `RequireGoal` throws the user back into onboarding with
+half their history already written. PostgREST has no cross-request transaction, so
+migration `0007` puts the atomicity in the database as `set_active_goal(text, date,
+integer)`. It is `security invoker`, deliberately: RLS `goals_all_own` stays the
+thing that decides whose rows these are, and the function only needs to be one
+statement, not privileged. EXECUTE is revoked from `public` and `anon` the same way
+`0002` and `0006` do it.
+
 ---
 
 ## 6. One dictionary, every string
@@ -273,7 +467,8 @@ cheaper.
 
 ## 8. Traps this system has already fallen into
 
-Kept because each one cost real time and none of them announce themselves.
+Kept because each one cost real time, and every one of them meets the bar for this
+table: **the symptom does not point at the cause.**
 
 | Trap | Symptom | Guard now in place |
 |---|---|---|
@@ -282,6 +477,14 @@ Kept because each one cost real time and none of them announce themselves.
 | **Public signup left enabled** | Invite code becomes decoration; anyone can POST to `/auth/v1/signup`. It stayed on for hours because it was assumed rather than checked | Toggle is off, and the probe that proves it is written down above so it can be re-run rather than remembered |
 | **`revoke ... from public`** | Not enough on Supabase: `anon` and `authenticated` also get direct grants, so a function stays callable after the revoke appears to have closed it | Named explicitly in `0002`, verified with `has_function_privilege` |
 | **`for all` policies** | Also cover SELECT, leaving two permissive SELECT policies that both run per row | Split into INSERT/UPDATE/DELETE in `0003` |
+| **Two navigations committed at once** | A screenful of raw `1:"$Sreact.fragment"` — the RSC route payload, painted as a page. Two users hit it. Signing out fired a hard navigation *and* a `router.replace` from RequireAuth, whose in-flight `.txt` fetch iPhone Safari then committed as the document. Nothing in the text names sign-out, routing, or Safari. | `beginSignOut()` / `isLeaving()` in `auth-provider`; both guards stand down while a departure is in flight. Two more layers in the service worker: navigations are claimed before any other rule, and a `.txt` committed as a document is redirected to its route |
+| **A hashed font family name** | Every screen renders in system-ui, and 13.2 MB of Japanese webfont is downloaded and precached to draw nothing. `--font-gothic` named the literal family while `next/font/google` registered a hashed one, so the token matched no font that existed — and "the font token is set" reads as correct in every file you would think to open | `next/font` removed from the layout; real `@font-face` rules with real family names in `globals.css`, over subset files committed in `public/fonts`. `npm run verify:fonts` |
+| **`dayState` congratulating an untouched day** | A brand-new account has no cards, so "nothing is due" is true of it — and the first screen it ever showed stamped 済 over a day with no work in it *and* hid the only button that could start one. New users were trapped by a success state | `selesai` now requires `doneToday > 0` or `newPerDay === 0`. Nothing due is not the same fact as nothing left to do |
+| **A queue with a push side and no pull side** | Streak strip reads zero on a new phone — a week of empty squares over days the person genuinely studied. The rows exist; they are just on the other device. Looks like data loss, is a missing fetch | `pullProgress()` in `SyncProvider`, with `mergeProgress()` letting local rows win |
+| **`saveWriting` not calling `bumpProgress`** | A day spent entirely on writing practice shows an empty streak square. The work was saved — `kana_sheet` and `card_states` are both correct — only the daily tally never heard about it | `saveWriting` bumps the daily row like `saveReview` does; both paths tested |
+| **New-card allowance handed out per mount** | `started` was a ref, so a reload or a second tab granted the day's new cards again — opening the session three times released three days of material, silently blowing up tomorrow's review load rather than today's screen | Counted in `new_done_items` on the local daily row, which survives a reload in a way a component ref cannot |
+| **`pendingCount().total` in the sign-out warning** | "42 latihan akan hilang" after a session that answered six cards. The total also counts card-state and daily-summary rows, which are bookkeeping — the number is both wrong and frightening, and it appears at the exact moment someone is deciding whether to trust the app with their data | Warns on `reviews + kana` only: work the person actually did |
+| **`quota_target` in the wrong unit** | A finished day reads 200% complete. `newPerDay` counts *items*, `new_done` counts *cards*, and one kana item becomes two cards on the fast path — so the row compares two different units and neither number looks wrong on its own | The target is stored as a count of queued cards |
 
 ---
 
@@ -289,13 +492,24 @@ Kept because each one cost real time and none of them announce themselves.
 
 Stated plainly so the diagrams are not read as a description of finished work.
 
-- The review session
-- Hari Ini with real data
-- The listening mode
-- Japanese font subsetting — 13.5 MB currently ships, which the offline precache
-  would swallow whole
-- PNG icons at 192/512; the manifest currently ships an SVG only, and
-  "Add to Home Screen" is untested
+- **The listening mode.** `MODE_RANK` already holds a slot for it, but nothing
+  generates the cards and no screen plays audio
+- **The vocabulary, kanji and grammar datasets.** The JSON files exist; the content
+  tables do not. `items` and `item_examples` are still unwritten migrations, held
+  deliberately until the Japan Arena N3 schema has been seen — locking the shape
+  first is how you earn a second migration
+- **Curriculum Path for N5**, including the 95%-accuracy gate out of kana. Kana is
+  currently the only track with content, and onboarding shows only tracks that have
+  any
+- **Public registration** without an invite code, which needs rate limiting and bot
+  protection first
+- **A second locale.** The infrastructure is ready — a sibling file declared
+  `satisfies Dictionary` — but no dictionary is written
+- **The Capacitor shell** for Android and iOS. The storage adapter has been kept
+  swappable from the start for this
+
+Built since the previous revision, and no longer on this list: the review session,
+Hari Ini reading real data, Japanese font subsetting, and PNG icons.
 
 ### Resolved: stroke counts now match Japanese teaching, 150 of 150
 
