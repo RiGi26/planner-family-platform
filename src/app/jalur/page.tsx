@@ -9,8 +9,12 @@ import { BottomNav } from '@/components/bottom-nav'
 import { Sheet } from '@/components/sheet'
 import { clsx } from '@/lib/clsx'
 import { groupByItem } from '@/lib/curriculum'
+import { dayPlan } from '@/lib/day-plan'
+import { localDate } from '@/lib/day'
+import { localProgress } from '@/lib/db'
 import { fmt, useT } from '@/lib/i18n'
 import { loadN5Items, loadUnits, type Item } from '@/lib/items'
+import { useGoal, useProfile } from '@/lib/queries'
 import { localCards } from '@/lib/study'
 import { jaVoice, speak } from '@/lib/tts'
 import { currentUnit, unitProgress, type Unit, type UnitProgress } from '@/lib/units'
@@ -276,6 +280,29 @@ function JalurScreen() {
   const cards = useLiveQuery(() => (user ? localCards(user.id) : Promise.resolve([])), [user?.id])
   const states = useMemo(() => groupByItem(cards ?? []), [cards])
 
+  // The CTA has to know what the session will actually do, not just which unit
+  // is current: on a day whose new-material allowance is spent, "Lanjut Unit N"
+  // was promising material the session would not contain.
+  const { data: goal } = useGoal(user?.id)
+  const { data: profile } = useProfile(user?.id)
+  const progressRows = useLiveQuery(
+    () => (user ? localProgress(user.id) : Promise.resolve([])),
+    [user?.id],
+  )
+  const plan = useMemo(() => {
+    if (!loaded || !cards || !progressRows || !goal) return null
+    const now = new Date()
+    return dayPlan({
+      cards,
+      progressRows,
+      goal,
+      units: loaded.units,
+      items: loaded.items,
+      today: localDate(now, profile?.timezone ?? 'Asia/Jakarta'),
+      now,
+    })
+  }, [loaded, cards, progressRows, goal, profile?.timezone])
+
   const rows = useMemo(() => {
     if (!loaded) return null
     const now = new Date()
@@ -355,7 +382,10 @@ function JalurScreen() {
         )}
       </main>
 
-      {/* The single action, in the thumb zone above the nav. */}
+      {/* The single action, in the thumb zone above the nav.
+          Its words follow the plan, not the position in the path: naming a unit
+          the session will not touch today is the one thing this button must
+          never do. */}
       <div
         className="fixed inset-x-0 z-30 mx-auto max-w-lg px-5"
         style={{ bottom: 'calc(var(--spacing-safe-bottom) + 68px)' }}
@@ -369,11 +399,28 @@ function JalurScreen() {
           </span>
           <span className="text-left">
             <span className="block text-[15px] leading-tight font-medium">
-              {fmt(t.jalur.continueUnit, { n: current.unit.n })}
+              {plan && plan.newToday === 0
+                ? t.jalur.startReviewsOnly
+                : fmt(t.jalur.continueUnit, { n: current.unit.n })}
             </span>
-            <span className="block text-[11px] opacity-80">{current.unit.title}</span>
+            <span className="tnum block text-[11px] opacity-80">
+              {!plan
+                ? current.unit.title
+                : plan.newToday > 0 && plan.reviewsDue > 0
+                  ? fmt(t.jalur.ctaBoth, { r: plan.reviewsDue, b: plan.newToday })
+                  : plan.newToday > 0
+                    ? fmt(t.jalur.ctaNewOnly, { b: plan.newToday })
+                    : plan.reviewsDue > 0
+                      ? fmt(t.jalur.ctaReviewsOnly, { r: plan.reviewsDue })
+                      : t.jalur.nothingDue}
+            </span>
           </span>
         </Link>
+        {plan && plan.newToday === 0 && plan.unitRemaining > 0 ? (
+          <p className="mt-2 text-center text-[12px] text-ink-muted">
+            {fmt(t.jalur.unitRestsToday, { n: current.unit.n })}
+          </p>
+        ) : null}
       </div>
 
       <BottomNav />

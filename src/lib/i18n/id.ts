@@ -102,7 +102,12 @@ export const id = {
     weekHeading: '7 hari terakhir',
     weekCount: '{n} dari 7',
     startSession: 'Mulai sesi',
-    startSessionDetail: '{n} kartu · recognition & recall',
+    // Says what the session CONTAINS, in the app's own language. The old line
+    // ("{n} kartu · recognition & recall") named two English mode words a
+    // beginner has no reason to know, and said nothing about the unit.
+    startDetailBoth: '{r} ulangan · {b} materi baru dari Unit {n}',
+    startDetailReviews: '{r} ulangan',
+    startDetailNew: '{b} materi baru dari Unit {n}',
     writingQueued: 'Latihan menulis ({n})',
 
     behind: 'Tertinggal',
@@ -129,6 +134,15 @@ export const id = {
     unitN: 'Unit {n}',
     itemProgress: '{strong} dari {total} materi sudah kuat',
     continueUnit: 'Lanjut Unit {n}',
+    // When today's new-material allowance is spent, the unit does not move —
+    // and a button that still says "Lanjut Unit N" is promising material the
+    // session will not contain. It says what will actually happen instead.
+    startReviewsOnly: 'Mulai ulangan',
+    ctaBoth: '{r} ulangan dulu · {b} materi baru',
+    ctaNewOnly: '{b} materi baru',
+    ctaReviewsOnly: '{r} kartu',
+    unitRestsToday: 'Materi baru Unit {n} lanjut besok — jatah hari ini sudah diberikan.',
+    nothingDue: 'Tidak ada yang jatuh tempo. Buka sesi kalau mau menengok.',
     backToPath: 'Jalur belajar',
     patternHeading: 'Pola kalimat',
     dialogHeading: 'Percakapan',

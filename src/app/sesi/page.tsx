@@ -12,13 +12,10 @@ import { clsx } from '@/lib/clsx'
 import { groupByItem } from '@/lib/curriculum'
 import { dueCards, localProgress } from '@/lib/db'
 import { localDate } from '@/lib/day'
-import { parseExamDate } from '@/lib/exam-dates'
-import { computeQuota } from '@/lib/goal-engine'
 import { fmt, useT } from '@/lib/i18n'
 import { itemMapFor, loadN5Items, loadUnits } from '@/lib/items'
-import { pathState } from '@/lib/path'
+import { dayPlan } from '@/lib/day-plan'
 import { currentUnit, unitRemaining } from '@/lib/units'
-import { overdueBefore } from '@/lib/progress'
 import { useGoal, useProfile } from '@/lib/queries'
 import {
   buildQueue,
@@ -28,6 +25,7 @@ import {
   hintBudget,
   initSession,
   reduceSession,
+  spokenForm,
   tally,
   type SessionCard,
   type SessionState,
@@ -54,7 +52,13 @@ import type { UserRating } from '@/lib/fsrs'
  * nav bar would sit exactly where the thumb lands.
  */
 
-type Loaded = { queue: SessionCard[]; canvas: SessionCard[]; quotaTotal: number }
+type Loaded = {
+  queue: SessionCard[]
+  canvas: SessionCard[]
+  quotaTotal: number
+  /** The unit today's new material came from, so a lesson can name its place. */
+  unitN: number | null
+}
 
 function SessionScreen() {
   const t = useT()
@@ -97,47 +101,32 @@ function SessionScreen() {
     started.current = true
 
     void (async () => {
-      const today = localDate(new Date(), timezone)
+      const now = new Date()
+      const today = localDate(now, timezone)
       const cards = await localCards(user.id)
       const states = groupByItem(cards)
 
-      // The guided path decides what comes next. The kana track keeps its own
-      // route through the Kana Sheet; the unit spine owns everything else, and
-      // a unit is a small finite list — there is nothing to apportion, only an
-      // order to follow.
-      const gateCheck = pathState(cards, null)
+      // The guided path decides what comes next, and it decides it in ONE place:
+      // dayPlan reads the same rows the buttons on Hari Ini and Jalur read, so a
+      // button that says "Lanjut Unit N" cannot promise material this session
+      // will not introduce. The allowance bookkeeping lives there too — it has
+      // to outlive this component, or a reload hands out a second day's worth.
       const [units, n5Items] = await Promise.all([loadUnits(), loadN5Items()])
-      const unit = currentUnit(units, n5Items, states)
-      const unitLeft = unitRemaining(unit, n5Items, states)
-
-      // Kana still needs counting for the pace, because it is real work even
-      // though it is introduced through the sheet rather than through a unit.
-      const kanaLeft = gateCheck.remainingNew
-
-      const quota = computeQuota({
-        remainingNew: kanaLeft + unitLeft.length,
-        dueToday: cards.filter((c) => new Date(c.due) <= new Date()).length,
-        dueWriting: cards.filter((c) => c.mode === 'writing' && new Date(c.due) <= new Date())
-          .length,
-        targetExamDate: parseExamDate(goal.target_exam_date),
-        today: new Date(),
-        ...(goal.baseline_new_per_day ? { baselineNewPerDay: goal.baseline_new_per_day } : {}),
+      const plan = dayPlan({
+        cards,
+        progressRows: await localProgress(user.id),
+        goal,
+        units,
+        items: n5Items,
+        today,
+        now,
       })
+      const unit = plan.unit ?? currentUnit(units, n5Items, states, now)
 
-      // How many of today's allowance has already been handed out.
-      //
-      // `started` is a ref, so it only guards one mount: a reload, a second tab,
-      // or coming back to the session later started the whole allowance again,
-      // and someone who opened the session three times in a day was handed three
-      // days of new material. The count has to outlive the component, so it
-      // lives in the same daily row everything else about today lives in.
-      const introducedToday = (await localProgress(user.id)).find((r) => r.date === today)
-        ?.new_done_items ?? 0
-      const allowance = Math.max(0, quota.newPerDay - introducedToday)
-
-      // Today's new material: the next items of the current unit, in unit
-      // order. Kana arrives through the sheet, so it is not introduced here.
-      const fresh = unitLeft.slice(0, allowance)
+      // Today's new material: the next items of the current unit, in unit order.
+      // Unit 0 introduces kana here as well — the Kana Sheet is a parallel route
+      // to the same items, not the only one.
+      const fresh = unitRemaining(unit, n5Items, states).slice(0, plan.newToday)
 
       const prefs = {
         kanaWriting: profile?.writing_kana_enabled ?? true,
@@ -184,7 +173,12 @@ function SessionScreen() {
         )
       }
 
-      setLoaded({ queue: built.queue, canvas: built.canvas, quotaTotal: built.queue.length })
+      setLoaded({
+        queue: built.queue,
+        canvas: built.canvas,
+        quotaTotal: built.queue.length,
+        unitN: unit.n,
+      })
       setState(initSession(built.queue, Date.now()))
     })()
   }, [user, goal, profile, timezone, voice])
@@ -268,6 +262,7 @@ function SessionScreen() {
         card={card}
         index={state.index}
         total={state.queue.length}
+        unitN={loaded.unitN}
         voice={voice ?? null}
         onNext={() => setState(reduceSession(state, { kind: 'understood', at: Date.now() }).state)}
       />
@@ -440,7 +435,7 @@ function SessionScreen() {
                 // listening practice there is, and kana had no sound at all
                 // until now — the layer the whole ladder starts from.
                 if (voice && card.card.mode !== 'listening') {
-                  const spoken = card.item.type === 'grammar' ? '' : card.item.reading
+                  const spoken = spokenForm(card.item)
                   if (spoken) speak(spoken, voice)
                 }
               }}
@@ -470,12 +465,14 @@ function LessonCard({
   card,
   index,
   total,
+  unitN,
   voice,
   onNext,
 }: {
   card: SessionCard
   index: number
   total: number
+  unitN: number | null
   voice: SpeechSynthesisVoice | null
   onNext: () => void
 }) {
@@ -513,7 +510,14 @@ function LessonCard({
       </header>
 
       <section className="flex min-h-0 flex-1 flex-col items-center justify-center gap-5 overflow-y-auto py-4">
-        <p className="text-[12px] tracking-[0.14em] text-ai uppercase">{t.sesi.lessonLabel}</p>
+        {/* Naming the unit is what connects this card to the button that was
+            pressed to get here — "Lanjut Unit 4" has to arrive somewhere that
+            says Unit 4. */}
+        <p className="text-[12px] tracking-[0.14em] text-ai uppercase">
+          {unitN === null
+            ? t.sesi.lessonLabel
+            : `${t.sesi.lessonLabel} · ${fmt(t.jalur.unitN, { n: unitN })}`}
+        </p>
 
         <p className={clsx('tnum text-ink', size)}>{face.expression}</p>
 

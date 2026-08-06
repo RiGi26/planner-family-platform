@@ -9,10 +9,12 @@ import {
   initSession,
   MAX_CARD_MS,
   reduceSession,
+  spokenForm,
   tally,
   type SessionCard,
   type SessionState,
 } from '../session'
+import type { Item } from '../items'
 
 const USER = '11111111-1111-1111-1111-111111111111'
 const now = new Date('2026-08-05T09:00:00Z')
@@ -37,6 +39,40 @@ function build(due: CardStateRow[], introduced: CardStateRow[] = []) {
 function questions(built: ReturnType<typeof build>) {
   return built.queue.filter((c) => !c.lesson)
 }
+
+describe('spokenForm', () => {
+  const mk = (over: Partial<Item>): Item => ({
+    id: 'x',
+    level: 'N5',
+    type: 'vocab',
+    expression: 'x',
+    reading: 'x',
+    meanings: ['x'],
+    seq: 1,
+    data: {},
+    ...over,
+  })
+
+  it('speaks the kana CHARACTER, never its romaji reading', () => {
+    // kana.json stores reading: "a" — handing that to a Japanese voice makes it
+    // read a Latin letter, which is why single characters sounded English.
+    expect(spokenForm(a as unknown as Item)).toBe('あ')
+    expect(spokenForm(mk({ type: 'kana', expression: 'ア', reading: 'a' }))).toBe('ア')
+  })
+
+  it('speaks the reading for vocabulary and kanji', () => {
+    expect(spokenForm(mk({ expression: '日本語', reading: 'にほんご' }))).toBe('にほんご')
+    expect(spokenForm(mk({ type: 'kanji', expression: '山', reading: 'やま' }))).toBe('やま')
+  })
+
+  it('stays silent for grammar patterns', () => {
+    expect(spokenForm(mk({ type: 'grammar', expression: '〜てください', reading: '' }))).toBe('')
+  })
+
+  it('falls back to the expression when a reading is missing', () => {
+    expect(spokenForm(mk({ expression: 'パン', reading: '' }))).toBe('パン')
+  })
+})
 
 describe('buildQueue', () => {
   it('puts reviews before new cards, because a review is a debt', () => {

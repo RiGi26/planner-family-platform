@@ -12,6 +12,7 @@ import { groupByItem, sheetProgress } from '@/lib/curriculum'
 import { localDate } from '@/lib/day'
 import { db, localProgress } from '@/lib/db'
 import { parseExamDate, upcomingSittings } from '@/lib/exam-dates'
+import { dayPlan } from '@/lib/day-plan'
 import { catchUpOptions, computeQuota } from '@/lib/goal-engine'
 import { fmt, useT } from '@/lib/i18n'
 import { loadN5Items, loadUnits, type Item } from '@/lib/items'
@@ -87,6 +88,20 @@ function TodayScreen() {
   const unitNow = path ? currentUnit(path.units, path.items, states, now) : null
   const unitLeft = unitNow ? unitRemaining(unitNow, path!.items, states).length : 0
   const remainingNew = pathState(cards, null, now).remainingNew + unitLeft
+
+  // The same plan the session will act on, so the button's promise and the
+  // session's contents cannot disagree.
+  const plan = path
+    ? dayPlan({
+        cards,
+        progressRows,
+        goal,
+        units: path.units,
+        items: path.items,
+        today,
+        now,
+      })
+    : null
 
   const quota = computeQuota({
     remainingNew,
@@ -332,8 +347,19 @@ function TodayScreen() {
               <span className="block text-[15px] leading-tight font-medium">
                 {remaining > 0 ? t.hariIni.startSession : t.hariIni.startFirst}
               </span>
+              {/* What the session contains, from the same plan the session
+                  itself acts on — reviews first, then whatever the unit still
+                  gets to introduce today. */}
               <span className="tnum block text-[11px] opacity-80">
-                {fmt(t.hariIni.startSessionDetail, { n: remaining })}
+                {plan && plan.reviewsDue > 0 && plan.newToday > 0 && plan.unit
+                  ? fmt(t.hariIni.startDetailBoth, {
+                      r: plan.reviewsDue,
+                      b: plan.newToday,
+                      n: plan.unit.n,
+                    })
+                  : plan && plan.newToday > 0 && plan.unit
+                    ? fmt(t.hariIni.startDetailNew, { b: plan.newToday, n: plan.unit.n })
+                    : fmt(t.hariIni.startDetailReviews, { r: plan ? plan.reviewsDue : remaining })}
               </span>
             </span>
           </Link>

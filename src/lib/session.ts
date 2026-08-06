@@ -342,6 +342,23 @@ export type Faces = {
 const asList = (v: unknown): string[] => (Array.isArray(v) ? (v as string[]) : [])
 
 /**
+ * What to hand the speech engine for an item.
+ *
+ * `reading` is the right answer for vocabulary and kanji — but NOT for kana,
+ * whose reading field holds romaji ("a", "ki"). Feeding that to a Japanese voice
+ * makes it read Latin letters, which is why single characters came out sounding
+ * English. The kana character itself is what should be spoken.
+ *
+ * Grammar patterns start with 〜 and read as punctuation aloud, so they are
+ * silent by design.
+ */
+export function spokenForm(item: Item): string {
+  if (item.type === 'grammar') return ''
+  if (item.type === 'kana') return item.expression
+  return item.reading || item.expression
+}
+
+/**
  * The teaching face: everything at once, nothing hidden.
  *
  * The opposite of a question card by construction — no hint budget, no reveal,
@@ -383,8 +400,7 @@ export function lessonFace(item: Item): {
     reading: item.reading && item.reading !== item.expression ? item.reading : '',
     meaning: item.meanings.join('; '),
     detail,
-    // Grammar patterns start with 〜 and read badly aloud; the rest are words.
-    speak: item.type === 'grammar' ? '' : item.reading || item.expression,
+    speak: spokenForm(item),
   }
 }
 
