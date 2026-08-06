@@ -6,13 +6,22 @@ drifts the moment someone forgets to update it.
 
 GitHub renders the Mermaid blocks below directly.
 
-**Last verified against production:** 6 August 2026, after Sprint 1 — migration
-`0007` applied (`goals.baseline_new_per_day`, `set_active_goal` RPC), onboarding
-and the review session live on masume.vercel.app, 149 tests green and `tsc`
-clean, an end-to-end offline run (six cards answered with no network, six unique
-`client_review_id` rows landing after reconnect, re-synced three times with no
-duplicates), the ten PWA installability conditions met, and Hari Ini's three
-states walked on a real account with the data restored afterwards.
+**Last verified against production:** 6 August 2026, after Sprint 2 — the N5
+datasets built and committed (662 vocabulary, 79 kanji, 49 grammar), the engine
+generalised from kana to a generic item, the kana gate opening the three N5
+tracks, the daily allowance dividing across them, and listening cards speaking.
+160 tests green, `tsc` clean, static export building. Walked on a synthetic
+account with 208 strong kana: the gate opened, a 20-card session came out as
+5 vocabulary × 3 modes + 2 kanji × 2 + 1 grammar in the right order, no Japanese
+appeared on a listening card before reveal, and the account was deleted
+afterwards with the database verified back to two real users.
+
+Verified earlier on 6 August 2026 and still standing: migration `0007`
+(`goals.baseline_new_per_day`, `set_active_goal` RPC), onboarding and the review
+session live, an end-to-end offline run (six cards answered with no network, six
+unique `client_review_id` rows landing after reconnect, re-synced three times
+with no duplicates), the ten PWA installability conditions met, and Hari Ini's
+three states walked on a real account with the data restored afterwards.
 
 Verified 5 August 2026 and still standing: migrations `0005`+`0006` (households
 and `progress_summary` gone, every policy own-rows-only), `redeem-invite` v3 and
@@ -83,9 +92,9 @@ reload.
 
 | Route | What it is | Guard |
 |---|---|---|
-| `/` | Hari Ini — the day's quota, the streak strip, one CTA | auth + goal |
-| `/mulai/` | Onboarding: level, exam sitting, the plan it implies | auth |
-| `/sesi/` | Review session — recognition and recall | auth + goal |
+| `/` | Hari Ini — the day's quota, the gate line, the streak strip, one CTA | auth + goal |
+| `/mulai/` | Onboarding: level, exam sitting, the four-track plan it implies | auth |
+| `/sesi/` | Review session — recognition, recall and listening | auth + goal |
 | `/menulis/` | Writing practice: demo → trace → recall on canvas | auth |
 | `/kana/` | Lembar Kana, the gojūon sheet you fill in yourself | auth |
 | `/setelan/` | Profile, sign out, delete account | auth |
@@ -323,6 +332,69 @@ is to say, never during the hours anyone would test it.
 `overdueBefore` counts in calendar days for the same reason: a card due at 11pm
 yesterday is a card from yesterday, even when it is only nine hours old.
 
+### The curriculum ladder
+
+Everything the app teaches is one generic shape. `src/lib/items.ts` defines
+`Item` — id, level, type, expression, reading, meanings, seq, and a `data` bag
+for whatever is type-specific (a kana's row and column, a kanji's readings, a
+grammar point's formation). `kana.json` has carried that shape since Sprint 1 and
+`scripts/fetch-jlpt.mjs` builds the N5 files to it, so the queue, the scheduler
+and the sync layer never learn which file an item came from. **Adding N4 is
+adding rows, not code.**
+
+```mermaid
+flowchart TD
+    cards[("card_states<br/>lokal (Dexie)")] --> gate{"kanaGate()<br/>≥ 95% kana kuat?"}
+    gate -->|"belum"| kanaonly["Track terbuka: kana<br/>N5 tidak dimuat sama sekali"]
+    gate -->|"sudah"| load["Muat N5 (dynamic import)<br/>vocab · kanji · grammar"]
+    load --> open["Track terbuka: kana + 3 N5"]
+    kanaonly --> quota["computeQuota()<br/>sisa item ÷ hari kerja"]
+    open --> quota
+    quota --> split["splitQuota()<br/>kana dulu → sisanya proporsional,<br/>tiap track dijamin ≥ 1"]
+    split --> intro["introduceAcross()<br/>item berikutnya per track"]
+    intro --> ensure["ensureCards()<br/>mode per TIPE item"]
+    ensure --> queue["buildQueue()"]
+```
+
+Two rules in `src/lib/path.ts` carry the weight:
+
+- **N5 counts toward `remainingNew` only once the gate is open.** A quota is a
+  promise about work that can actually be assigned today; counting locked items
+  would inflate the daily pace months early. Both screens that compute a pace —
+  the session and Hari Ini — call `pathState()`, so they cannot disagree.
+- **Every open track is guaranteed one slot** before the proportional split.
+  662 : 79 : 49 on a quota of eight gives grammar zero for weeks and then a
+  lump; kana still finishes first, because N5 is written in it.
+
+Which cards an item gets is a property of its **type**, not of a screen —
+`modesForItem()`:
+
+| Type | recognition | recall | writing | listening |
+|---|---|---|---|---|
+| kana | ✓ | ✓ | ✓ default on | — |
+| vocab | ✓ | ✓ | — | ✓ when a voice exists |
+| kanji | ✓ | ✓ | ✓ toggle, default off | — |
+| grammar | ✓ | — | — | — |
+
+`cardFaces()` in `session.ts` then decides what each card asks and answers with.
+These are curriculum decisions, not layout ones, which is why they are pure and
+tested: a vocabulary **recall prompts with the meaning** and answers with the
+word — prompting with the reading would be transcription, not recall. A kanji
+answer carries 訓 and 音. A grammar answer carries its formation line. A
+kana-only word answers with its meaning, because its reading *is* the prompt
+spelled back. The screen only picks font sizes, stepped down by length so a
+five-character word does not overflow 390px.
+
+**Listening never exists where it cannot be asked.** `src/lib/tts.ts` resolves
+the device's ja-JP voice asynchronously — `getVoices()` is empty until
+`voiceschanged` fires, so a synchronous read reports "no voice" on every first
+load — and the session waits for that answer *before* building the queue. No
+voice means no listening cards are created; a listening card due from another
+device is **held back from the queue rather than skipped**, so it stays due for
+the next device that can speak it. The card speaks itself on arrival (the tap
+budget is twelve seconds; spending one on "press to hear" is a third of it) and
+shows no Japanese before reveal, because the ear is the thing being tested.
+
 ### The session queue
 
 `src/lib/session.ts` is pure — no Dexie, no React, no network. The screen fetches
@@ -342,8 +414,9 @@ screen. The split is by **interaction cost, not mode name**, and it lives in a
 thirty seconds a stroke at a time, and mixing them breaks the four-minute session
 outright. Dropping writing from the daily flow entirely would be worse, because FSRS
 schedules those cards like any other and they would pile up unseen until the
-schedule stopped meaning anything. Sprint 2 adds `listening` to the fast side and
-kanji writing to the canvas side; nothing else in the file changes.
+schedule stopped meaning anything. Sprint 2 proved the constant was the right
+seam: listening joined the fast side and kanji writing the canvas side, and
+`buildQueue` itself did not change a line.
 
 Two smaller rules with sharp edges:
 
@@ -485,6 +558,9 @@ table: **the symptom does not point at the cause.**
 | **New-card allowance handed out per mount** | `started` was a ref, so a reload or a second tab granted the day's new cards again — opening the session three times released three days of material, silently blowing up tomorrow's review load rather than today's screen | Counted in `new_done_items` on the local daily row, which survives a reload in a way a component ref cannot |
 | **`pendingCount().total` in the sign-out warning** | "42 latihan akan hilang" after a session that answered six cards. The total also counts card-state and daily-summary rows, which are bookkeeping — the number is both wrong and frightening, and it appears at the exact moment someone is deciding whether to trust the app with their data | Warns on `reviews + kana` only: work the person actually did |
 | **`quota_target` in the wrong unit** | A finished day reads 200% complete. `newPerDay` counts *items*, `new_done` counts *cards*, and one kana item becomes two cards on the fast path — so the row compares two different units and neither number looks wrong on its own | The target is stored as a count of queued cards |
+| **A component surviving a navigation it should not** | The Kana Sheet appeared to hang: finish a cell, press Simpan, the row strip advances and the practice area freezes on the previous character's score. Worse than the freeze, the still-live Simpan button held the *previous* result, so a second press wrote the old character's strokes into the new cell and recorded a review nobody performed. `router.replace` changes the query string, not the component identity | `key={item.id}` on `WritingPractice`, so moving cells is a real remount, plus a `saving` guard against the double press |
+| **A server-only read behind a local-first write** | The same sheet, one cell behind itself. `recordKanaCell` lands in Dexie immediately while `pushPending()` is fire-and-forget, so the refetch raced the upload — and the writing screen picked *the next unwritten cell* from that same stale map, which after a row's last cell could point back at one already written | `useKanaSheet` layers local Dexie rows over the server map, local winning per item. Reading the sheet works offline now too, which the server-only version never did |
+| **`208 - states.size` as "how much is left"** | Correct for exactly as long as kana is the only content. The day an N5 card could exist, the number quietly counted N5 items against the kana total and the daily pace drifted | `pathState()` computes `remainingNew` from the open tracks, and both screens that print a pace call it |
 
 ---
 
@@ -492,15 +568,26 @@ table: **the symptom does not point at the cause.**
 
 Stated plainly so the diagrams are not read as a description of finished work.
 
-- **The listening mode.** `MODE_RANK` already holds a slot for it, but nothing
-  generates the cards and no screen plays audio
-- **The vocabulary, kanji and grammar datasets.** The JSON files exist; the content
-  tables do not. `items` and `item_examples` are still unwritten migrations, held
-  deliberately until the Japan Arena N3 schema has been seen — locking the shape
-  first is how you earn a second migration
-- **Curriculum Path for N5**, including the 95%-accuracy gate out of kana. Kana is
-  currently the only track with content, and onboarding shows only tracks that have
-  any
+- **The audible half of listening.** The logic is verified end to end — cards
+  created only where a voice exists, held back where none does, spoken once on
+  arrival, nothing Japanese on screen before reveal — but that was proven with a
+  stubbed `speechSynthesis` recording what it was asked to say. **How the real
+  ja-JP voice actually sounds is untested**, and it needs a phone, not a test
+  rig. VOICEVOX is the upgrade path if a device's built-in voice is poor
+- **Content tables in the database.** The datasets ship as bundled JSON, loaded
+  by dynamic import, which is what makes them work offline from the first visit.
+  `items` and `item_examples` remain unwritten migrations, held deliberately
+  until the Japan Arena N3 schema has been seen — locking the shape first is how
+  you earn a second migration
+- **Fonts do not cover the datasets.** The subset holds ~290 glyphs: kana, the
+  UI's kanji, latin. N5 vocabulary and kanji fall back to whatever Japanese font
+  the device has, which on Windows and Android is not always the one the design
+  assumes. Deliberately left until the cards could be looked at on a real screen
+- **N4 through N1.** The ladder is level-agnostic by construction; each level is
+  a dataset build plus a gate, not new machinery. `docs/PETA-MATERI.md` holds
+  the full map with per-figure honesty labels
+- **Cloze for grammar.** Grammar is recognition-only until the dataset is rich
+  enough that a fill-in-the-blank has something to hide
 - **Public registration** without an invite code, which needs rate limiting and bot
   protection first
 - **A second locale.** The infrastructure is ready — a sibling file declared
@@ -508,8 +595,9 @@ Stated plainly so the diagrams are not read as a description of finished work.
 - **The Capacitor shell** for Android and iOS. The storage adapter has been kept
   swappable from the start for this
 
-Built since the previous revision, and no longer on this list: the review session,
-Hari Ini reading real data, Japanese font subsetting, and PNG icons.
+Built since the previous revision, and no longer on this list: the N5 datasets,
+the generic item engine, the Curriculum Path with its 95% kana gate, the quota
+split across tracks, per-type card faces, the catch-up options, and listening.
 
 ### Resolved: stroke counts now match Japanese teaching, 150 of 150
 

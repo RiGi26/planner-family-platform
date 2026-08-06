@@ -1,9 +1,9 @@
 # PRD — JLPT Certification Planner
 
 **Nama:** Masume (升目) — kotak-kotak pada kertas 原稿用紙, satu karakter per petak. Diputuskan 5 Agustus 2026, menggantikan working title "Goukaku" (§11.2 ditutup).
-**Versi:** 2.2 — Sprint 1 tuntas (onboarding, sesi review, Hari Ini berdata, PWA installable)
+**Versi:** 2.3 — Sprint 2 tuntas (dataset N5, Curriculum Path + gerbang kana, kuota lintas track, listening)
 **Tanggal:** 6 Agustus 2026
-**Status:** Fase 0 berjalan — Sprint 1 **SELESAI** (§8.1), Sprint 2 berikutnya. Satu item blocking (§11.1).
+**Status:** Fase 0 berjalan — Sprint 1 dan Sprint 2 **SELESAI** (§8.1), Sprint 3 berikutnya. Satu item blocking (§11.1).
 
 ---
 
@@ -553,7 +553,7 @@ Tiap entry ditandai `"source": "openjlpt"` atau `"compiled"`. Cukup untuk Sprint
 | Sprint | Isi | Selesai kalau | Status |
 |---|---|---|---|
 | **1** | Setup, auth, migration 0001, seed konten, FSRS engine, modul kana + writing canvas + Lembar Kana (§6.6) | Bisa belajar kana sampai tuntas | ✅ **SELESAI** 6 Agustus 2026 |
-| **2** | Goal Engine, Curriculum Path + gate, N5 vocab & grammar, TTS listening | Kuota harian jalan otomatis | Berikutnya |
+| **2** | Goal Engine, Curriculum Path + gate, N5 vocab & grammar, TTS listening | Kuota harian jalan otomatis | ✅ **SELESAI** 6 Agustus 2026 (satu sisa: bunyi TTS nyata belum didengar di HP) |
 | **3** | N5 kanji + writing, ~~Family Dashboard~~ (dibatalkan — §6.5), offline sync | Dipakai harian oleh user awal | — |
 | **4** | Polish, perbaikan dari pemakaian nyata | Kriteria sukses §1.4 terpenuhi | — |
 
@@ -588,6 +588,32 @@ Komponen baru yang menopangnya: `SyncProvider` (sebelumnya `pullCards` dan `watc
 - Halaman `/tentang/` — atribusi lisensi, bisa diakses tanpa login
 - Edge Function `delete-account` (§4.1)
 - i18n dictionary — seluruh string UI di `src/lib/i18n/id.ts` (§9.3 untuk bahasa kedua)
+
+#### Sprint 2 — SELESAI
+
+Definisi selesainya: **kuota harian jalan otomatis** — bukan lagi kana saja, tapi
+terbagi ke seluruh track yang terbuka. Per 6 Agustus 2026 itu benar.
+
+| Bagian | Isi |
+|---|---|
+| **Dataset N5** | 662 kosakata · 79 kanji · 49 grammar, dibangun `npm run jlpt` (`scripts/fetch-jlpt.mjs`) dari OpenJLPT + 29 pattern susunan sendiri. Di-commit, bukan diunduh saat build. Atribusi di `licenses/openjlpt/`, NOTICE, dan `/tentang/` |
+| **Item generik** | `src/lib/items.ts` — satu bentuk `Item` untuk empat tipe; `modesForItem()` menentukan mode per TIPE, bukan per layar; dataset N5 dimuat `dynamic import` per prefix id, jadi orang di fase kana tak mengunduh sebyte pun (First Load JS tak berubah) |
+| **Curriculum Path** | `src/lib/path.ts` — `kanaGate()` 95% membuka tiga track N5; `splitQuota()` mendahulukan kana lalu membagi proporsional dengan **jaminan 1 slot per track** (662:79:49 pada kuota 8 membuat grammar nol selama berminggu-minggu); N5 baru dihitung ke `remainingNew` setelah gerbang terbuka |
+| **Wajah kartu** | `cardFaces()` — recall kosakata bertanya dari ARTI (bertanya dari bacaan = transliterasi, bukan recall); kanji menjawab dengan 訓/音; grammar membawa rumus bentukan; kata kana-murni menjawab dengan artinya |
+| **Listening** | `src/lib/tts.ts` — voice ja-JP perangkat, deteksi async (`getVoices()` kosong sampai `voiceschanged`). Kartu listening **tak pernah dibuat** di perangkat tanpa voice, dan yang due dari perangkat lain **ditahan**, bukan ditampilkan bisu. Kartu berbunyi sendiri saat tampil; tak ada teks Jepang sebelum reveal |
+| **Catch-up** | `catchUpOptions()` akhirnya dipakai: saat tertinggal atau pace melewati 2× baseline, Hari Ini menawarkan dua jalan setara berikut angkanya, dalam oker — bukan shu |
+
+**Bukti verifikasi:**
+
+- 160 test lolos, `tsc` bersih, `next build` (static export) sukses
+- Akun sintetis 208 kana kuat → gerbang terbuka → sesi **20 kartu = 5 kosakata × 3 mode + 2 kanji × 2 + 1 grammar**, urutan recognition → recall → listening; buka sesi kedua kali = nihil (jatah tak ganda). Akun dihapus, DB terverifikasi kembali ke 2 user nyata
+- Listening diuji dengan stub `speechSynthesis` yang merekam ucapan: auto-ucap tepat 1×/kartu, Putar lagi menambah 1, nol teks Jepang pra-reveal
+- Catch-up terverifikasi di akun pemilik yang memang tertinggal 8 kartu
+
+**Yang belum terverifikasi, dan tidak disembunyikan:** bunyi TTS sesungguhnya
+belum pernah didengar — butuh HP, bukan rig uji. Juga font: subset ~290 glyph
+tidak mencakup kosakata/kanji N5, jadi teks kartu N5 sementara memakai font
+Jepang bawaan perangkat.
 
 ### 8.2 Yang berubah di Fase 1 (Android)
 
@@ -645,14 +671,19 @@ Tipe akun ditentukan sekali saat registrasi dan repot diubah belakangan. Menunda
 Daftar prasyarat rilis publik yang sudah teridentifikasi tapi belum disentuh — supaya tidak baru ketahuan saat submit ke store:
 
 - **Rate-limit + proteksi bot** di jalur pendaftaran — begitu kode undangan dilepas, `redeem-invite` jadi endpoint publik yang tiap panggilannya mengirim email
-- **Dataset Sprint 2** — `vocab_n5.json`, `kanji_n5.json`, `grammar_n5.json` **belum ada sebagai berkas** (koreksi §7.1) dan belum ada tabel konten di DB (§5.6, menunggu §11.1). Kana satu-satunya track berisi. Peta lengkap N5→N1: `docs/PETA-MATERI.md`
-- **Mode listening** — kolom keempat di tabel §6.3 masih rencana; `MODE_RANK` sudah menyediakan tempatnya, tapi tidak ada layar yang membangkitkan kartunya
+- **Font untuk dataset** — subset ~290 glyph tidak mencakup kosakata & kanji N5, jadi teks kartu N5 memakai font Jepang bawaan perangkat. Sengaja ditunda sampai kartunya bisa dilihat di layar sungguhan; kalau hasilnya jelek, perluas subset atau muat font penuh khusus layar sesi
+- **Tabel konten di DB** — dataset kini berupa JSON bundel (dynamic import), yang justru membuatnya jalan offline sejak kunjungan pertama. `items`/`item_examples` (§5.6) tetap ditahan sampai schema N3 Japan Arena terlihat (§11.1)
 - **Privacy policy URL** — wajib untuk store listing di kedua store
 - **Tipe akun Play Console** — personal vs organization (§9.2), masih terbuka (§11)
 - **i18n bahasa kedua** — infrastrukturnya siap (file sibling `satisfies Dictionary`, hanya `src/lib/i18n/index.ts` yang berubah), tapi kamusnya belum ditulis
 - **Native shell Capacitor** — Fase 1/2 (§8.2, §8.3); storage adapter sudah dipisah sejak sekarang (§4.4)
 
-**Lunas 6 Agustus 2026:**
+**Lunas 6 Agustus 2026 (Sprint 2):**
+
+- ~~**Dataset N5**~~ — ✅ 662 kosakata · 79 kanji · 49 grammar di `src/data/`, dibangun `npm run jlpt`, atribusi lengkap (§7). Peta lengkap N5→N1: `docs/PETA-MATERI.md`
+- ~~**Mode listening**~~ — ✅ kolom keempat §6.3 hidup: `src/lib/tts.ts`, kartu hanya dibuat di perangkat yang bisa memainkannya. ⚠️ bunyi nyatanya belum didengar di HP
+
+**Lunas 6 Agustus 2026 (Sprint 1):**
 
 - ~~**Subset font Jepang**~~ — ✅ di-subset lewat `scripts/subset-fonts.mjs` (Google Fonts CSS API `text=`), hasilnya di-commit di `public/fonts/`: **6 berkas, 138 KB**, turun dari 865 berkas / 13,2 MB. `next/font/google` dihapus dari layout, diganti `@font-face` sungguhan di `globals.css`. Ini sekaligus perbaikan bug, bukan sekadar optimasi: `--font-gothic` menamai family literal sementara `next/font` mendaftarkan nama ber-hash, jadi tidak ada yang cocok — seluruh app selama berminggu-minggu dirender dengan system-ui dan 13,2 MB font itu diunduh serta di-precache untuk menggambar nol karakter. Dijaga `npm run fonts` + `npm run verify:fonts`
 - ~~**Ikon PNG 192/512**~~ — ✅ `icon-192.png`, `icon-512.png`, `icon-maskable-512.png`, dan `apple-touch-icon.png` di-commit, dihasilkan `npm run icons` (`scripts/render-icons.mjs`). Manifest memuat entri `any` dan `maskable` **terpisah**: menyatakan satu ikon sebagai `"any maskable"` memberi tahu Android bahwa gambar itu boleh dipotong bulat *sekaligus* dipakai apa adanya di tempat lain — hasilnya menyusut berpadding di tempat yang tidak memotong. "Add to Home Screen" sudah diuji, 10 syarat installable terpenuhi
