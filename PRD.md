@@ -505,14 +505,22 @@ Bagian dakuten/handakuten (25) dan youon (33) memakai grid terpisah di bawahnya 
 
 ## 7. Dataset & lisensi
 
+Peta materi lengkap N5→N1 — angka per level, mode kartu per jenis materi, gerbang,
+dan batas cakupan yang jujur — ada di **`docs/PETA-MATERI.md`** (dikunci 6 Agustus
+2026). Bagian ini hanya memuat dataset yang menyentuh repo.
+
 ### 7.1 Isi
 
-| File | Jumlah | Isi |
-|---|---|---|
-| `kana.json` | 208 | 104 hiragana + 104 katakana (basic 46, dakuten/handakuten 25, youon 33 per skrip) |
-| `vocab_n5.json` | 662 | expression, reading, meanings[], examples[] (JA+EN) |
-| `kanji_n5.json` | 79 | character, onyomi, kunyomi, meanings, strokes, grade, freq |
-| `grammar_n5.json` | 49 | pattern, meaning, formation, examples |
+| File | Jumlah | Status | Isi |
+|---|---|---|---|
+| `kana.json` | 208 | ✅ di repo | 104 hiragana + 104 katakana (basic 46, dakuten/handakuten 25, youon 33 per skrip) |
+| `vocab_n5.json` | 662 | **dibangun di Sprint 2** | expression, reading, meanings[], examples[] (JA+EN) |
+| `kanji_n5.json` | 79 | **dibangun di Sprint 2** | character, onyomi, kunyomi, meanings, strokes, grade, freq |
+| `grammar_n5.json` | 49 | **dibangun di Sprint 2** | pattern, meaning, formation, examples |
+
+> Koreksi 6 Agustus 2026: tiga file N5 sempat tercatat "sudah ada sebagai berkas" —
+> itu tidak benar; tidak pernah ada di repo. Angkanya adalah jumlah di sumber
+> (OpenJLPT), dan pekerjaan pertama Sprint 2 adalah skrip yang membangunnya.
 
 ### 7.2 Sumber
 
@@ -637,7 +645,7 @@ Tipe akun ditentukan sekali saat registrasi dan repot diubah belakangan. Menunda
 Daftar prasyarat rilis publik yang sudah teridentifikasi tapi belum disentuh — supaya tidak baru ketahuan saat submit ke store:
 
 - **Rate-limit + proteksi bot** di jalur pendaftaran — begitu kode undangan dilepas, `redeem-invite` jadi endpoint publik yang tiap panggilannya mengirim email
-- **Dataset Sprint 2** — `vocab_n5.json`, `kanji_n5.json`, `grammar_n5.json` sudah ada sebagai berkas tapi belum ada tabel konten di DB (§5.6, menunggu §11.1) dan belum tersentuh engine. Kana satu-satunya track berisi
+- **Dataset Sprint 2** — `vocab_n5.json`, `kanji_n5.json`, `grammar_n5.json` **belum ada sebagai berkas** (koreksi §7.1) dan belum ada tabel konten di DB (§5.6, menunggu §11.1). Kana satu-satunya track berisi. Peta lengkap N5→N1: `docs/PETA-MATERI.md`
 - **Mode listening** — kolom keempat di tabel §6.3 masih rencana; `MODE_RANK` sudah menyediakan tempatnya, tapi tidak ada layar yang membangkitkan kartunya
 - **Privacy policy URL** — wajib untuk store listing di kedua store
 - **Tipe akun Play Console** — personal vs organization (§9.2), masih terbuka (§11)
