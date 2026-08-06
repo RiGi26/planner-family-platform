@@ -136,7 +136,8 @@ export const id = {
     playLine: 'Dengarkan',
     notReviewed:
       'Percakapan dan contoh kalimat di unit ini disusun untuk Masume dan diperiksa mesin — hanya memakai materi yang sudah diajarkan. Belum diperiksa penutur asli.',
-    moreSoon: 'Unit berikutnya sedang disusun.',
+    moreSoon:
+      'Ini ujung jalur N5 — 26 unit, dari huruf pertama sampai たら/ても. Setelah ini: pemeriksaan penutur asli, lalu N4.',
   },
 
   sesi: {
