@@ -275,6 +275,9 @@ const files = [
   ['vocab_n5.json', vocab],
   ['kanji_n5.json', kanji],
   ['grammar_n5.json', grammar],
+  // The curriculum travels with the app: the guided path has to work offline,
+  // and it is the one file that decides what a person sees next.
+  ['units_n5.json', units],
 ]
 for (const [name, rows] of files) {
   const path = join(DATA, name)

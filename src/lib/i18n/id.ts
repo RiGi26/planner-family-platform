@@ -133,6 +133,8 @@ export const id = {
     promptProduce: 'Bahasa Jepangnya apa?',
     promptListening: 'Apa yang kamu dengar?',
     listenReplay: 'Putar lagi',
+    lessonLabel: 'Materi baru',
+    understood: 'Mengerti',
     badgeVocab: 'kosakata',
     badgeKanji: 'kanji',
     badgeGrammar: 'pola kalimat',

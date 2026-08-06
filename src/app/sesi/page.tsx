@@ -9,19 +9,21 @@ import { RequireGoal } from '@/components/require-goal'
 import { RatingButtons } from '@/components/rating-buttons'
 import { AnswerCells } from '@/components/sheet'
 import { clsx } from '@/lib/clsx'
-import { KANA, groupByItem } from '@/lib/curriculum'
+import { groupByItem } from '@/lib/curriculum'
 import { dueCards, localProgress } from '@/lib/db'
 import { localDate } from '@/lib/day'
 import { parseExamDate } from '@/lib/exam-dates'
 import { computeQuota } from '@/lib/goal-engine'
 import { fmt, useT } from '@/lib/i18n'
-import { itemMapFor, loadTrack, type Item } from '@/lib/items'
-import { introduceAcross, pathState, splitQuota, type Track } from '@/lib/path'
+import { itemMapFor, loadN5Items, loadUnits } from '@/lib/items'
+import { pathState } from '@/lib/path'
+import { currentUnit, unitRemaining } from '@/lib/units'
 import { overdueBefore } from '@/lib/progress'
 import { useGoal, useProfile } from '@/lib/queries'
 import {
   buildQueue,
   cardFaces,
+  lessonFace,
   currentCard,
   hintBudget,
   initSession,
@@ -99,21 +101,21 @@ function SessionScreen() {
       const cards = await localCards(user.id)
       const states = groupByItem(cards)
 
-      // The ladder: kana always, the N5 tracks once the gate is open. The gate
-      // is checked BEFORE loading N5 so a person still in the kana phase never
-      // downloads a byte of it.
+      // The guided path decides what comes next. The kana track keeps its own
+      // route through the Kana Sheet; the unit spine owns everything else, and
+      // a unit is a small finite list — there is nothing to apportion, only an
+      // order to follow.
       const gateCheck = pathState(cards, null)
-      const n5 = gateCheck.gate.open
-        ? {
-            vocab: await loadTrack('N5', 'vocab'),
-            kanji: await loadTrack('N5', 'kanji'),
-            grammar: await loadTrack('N5', 'grammar'),
-          }
-        : null
-      const path = n5 ? pathState(cards, n5) : gateCheck
+      const [units, n5Items] = await Promise.all([loadUnits(), loadN5Items()])
+      const unit = currentUnit(units, n5Items, states)
+      const unitLeft = unitRemaining(unit, n5Items, states)
+
+      // Kana still needs counting for the pace, because it is real work even
+      // though it is introduced through the sheet rather than through a unit.
+      const kanaLeft = gateCheck.remainingNew
 
       const quota = computeQuota({
-        remainingNew: path.remainingNew,
+        remainingNew: kanaLeft + unitLeft.length,
         dueToday: cards.filter((c) => new Date(c.due) <= new Date()).length,
         dueWriting: cards.filter((c) => c.mode === 'writing' && new Date(c.due) <= new Date())
           .length,
@@ -133,19 +135,9 @@ function SessionScreen() {
         ?.new_done_items ?? 0
       const allowance = Math.max(0, quota.newPerDay - introducedToday)
 
-      // Divide the allowance across open tracks and introduce per track — kana
-      // to completion first, then the N5 tracks in proportion, none starving.
-      const tracks: Track[] = [{ key: 'kana', items: KANA as Item[] }]
-      if (n5) {
-        tracks.push(
-          { key: 'vocab', items: n5.vocab },
-          { key: 'kanji', items: n5.kanji },
-          { key: 'grammar', items: n5.grammar },
-        )
-      }
-      const allotments = splitQuota(allowance, path.openTracks)
-      const perTrack = introduceAcross(tracks, states, allotments)
-      const fresh = perTrack.flatMap((t) => t.fresh)
+      // Today's new material: the next items of the current unit, in unit
+      // order. Kana arrives through the sheet, so it is not introduced here.
+      const fresh = unitLeft.slice(0, allowance)
 
       const prefs = {
         kanaWriting: profile?.writing_kana_enabled ?? true,
@@ -266,6 +258,21 @@ function SessionScreen() {
   }
 
   if (!card) return null
+
+  // A lesson is the opposite of a question card: everything on screen at once,
+  // no hints, no reveal, no rating. It exists so that nothing is ever asked
+  // before the app has taught it.
+  if (card.lesson) {
+    return (
+      <LessonCard
+        card={card}
+        index={state.index}
+        total={state.queue.length}
+        voice={voice ?? null}
+        onNext={() => setState(reduceSession(state, { kind: 'understood', at: Date.now() }).state)}
+      />
+    )
+  }
 
   const isRecognition = card.card.mode === 'recognition'
   const faces = cardFaces(card.item, card.card.mode)
@@ -429,6 +436,13 @@ function SessionScreen() {
                 const at = Date.now()
                 setRevealedAt(at)
                 setState(reduceSession(state, { kind: 'reveal', at }).state)
+                // Hearing the answer at the moment it appears is the cheapest
+                // listening practice there is, and kana had no sound at all
+                // until now — the layer the whole ladder starts from.
+                if (voice && card.card.mode !== 'listening') {
+                  const spoken = card.item.type === 'grammar' ? '' : card.item.reading
+                  if (spoken) speak(spoken, voice)
+                }
               }}
               className={clsx(
                 'flex min-h-[64px] touch-manipulation items-center justify-center rounded-[3px]',
@@ -439,6 +453,123 @@ function SessionScreen() {
             </button>
           </>
         )}
+      </footer>
+    </main>
+  )
+}
+
+/**
+ * The teaching card.
+ *
+ * Same shell as a question card — same paddings, same thumb-zone button — so the
+ * session keeps one rhythm and the change of purpose is carried by the content
+ * rather than by a different-looking screen. It speaks on arrival, because the
+ * first thing a learner needs from a new word is how it sounds.
+ */
+function LessonCard({
+  card,
+  index,
+  total,
+  voice,
+  onNext,
+}: {
+  card: SessionCard
+  index: number
+  total: number
+  voice: SpeechSynthesisVoice | null
+  onNext: () => void
+}) {
+  const t = useT()
+  const face = lessonFace(card.item)
+
+  useEffect(() => {
+    if (voice && face.speak) speak(face.speak, voice)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [card.item.id, voice])
+
+  const len = [...face.expression].length
+  const size =
+    len <= 2
+      ? 'text-[88px] leading-none sm:text-[120px]'
+      : len <= 6
+        ? 'text-[52px] leading-none sm:text-[72px]'
+        : 'max-w-[340px] text-center text-[34px] leading-tight sm:text-[44px]'
+
+  return (
+    <main
+      className="flex h-dvh flex-col overflow-hidden overscroll-contain px-5"
+      style={{
+        paddingTop: 'calc(var(--spacing-safe-top) + 12px)',
+        paddingBottom: 'calc(var(--spacing-safe-bottom) + 16px)',
+      }}
+    >
+      <header className="flex items-center justify-between">
+        <span className="tnum text-[12px] text-ink-faint">
+          {fmt(t.sesi.progress, { done: index + 1, total })}
+        </span>
+        <Link href="/" className="-my-3 inline-flex min-h-tap items-center text-[13px] text-ai">
+          {t.sesi.quit}
+        </Link>
+      </header>
+
+      <section className="flex min-h-0 flex-1 flex-col items-center justify-center gap-5 overflow-y-auto py-4">
+        <p className="text-[12px] tracking-[0.14em] text-ai uppercase">{t.sesi.lessonLabel}</p>
+
+        <p className={clsx('tnum text-ink', size)}>{face.expression}</p>
+
+        {face.reading ? (
+          <p className="tnum text-[24px] leading-none text-ink-muted sm:text-[30px]">
+            {face.reading}
+          </p>
+        ) : null}
+
+        <p className="max-w-[340px] text-center text-[18px] leading-snug text-shu">
+          {face.meaning}
+        </p>
+
+        {face.detail.length > 0 ? (
+          <div className="flex flex-col items-center gap-1">
+            {face.detail.map((d) => (
+              <p key={d} className="text-center text-[13px] leading-relaxed text-ink-muted">
+                {d}
+              </p>
+            ))}
+          </div>
+        ) : null}
+
+        {voice && face.speak ? (
+          <button
+            type="button"
+            onClick={() => speak(face.speak, voice)}
+            className="flex min-h-tap touch-manipulation items-center gap-2 rounded-[3px] border border-rule px-5 text-[14px] text-ink-muted"
+          >
+            <svg
+              aria-hidden
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
+              <path d="M15.54 8.46a5 5 0 0 1 0 7.07" />
+            </svg>
+            {t.sesi.listenReplay}
+          </button>
+        ) : null}
+      </section>
+
+      <footer>
+        <button
+          type="button"
+          onClick={onNext}
+          className="flex min-h-[64px] w-full touch-manipulation items-center justify-center rounded-[3px] bg-shu px-4 text-[15px] font-medium text-paper-raised"
+        >
+          {t.sesi.understood}
+        </button>
       </footer>
     </main>
   )

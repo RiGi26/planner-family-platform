@@ -15,6 +15,16 @@ export type SessionCard = {
   item: Item
   /** Introduced today. Counted against the new-card quota, not the review count. */
   isNew: boolean
+  /**
+   * A teaching card, not a question: the item is shown with its reading, meaning
+   * and sound, and answered with "Mengerti" — no rating, no review row.
+   *
+   * The app used to open by asking what あ reads as, to someone who had never
+   * seen あ. That is not a test, it is a guess, and the "Lupa" it produces is not
+   * memory data because nothing ever went in. One rule now: nothing is asked
+   * before it has been taught.
+   */
+  lesson?: boolean
 }
 
 /**
@@ -125,7 +135,21 @@ export function buildQueue(input: BuildQueueInput): BuiltQueue {
     (a, b) => a.item.seq - b.item.seq || (a.card.id < b.card.id ? -1 : 1),
   )
 
-  return { queue: [...reviews, ...fresh], canvas, skipped }
+  // One lesson per newly-introduced ITEM, ahead of every question about it.
+  // Keyed by item rather than card: あ gets taught once, then asked as
+  // recognition and as recall — being taught twice would be padding.
+  const lessons: SessionCard[] = []
+  const taught = new Set<string>()
+  for (const c of fresh) {
+    if (taught.has(c.item.id)) continue
+    taught.add(c.item.id)
+    lessons.push({ ...c, lesson: true })
+  }
+  lessons.sort((a, b) => a.item.seq - b.item.seq || (a.item.id < b.item.id ? -1 : 1))
+
+  // Reviews first (a debt), then today's lessons, then the questions those
+  // lessons just made answerable.
+  return { queue: [...reviews, ...lessons, ...fresh], canvas, skipped }
 }
 
 // ---------------------------------------------------------------------------
@@ -170,6 +194,8 @@ export type SessionEvent =
   | { kind: 'reveal'; at: number }
   | { kind: 'hint' }
   | { kind: 'rate'; rating: UserRating; at: number }
+  /** "Mengerti" on a lesson card: move on, record nothing. */
+  | { kind: 'understood'; at: number }
 
 /** What the screen must persist. Returned rather than performed, to stay pure. */
 export type SaveEffect = AnsweredCard
@@ -214,6 +240,24 @@ export function reduceSession(
   if (!card) return { state }
 
   switch (event.kind) {
+    case 'understood': {
+      // A lesson is not an answer: nothing is rated, nothing is logged, the
+      // schedule does not move. Its only job is to have happened before the
+      // questions that follow it.
+      if (!card.lesson) return { state }
+      const index = state.index + 1
+      return {
+        state: {
+          ...state,
+          index,
+          revealed: false,
+          hintsUsed: 0,
+          shownAt: event.at,
+          phase: index >= state.queue.length ? 'done' : 'card',
+        },
+      }
+    }
+
     case 'reveal':
       if (state.revealed) return { state }
       return { state: { ...state, revealed: true } }
@@ -225,8 +269,9 @@ export function reduceSession(
     }
 
     case 'rate': {
-      // Rating without looking is not an answer, it is a mis-tap.
-      if (!state.revealed) return { state }
+      // Rating without looking is not an answer, it is a mis-tap. A lesson card
+      // has no rating at all.
+      if (!state.revealed || card.lesson) return { state }
 
       const mode = card.card.mode as Exclude<CardMode, 'writing'>
       const effect: SaveEffect = {
@@ -295,6 +340,53 @@ export type Faces = {
 }
 
 const asList = (v: unknown): string[] => (Array.isArray(v) ? (v as string[]) : [])
+
+/**
+ * The teaching face: everything at once, nothing hidden.
+ *
+ * The opposite of a question card by construction — no hint budget, no reveal,
+ * no answer cells. Whatever the learner needs in order to be asked later is on
+ * screen now: the form, how it sounds, what it means, and for a kanji its
+ * readings, for a verb its group.
+ */
+export function lessonFace(item: Item): {
+  expression: string
+  reading: string
+  meaning: string
+  detail: string[]
+  /** Text to speak. Empty when there is nothing sensible to pronounce. */
+  speak: string
+} {
+  const detail: string[] = []
+
+  if (item.type === 'kanji') {
+    const kun = asList(item.data.kunyomi).join('・')
+    const on = asList(item.data.onyomi).join('・')
+    if (kun) detail.push(`訓 ${kun}`)
+    if (on) detail.push(`音 ${on}`)
+  }
+  if (item.type === 'vocab' && typeof item.data.verb_group === 'string') {
+    detail.push(
+      item.data.verb_group === 'godan'
+        ? 'kata kerja golongan I (godan)'
+        : item.data.verb_group === 'ichidan'
+          ? 'kata kerja golongan II (ichidan)'
+          : 'kata kerja tak beraturan',
+    )
+  }
+  if (item.type === 'grammar' && typeof item.data.formation === 'string') {
+    detail.push(item.data.formation)
+  }
+
+  return {
+    expression: item.expression,
+    reading: item.reading && item.reading !== item.expression ? item.reading : '',
+    meaning: item.meanings.join('; '),
+    detail,
+    // Grammar patterns start with 〜 and read badly aloud; the rest are words.
+    speak: item.type === 'grammar' ? '' : item.reading || item.expression,
+  }
+}
 
 export function cardFaces(item: Item, mode: CardMode): Faces {
   const meanings = item.meanings.join('; ')

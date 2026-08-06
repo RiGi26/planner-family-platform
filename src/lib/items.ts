@@ -116,6 +116,24 @@ export async function itemMapFor(itemIds: Iterable<string>): Promise<Map<string,
   return map
 }
 
+/** The unit curriculum. Loaded on demand — the path screen and the session. */
+export async function loadUnits() {
+  const m = await import('@/data/units_n5.json')
+  return m.default as unknown as import('./units').Unit[]
+}
+
+/** Every N5 item, keyed by id — what a unit's item ids resolve against. */
+export async function loadN5Items(): Promise<Map<string, Item>> {
+  const [vocab, kanji, grammar] = await Promise.all([
+    loadTrack('N5', 'vocab'),
+    loadTrack('N5', 'kanji'),
+    loadTrack('N5', 'grammar'),
+  ])
+  const map = new Map<string, Item>()
+  for (const item of [...vocab, ...kanji, ...grammar]) map.set(item.id, item)
+  return map
+}
+
 /** One full track of a level, in curriculum order — for the path screen. */
 export async function loadTrack(
   level: 'N5',

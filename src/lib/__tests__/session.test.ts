@@ -33,12 +33,38 @@ function build(due: CardStateRow[], introduced: CardStateRow[] = []) {
   return buildQueue({ due, introduced, items })
 }
 
+/** The questions only — lesson cards filtered out, for the ordering assertions. */
+function questions(built: ReturnType<typeof build>) {
+  return built.queue.filter((c) => !c.lesson)
+}
+
 describe('buildQueue', () => {
   it('puts reviews before new cards, because a review is a debt', () => {
     const review = card(i, 'recognition', '2026-08-04T09:00:00Z')
     const fresh = card(a, 'recognition')
     const built = build([review], [fresh])
-    expect(built.queue.map((c) => c.card.id)).toEqual([review.id, fresh.id])
+    expect(questions(built).map((c) => c.card.id)).toEqual([review.id, fresh.id])
+  })
+
+  it('teaches an item before asking about it, and only once', () => {
+    // The failure this exists to prevent: card one asking what あ reads as, to
+    // someone who has never seen あ. A "Lupa" there is not memory data.
+    const fresh = [card(a, 'recognition'), card(a, 'recall'), card(i, 'recognition')]
+    const built = build([], fresh)
+
+    const firstLesson = built.queue.findIndex((c) => c.lesson)
+    const firstQuestion = built.queue.findIndex((c) => !c.lesson)
+    expect(firstLesson).toBe(0)
+    expect(firstLesson).toBeLessThan(firstQuestion)
+
+    // One lesson per ITEM, not per card: あ has two cards but is taught once.
+    const taught = built.queue.filter((c) => c.lesson).map((c) => c.item.id)
+    expect(taught).toEqual([a.id, i.id])
+  })
+
+  it('does not teach a card that is merely due — only newly introduced items', () => {
+    const review = card(a, 'recognition', '2026-08-04T09:00:00Z')
+    expect(build([review]).queue.some((c) => c.lesson)).toBe(false)
   })
 
   it('orders reviews by how long they have been waiting', () => {
@@ -56,7 +82,7 @@ describe('buildQueue', () => {
       card(i, 'recognition'),
       card(i, 'recall'),
     ]
-    const modes = build([], fresh).queue.map((c) => c.card.mode)
+    const modes = questions(build([], fresh)).map((c) => c.card.mode)
     expect(modes).toEqual(['recognition', 'recognition', 'recall', 'recall'])
   })
 
@@ -87,7 +113,10 @@ describe('buildQueue', () => {
 
   it('asks a card once even when it is both due and just introduced', () => {
     const both = card(a, 'recognition')
-    expect(build([both], [both]).queue).toHaveLength(1)
+    const built = build([both], [both])
+    expect(questions(built)).toHaveLength(1)
+    // Newly introduced, so it is taught first — once.
+    expect(built.queue.filter((c) => c.lesson)).toHaveLength(1)
   })
 })
 
