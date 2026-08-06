@@ -431,13 +431,18 @@ Two smaller rules with sharp edges:
 
 The static payload is part of the offline story, so it belongs here.
 
-**Fonts are self-hosted and subset.** `scripts/subset-fonts.mjs` pulls exactly the
-glyphs the app uses through the Google Fonts CSS API (`text=`), and the result is
-committed: six woff2 files, 138 KB, down from 865 files and 13.2 MB.
-`next/font/google` is gone from the layout, replaced by real `@font-face` rules in
-`globals.css`. That was a bug fix rather than a size optimisation — see the traps
-table. Only the body face is preloaded; preloading all six would repeat the mistake
-at a smaller scale. `npm run fonts` regenerates, `npm run verify:fonts` checks.
+**Fonts are self-hosted and subset — locally, by HarfBuzz.** The first mechanism
+(Google Fonts CSS API, `text=`) hit its structural ceiling the day the N5
+datasets joined the glyph sweep: past a thousand glyphs the URL outgrows what
+the API accepts, and Google silently answers the full 121-block family — the
+assertion built for exactly that failure fired. `scripts/subset-fonts.mjs` now
+downloads the full TTFs from the google/fonts repo and cuts them with
+`subset-font` (HarfBuzz as wasm — no native binary). Two glyph sets: the gothic
+body face carries everything including the datasets (1057 glyphs); mincho and
+mono carry the UI sweep only (364) — they draw decorative kanji and digits, and
+a thousand CJK glyphs each would triple the payload to draw nothing. Result:
+six woff2 files, 469 KB, each checked against its own set by
+`npm run verify:fonts`. Only the body face is preloaded.
 
 **Icons are committed rasters**, produced by `npm run icons`
 (`scripts/render-icons.mjs`): `icon-192.png`, `icon-512.png`,
@@ -561,6 +566,9 @@ table: **the symptom does not point at the cause.**
 | **A component surviving a navigation it should not** | The Kana Sheet appeared to hang: finish a cell, press Simpan, the row strip advances and the practice area freezes on the previous character's score. Worse than the freeze, the still-live Simpan button held the *previous* result, so a second press wrote the old character's strokes into the new cell and recorded a review nobody performed. `router.replace` changes the query string, not the component identity | `key={item.id}` on `WritingPractice`, so moving cells is a real remount, plus a `saving` guard against the double press |
 | **A server-only read behind a local-first write** | The same sheet, one cell behind itself. `recordKanaCell` lands in Dexie immediately while `pushPending()` is fire-and-forget, so the refetch raced the upload — and the writing screen picked *the next unwritten cell* from that same stale map, which after a row's last cell could point back at one already written | `useKanaSheet` layers local Dexie rows over the server map, local winning per item. Reading the sheet works offline now too, which the server-only version never did |
 | **`208 - states.size` as "how much is left"** | Correct for exactly as long as kana is the only content. The day an N5 card could exist, the number quietly counted N5 items against the kana total and the daily pace drifted | `pathState()` computes `remainingNew` from the open tracks, and both screens that print a pace call it |
+| **A toggle for a screen that does not exist** | The kanji-writing switch in Setelan saved fine, `modesForItem` obeyed it, the session split the cards out — and `/menulis/` could never open one, so an unanswerable card would sit in FSRS being rescheduled forever. Every layer worked; the sum was a trap | Toggle rendered disabled with an honest note, and `modesForItem` ignores the pref outright until Sprint 3 — the second guard, for stale bundles that still carry it as true. Production checked: zero stray cards |
+| **A promise frozen at what the row was born with** | A day read "4 / 0" — four answers against a target of zero. The daily row was created by writing practice, which carries no quota, and the old "record only if no row exists" guard meant the session that later built a real queue could never raise it | `bumpProgress` takes the max — the promise is revised up when new work appears, never down — and Hari Ini clamps target to done as the second layer |
+| **`text=` silently ignored past the URL limit** | Adding the datasets grew the glyph set past a thousand; the subset request URL outgrew what the Google Fonts CSS API accepts, and it answered the full 121-block sliced family without an error. Everything downstream still "worked" while heading back towards 13 MB | The one-`@font-face` assertion caught it before it shipped. Subsetting moved local (HarfBuzz via `subset-font`) — the ceiling was structural, since every JLPT level adds glyphs |
 
 ---
 
@@ -579,10 +587,6 @@ Stated plainly so the diagrams are not read as a description of finished work.
   `items` and `item_examples` remain unwritten migrations, held deliberately
   until the Japan Arena N3 schema has been seen — locking the shape first is how
   you earn a second migration
-- **Fonts do not cover the datasets.** The subset holds ~290 glyphs: kana, the
-  UI's kanji, latin. N5 vocabulary and kanji fall back to whatever Japanese font
-  the device has, which on Windows and Android is not always the one the design
-  assumes. Deliberately left until the cards could be looked at on a real screen
 - **N4 through N1.** The ladder is level-agnostic by construction; each level is
   a dataset build plus a gate, not new machinery. `docs/PETA-MATERI.md` holds
   the full map with per-figure honesty labels

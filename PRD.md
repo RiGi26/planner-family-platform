@@ -671,12 +671,17 @@ Tipe akun ditentukan sekali saat registrasi dan repot diubah belakangan. Menunda
 Daftar prasyarat rilis publik yang sudah teridentifikasi tapi belum disentuh — supaya tidak baru ketahuan saat submit ke store:
 
 - **Rate-limit + proteksi bot** di jalur pendaftaran — begitu kode undangan dilepas, `redeem-invite` jadi endpoint publik yang tiap panggilannya mengirim email
-- **Font untuk dataset** — subset ~290 glyph tidak mencakup kosakata & kanji N5, jadi teks kartu N5 memakai font Jepang bawaan perangkat. Sengaja ditunda sampai kartunya bisa dilihat di layar sungguhan; kalau hasilnya jelek, perluas subset atau muat font penuh khusus layar sesi
 - **Tabel konten di DB** — dataset kini berupa JSON bundel (dynamic import), yang justru membuatnya jalan offline sejak kunjungan pertama. `items`/`item_examples` (§5.6) tetap ditahan sampai schema N3 Japan Arena terlihat (§11.1)
 - **Privacy policy URL** — wajib untuk store listing di kedua store
 - **Tipe akun Play Console** — personal vs organization (§9.2), masih terbuka (§11)
 - **i18n bahasa kedua** — infrastrukturnya siap (file sibling `satisfies Dictionary`, hanya `src/lib/i18n/index.ts` yang berubah), tapi kamusnya belum ditulis
 - **Native shell Capacitor** — Fase 1/2 (§8.2, §8.3); storage adapter sudah dipisah sejak sekarang (§4.4)
+
+**Lunas 6 Agustus 2026 (pasca-Sprint 2, penutupan lubang):**
+
+- ~~**Font untuk dataset**~~ — ✅ subsetting pindah lokal (HarfBuzz via `subset-font`; mekanisme `text=` mentok struktural di >1.000 glyph dan diam-diam menjawab keluarga penuh — tertangkap asersi). Gothic memuat 1.057 glyph termasuk contoh kalimat; mincho/mono cukup set UI (364). Total 469 KB — di bawah anggaran lama. Dibuktikan `document.fonts.check` di produksi
+- ~~**Jebakan toggle kanji writing**~~ — ✅ toggle dinonaktifkan + `modesForItem` mengabaikan pref sampai Sprint 3; nol kartu liar di produksi
+- ~~**Hari "4 / 0"**~~ — ✅ `quota_target` kini revisi-naik + klem tampilan
 
 **Lunas 6 Agustus 2026 (Sprint 2):**
 
