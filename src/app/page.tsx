@@ -83,7 +83,7 @@ function TodayScreen() {
   const target = todayRow?.quota_target ?? due.filter((c) => c.mode !== 'writing').length
   const remaining = Math.max(0, target - done)
 
-  const state = dayState({ dueRemaining: remaining, overdue, quota })
+  const state = dayState({ dueRemaining: remaining, overdue, quota, doneToday: done })
   const writingDue = due.filter((c) => c.mode === 'writing').length
 
   const kana = (['basic', 'dakuten', 'youon'] as const).reduce(

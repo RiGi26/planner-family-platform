@@ -223,6 +223,39 @@ export async function pullCards(userId: string): Promise<number> {
   return rows.length
 }
 
+/**
+ * Pulls the daily record back down.
+ *
+ * The queue had a push side and no pull side, so the streak strip read zero on
+ * any device that had not personally written the rows — a new phone showed a
+ * week of empty squares over days the person had actually studied.
+ *
+ * Only the last few weeks: the strip shows seven days, and the whole history is
+ * never the answer to a question about this week.
+ */
+export async function pullProgress(userId: string): Promise<number> {
+  const sb = await client()
+  const since = new Date(Date.now() - 30 * 86_400_000).toISOString().slice(0, 10)
+  const { data, error } = await sb
+    .from('daily_progress')
+    .select('user_id, date, new_done, review_done, minutes, quota_target')
+    .eq('user_id', userId)
+    .gte('date', since)
+  if (error) throw error
+
+  const rows = (data ?? []) as Omit<DailyProgressRow, 'ms'>[]
+  // Local rows may hold counts that have not been uploaded yet, so the server
+  // never overwrites them — and `ms`, which is local-only, survives.
+  const local = await db.dailyProgress.toArray()
+  const byDate = new Map(local.map((r) => [r.date, r]))
+  const merged = rows
+    .filter((r) => !byDate.has(r.date))
+    .map((r) => ({ ...r, ms: (r.minutes ?? 0) * 60_000 }))
+
+  if (merged.length > 0) await db.dailyProgress.bulkPut(merged)
+  return merged.length
+}
+
 export async function pushPending() {
   return syncPending((await client()) as never)
 }

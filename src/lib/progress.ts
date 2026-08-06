@@ -54,11 +54,30 @@ export type DayState = 'selesai' | 'onTrack' | 'tertinggal'
  * today is unfinished. Someone opening the app at 7am has done nothing yet and
  * is not behind. The design rule follows from this: behind is drawn in oker,
  * never shu, so falling behind never reads as an error.
+ *
+ * `selesai` means the work that existed got finished — NOT that nothing happens
+ * to be due this second. The distinction is the difference between a reward and
+ * a lie: an account that has just onboarded has no cards yet, so "nothing due"
+ * is true of it, and the first screen it ever showed stamped 済 over a day with
+ * no work in it and hid the only button that could start one. New material that
+ * has not been introduced yet is work, and `newPerDay` is where it lives.
  */
-export function dayState(input: { dueRemaining: number; overdue: number; quota: Quota }): DayState {
+export function dayState(input: {
+  dueRemaining: number
+  overdue: number
+  quota: Quota
+  /** Cards answered today. Distinguishes "finished" from "never started". */
+  doneToday: number
+}): DayState {
   if (input.overdue > 0) return 'tertinggal'
+
+  // Nothing due and nothing left to release: a genuinely empty day, which the
+  // review buffer produces on purpose near the exam.
   if (input.dueRemaining === 0 && input.quota.newPerDay === 0) return 'selesai'
-  if (input.dueRemaining === 0) return 'selesai'
+
+  // Cleared what was asked, having actually been asked something.
+  if (input.dueRemaining === 0 && input.doneToday > 0) return 'selesai'
+
   return 'onTrack'
 }
 

@@ -66,21 +66,46 @@ describe('weekTicks', () => {
 
 describe('dayState', () => {
   it('is behind when work has rolled over from an earlier day', () => {
-    expect(dayState({ dueRemaining: 12, overdue: 5, quota: quota() })).toBe('tertinggal')
+    expect(dayState({ dueRemaining: 12, overdue: 5, quota: quota(), doneToday: 0 })).toBe(
+      'tertinggal',
+    )
   })
 
   it('is on track when today is merely unfinished', () => {
     // Someone opening the app at 7am has done nothing yet and is not behind.
-    expect(dayState({ dueRemaining: 12, overdue: 0, quota: quota() })).toBe('onTrack')
+    expect(dayState({ dueRemaining: 12, overdue: 0, quota: quota(), doneToday: 0 })).toBe('onTrack')
   })
 
-  it('is done when nothing is left due', () => {
-    expect(dayState({ dueRemaining: 0, overdue: 0, quota: quota() })).toBe('selesai')
+  it('is done when the work that existed was cleared', () => {
+    expect(dayState({ dueRemaining: 0, overdue: 0, quota: quota(), doneToday: 6 })).toBe('selesai')
+  })
+
+  it('does NOT congratulate an account that has never studied', () => {
+    // A freshly onboarded account owns no cards, so nothing is due — and the
+    // first screen it ever showed used to stamp the day complete and hide the
+    // only button that could start a session. New material not yet introduced is
+    // work, and newPerDay is where that work lives.
+    expect(
+      dayState({ dueRemaining: 0, overdue: 0, quota: quota({ newPerDay: 3 }), doneToday: 0 }),
+    ).toBe('onTrack')
+  })
+
+  it('is done on a genuinely empty day, such as inside the review buffer', () => {
+    expect(
+      dayState({
+        dueRemaining: 0,
+        overdue: 0,
+        quota: quota({ newPerDay: 0, inBufferPhase: true }),
+        doneToday: 0,
+      }),
+    ).toBe('selesai')
   })
 
   it('prefers behind over done when both could apply', () => {
     // Overdue cards outrank an empty due list: the debt is the more useful truth.
-    expect(dayState({ dueRemaining: 0, overdue: 3, quota: quota() })).toBe('tertinggal')
+    expect(dayState({ dueRemaining: 0, overdue: 3, quota: quota(), doneToday: 9 })).toBe(
+      'tertinggal',
+    )
   })
 })
 

@@ -3,7 +3,7 @@
 import { useEffect } from 'react'
 import { useSession } from '@/components/auth-provider'
 import { clearAll, db, watchForSync } from '@/lib/db'
-import { pullCards, pushPending } from '@/lib/study'
+import { pullCards, pullProgress, pushPending } from '@/lib/study'
 
 /**
  * Owns the lifecycle of the local database: wipe it when the account changes,
@@ -55,6 +55,7 @@ async function guardLocalData(userId: string) {
 async function syncBoth(userId: string) {
   await pushPending()
   await pullCards(userId)
+  await pullProgress(userId)
 }
 
 export function SyncProvider({ children }: { children: React.ReactNode }) {
