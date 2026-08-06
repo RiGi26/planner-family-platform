@@ -18,7 +18,8 @@
     "kvg": "node scripts/fetch-kanjivg.mjs",
     "kana": "node scripts/generate-kana.mjs",
     "fonts": "node scripts/subset-fonts.mjs",
-    "icons": "node scripts/render-icons.mjs"
+    "icons": "node scripts/render-icons.mjs",
+    "jlpt": "node scripts/fetch-jlpt.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.58.0",

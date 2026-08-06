@@ -82,6 +82,22 @@ export default function AboutPage() {
         </ul>
       </Section>
 
+      <Section heading={t.tentang.jlptHeading}>
+        <p className="text-[14px] leading-relaxed text-ink-muted">{t.tentang.jlptBody}</p>
+        <ul className="mt-3 flex flex-col gap-1 text-[14px]">
+          <li>
+            <ExternalLink href="https://github.com/evanclan/OpenJLPT">
+              {t.tentang.jlptSite}
+            </ExternalLink>
+          </li>
+          <li>
+            <ExternalLink href="https://creativecommons.org/licenses/by-sa/4.0/">
+              {t.tentang.jlptLicense}
+            </ExternalLink>
+          </li>
+        </ul>
+      </Section>
+
       <Section heading={t.tentang.fontsHeading}>
         <p className="text-[14px] leading-relaxed text-ink-muted">{t.tentang.fontsBody}</p>
         <p className="mt-3 text-[14px]">

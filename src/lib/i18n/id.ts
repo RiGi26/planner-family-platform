@@ -313,9 +313,14 @@ export const id = {
     appRepo: 'Kode sumber di GitHub',
     dataHeading: 'Data urutan goresan',
     kanjivgBody:
-      'Data urutan goresan berasal dari KanjiVG © Ulrich Apel dan kontributor, dilisensikan di bawah Creative Commons Attribution-ShareAlike 3.0. Masume memakai subset 150 karakter; path goresannya tidak diubah. Data turunannya mengikuti lisensi yang sama.',
+      'Data urutan goresan berasal dari KanjiVG © Ulrich Apel dan kontributor, dilisensikan di bawah Creative Commons Attribution-ShareAlike 3.0. Masume memakai subset karakter yang digambarnya; path goresannya tidak diubah. Data turunannya mengikuti lisensi yang sama.',
     kanjivgSite: 'Situs KanjiVG',
     kanjivgLicense: 'Teks lisensi CC BY-SA 3.0',
+    jlptHeading: 'Data kosakata, kanji & grammar',
+    jlptBody:
+      'Dataset N5 berasal dari OpenJLPT, dilisensikan di bawah Creative Commons Attribution-ShareAlike 4.0 — disusun dari JMdict & KANJIDIC2 (EDRDG), daftar level Jonathan Waller (tanos.co.uk), dan contoh kalimat Tatoeba. Entri dibentuk ulang ke format aplikasi ini; data turunannya mengikuti lisensi yang sama. Sebagian pattern grammar disusun sendiri untuk Masume dan ditandai di datanya.',
+    jlptSite: 'OpenJLPT di GitHub',
+    jlptLicense: 'Teks lisensi CC BY-SA 4.0',
     fontsHeading: 'Huruf',
     fontsBody:
       'Masume memakai Zen Kaku Gothic New, Zen Old Mincho, dan IBM Plex Mono — ketiganya di bawah SIL Open Font License 1.1. Berkasnya dipangkas hanya berisi huruf yang dipakai aplikasi ini; selain itu tidak diubah, dan namanya tidak diganti.',

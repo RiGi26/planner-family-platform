@@ -1,0 +1,292 @@
+[
+  {
+    "pattern": "〜は",
+    "meaning": "topic marker — as for ...",
+    "formation": "Noun + は + comment",
+    "examples": [
+      { "ja": "わたしは学生です。", "en": "I am a student." },
+      { "ja": "この本は面白いです。", "en": "This book is interesting." }
+    ],
+    "tags": ["particle"]
+  },
+  {
+    "pattern": "〜も",
+    "meaning": "also; too",
+    "formation": "Noun + も (replaces は/が/を)",
+    "examples": [
+      { "ja": "わたしも行きます。", "en": "I will go too." },
+      { "ja": "田中さんは先生です。山田さんも先生です。", "en": "Tanaka is a teacher. Yamada is also a teacher." }
+    ],
+    "tags": ["particle"]
+  },
+  {
+    "pattern": "〜の",
+    "meaning": "possessive; noun linking — 's / of",
+    "formation": "Noun A + の + Noun B",
+    "examples": [
+      { "ja": "これはわたしの本です。", "en": "This is my book." },
+      { "ja": "日本語の先生はやさしいです。", "en": "The Japanese teacher is kind." }
+    ],
+    "tags": ["particle"]
+  },
+  {
+    "pattern": "〜か",
+    "meaning": "question particle",
+    "formation": "Sentence + か",
+    "examples": [
+      { "ja": "これはペンですか。", "en": "Is this a pen?" },
+      { "ja": "明日学校へ行きますか。", "en": "Will you go to school tomorrow?" }
+    ],
+    "tags": ["particle"]
+  },
+  {
+    "pattern": "〜へ",
+    "meaning": "direction marker — to; toward",
+    "formation": "Place + へ + motion verb",
+    "examples": [
+      { "ja": "日本へ行きます。", "en": "I will go to Japan." },
+      { "ja": "うちへ帰ります。", "en": "I am going home." }
+    ],
+    "tags": ["particle"]
+  },
+  {
+    "pattern": "〜や〜（など）",
+    "meaning": "non-exhaustive listing — things like A and B",
+    "formation": "Noun A + や + Noun B (+ など)",
+    "examples": [
+      { "ja": "机の上に本やペンがあります。", "en": "There are books, pens, and such on the desk." },
+      { "ja": "りんごやバナナなどを買いました。", "en": "I bought apples, bananas, and so on." }
+    ],
+    "tags": ["particle"]
+  },
+  {
+    "pattern": "〜ね",
+    "meaning": "sentence-ending particle — isn't it?; right? (seeking agreement)",
+    "formation": "Sentence + ね",
+    "examples": [
+      { "ja": "今日は暑いですね。", "en": "It's hot today, isn't it?" },
+      { "ja": "この料理はおいしいですね。", "en": "This food is delicious, isn't it?" }
+    ],
+    "tags": ["particle", "spoken"]
+  },
+  {
+    "pattern": "〜よ",
+    "meaning": "sentence-ending particle — you know; I tell you (new information / emphasis)",
+    "formation": "Sentence + よ",
+    "examples": [
+      { "ja": "この店は安いですよ。", "en": "This shop is cheap, you know." },
+      { "ja": "バスはもう出ましたよ。", "en": "The bus has already left, I tell you." }
+    ],
+    "tags": ["particle", "spoken"]
+  },
+  {
+    "pattern": "い形容詞の活用（〜くない／〜かった／〜くなかった）",
+    "meaning": "i-adjective conjugation — negative, past, past negative",
+    "formation": "高い → 高くない → 高かった → 高くなかった",
+    "examples": [
+      { "ja": "この靴は高くないです。", "en": "These shoes are not expensive." },
+      { "ja": "昨日は寒かったです。", "en": "It was cold yesterday." }
+    ],
+    "tags": ["adjective", "conjugation"]
+  },
+  {
+    "pattern": "な形容詞＋です／じゃありません",
+    "meaning": "na-adjective predicate — is / is not",
+    "formation": "な-adj + です ／ な-adj + じゃありません",
+    "examples": [
+      { "ja": "この町は静かです。", "en": "This town is quiet." },
+      { "ja": "その部屋はきれいじゃありません。", "en": "That room is not clean." }
+    ],
+    "tags": ["adjective", "conjugation"]
+  },
+  {
+    "pattern": "〜ました／〜ませんでした",
+    "meaning": "polite past — did / did not do",
+    "formation": "Verb stem + ました ／ ませんでした",
+    "examples": [
+      { "ja": "昨日映画を見ました。", "en": "I watched a movie yesterday." },
+      { "ja": "朝ごはんを食べませんでした。", "en": "I did not eat breakfast." }
+    ],
+    "tags": ["verb", "conjugation", "polite"]
+  },
+  {
+    "pattern": "〜ません",
+    "meaning": "polite negative — do not do",
+    "formation": "Verb stem + ません",
+    "examples": [
+      { "ja": "お酒を飲みません。", "en": "I do not drink alcohol." },
+      { "ja": "今日は勉強しません。", "en": "I will not study today." }
+    ],
+    "tags": ["verb", "conjugation", "polite"]
+  },
+  {
+    "pattern": "〜ないでください",
+    "meaning": "please do not do",
+    "formation": "Verb ない-form + でください",
+    "examples": [
+      { "ja": "ここで写真を撮らないでください。", "en": "Please do not take photos here." },
+      { "ja": "教室で食べないでください。", "en": "Please do not eat in the classroom." }
+    ],
+    "tags": ["verb", "request"]
+  },
+  {
+    "pattern": "〜まえに",
+    "meaning": "before doing ...",
+    "formation": "Verb dictionary form + まえに ／ Noun + の + まえに",
+    "examples": [
+      { "ja": "寝るまえに歯をみがきます。", "en": "I brush my teeth before going to bed." },
+      { "ja": "食事のまえに手を洗います。", "en": "I wash my hands before meals." }
+    ],
+    "tags": ["sequence"]
+  },
+  {
+    "pattern": "〜てから",
+    "meaning": "after doing ...; and then",
+    "formation": "Verb て-form + から",
+    "examples": [
+      { "ja": "宿題をしてから遊びます。", "en": "I play after doing my homework." },
+      { "ja": "シャワーを浴びてから寝ます。", "en": "I go to bed after taking a shower." }
+    ],
+    "tags": ["sequence"]
+  },
+  {
+    "pattern": "〜ながら",
+    "meaning": "while doing ... (two actions at once)",
+    "formation": "Verb stem + ながら",
+    "examples": [
+      { "ja": "音楽を聞きながら勉強します。", "en": "I study while listening to music." },
+      { "ja": "テレビを見ながらごはんを食べます。", "en": "I eat while watching TV." }
+    ],
+    "tags": ["sequence"]
+  },
+  {
+    "pattern": "〜ことができます",
+    "meaning": "can do; be able to do",
+    "formation": "Verb dictionary form + ことができます",
+    "examples": [
+      { "ja": "日本語を話すことができます。", "en": "I can speak Japanese." },
+      { "ja": "ここで切符を買うことができます。", "en": "You can buy tickets here." }
+    ],
+    "tags": ["ability"]
+  },
+  {
+    "pattern": "〜ほうがいいです",
+    "meaning": "had better do; it is better to",
+    "formation": "Verb た-form + ほうがいいです ／ Verb ない-form + ほうがいいです",
+    "examples": [
+      { "ja": "早く寝たほうがいいです。", "en": "You had better go to bed early." },
+      { "ja": "たばこを吸わないほうがいいです。", "en": "You had better not smoke." }
+    ],
+    "tags": ["advice"]
+  },
+  {
+    "pattern": "〜たり〜たりします",
+    "meaning": "doing things like A and B (non-exhaustive actions)",
+    "formation": "Verb た-form + り + Verb た-form + り + します",
+    "examples": [
+      { "ja": "日曜日は本を読んだり音楽を聞いたりします。", "en": "On Sundays I do things like reading books and listening to music." },
+      { "ja": "休みに掃除をしたり買い物をしたりしました。", "en": "During the holiday I did things like cleaning and shopping." }
+    ],
+    "tags": ["listing"]
+  },
+  {
+    "pattern": "〜とき",
+    "meaning": "when ...; at the time of ...",
+    "formation": "Verb/adjective plain form + とき ／ Noun + の + とき",
+    "examples": [
+      { "ja": "ひまなとき、映画を見ます。", "en": "When I am free, I watch movies." },
+      { "ja": "子どものとき、大阪に住んでいました。", "en": "When I was a child, I lived in Osaka." }
+    ],
+    "tags": ["time"]
+  },
+  {
+    "pattern": "〜つもりです",
+    "meaning": "intend to do; plan to do",
+    "formation": "Verb dictionary form + つもりです ／ Verb ない-form + つもりです",
+    "examples": [
+      { "ja": "来年日本へ行くつもりです。", "en": "I intend to go to Japan next year." },
+      { "ja": "今日は出かけないつもりです。", "en": "I do not plan to go out today." }
+    ],
+    "tags": ["intention"]
+  },
+  {
+    "pattern": "〜でしょう",
+    "meaning": "probably; I suppose",
+    "formation": "Plain form + でしょう",
+    "examples": [
+      { "ja": "明日は雨が降るでしょう。", "en": "It will probably rain tomorrow." },
+      { "ja": "田中さんは来ないでしょう。", "en": "Tanaka probably won't come." }
+    ],
+    "tags": ["conjecture"]
+  },
+  {
+    "pattern": "もう／まだ",
+    "meaning": "already / still; not yet",
+    "formation": "もう + past ／ まだ + negative or continuing state",
+    "examples": [
+      { "ja": "もう昼ごはんを食べました。", "en": "I have already eaten lunch." },
+      { "ja": "まだ宿題をしていません。", "en": "I have not done my homework yet." }
+    ],
+    "tags": ["adverb", "time"]
+  },
+  {
+    "pattern": "〜より〜のほうが",
+    "meaning": "comparison — B is more ... than A",
+    "formation": "A + より + B + のほうが + adjective",
+    "examples": [
+      { "ja": "バスより電車のほうが速いです。", "en": "The train is faster than the bus." },
+      { "ja": "夏より冬のほうが好きです。", "en": "I like winter more than summer." }
+    ],
+    "tags": ["comparison"]
+  },
+  {
+    "pattern": "〜がいちばん〜",
+    "meaning": "superlative — the most ...",
+    "formation": "(Group + で) + Noun + が + いちばん + adjective",
+    "examples": [
+      { "ja": "果物の中でりんごがいちばん好きです。", "en": "Among fruits, I like apples the most." },
+      { "ja": "クラスで田中さんがいちばん背が高いです。", "en": "Tanaka is the tallest in the class." }
+    ],
+    "tags": ["comparison"]
+  },
+  {
+    "pattern": "〜がほしいです",
+    "meaning": "want (something)",
+    "formation": "Noun + が + ほしいです",
+    "examples": [
+      { "ja": "新しいかばんがほしいです。", "en": "I want a new bag." },
+      { "ja": "時間がほしいです。", "en": "I want time." }
+    ],
+    "tags": ["desire"]
+  },
+  {
+    "pattern": "〜くなります／〜になります",
+    "meaning": "become ... (change of state)",
+    "formation": "い-adj（〜く） + なります ／ な-adj・Noun + に + なります",
+    "examples": [
+      { "ja": "冬は寒くなります。", "en": "It gets cold in winter." },
+      { "ja": "弟は医者になりました。", "en": "My younger brother became a doctor." }
+    ],
+    "tags": ["change"]
+  },
+  {
+    "pattern": "〜ごろ／〜ぐらい",
+    "meaning": "about; approximately (time point / amount)",
+    "formation": "Time + ごろ ／ Quantity + ぐらい",
+    "examples": [
+      { "ja": "七時ごろ起きます。", "en": "I get up at about seven." },
+      { "ja": "駅まで十分ぐらいかかります。", "en": "It takes about ten minutes to the station." }
+    ],
+    "tags": ["adverb", "quantity"]
+  },
+  {
+    "pattern": "〜だけ",
+    "meaning": "only; just",
+    "formation": "Noun/quantity + だけ",
+    "examples": [
+      { "ja": "水だけ飲みます。", "en": "I drink only water." },
+      { "ja": "一人だけ来ました。", "en": "Only one person came." }
+    ],
+    "tags": ["particle", "limitation"]
+  }
+]
