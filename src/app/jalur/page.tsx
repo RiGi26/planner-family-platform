@@ -301,8 +301,11 @@ function JalurScreen() {
     )
   }
 
-  const openN = Number(params.get('unit'))
-  const open = rows.find((r) => r.unit.n === openN)
+  // Read the parameter's presence, not its value: `Number(null)` is 0, and
+  // Unit 0 exists — so /jalur/ with no query opened Unit 0's detail instead of
+  // the path. Zero being both "absent" and a real unit number is the whole trap.
+  const unitParam = params.get('unit')
+  const open = unitParam === null ? undefined : rows.find((r) => r.unit.n === Number(unitParam))
   const current = rows.find((r) => r.state === 'current') ?? rows[0]!
 
   return (
