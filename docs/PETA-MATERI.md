@@ -12,6 +12,23 @@ Setiap angka diberi label kejujuran:
   bukan janji resmi ujian
 - **usulan** — default yang dipakai sampai owner memutuskan lain
 
+## Struktur mikro: UNIT (ditambahkan 6 Agustus 2026)
+
+Tangga di bawah adalah peta MAKRO — berapa banyak materi per level. Yang dialami
+pengguna sehari-hari adalah struktur MIKRO di dalamnya: **unit berurutan**, tiap
+unit satu kemampuan baru (±25 unit untuk N5, urutan Minna no Nihongo, judul gaya
+can-do ala Irodori).
+
+Satu unit = 1–2 pola kalimat + 10–15 kosakata yang dipakai pola itu + 3–5 kanji
+(mulai unit ±8) + 1 percakapan + contoh kalimat, dengan aturan **tidak ada yang
+muncul sebelum diajarkan** ditegakkan mesin. Item baru selalu didahului **kartu
+pelajaran** — app mengajar sebelum bertanya.
+
+Lembar Kana tetap kurikulum mandiri yang berjalan paralel (keputusan owner).
+Detail model + alasannya: PRD §6.2.
+
+---
+
 ## Tangga kurikulum
 
 ```

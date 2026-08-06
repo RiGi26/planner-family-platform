@@ -384,19 +384,33 @@ Buffer 21 hari di akhir: berhenti melepas kartu baru, murni review — supaya ma
 
 Goal ditulis **langsung lewat RPC `set_active_goal`**, bukan lewat antrean offline. Ini satu-satunya tulisan di app yang menuntut koneksi, dan sengaja: sesi tidak bisa dimulai tanpa target, jadi mengantrekannya cuma menunda kegagalan ke tempat yang lebih membingungkan.
 
-### 6.2 Curriculum Path
+### 6.2 Curriculum Path — model UNIT (direvisi 6 Agustus 2026)
 
 ```
-Fase 0: Kana (208 item)      gate: 95% akurat → buka N5
-Fase 1: N5 Vocab (662)
-        N5 Kanji (79)        gate: kana lulus
-        N5 Grammar (49)
-Fase 2: N4 → Fase 3: N3
+Jalur (/jalur/):  Unit 0 → 1 → 2 → … → 25          ← N5, urutan Minna no Nihongo
+                  judul = kemampuan, bukan tata bahasa
+                  lulus 80% kuat → unit berikutnya
+
+Lembar Kana:      kurikulum mandiri yang berjalan paralel (§6.6)
 ```
 
-Kana wajib termasuk **writing** untuk semua — motor memory mempercepat hafal, dan datasetnya kecil sehingga cocok sebagai test case engine sebelum di-scale ke ribuan item.
+**Kenapa berubah dari model kategori.** Menu `Kana | Kosakata | Grammar | Kanji` menyerahkan keputusan kurikulum kepada orang yang paling tidak punya modal mengambilnya — itulah sumber rasa "tidak terarah". Dan urutan lama alfabetis: 12 kata pertama seorang pemula adalah あさって、あそこ、あちら、あっち、あなた — lima kata tunjuk nyaris identik tanpa satu pun pola kalimat untuk memakainya.
 
-Untuk fase kana, peta kurikulumnya berbentuk **Lembar Kana** (§6.6), bukan jalur linear.
+**Satu unit** = 1–2 pola kalimat + 10–15 kosakata yang dipakai pola itu + 3–5 kanji (mulai unit ±8) + 1 percakapan 4–6 baris + contoh kalimat. Aturan *i+1* — tiap kalimat hanya memakai materi unit ≤ N — benar **secara konstruksi**, ditegakkan `scripts/verify-units.mjs`.
+
+**Urutan meminjam Minna no Nihongo**, bukan isinya: urutan pengenalan grammar adalah fakta tentang silabus yang terbit luas (Bunpro menjualnya sebagai study path), sementara tiap kalimat dan dialog di `units-n5.json` ditulis untuk Masume. Alasannya praktis: LPK dan kursus di Indonesia mengajar dari MNN, jadi orang yang kelak ikut kelas mendarat di tengah buku, bukan di antah-berantah.
+
+**Gerbang lunak, bukan tembok.** Unit lulus pada 80% kuat — menahan seseorang sampai tiap kartu kuat-seminggu memarkirnya di belakang materi yang sudah setengah dikuasai. Gerbang keras "95% kana sebelum N5" dipensiunkan; kana tetap jalan lewat lembarnya sendiri.
+
+Kana wajib termasuk **writing** untuk semua — motor memory mempercepat hafal. Unit 0 mengajarkannya lewat **kata utuh** (あさ、あき) bukan karakter lepas: beban tulis sama, hasilnya bentuk + bunyi + rasa panjang kata sekaligus.
+
+Untuk fase kana, peta kurikulumnya tetap **Lembar Kana** (§6.6) — keputusan owner 6 Agustus 2026: lembar tetap kurikulum mandiri, bukan galeri.
+
+### 6.2.1 Kartu pelajaran — app mengajar sebelum bertanya
+
+Item baru masuk antrean sebagai **kartu pelajaran** lebih dulu: bentuk, bacaan, arti, bunyi (TTS), dan untuk kata kerja golongannya — semuanya sekaligus, tanpa petunjuk, tanpa reveal, tanpa rating, tanpa baris review. Satu pelajaran per **item**, bukan per kartu.
+
+Yang dihapusnya adalah langkah pembuka app selama ini: kartu pertama menanyakan bacaan あ kepada orang yang belum pernah melihat あ. Itu tebakan, bukan tes — dan "Lupa" yang dihasilkannya bukan data ingatan, karena tak pernah ada yang masuk untuk dilupakan.
 
 ### 6.3 Daily Engine
 
