@@ -131,6 +131,8 @@ export const id = {
     promptKanjiRecognition: 'Arti & bacanya?',
     promptMeaning: 'Apa artinya?',
     promptProduce: 'Bahasa Jepangnya apa?',
+    promptListening: 'Apa yang kamu dengar?',
+    listenReplay: 'Putar lagi',
     badgeVocab: 'kosakata',
     badgeKanji: 'kanji',
     badgeGrammar: 'pola kalimat',

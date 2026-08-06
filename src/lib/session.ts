@@ -280,8 +280,8 @@ export function reduceSession(
  */
 export type Faces = {
   prompt: string
-  /** glyph → rendered huge in Japanese; text → a meaning, rendered as prose. */
-  promptKind: 'glyph' | 'text'
+  /** glyph → huge Japanese; text → a meaning as prose; audio → spoken, not shown. */
+  promptKind: 'glyph' | 'text' | 'audio'
   /**
    * Disambiguating chip under the prompt. Kana recall shows the script —
    * without it "a" could be あ or ア. Other types name themselves, because a
@@ -356,6 +356,23 @@ export function cardFaces(item: Item, mode: CardMode): Faces {
   }
 
   // vocab
+  if (mode === 'listening') {
+    // The prompt is the spoken reading; nothing Japanese may appear on screen
+    // before reveal, or the ear stops being what is tested. `prompt` still
+    // carries the text to hand to the speech engine.
+    return {
+      prompt: item.reading,
+      promptKind: 'audio',
+      badge: 'vocab',
+      answerMain: item.expression,
+      answerSub: [
+        ...(item.reading !== item.expression ? [item.reading] : []),
+        meanings,
+      ],
+      hintTarget: '',
+    }
+  }
+
   // A kana-only word reads as itself, so showing the reading as the answer
   // repeats the prompt back — the meaning IS the answer for those.
   return mode === 'recognition'

@@ -31,6 +31,7 @@ import {
   type SessionState,
 } from '@/lib/session'
 import { bumpProgress, ensureCards, localCards, pushPending, saveReview } from '@/lib/study'
+import { jaVoice, speak } from '@/lib/tts'
 import type { UserRating } from '@/lib/fsrs'
 
 /**
@@ -66,6 +67,14 @@ function SessionScreen() {
   const [revealedAt, setRevealedAt] = useState<number | null>(null)
   const started = useRef(false)
 
+  // undefined = still resolving; null = this device has no Japanese voice.
+  // The queue build waits for the answer, because whether listening cards may
+  // be created — and whether due ones may be asked — depends on it.
+  const [voice, setVoice] = useState<SpeechSynthesisVoice | null | undefined>(undefined)
+  useEffect(() => {
+    void jaVoice().then(setVoice)
+  }, [])
+
   const timezone = profile?.timezone ?? 'Asia/Jakarta'
 
   /**
@@ -77,7 +86,7 @@ function SessionScreen() {
    * introducing lazily, would make the queue length change under the counter.
    */
   useEffect(() => {
-    if (!user || !goal || started.current) return
+    if (!user || !goal || voice === undefined || started.current) return
     started.current = true
 
     void (async () => {
@@ -136,7 +145,7 @@ function SessionScreen() {
       const prefs = {
         kanaWriting: profile?.writing_kana_enabled ?? true,
         kanjiWriting: profile?.writing_kanji_enabled ?? false,
-        listening: false,
+        listening: Boolean(voice),
       }
       const introduced: Awaited<ReturnType<typeof ensureCards>> = []
       for (const item of fresh) {
@@ -149,7 +158,12 @@ function SessionScreen() {
         await bumpProgress(user.id, { newItems: fresh.length }, { timezone })
       }
 
-      const due = await dueCards(user.id)
+      // A due listening card on a device with no Japanese voice would be a
+      // silent prompt; it is held back, not skipped-and-forgotten — it stays
+      // due for the next device that can speak it.
+      const due = (await dueCards(user.id)).filter(
+        (c) => c.mode !== 'listening' || Boolean(voice),
+      )
       const items = await itemMapFor([...due, ...introduced].map((c) => c.item_id))
       const built = buildQueue({ due, introduced, items })
 
@@ -168,9 +182,20 @@ function SessionScreen() {
       setLoaded({ queue: built.queue, canvas: built.canvas, quotaTotal: built.queue.length })
       setState(initSession(built.queue, Date.now()))
     })()
-  }, [user, goal, profile, timezone])
+  }, [user, goal, profile, timezone, voice])
 
   const card = state ? currentCard(state) : null
+
+  // A listening card speaks itself the moment it appears — the tap budget is
+  // twelve seconds a card, and demanding a tap just to hear the prompt spends
+  // it. Replay stays one tap away.
+  const cardId = card?.card.id
+  const cardMode = card?.card.mode
+  useEffect(() => {
+    if (cardMode !== 'listening' || !card || !voice) return
+    speak(cardFaces(card.item, 'listening').prompt, voice)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [cardId, cardMode, voice])
 
   const answer = useCallback(
     (rating: UserRating) => {
@@ -254,15 +279,18 @@ function SessionScreen() {
         ? 'text-[36px] leading-tight text-shu sm:text-[48px]'
         : 'max-w-[340px] text-center text-[22px] leading-snug text-shu sm:text-[26px]'
 
-  const promptLabel = isRecognition
-    ? card.item.type === 'grammar'
-      ? t.sesi.promptMeaning
-      : card.item.type === 'kanji'
-        ? t.sesi.promptKanjiRecognition
-        : t.sesi.promptRecognition
-    : faces.promptKind === 'text'
-      ? t.sesi.promptProduce
-      : t.sesi.promptRecall
+  const promptLabel =
+    faces.promptKind === 'audio'
+      ? t.sesi.promptListening
+      : isRecognition
+        ? card.item.type === 'grammar'
+          ? t.sesi.promptMeaning
+          : card.item.type === 'kanji'
+            ? t.sesi.promptKanjiRecognition
+            : t.sesi.promptRecognition
+        : faces.promptKind === 'text'
+          ? t.sesi.promptProduce
+          : t.sesi.promptRecall
 
   const badgeLabel =
     faces.badge === 'hiragana'
@@ -308,9 +336,36 @@ function SessionScreen() {
         <p className="text-[12px] tracking-[0.14em] text-ink-muted uppercase">{promptLabel}</p>
 
         <div className="flex flex-col items-center gap-3">
-          <p className={clsx(faces.promptKind === 'glyph' && 'tnum', promptClass)}>
-            {faces.prompt}
-          </p>
+          {faces.promptKind === 'audio' ? (
+            /* Nothing Japanese on screen before reveal — the ear is the thing
+               being tested. The button replays; the card already spoke once. */
+            <button
+              type="button"
+              onClick={() => voice && speak(faces.prompt, voice)}
+              className="flex min-h-tap touch-manipulation items-center gap-2 rounded-[3px] border border-rule px-6 py-4 text-[15px] text-ink"
+            >
+              <svg
+                aria-hidden
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
+                <path d="M15.54 8.46a5 5 0 0 1 0 7.07" />
+                <path d="M19.07 4.93a10 10 0 0 1 0 14.14" />
+              </svg>
+              {t.sesi.listenReplay}
+            </button>
+          ) : (
+            <p className={clsx(faces.promptKind === 'glyph' && 'tnum', promptClass)}>
+              {faces.prompt}
+            </p>
+          )}
           {/* Kana recall is unanswerable without the script — "a" could be あ or
               ア — and a bare English word could be asking for vocabulary or a
               kanji, so every non-kana card names its own type. */}
