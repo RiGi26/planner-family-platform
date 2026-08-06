@@ -9,16 +9,19 @@ import { RequireGoal } from '@/components/require-goal'
 import { RatingButtons } from '@/components/rating-buttons'
 import { AnswerCells } from '@/components/sheet'
 import { clsx } from '@/lib/clsx'
-import { KANA, groupByItem, nextToIntroduce, type KanaItem } from '@/lib/curriculum'
+import { KANA, groupByItem } from '@/lib/curriculum'
 import { dueCards, localProgress } from '@/lib/db'
 import { localDate } from '@/lib/day'
 import { parseExamDate } from '@/lib/exam-dates'
 import { computeQuota } from '@/lib/goal-engine'
 import { fmt, useT } from '@/lib/i18n'
+import { itemMapFor, loadTrack, type Item } from '@/lib/items'
+import { introduceAcross, pathState, splitQuota, type Track } from '@/lib/path'
 import { overdueBefore } from '@/lib/progress'
 import { useGoal, useProfile } from '@/lib/queries'
 import {
   buildQueue,
+  cardFaces,
   currentCard,
   hintBudget,
   initSession,
@@ -47,8 +50,6 @@ import type { UserRating } from '@/lib/fsrs'
  * The bottom nav is deliberately absent: the whole screen is a tap target, and a
  * nav bar would sit exactly where the thumb lands.
  */
-
-const items = new Map<string, KanaItem>(KANA.map((k) => [k.id, k]))
 
 type Loaded = { queue: SessionCard[]; canvas: SessionCard[]; quotaTotal: number }
 
@@ -84,8 +85,21 @@ function SessionScreen() {
       const cards = await localCards(user.id)
       const states = groupByItem(cards)
 
+      // The ladder: kana always, the N5 tracks once the gate is open. The gate
+      // is checked BEFORE loading N5 so a person still in the kana phase never
+      // downloads a byte of it.
+      const gateCheck = pathState(cards, null)
+      const n5 = gateCheck.gate.open
+        ? {
+            vocab: await loadTrack('N5', 'vocab'),
+            kanji: await loadTrack('N5', 'kanji'),
+            grammar: await loadTrack('N5', 'grammar'),
+          }
+        : null
+      const path = n5 ? pathState(cards, n5) : gateCheck
+
       const quota = computeQuota({
-        remainingNew: KANA.filter((k) => !states.has(k.id)).length,
+        remainingNew: path.remainingNew,
         dueToday: cards.filter((c) => new Date(c.due) <= new Date()).length,
         dueWriting: cards.filter((c) => c.mode === 'writing' && new Date(c.due) <= new Date())
           .length,
@@ -105,7 +119,20 @@ function SessionScreen() {
         ?.new_done_items ?? 0
       const allowance = Math.max(0, quota.newPerDay - introducedToday)
 
-      const fresh = nextToIntroduce(states, allowance)
+      // Divide the allowance across open tracks and introduce per track — kana
+      // to completion first, then the N5 tracks in proportion, none starving.
+      const tracks: Track[] = [{ key: 'kana', items: KANA as Item[] }]
+      if (n5) {
+        tracks.push(
+          { key: 'vocab', items: n5.vocab },
+          { key: 'kanji', items: n5.kanji },
+          { key: 'grammar', items: n5.grammar },
+        )
+      }
+      const allotments = splitQuota(allowance, path.openTracks)
+      const perTrack = introduceAcross(tracks, states, allotments)
+      const fresh = perTrack.flatMap((t) => t.fresh)
+
       const prefs = {
         kanaWriting: profile?.writing_kana_enabled ?? true,
         kanjiWriting: profile?.writing_kanji_enabled ?? false,
@@ -123,6 +150,7 @@ function SessionScreen() {
       }
 
       const due = await dueCards(user.id)
+      const items = await itemMapFor([...due, ...introduced].map((c) => c.item_id))
       const built = buildQueue({ due, introduced, items })
 
       // The quota is a promise made once a day. Recording it here is what lets
@@ -202,8 +230,52 @@ function SessionScreen() {
   if (!card) return null
 
   const isRecognition = card.card.mode === 'recognition'
-  const budget = hintBudget(card.item.expression)
-  const revealedChars = [...card.item.expression]
+  const faces = cardFaces(card.item, card.card.mode)
+  const budget = faces.hintTarget ? hintBudget(faces.hintTarget) : 0
+  const revealedChars = [...faces.hintTarget]
+
+  // A five-character word at the kana size overflows a 390px screen; the size
+  // steps down with length instead of wrapping a prompt mid-word.
+  const promptLen = [...faces.prompt].length
+  const promptClass =
+    faces.promptKind === 'text'
+      ? 'max-w-[320px] text-center text-[28px] leading-snug text-ink sm:text-[36px]'
+      : promptLen <= 2
+        ? 'text-[88px] leading-none text-ink sm:text-[120px]'
+        : promptLen <= 6
+          ? 'text-[52px] leading-none text-ink sm:text-[72px]'
+          : 'max-w-[340px] text-center text-[36px] leading-tight text-ink sm:text-[48px]'
+
+  const answerLen = [...faces.answerMain].length
+  const answerClass =
+    answerLen <= 4
+      ? 'text-[56px] leading-none text-shu sm:text-[80px]'
+      : answerLen <= 12
+        ? 'text-[36px] leading-tight text-shu sm:text-[48px]'
+        : 'max-w-[340px] text-center text-[22px] leading-snug text-shu sm:text-[26px]'
+
+  const promptLabel = isRecognition
+    ? card.item.type === 'grammar'
+      ? t.sesi.promptMeaning
+      : card.item.type === 'kanji'
+        ? t.sesi.promptKanjiRecognition
+        : t.sesi.promptRecognition
+    : faces.promptKind === 'text'
+      ? t.sesi.promptProduce
+      : t.sesi.promptRecall
+
+  const badgeLabel =
+    faces.badge === 'hiragana'
+      ? t.sesi.scriptHiragana
+      : faces.badge === 'katakana'
+        ? t.sesi.scriptKatakana
+        : faces.badge === 'vocab'
+          ? t.sesi.badgeVocab
+          : faces.badge === 'kanji'
+            ? t.sesi.badgeKanji
+            : faces.badge === 'grammar'
+              ? t.sesi.badgeGrammar
+              : null
 
   return (
     <main
@@ -233,39 +305,35 @@ function SessionScreen() {
           scrolls. Without both, a 96px glyph plus an answer plus 64px buttons
           clips on anything smaller than the test device. */}
       <section className="flex min-h-0 flex-1 flex-col items-center justify-center gap-6 overflow-y-auto py-4">
-        <p className="text-[12px] tracking-[0.14em] text-ink-muted uppercase">
-          {isRecognition ? t.sesi.promptRecognition : t.sesi.promptRecall}
-        </p>
+        <p className="text-[12px] tracking-[0.14em] text-ink-muted uppercase">{promptLabel}</p>
 
-        {isRecognition ? (
-          <p className="text-[88px] leading-none text-ink sm:text-[120px]">
-            {card.item.expression}
+        <div className="flex flex-col items-center gap-3">
+          <p className={clsx(faces.promptKind === 'glyph' && 'tnum', promptClass)}>
+            {faces.prompt}
           </p>
-        ) : (
-          <div className="flex flex-col items-center gap-3">
-            <p className="tnum text-[52px] leading-none text-ink sm:text-[72px]">
-              {card.item.reading}
-            </p>
-            {/* Without this the prompt is unanswerable: "a" could be あ or ア. */}
+          {/* Kana recall is unanswerable without the script — "a" could be あ or
+              ア — and a bare English word could be asking for vocabulary or a
+              kanji, so every non-kana card names its own type. */}
+          {badgeLabel ? (
             <span className="rounded-[2px] bg-paper-sunken px-2 py-[3px] text-[11px] tracking-[0.08em] text-ink-muted uppercase">
-              {card.item.data.script === 'hiragana' ? t.sesi.scriptHiragana : t.sesi.scriptKatakana}
+              {badgeLabel}
             </span>
-          </div>
-        )}
+          ) : null}
+        </div>
 
         {state.revealed ? (
           <div className="animate-reveal flex flex-col items-center gap-2">
-            {isRecognition ? (
-              <p className="tnum text-[40px] leading-none text-shu sm:text-[56px]">
-                {card.item.reading}
+            <p className={answerClass}>{faces.answerMain}</p>
+            {faces.answerSub.map((line) => (
+              <p
+                key={line}
+                className="max-w-[340px] text-center text-[15px] leading-relaxed text-ink-muted"
+              >
+                {line}
               </p>
-            ) : (
-              <p className="text-[64px] leading-none text-shu sm:text-[88px]">
-                {card.item.expression}
-              </p>
-            )}
+            ))}
           </div>
-        ) : !isRecognition ? (
+        ) : faces.hintTarget ? (
           <AnswerCells
             length={revealedChars.length}
             revealed={revealedChars.map((c, idx) => (idx < state.hintsUsed ? c : ''))}
@@ -278,7 +346,7 @@ function SessionScreen() {
           <RatingButtons card={card.card} now={revealedAt} onRate={answer} />
         ) : (
           <>
-            {budget > 0 && state.hintsUsed < budget && !isRecognition ? (
+            {budget > 0 && state.hintsUsed < budget && Boolean(faces.hintTarget) ? (
               <button
                 type="button"
                 onClick={() => setState(reduceSession(state, { kind: 'hint' }).state)}

@@ -1,5 +1,6 @@
 'use client'
 
+import { useEffect, useState } from 'react'
 import { useLiveQuery } from 'dexie-react-hooks'
 import Link from 'next/link'
 import { RequireAuth, useSession } from '@/components/auth-provider'
@@ -13,9 +14,13 @@ import { db, localProgress } from '@/lib/db'
 import { parseExamDate } from '@/lib/exam-dates'
 import { computeQuota } from '@/lib/goal-engine'
 import { fmt, useT } from '@/lib/i18n'
+import { loadTrack, type Item } from '@/lib/items'
+import { pathState } from '@/lib/path'
 import { dayState, overdueBefore, shouldStamp, weekTicks } from '@/lib/progress'
 import { useGoal, useProfile } from '@/lib/queries'
 import { localCards } from '@/lib/study'
+
+type N5Items = { vocab: Item[]; kanji: Item[]; grammar: Item[] }
 
 /**
  * Hari Ini.
@@ -52,6 +57,19 @@ function TodayScreen() {
   )
   const stampedOn = useLiveQuery(() => db.meta.get('hanko_on').then((m) => m?.value), [])
 
+  // The N5 datasets load only once the kana gate is open — same rule as the
+  // session, so the two screens can never disagree about the daily pace.
+  const [n5, setN5] = useState<N5Items | null>(null)
+  useEffect(() => {
+    if (!cards || n5) return
+    if (!pathState(cards, null).gate.open) return
+    void Promise.all([
+      loadTrack('N5', 'vocab'),
+      loadTrack('N5', 'kanji'),
+      loadTrack('N5', 'grammar'),
+    ]).then(([vocab, kanji, grammar]) => setN5({ vocab, kanji, grammar }))
+  }, [cards, n5])
+
   if (!cards || !progressRows || !goal) {
     return (
       <div className="flex min-h-dvh items-center justify-center">
@@ -67,8 +85,12 @@ function TodayScreen() {
   const due = cards.filter((c) => new Date(c.due) <= now)
   const overdue = overdueBefore(cards, today, timezone)
 
+  // `208 - states.size` stopped being right the day N5 cards could exist:
+  // states counts every item with cards, whatever its level.
+  const path = pathState(cards, n5, now)
+
   const quota = computeQuota({
-    remainingNew: 208 - states.size,
+    remainingNew: path.remainingNew,
     dueToday: due.length,
     dueWriting: due.filter((c) => c.mode === 'writing').length,
     targetExamDate: parseExamDate(goal.target_exam_date),
@@ -194,18 +216,26 @@ function TodayScreen() {
           )}
         </section>
 
-        {/* One track, because one track is what exists. Listing vocabulary, kanji
-            and grammar at zero would promise material that has not been built. */}
-        <section className="mt-8 flex items-center justify-between rounded-[3px] bg-paper-raised px-4 py-3">
-          <span className="flex items-center gap-3">
-            <span aria-hidden className="text-[22px] leading-none text-ink-faint">
-              あ
+        {/* The ladder, one line: where kana stands, and what that means for N5.
+            The gate is stated as a fact with a number, not as a lock icon —
+            "62% of the way to opening N5" is a plan; a padlock is a wall. */}
+        <section className="mt-8 rounded-[3px] bg-paper-raised px-4 py-3">
+          <div className="flex items-center justify-between">
+            <span className="flex items-center gap-3">
+              <span aria-hidden className="text-[22px] leading-none text-ink-faint">
+                あ
+              </span>
+              <span className="text-[13px] text-ink-muted">{t.hariIni.kanaStrength}</span>
             </span>
-            <span className="text-[13px] text-ink-muted">{t.hariIni.kanaStrength}</span>
-          </span>
-          <span className="tnum text-[15px] text-ink">
-            {fmt(t.hariIni.kanaStrengthValue, { strong: kana.strong, total: kana.total })}
-          </span>
+            <span className="tnum text-[15px] text-ink">
+              {fmt(t.hariIni.kanaStrengthValue, { strong: kana.strong, total: kana.total })}
+            </span>
+          </div>
+          <p className="tnum mt-2 border-t border-rule pt-2 text-[12px] leading-relaxed text-ink-muted">
+            {path.gate.open
+              ? t.hariIni.gateOpen
+              : fmt(t.hariIni.gateLocked, { pct: Math.floor(path.gate.ratio * 100) })}
+          </p>
         </section>
 
         <section className="mt-8">

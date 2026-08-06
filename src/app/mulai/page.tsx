@@ -11,6 +11,7 @@ import { db } from '@/lib/db'
 import { toExamDate, upcomingSittings, type Sitting } from '@/lib/exam-dates'
 import { computeQuota, planTracks, REVIEW_BUFFER_DAYS } from '@/lib/goal-engine'
 import { fmt, useT } from '@/lib/i18n'
+import { loadTrack } from '@/lib/items'
 import { useCardStates, useGoal } from '@/lib/queries'
 import { supabase } from '@/lib/supabase-client'
 
@@ -59,21 +60,52 @@ function OnboardingScreen() {
 
   const left = useMemo(() => remainingNew(groupByItem(cards ?? [])), [cards])
 
+  // The N5 counts, loaded once. Onboarding is the one screen that already
+  // requires the network (the goal writes straight to the server), so a dynamic
+  // import here costs nothing it was not already paying.
+  const [n5Counts, setN5Counts] = useState<{ vocab: number; kanji: number; grammar: number } | null>(
+    null,
+  )
+  useEffect(() => {
+    void Promise.all([
+      loadTrack('N5', 'vocab'),
+      loadTrack('N5', 'kanji'),
+      loadTrack('N5', 'grammar'),
+    ]).then(([v, k, g]) => setN5Counts({ vocab: v.length, kanji: k.length, grammar: g.length }))
+  }, [])
+
+  const totalLeft = left + (n5Counts ? n5Counts.vocab + n5Counts.kanji + n5Counts.grammar : 0)
+
   const quota = useMemo(() => {
     if (!chosen) return null
     return computeQuota({
-      remainingNew: left,
+      remainingNew: totalLeft,
       dueToday: 0,
       targetExamDate: chosen.date,
       today,
     })
-  }, [chosen, left, today])
+  }, [chosen, totalLeft, today])
 
-  // Only tracks that actually have content. Listing vocabulary, kanji and grammar
-  // today would promise material that has not been built.
+  // The whole ladder, now that all four tracks have content. The arithmetic is
+  // shown open per track — kana first, then the three N5 tracks side by side.
   const plan = useMemo(
-    () => (quota ? planTracks([{ track: t.hariIni.trackKana, items: left }], quota.newPerDay) : null),
-    [quota, left, t],
+    () =>
+      quota
+        ? planTracks(
+            [
+              { track: t.hariIni.trackKana, items: left },
+              ...(n5Counts
+                ? [
+                    { track: t.hariIni.trackVocab, items: n5Counts.vocab },
+                    { track: t.hariIni.trackKanji, items: n5Counts.kanji },
+                    { track: t.hariIni.trackGrammar, items: n5Counts.grammar },
+                  ]
+                : []),
+            ],
+            quota.newPerDay,
+          )
+        : null,
+    [quota, left, n5Counts, t],
   )
 
   async function start() {

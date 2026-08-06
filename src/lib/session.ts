@@ -266,6 +266,118 @@ export function reduceSession(
 }
 
 // ---------------------------------------------------------------------------
+// card faces
+// ---------------------------------------------------------------------------
+
+/**
+ * What a card shows before and after reveal, per item type and mode.
+ *
+ * Kept pure and away from the screen because these are curriculum decisions,
+ * not layout ones: a vocabulary recall prompts with the MEANING and answers
+ * with the word — prompting with the reading would just be transcription. A
+ * grammar answer carries its formation line. A kanji answer carries both
+ * readings. The screen only chooses font sizes.
+ */
+export type Faces = {
+  prompt: string
+  /** glyph → rendered huge in Japanese; text → a meaning, rendered as prose. */
+  promptKind: 'glyph' | 'text'
+  /**
+   * Disambiguating chip under the prompt. Kana recall shows the script —
+   * without it "a" could be あ or ア. Other types name themselves, because a
+   * bare English word could be asking for vocabulary or a kanji.
+   */
+  badge: 'hiragana' | 'katakana' | 'vocab' | 'kanji' | 'grammar' | null
+  answerMain: string
+  answerSub: string[]
+  /** What hint cells count against; '' disables hints for this card. */
+  hintTarget: string
+}
+
+const asList = (v: unknown): string[] => (Array.isArray(v) ? (v as string[]) : [])
+
+export function cardFaces(item: Item, mode: CardMode): Faces {
+  const meanings = item.meanings.join('; ')
+
+  if (item.type === 'kana') {
+    const script = (item.data.script as string) === 'katakana' ? 'katakana' : 'hiragana'
+    return mode === 'recognition'
+      ? {
+          prompt: item.expression,
+          promptKind: 'glyph',
+          badge: null,
+          answerMain: item.reading,
+          answerSub: [],
+          hintTarget: '',
+        }
+      : {
+          prompt: item.reading,
+          promptKind: 'glyph',
+          badge: script,
+          answerMain: item.expression,
+          answerSub: [],
+          hintTarget: item.expression,
+        }
+  }
+
+  if (item.type === 'kanji') {
+    const kun = asList(item.data.kunyomi).join('・')
+    const on = asList(item.data.onyomi).join('・')
+    const readings = [kun && `訓 ${kun}`, on && `音 ${on}`].filter(Boolean) as string[]
+    return mode === 'recognition'
+      ? {
+          prompt: item.expression,
+          promptKind: 'glyph',
+          badge: 'kanji',
+          answerMain: meanings,
+          answerSub: readings,
+          hintTarget: '',
+        }
+      : {
+          prompt: item.meanings[0] ?? '',
+          promptKind: 'text',
+          badge: 'kanji',
+          answerMain: item.expression,
+          answerSub: readings,
+          hintTarget: item.expression,
+        }
+  }
+
+  if (item.type === 'grammar') {
+    const formation = typeof item.data.formation === 'string' ? item.data.formation : ''
+    return {
+      prompt: item.expression,
+      promptKind: 'glyph',
+      badge: 'grammar',
+      answerMain: item.meanings[0] ?? '',
+      answerSub: formation ? [formation] : [],
+      hintTarget: '',
+    }
+  }
+
+  // vocab
+  return mode === 'recognition'
+    ? {
+        prompt: item.expression,
+        promptKind: 'glyph',
+        badge: 'vocab',
+        answerMain: item.reading,
+        answerSub: [meanings],
+        hintTarget: '',
+      }
+    : {
+        prompt: item.meanings[0] ?? '',
+        promptKind: 'text',
+        badge: 'vocab',
+        answerMain: item.expression,
+        // The reading repeats the word for kana-only vocabulary; saying it twice
+        // reads like an error.
+        answerSub: item.reading !== item.expression ? [item.reading] : [],
+        hintTarget: item.expression,
+      }
+}
+
+// ---------------------------------------------------------------------------
 // labels
 // ---------------------------------------------------------------------------
 
