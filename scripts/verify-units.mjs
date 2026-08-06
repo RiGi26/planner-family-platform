@@ -49,7 +49,9 @@ const kana = read(join(ROOT, 'src', 'data', 'kana.json'))
  */
 const GRAMMAR_TOKENS = [
   'じゃありません',
-  'ですか',
+  // NOT ですか: です + か covers it, and the longer token would greedily eat
+  // ですか out of ですから, leaving a stray ら. Longest-match is stupid; keep
+  // the token list minimal so it stays predictably stupid.
   'です',
   'さん',
   'は',
@@ -73,6 +75,91 @@ const GRAMMAR_TOKENS = [
 
 /** Names used in dialogue. Proper nouns are not vocabulary to be learned. */
 const NAMES = ['アリ', 'さとう', 'たなか', 'やまだ']
+
+// ---------------------------------------------------------------------------
+// conjugation — derived, never stored
+//
+// From unit 4 on, sentences use verbs, and verbs appear conjugated: 行きます is
+// in no dataset, only 行く is. The forms are fully determined by the dictionary
+// form plus the verb group JMdict gave us in Tahap A — the same derivation the
+// display layer uses — so the validator derives them too instead of asking the
+// author to list every surface form. What stays un-derivable (a word the
+// learner never met) is exactly what the check is for.
+// ---------------------------------------------------------------------------
+
+const I_ROW = { く: 'き', ぐ: 'ぎ', す: 'し', つ: 'ち', ぬ: 'に', ぶ: 'び', む: 'み', る: 'り', う: 'い' }
+const A_ROW = { く: 'か', ぐ: 'が', す: 'さ', つ: 'た', ぬ: 'な', ぶ: 'ば', む: 'ま', る: 'ら', う: 'わ' }
+const TE_ROW = { く: 'いて', ぐ: 'いで', す: 'して', つ: 'って', ぬ: 'んで', ぶ: 'んで', む: 'んで', る: 'って', う: 'って' }
+const POLITE = ['ます', 'ません', 'ました', 'ませんでした', 'ましょう']
+
+/** Polite, te, ta and nai forms for one spelling of one verb. */
+function verbForms(base, group) {
+  const out = []
+  if (group === 'irregular') {
+    if (base === 'する') {
+      for (const p of POLITE) out.push(`し${p}`)
+      out.push('して', 'した', 'しない', 'しなかった')
+    } else {
+      // 来る / くる — the only other irregular at N5
+      const stem = base === '来る' ? '来' : 'き'
+      for (const p of POLITE) out.push(`${stem}${p}`)
+      out.push(`${stem}て`, `${stem}た`, base === '来る' ? '来ない' : 'こない')
+    }
+    return out
+  }
+  const stem = base.slice(0, -1)
+  if (group === 'ichidan') {
+    for (const p of POLITE) out.push(`${stem}${p}`)
+    out.push(`${stem}て`, `${stem}た`, `${stem}ない`, `${stem}なかった`)
+    return out
+  }
+  // godan
+  const last = base.slice(-1)
+  const i = I_ROW[last]
+  if (!i) return out
+  for (const p of POLITE) out.push(`${stem}${i}${p}`)
+  const te = base.endsWith('行く') || base === 'いく' ? 'って' : TE_ROW[last]
+  out.push(`${stem}${te}`, `${stem}${te.replace('て', 'た').replace('で', 'だ')}`)
+  out.push(`${stem}${A_ROW[last]}ない`, `${stem}${A_ROW[last]}なかった`)
+  return out
+}
+
+/** くない / かった / くて for an i-adjective. いい conjugates via よい, never itself. */
+function adjForms(base) {
+  if (base === 'いい') return []
+  const stem = base.slice(0, -1)
+  return [`${stem}くない`, `${stem}くなかった`, `${stem}かった`, `${stem}くて`, `${stem}く`]
+}
+
+/** "いい/よい" and "見る 観る" are one entry with several spellings. */
+const variants = (s) => s.split(/[/\s]+/).filter(Boolean)
+
+/** Everything a taught word makes readable: its spellings plus their conjugations. */
+function formsOf(w, entry) {
+  const spellings = new Set(variants(w))
+  if (entry) {
+    for (const v of variants(entry.expression)) spellings.add(v)
+    if (entry.reading) for (const v of variants(entry.reading)) spellings.add(v)
+  }
+  const out = new Set(spellings)
+  const pos = entry?.data?.pos ?? []
+  const group = entry?.data?.verb_group ?? null
+  // 勉強 reads べんきょうする: a noun that carries its する. Teach the noun and
+  // the learner can say 勉強します — so the derivation follows.
+  const suru =
+    entry?.reading?.endsWith('する') && entry.expression !== 'する'
+      ? [...variants(entry.expression), entry.reading.slice(0, -2)]
+      : []
+  for (const s of spellings) {
+    if (group) for (const f of verbForms(s, group)) out.add(f)
+    if (pos.includes('adj-i')) for (const f of adjForms(s)) out.add(f)
+  }
+  for (const base of suru) {
+    out.add(base)
+    for (const f of verbForms('する', 'irregular')) out.add(`${base}${f}`)
+  }
+  return out
+}
 
 const errors = []
 const warn = []
@@ -134,14 +221,15 @@ const known = new Set([...GRAMMAR_TOKENS, ...NAMES])
 let sentenceCount = 0
 
 for (const u of [...units].sort((a, b) => a.n - b.n)) {
-  // Everything this unit introduces becomes usable from here on.
+  // Everything this unit introduces becomes usable from here on: the word, its
+  // other spellings, its reading, and every form the unit's grammar derives.
   for (const w of u.vocab ?? []) {
-    known.add(w)
-    const entry = vocabByExpr.get(w)
-    // The reading counts too: a word written in kanji may appear in kana.
-    if (entry?.reading) known.add(entry.reading)
+    for (const f of formsOf(w, vocabByExpr.get(w))) known.add(f)
   }
   for (const k of u.kanji ?? []) known.add(k)
+  // Function words the unit's PATTERN teaches (時 in 九時, から/まで) — scoped
+  // to the unit so they cannot appear before the pattern that explains them.
+  for (const t of u.tokens ?? []) known.add(t)
 
   const lines = [
     ...(u.dialog ?? []).map((d) => ({ ja: d.ja, id: d.id, kind: 'dialog' })),

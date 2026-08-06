@@ -104,5 +104,196 @@
       { "ja": "私の車はあそこです。", "id": "Mobil saya di sebelah sana." },
       { "ja": "友達はあそこですか。", "id": "Temanmu di sebelah sana?" }
     ]
+  },
+  {
+    "n": 4,
+    "title": "Jam berapa sekarang?",
+    "cando": "Aku bisa menyebut angka 1–10, membaca jam, dan menanyakan jam buka.",
+    "reviewed": false,
+    "grammar": ["数字 1–10", "今 〜時 です", "〜から 〜まで"],
+    "vocab": ["一", "二", "三", "四", "五", "六", "七", "八", "九", "十", "今", "半", "午前", "午後", "銀行", "図書館"],
+    "kanji": [],
+    "tokens": ["時", "から", "まで"],
+    "kana_focus": [],
+    "note": "MNN pelajaran 4, paruh pertama. Angka 1–10 masuk di sini karena jam adalah pemakaian angka pertama yang nyata — angka tanpa konteks hanyalah hafalan. 時 diajarkan sebagai bagian pola 〜時, bukan kartu tersendiri.",
+    "dialog": [
+      { "speaker": "A", "ja": "すみません、今何時ですか。", "id": "Permisi, sekarang jam berapa?" },
+      { "speaker": "B", "ja": "九時半です。", "id": "Jam setengah sepuluh." },
+      { "speaker": "A", "ja": "銀行は何時からですか。", "id": "Bank buka dari jam berapa?" },
+      { "speaker": "B", "ja": "九時から三時までです。", "id": "Dari jam sembilan sampai jam tiga." },
+      { "speaker": "A", "ja": "図書館は？", "id": "Kalau perpustakaan?" },
+      { "speaker": "B", "ja": "図書館は午前八時から午後六時までです。", "id": "Perpustakaan dari jam delapan pagi sampai jam enam sore." }
+    ],
+    "sentences": [
+      { "ja": "今三時です。", "id": "Sekarang jam tiga." },
+      { "ja": "今午前七時半です。", "id": "Sekarang jam setengah delapan pagi." },
+      { "ja": "銀行は九時から三時までです。", "id": "Bank buka dari jam sembilan sampai jam tiga." },
+      { "ja": "学校は八時からです。", "id": "Sekolah mulai jam delapan." },
+      { "ja": "今何時ですか。", "id": "Sekarang jam berapa?" }
+    ]
+  },
+  {
+    "n": 5,
+    "title": "Rutinitas harianku",
+    "cando": "Aku bisa menceritakan jam bangun, tidur, dan bekerja — hari ini, besok, dan kemarin.",
+    "reviewed": false,
+    "grammar": ["V ます / V ません / V ました", "〜時 に V", "毎日・毎朝・毎晩"],
+    "vocab": ["起きる", "寝る", "働く", "休む", "勉強", "終る", "始まる", "毎日", "毎朝", "毎晩", "朝", "晩", "昨日", "今日", "明日"],
+    "kanji": [],
+    "tokens": [],
+    "kana_focus": [],
+    "note": "MNN pelajaran 4, paruh kedua: kata kerja pertama. Bentuk sopan ます/ません/ました diperkenalkan di sini dan dipakai semua unit selanjutnya — bentuk kamus tetap jadi kunci kartu, bentuk sopan diturunkan.",
+    "dialog": [
+      { "speaker": "A", "ja": "たなかさんは毎朝何時に起きますか。", "id": "Tanaka-san, setiap pagi bangun jam berapa?" },
+      { "speaker": "B", "ja": "六時に起きます。", "id": "Bangun jam enam." },
+      { "speaker": "A", "ja": "晩は何時に寝ますか。", "id": "Kalau malam, tidur jam berapa?" },
+      { "speaker": "B", "ja": "十一時に寝ます。", "id": "Jam sebelas." },
+      { "speaker": "A", "ja": "明日も働きますか。", "id": "Besok juga bekerja?" },
+      { "speaker": "B", "ja": "いいえ、明日は休みます。", "id": "Tidak, besok saya libur." }
+    ],
+    "sentences": [
+      { "ja": "私は毎朝六時に起きます。", "id": "Saya bangun jam enam setiap pagi." },
+      { "ja": "毎晩十時に寝ます。", "id": "Setiap malam saya tidur jam sepuluh." },
+      { "ja": "昨日は働きませんでした。", "id": "Kemarin saya tidak bekerja." },
+      { "ja": "学校は九時に始まります。", "id": "Sekolah mulai jam sembilan." },
+      { "ja": "今日は勉強しません。", "id": "Hari ini saya tidak belajar." }
+    ]
+  },
+  {
+    "n": 6,
+    "title": "Pergi dan pulang",
+    "cando": "Aku bisa mengatakan aku pergi ke mana, naik apa, dan kapan.",
+    "reviewed": false,
+    "grammar": ["N へ 行きます / 来ます / 帰ります", "N（kendaraan）で 行きます", "いつ / hari + に"],
+    "vocab": ["行く", "来る", "帰る", "電車", "バス", "タクシー", "自転車", "飛行機", "家", "会社", "日曜日", "月曜日", "土曜日", "いつ", "来年", "日本"],
+    "kanji": [],
+    "tokens": ["へ"],
+    "kana_focus": [],
+    "note": "MNN pelajaran 5. Tiga kata kerja gerak dulu — へ menandai arah, で menandai kendaraan. どこへも行きません memakai どこ yang sudah dikenal dari unit 3.",
+    "dialog": [
+      { "speaker": "A", "ja": "やまださんは明日どこへ行きますか。", "id": "Yamada-san, besok pergi ke mana?" },
+      { "speaker": "B", "ja": "会社へ行きます。", "id": "Ke kantor." },
+      { "speaker": "A", "ja": "日曜日も会社へ行きますか。", "id": "Hari Minggu juga ke kantor?" },
+      { "speaker": "B", "ja": "いいえ、どこへも行きません。", "id": "Tidak, tidak pergi ke mana-mana." },
+      { "speaker": "A", "ja": "いつ日本へ行きますか。", "id": "Kapan kamu pergi ke Jepang?" },
+      { "speaker": "B", "ja": "来年行きます。", "id": "Pergi tahun depan." }
+    ],
+    "sentences": [
+      { "ja": "私は電車で学校へ行きます。", "id": "Saya pergi ke sekolah naik kereta." },
+      { "ja": "明日友達と駅へ行きます。", "id": "Besok saya pergi ke stasiun bersama teman." },
+      { "ja": "バスで家へ帰ります。", "id": "Saya pulang ke rumah naik bus." },
+      { "ja": "先生は月曜日に来ます。", "id": "Guru datang hari Senin." },
+      { "ja": "日曜日はどこへも行きません。", "id": "Hari Minggu saya tidak pergi ke mana-mana." }
+    ]
+  },
+  {
+    "n": 7,
+    "title": "Makan, minum, membeli",
+    "cando": "Aku bisa menyebut apa yang kumakan dan kulakukan, lalu mengajak orang melakukannya bersama.",
+    "reviewed": false,
+    "grammar": ["N を V", "何 を しますか", "一緒に 〜ませんか / 〜ましょう"],
+    "vocab": ["食べる", "飲む", "見る 観る", "聞く", "読む", "買う", "する", "御飯", "パン", "お茶", "コーヒー", "テレビ", "映画", "音楽", "新聞", "一緒"],
+    "kanji": [],
+    "tokens": [],
+    "kana_focus": [],
+    "note": "MNN pelajaran 6. を tiba bersama kata kerja transitif pertama. Ajakan ませんか/ましょう masuk di sini karena inilah unit pertama yang punya kegiatan untuk diajak.",
+    "dialog": [
+      { "speaker": "A", "ja": "明日何をしますか。", "id": "Besok kamu mau apa?" },
+      { "speaker": "B", "ja": "友達と映画を見ます。", "id": "Menonton film bersama teman." },
+      { "speaker": "A", "ja": "私は家で音楽を聞きます。", "id": "Saya mendengarkan musik di rumah." },
+      { "speaker": "B", "ja": "日曜日に一緒にお茶を飲みませんか。", "id": "Hari Minggu, minum teh bersama, yuk?" },
+      { "speaker": "A", "ja": "はい、飲みましょう。", "id": "Ya, ayo." }
+    ],
+    "sentences": [
+      { "ja": "私は毎朝パンを食べます。", "id": "Setiap pagi saya makan roti." },
+      { "ja": "毎晩テレビを見ます。", "id": "Setiap malam saya menonton TV." },
+      { "ja": "駅で新聞を買います。", "id": "Saya membeli koran di stasiun." },
+      { "ja": "昨日コーヒーを飲みました。", "id": "Kemarin saya minum kopi." },
+      { "ja": "一緒にごはんを食べませんか。", "id": "Makan bersama, yuk?" }
+    ]
+  },
+  {
+    "n": 8,
+    "title": "Memberi dan meminjam",
+    "cando": "Aku bisa mengatakan aku memberi atau meminjam apa kepada siapa, dan memakai apa untuk apa.",
+    "reviewed": false,
+    "grammar": ["N（alat）で V", "N に N を あげます", "N に N を 貸します / 借ります"],
+    "vocab": ["上げる", "貸す", "借りる", "習う", "教える", "かける", "撮る", "書く", "電話", "手紙", "はし", "写真", "日本語", "辞書"],
+    "kanji": [],
+    "tokens": [],
+    "kana_focus": [],
+    "note": "MNN pelajaran 7 tanpa もらいます — kata itu tidak ada di daftar N5 kita; sisi menerima menyusul bersama suplemen. で beralih dari kendaraan (unit 6) ke alat.",
+    "dialog": [
+      { "speaker": "A", "ja": "それは何ですか。", "id": "Itu apa?" },
+      { "speaker": "B", "ja": "日本語の辞書です。友達に借りました。", "id": "Kamus bahasa Jepang. Saya pinjam dari teman." },
+      { "speaker": "A", "ja": "私も日本語を習います。", "id": "Saya juga akan belajar bahasa Jepang." },
+      { "speaker": "B", "ja": "この辞書を貸しましょうか。", "id": "Saya pinjamkan kamus ini, ya?" },
+      { "speaker": "A", "ja": "ありがとうございます。", "id": "Terima kasih." }
+    ],
+    "sentences": [
+      { "ja": "はしでごはんを食べます。", "id": "Saya makan nasi dengan sumpit." },
+      { "ja": "友達に手紙を書きます。", "id": "Saya menulis surat untuk teman." },
+      { "ja": "先生に電話をかけます。", "id": "Saya menelepon guru." },
+      { "ja": "私は友達にこの本をあげます。", "id": "Saya memberikan buku ini kepada teman." },
+      { "ja": "駅で写真を撮りました。", "id": "Saya mengambil foto di stasiun." },
+      { "ja": "友達に日本語を教えます。", "id": "Saya mengajari teman bahasa Jepang." }
+    ]
+  },
+  {
+    "n": 9,
+    "title": "Seperti apa?",
+    "cando": "Aku bisa menggambarkan benda dan tempat: besar, baru, mahal, tenang.",
+    "reviewed": false,
+    "grammar": ["い-adj です / くないです", "な-adj です / じゃありません", "とても / あまり"],
+    "vocab": ["大きい", "小さい", "新しい", "古い", "いい/よい", "高い", "安い", "おいしい", "おもしろい", "きれい", "静か", "有名", "とても", "あまり", "町", "レストラン"],
+    "kanji": ["大", "小", "高"],
+    "tokens": [],
+    "kana_focus": [],
+    "note": "MNN pelajaran 8. Kanji pertama masuk di sini — 大・小・高 diambil dari kata sifat unit ini sendiri, jadi aksara baru selalu punya kata yang sudah dikenal. いい menolak konjugasi; bentuk negatif/lampau lewat よい.",
+    "dialog": [
+      { "speaker": "A", "ja": "あなたの学校は大きいですか。", "id": "Sekolahmu besar?" },
+      { "speaker": "B", "ja": "はい、とても大きいです。新しいですよ。", "id": "Ya, besar sekali. Baru, lho." },
+      { "speaker": "A", "ja": "この町は静かですか。", "id": "Kota ini tenang?" },
+      { "speaker": "B", "ja": "いいえ、静かじゃありません。", "id": "Tidak, tidak tenang." },
+      { "speaker": "A", "ja": "あのレストランはおいしいですか。", "id": "Restoran itu enak?" },
+      { "speaker": "B", "ja": "おいしいです。安くないですよ。", "id": "Enak. Tapi tidak murah, lho." }
+    ],
+    "sentences": [
+      { "ja": "この本はとてもおもしろいです。", "id": "Buku ini menarik sekali." },
+      { "ja": "私のかばんは古いです。", "id": "Tas saya sudah tua." },
+      { "ja": "あの時計は高くないです。", "id": "Jam itu tidak mahal." },
+      { "ja": "先生の車はきれいです。", "id": "Mobil guru bersih." },
+      { "ja": "この町は有名じゃありません。", "id": "Kota ini tidak terkenal." },
+      { "ja": "あのレストランはあまり高くないです。", "id": "Restoran itu tidak begitu mahal." }
+    ]
+  },
+  {
+    "n": 10,
+    "title": "Suka dan mengerti",
+    "cando": "Aku bisa mengatakan apa yang kusukai, apa yang kupahami, dan alasannya.",
+    "reviewed": false,
+    "grammar": ["N が 好きです / 嫌いです", "N が 分かります / あります", "どうして / 〜から"],
+    "vocab": ["好き", "嫌い", "上手", "下手", "分かる", "ある", "時間", "スポーツ", "料理", "肉", "魚", "野菜", "少し", "どうして", "忙しい", "元気"],
+    "kanji": ["人", "本", "日", "学", "生"],
+    "tokens": [],
+    "kana_focus": [],
+    "note": "MNN pelajaran 9. が pertama kali membawa objek perasaan/kemampuan. Kanji unit ini semuanya sudah lama terlihat di dalam kata (日本人・学生・毎日) — sekarang dipelajari sebagai aksara.",
+    "dialog": [
+      { "speaker": "A", "ja": "さとうさんは料理が上手ですね。", "id": "Sato-san pintar memasak, ya." },
+      { "speaker": "B", "ja": "私は料理が好きですから。", "id": "Karena saya suka memasak." },
+      { "speaker": "A", "ja": "魚は好きですか。", "id": "Suka ikan?" },
+      { "speaker": "B", "ja": "いいえ、魚はあまり好きじゃありません。肉が好きです。", "id": "Tidak begitu suka. Saya suka daging." },
+      { "speaker": "A", "ja": "どうして野菜を食べませんか。", "id": "Kenapa kamu tidak makan sayur?" },
+      { "speaker": "B", "ja": "野菜は嫌いですから。", "id": "Karena saya benci sayur." }
+    ],
+    "sentences": [
+      { "ja": "私はスポーツが好きです。", "id": "Saya suka olahraga." },
+      { "ja": "日本語が少し分かります。", "id": "Saya sedikit mengerti bahasa Jepang." },
+      { "ja": "今日は時間がありません。", "id": "Hari ini saya tidak punya waktu." },
+      { "ja": "あの人は英語が上手です。", "id": "Orang itu jago bahasa Inggris." },
+      { "ja": "どうして勉強しませんか。忙しいですから。", "id": "Kenapa tidak belajar? Karena sibuk." },
+      { "ja": "私は料理が下手です。", "id": "Saya payah memasak." },
+      { "ja": "先生はとても元気です。", "id": "Guru sangat bersemangat." }
+    ]
   }
 ]

@@ -30,6 +30,8 @@ export type Unit = {
   grammar: string[]
   vocab: string[]
   kanji: string[]
+  /** Function words the unit's pattern teaches (時, から) — validator scope, no cards. */
+  tokens?: string[]
   /** Kana rows this unit practises, for Unit 0's whole-word reading. */
   kana_focus?: string[]
   note?: string
