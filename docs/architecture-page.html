@@ -189,7 +189,7 @@
       bagaimana bagian-bagiannya bertaut, dan diperbarui tiap kali sistemnya berubah —
       bukan tiap kali seseorang ingat.
     </p>
-    <span class="stamp">Terverifikasi lawan produksi · <b>6 Agustus 2026</b> · sesudah Sprint 1</span>
+    <span class="stamp">Terverifikasi lawan produksi · <b>6 Agustus 2026</b> · sesudah Sprint 2</span>
   </header>
 
   <section>
@@ -299,9 +299,9 @@
           <tr><th>Rute</th><th>Isinya</th><th>Penjaga</th></tr>
         </thead>
         <tbody>
-          <tr><td><code>/</code></td><td>Hari Ini — kuota hari itu, pita runtun, satu CTA</td><td>auth + goal</td></tr>
-          <tr><td><code>/mulai/</code></td><td>Onboarding: level, jadwal ujian, rencana yang menyusul darinya</td><td>auth</td></tr>
-          <tr><td><code>/sesi/</code></td><td>Sesi review — recognition dan recall</td><td>auth + goal</td></tr>
+          <tr><td><code>/</code></td><td>Hari Ini — kuota hari itu, baris gerbang, pita runtun, satu CTA</td><td>auth + goal</td></tr>
+          <tr><td><code>/mulai/</code></td><td>Onboarding: level, jadwal ujian, rencana empat track yang menyusul darinya</td><td>auth</td></tr>
+          <tr><td><code>/sesi/</code></td><td>Sesi review — recognition, recall, dan menyimak</td><td>auth + goal</td></tr>
           <tr><td><code>/menulis/</code></td><td>Latihan menulis: contoh → jiplak → tulis dari ingatan di kanvas</td><td>auth</td></tr>
           <tr><td><code>/kana/</code></td><td>Lembar Kana, gojūon yang diisi sendiri</td><td>auth</td></tr>
           <tr><td><code>/setelan/</code></td><td>Profil, keluar akun, hapus akun</td><td>auth</td></tr>
@@ -530,6 +530,129 @@
         sesudah sinkronisasi dipaksa ulang tiga kali.
       </figcaption>
     </figure>
+  </section>
+
+  <section>
+    <h2><span class="cell done"></span> Tangga kurikulum: satu bentuk item, empat track</h2>
+    <p class="lede">
+      Semua yang diajarkan aplikasi ini memakai <strong>satu bentuk yang sama</strong>.
+      <code>src/lib/items.ts</code> mendefinisikan <code>Item</code>; apa pun yang khas
+      per tipe — baris & kolom kana, bacaan kanji, rumus bentukan grammar — masuk ke
+      kantong <code>data</code>. Antrean, penjadwal, dan lapisan sinkron tidak pernah
+      tahu sebuah item datang dari berkas yang mana. <strong>Menambah N4 berarti
+      menambah baris data, bukan menulis kode.</strong>
+    </p>
+
+    <figure>
+      <div class="frame">
+        <svg viewBox="0 0 860 396" role="img"
+             aria-label="Kartu lokal diperiksa gerbang kana; bila belum 95 persen hanya track kana yang terbuka dan dataset N5 tidak dimuat sama sekali; bila sudah, tiga track N5 dimuat dan kuota harian dibagi dengan kana didahulukan lalu proporsional dengan jaminan satu slot per track.">
+          <defs>
+            <marker id="p-ink" viewBox="0 0 10 10" refX="9" refY="5"
+                    markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path d="M 0 1 L 9 5 L 0 9 z" fill="currentColor"/>
+            </marker>
+            <marker id="p-shu" viewBox="0 0 10 10" refX="9" refY="5"
+                    markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path d="M 0 1 L 9 5 L 0 9 z" style="fill: var(--shu)"/>
+            </marker>
+          </defs>
+
+          <g fill="none" stroke="currentColor" stroke-width="1.5">
+            <rect x="24" y="150" width="150" height="52" rx="3"/>
+            <rect x="322" y="44" width="230" height="52" rx="3"/>
+            <rect x="322" y="256" width="230" height="52" rx="3"/>
+            <rect x="620" y="150" width="216" height="52" rx="3"/>
+          </g>
+          <path d="M 248 148 L 296 176 L 248 204 L 200 176 z" fill="none"
+                stroke-width="1.8" style="stroke: var(--shu)"/>
+
+          <g font-family="ui-monospace, monospace" font-size="12.5" fill="currentColor">
+            <text x="44" y="172">card_states</text>
+            <text x="342" y="66">track: kana saja</text>
+            <text x="342" y="278">+ 3 track N5</text>
+            <text x="640" y="172">splitQuota()</text>
+          </g>
+          <g font-family="ui-monospace, monospace" font-size="11" fill="currentColor" opacity="0.62">
+            <text x="44" y="190">lokal · Dexie</text>
+            <text x="342" y="84">N5 tidak diunduh sama sekali</text>
+            <text x="342" y="296">dynamic import saat itu juga</text>
+            <text x="640" y="190">kana dulu → sisanya proporsional</text>
+          </g>
+          <text x="248" y="180" text-anchor="middle" font-family="ui-monospace, monospace"
+                font-size="11.5" font-weight="600" style="fill: var(--shu)">95%?</text>
+
+          <g stroke="currentColor" stroke-width="1.4" fill="none" marker-end="url(#p-ink)">
+            <line x1="174" y1="176" x2="196" y2="176"/>
+            <path d="M 272 156 L 272 70 L 316 70"/>
+            <path d="M 552 70 L 596 70 L 596 168 L 614 168"/>
+            <path d="M 552 282 L 596 282 L 596 186 L 614 186"/>
+          </g>
+          <path d="M 272 196 L 272 282 L 316 282" stroke-width="2.2" fill="none"
+                style="stroke: var(--shu)" marker-end="url(#p-shu)"/>
+
+          <g font-family="ui-monospace, monospace" font-size="11" fill="currentColor">
+            <text x="284" y="112">belum</text>
+          </g>
+          <text x="284" y="248" font-family="ui-monospace, monospace" font-size="11"
+                font-weight="600" style="fill: var(--shu)">gerbang terbuka</text>
+
+          <text x="430" y="368" text-anchor="middle" font-family="ui-monospace, monospace"
+                font-size="11" fill="currentColor" opacity="0.6">
+            tiap track terbuka dijamin ≥ 1 slot — 662 : 79 : 49 pada kuota 8 membuat grammar nol berminggu-minggu
+          </text>
+        </svg>
+      </div>
+      <figcaption>
+        Dua aturan di <code>src/lib/path.ts</code> yang memikul bebannya. <b>N5 baru
+        dihitung sebagai “sisa” setelah gerbangnya terbuka</b> — kuota adalah janji
+        tentang pekerjaan yang benar-benar bisa diberikan hari ini, dan menghitung item
+        yang masih terkunci akan menggelembungkan pace berbulan-bulan lebih awal. Dan
+        <b>tiap track terbuka dijamin satu slot</b> sebelum pembagian proporsional;
+        kana tetap didahulukan sampai tuntas, karena N5 ditulis memakai kana.
+      </figcaption>
+    </figure>
+
+    <p>
+      Kartu apa yang didapat sebuah item adalah sifat <strong>tipe</strong>-nya, bukan
+      urusan layar — <code>modesForItem()</code>:
+    </p>
+    <div class="scroller">
+      <table>
+        <thead>
+          <tr><th>Tipe</th><th>recognition</th><th>recall</th><th>menulis</th><th>menyimak</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>kana</td><td>✓</td><td>✓</td><td>✓ default nyala</td><td>—</td></tr>
+          <tr><td>kosakata</td><td>✓</td><td>✓</td><td>—</td><td>✓ bila ada suara</td></tr>
+          <tr><td>kanji</td><td>✓</td><td>✓</td><td>✓ toggle, default mati</td><td>—</td></tr>
+          <tr><td>grammar</td><td>✓</td><td>—</td><td>—</td><td>—</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>
+      Lalu <code>cardFaces()</code> memutuskan tiap kartu bertanya apa dan menjawab apa.
+      Ini keputusan kurikulum, bukan tata letak — itulah kenapa ia murni dan bertest:
+      <strong>recall kosakata bertanya dari ARTI</strong> dan dijawab dengan katanya;
+      bertanya dari bacaannya hanya menyalin bunyi, bukan mengingat. Jawaban kanji
+      membawa 訓 dan 音. Jawaban grammar membawa rumus bentukannya. Kata yang seluruhnya
+      kana menjawab dengan artinya — bacaannya <em>adalah</em> promptnya.
+    </p>
+
+    <p>
+      <strong>Kartu menyimak tidak pernah ada di tempat yang tak bisa menanyakannya.</strong>
+      <code>src/lib/tts.ts</code> mencari suara ja-JP perangkat secara asinkron —
+      <code>getVoices()</code> kosong sampai <code>voiceschanged</code> menyala, jadi
+      membacanya sinkron akan melapor “tidak ada suara” di tiap muatan pertama — dan
+      sesi menunggu jawabannya <em>sebelum</em> menyusun antrean. Tidak ada suara berarti
+      kartu menyimak tidak dibuat; kartu menyimak yang jatuh tempo dari perangkat lain
+      <strong>ditahan dari antrean, bukan dilewati</strong>, jadi ia tetap jatuh tempo
+      untuk perangkat berikutnya yang bisa membunyikannya. Kartunya berbunyi sendiri
+      begitu tampil (jatah dua belas detik per kartu; menghabiskan satu ketukan hanya
+      untuk “tekan untuk mendengar” memakan sepertiganya) dan tidak menampilkan teks
+      Jepang sebelum jawabannya dibuka — yang diuji adalah telinganya.
+    </p>
   </section>
 
   <section>
@@ -1119,6 +1242,21 @@
             <td>Targetnya disimpan sebagai jumlah kartu yang mengantre</td>
           </tr>
           <tr>
+            <td><strong>Komponen yang selamat dari navigasi</strong></td>
+            <td>Lembar Kana tampak menggantung: selesaikan satu sel, tekan Simpan, strip barisnya maju tapi area latihannya beku di skor karakter sebelumnya. Yang lebih berbahaya dari bekunya: tombol Simpan yang masih hidup itu menggenggam hasil <em>sebelumnya</em>, jadi tekanan kedua menulis goresan karakter lama ke sel baru dan mencatat review yang tak pernah dikerjakan siapa pun. <code>router.replace</code> mengganti query string, bukan identitas komponen</td>
+            <td><code>key={item.id}</code> pada <code>WritingPractice</code>, jadi berpindah sel benar-benar remount, plus penjaga <code>saving</code> untuk tekanan ganda</td>
+          </tr>
+          <tr>
+            <td><strong>Baca server-saja di belakang tulis lokal-dulu</strong></td>
+            <td>Lembar yang sama, tertinggal satu sel dari dirinya sendiri. <code>recordKanaCell</code> mendarat di Dexie seketika sementara <code>pushPending()</code> dilepas tanpa ditunggu, jadi refetch-nya balapan dengan upload — dan layar menulis memilih <em>sel berikutnya yang belum ditulis</em> dari peta basi yang sama, yang sesudah sel terakhir sebuah baris bisa menunjuk balik ke sel yang sudah ditulis</td>
+            <td><code>useKanaSheet</code> melapis baris Dexie lokal di atas peta server, lokal menang per item. Lembarnya jadi terbaca offline juga — sesuatu yang versi server-saja tak pernah bisa</td>
+          </tr>
+          <tr>
+            <td><strong><code>208 - states.size</code> sebagai “berapa yang tersisa”</strong></td>
+            <td>Benar persis selama kana satu-satunya isi. Begitu kartu N5 bisa ada, angka itu diam-diam menghitung item N5 terhadap total kana, dan pace hariannya melenceng</td>
+            <td><code>pathState()</code> menghitung <code>remainingNew</code> dari track yang terbuka, dan kedua layar yang mencetak pace memanggilnya</td>
+          </tr>
+          <tr>
             <td><strong>BOM di env var Vercel</strong></td>
             <td>PowerShell menyisipkan U+FEFF saat mem-pipe ke perintah native. URL yang diawali BOM bukan URL absolut, jadi <code>fetch</code> memperlakukannya sebagai <em>relatif</em> dan mengirim semua permintaan ke origin kita sendiri. Log Supabase tetap kosong karena tak ada yang tiba</td>
             <td><code>cleanEnv()</code> mencopotnya dan bentuk URL divalidasi saat startup; <code>functionsUrl()</code> diturunkan dari origin yang sudah tervalidasi</td>
@@ -1136,20 +1274,32 @@
     </p>
     <ul>
       <li>
-        <strong>Mode listening.</strong> <code>MODE_RANK</code> sudah menyediakan
-        tempatnya, tapi belum ada yang membangkitkan kartunya dan belum ada layar yang
-        memutar audio
+        <strong>Separuh yang berbunyi dari mode menyimak.</strong> Logikanya sudah
+        terverifikasi ujung ke ujung — kartu hanya dibuat di perangkat bersuara, ditahan
+        di perangkat yang tak bersuara, berbunyi sekali saat tampil, tanpa teks Jepang
+        sebelum jawaban dibuka — tapi itu dibuktikan dengan <code>speechSynthesis</code>
+        tiruan yang merekam apa yang diminta diucapkan. <strong>Bagaimana suara ja-JP
+        sungguhan terdengar belum diuji</strong>, dan itu butuh HP, bukan rig uji.
+        VOICEVOX adalah jalur peningkatan kalau suara bawaan perangkat ternyata buruk
       </li>
       <li>
-        <strong>Dataset kosakata, kanji, dan grammar.</strong> Berkas JSON-nya ada, tabel
-        isinya belum: <code>items</code> dan <code>item_examples</code> masih migrasi yang
-        belum ditulis, sengaja ditahan sampai schema N3 Japan Arena terlihat — mengunci
-        bentuknya duluan adalah cara memastikan ada migrasi kedua
+        <strong>Tabel konten di database.</strong> Datasetnya dikirim sebagai JSON bundel
+        yang dimuat lewat dynamic import — justru itu yang membuatnya jalan offline sejak
+        kunjungan pertama. <code>items</code> dan <code>item_examples</code> tetap migrasi
+        yang belum ditulis, sengaja ditahan sampai schema N3 Japan Arena terlihat —
+        mengunci bentuknya duluan adalah cara memastikan ada migrasi kedua
       </li>
       <li>
-        <strong>Curriculum Path untuk N5</strong>, termasuk gerbang akurasi 95% untuk
-        keluar dari kana. Kana masih satu-satunya jalur yang punya isi, dan onboarding
-        hanya menampilkan jalur yang ada isinya
+        <strong>Font belum mencakup datasetnya.</strong> Subsetnya memuat ~290 glyph:
+        kana, kanji yang dipakai UI, latin. Kosakata dan kanji N5 jatuh ke font Jepang
+        bawaan perangkat — yang di Windows dan Android tidak selalu font yang diandaikan
+        desainnya. Sengaja ditunda sampai kartunya bisa dilihat di layar sungguhan
+      </li>
+      <li>
+        <strong>N4 sampai N1.</strong> Tangganya level-agnostik sejak konstruksinya; tiap
+        level adalah satu build dataset plus satu gerbang, bukan mesin baru.
+        <code>docs/PETA-MATERI.md</code> memuat peta lengkapnya berikut label kejujuran
+        per angka
       </li>
       <li>
         <strong>Pendaftaran publik</strong> tanpa kode undangan, yang lebih dulu menuntut
@@ -1165,13 +1315,15 @@
       </li>
     </ul>
     <p>
-      Dibangun sejak revisi sebelumnya dan turun dari daftar ini: <strong>sesi
-      review</strong>, <strong>Hari Ini yang membaca data sungguhan</strong>,
-      <strong>subsetting font Jepang</strong>, dan <strong>ikon PNG</strong>. Sebelumnya
-      lagi sudah ditutup: pendaftaran publik yang tadinya membuat diagram kedua
-      menggambarkan lubang yang masih terbuka, dan model household yang dicabut utuh saat
-      aplikasi digeneralisasi — halaman Setelan (keluar + hapus akun) dan Tentang
-      (atribusi lisensi) lahir di perubahan yang sama.
+      Dibangun sejak revisi sebelumnya dan turun dari daftar ini: <strong>dataset
+      N5</strong> (662 kosakata · 79 kanji · 49 grammar), <strong>mesin item
+      generik</strong>, <strong>Curriculum Path berikut gerbang kana 95%</strong>,
+      <strong>pembagian kuota lintas track</strong>, <strong>wajah kartu per tipe</strong>,
+      <strong>tawaran menyusul ketertinggalan</strong>, dan <strong>mode menyimak</strong>.
+      Satu revisi sebelumnya: sesi review, Hari Ini yang membaca data sungguhan,
+      subsetting font Jepang, dan ikon PNG. Lebih jauh lagi sudah ditutup: pendaftaran
+      publik yang tadinya membuat diagram kedua menggambarkan lubang yang masih terbuka,
+      dan model household yang dicabut utuh saat aplikasi digeneralisasi.
     </p>
   </section>
 
