@@ -11,8 +11,8 @@ import { clsx } from '@/lib/clsx'
 import { groupByItem, sheetProgress } from '@/lib/curriculum'
 import { localDate } from '@/lib/day'
 import { db, localProgress } from '@/lib/db'
-import { parseExamDate } from '@/lib/exam-dates'
-import { computeQuota } from '@/lib/goal-engine'
+import { parseExamDate, upcomingSittings } from '@/lib/exam-dates'
+import { catchUpOptions, computeQuota } from '@/lib/goal-engine'
 import { fmt, useT } from '@/lib/i18n'
 import { loadTrack, type Item } from '@/lib/items'
 import { pathState } from '@/lib/path'
@@ -108,6 +108,21 @@ function TodayScreen() {
   const state = dayState({ dueRemaining: remaining, overdue, quota, doneToday: done })
   const writingDue = due.filter((c) => c.mode === 'writing').length
 
+  // catchUpOptions runs only when there is something to catch up on. The move
+  // option shows what the pace BECOMES at the next sitting — a number, so the
+  // choice is informed rather than emotional.
+  const examDate = parseExamDate(goal.target_exam_date)
+  const moveOption =
+    state === 'tertinggal' || quota.unrealistic
+      ? catchUpOptions({
+          remainingNew: path.remainingNew,
+          overdue,
+          targetExamDate: examDate,
+          today: now,
+          alternativeExamDates: upcomingSittings(now, 4).map((s) => s.date),
+        }).find((o) => o.kind === 'moveExam')
+      : undefined
+
   const kana = (['basic', 'dakuten', 'youon'] as const).reduce(
     (acc, group) => {
       const p = sheetProgress('hiragana', group, states, now)
@@ -200,6 +215,30 @@ function TodayScreen() {
                 <p className="tnum mt-1 text-[13px] text-oker">
                   {fmt(t.hariIni.behindDetail, { n: overdue })}
                 </p>
+              ) : null}
+
+              {/* Falling behind gets choices, not a scolding — and both options
+                  are presented as equally reasonable (PRD §6.1: moving the exam
+                  is not a defeat). Oker, never shu: being behind is a fact. */}
+              {(state === 'tertinggal' || quota.unrealistic) && moveOption ? (
+                <div className="mt-3 rounded-[3px] bg-oker-tint px-3 py-2 text-[12px] leading-relaxed text-oker">
+                  <p>
+                    {quota.unrealistic ? t.hariIni.unrealisticNote : t.hariIni.catchupBody}
+                  </p>
+                  <p className="tnum mt-1">
+                    {fmt(t.hariIni.catchupMove, {
+                      date: moveOption.examDate.toLocaleDateString('id-ID', {
+                        day: 'numeric',
+                        month: 'long',
+                        year: 'numeric',
+                      }),
+                      n: moveOption.newPerDay,
+                    })}{' '}
+                    <Link href="/mulai/?ganti=1" className="underline underline-offset-2">
+                      {t.hariIni.catchupMoveCta}
+                    </Link>
+                  </p>
+                </div>
               ) : null}
 
               {target > 0 ? (

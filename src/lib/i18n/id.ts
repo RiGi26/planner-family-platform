@@ -106,6 +106,12 @@ export const id = {
 
     behind: 'Tertinggal',
     behindDetail: '{n} kartu lewat dari hari sebelumnya',
+    catchupBody:
+      'Dua jalan, dua-duanya wajar: kerjakan bertahap — antrean menyebar sendiri — atau geser tanggal ujian.',
+    unrealisticNote:
+      'Pace yang dibutuhkan sudah jauh melebihi kesepakatan awalmu. Menggeser sitting bukan kekalahan.',
+    catchupMove: 'Pindah ke {date} = {n} kartu baru/hari.',
+    catchupMoveCta: 'Geser tanggal',
     doneHeading: 'Kuota hari ini tuntas',
     doneDetail: 'Sisanya milikmu. Kartu berikutnya datang besok.',
     kanaStrength: 'Kana kuat',
