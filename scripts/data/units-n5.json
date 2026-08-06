@@ -295,5 +295,171 @@
       { "ja": "私は料理が下手です。", "id": "Saya payah memasak." },
       { "ja": "先生はとても元気です。", "id": "Guru sangat bersemangat." }
     ]
+  },
+  {
+    "n": 11,
+    "title": "Ada di mana, ada siapa",
+    "cando": "Aku bisa mengatakan sesuatu ada di mana — di atas, di bawah, di depan, di dalam.",
+    "reviewed": false,
+    "grammar": ["N が あります / います", "N の 上・下・中 に", "隣・前・後ろ・近く"],
+    "vocab": ["居る", "上", "下", "中", "前", "後ろ", "隣", "近く", "部屋", "机", "猫", "犬", "木", "庭", "店", "郵便局"],
+    "kanji": ["上", "下", "中", "前"],
+    "tokens": [],
+    "kana_focus": [],
+    "note": "MNN pelajaran 10. あります sudah muncul di unit 10 (時間がありません); di sini pasangannya います untuk yang bernyawa, plus kata posisi. Kanji unit ini = kata posisinya sendiri.",
+    "dialog": [
+      { "speaker": "A", "ja": "すみません、郵便局はどこにありますか。", "id": "Permisi, kantor pos ada di mana?" },
+      { "speaker": "B", "ja": "駅の前にあります。", "id": "Ada di depan stasiun." },
+      { "speaker": "A", "ja": "ありがとうございます。猫がいますね。", "id": "Terima kasih. Ada kucing, ya." },
+      { "speaker": "B", "ja": "店の猫ですよ。", "id": "Itu kucing toko, lho." },
+      { "speaker": "A", "ja": "部屋の中にも猫がいますか。", "id": "Di dalam ruangan juga ada kucing?" },
+      { "speaker": "B", "ja": "はい、います。", "id": "Ya, ada." }
+    ],
+    "sentences": [
+      { "ja": "机の上に本があります。", "id": "Di atas meja ada buku." },
+      { "ja": "いすの下に猫がいます。", "id": "Di bawah kursi ada kucing." },
+      { "ja": "庭に木があります。", "id": "Di kebun ada pohon." },
+      { "ja": "庭に犬もいます。", "id": "Di kebun juga ada anjing." },
+      { "ja": "駅の近くに店があります。", "id": "Di dekat stasiun ada toko." },
+      { "ja": "私の後ろに先生がいます。", "id": "Di belakang saya ada guru." }
+    ]
+  },
+  {
+    "n": 12,
+    "title": "Berapa harganya?",
+    "cando": "Aku bisa menghitung benda, menanyakan harga, dan membeli sesuatu.",
+    "reviewed": false,
+    "grammar": ["一つ・二つ・三つ（satuan hitung）", "N は いくらですか", "N を 数 ください"],
+    "vocab": ["一つ", "二つ", "三つ", "四つ", "五つ", "六つ", "七つ", "八つ", "九つ", "百", "千", "万", "いくら", "お金", "切符", "たくさん"],
+    "kanji": ["百", "千", "万", "金", "円"],
+    "tokens": ["円", "ください"],
+    "kana_focus": [],
+    "note": "MNN pelajaran 11. 円 diajarkan sebagai token pola seperti 時 di unit 4 — selalu menempel angka, tidak pernah berdiri sendiri. ください di sini bentuk N をください; bentuk てください menyusul di unit 15.",
+    "dialog": [
+      { "speaker": "A", "ja": "すみません、このパンはいくらですか。", "id": "Permisi, roti ini berapa?" },
+      { "speaker": "B", "ja": "一つ百円です。", "id": "Satu seratus yen." },
+      { "speaker": "A", "ja": "三つください。", "id": "Minta tiga." },
+      { "speaker": "B", "ja": "はい、三百円です。", "id": "Baik, tiga ratus yen." },
+      { "speaker": "A", "ja": "このお茶はいくらですか。", "id": "Teh ini berapa?" },
+      { "speaker": "B", "ja": "二百五十円です。", "id": "Dua ratus lima puluh yen." }
+    ],
+    "sentences": [
+      { "ja": "この本は千円です。", "id": "Buku ini seribu yen." },
+      { "ja": "水をください。", "id": "Minta air." },
+      { "ja": "この時計は一万円です。", "id": "Jam ini sepuluh ribu yen." },
+      { "ja": "部屋に机が二つあります。", "id": "Di kamar ada dua meja." },
+      { "ja": "お金がたくさんあります。", "id": "Uangnya banyak." },
+      { "ja": "あのかばんは八千円です。", "id": "Tas itu delapan ribu yen." }
+    ]
+  },
+  {
+    "n": 13,
+    "title": "Kemarin bagaimana? Mana yang lebih?",
+    "cando": "Aku bisa menceritakan keadaan yang sudah lewat dan membandingkan dua hal.",
+    "reviewed": false,
+    "grammar": ["adj かったです / くなかったです", "N でした", "N より N のほうが", "いちばん"],
+    "vocab": ["天気", "暑い", "寒い", "涼しい", "暖かい", "春", "夏", "秋", "冬", "旅行", "休み", "夏休み", "どちら", "どう", "でも", "楽しい"],
+    "kanji": ["天", "気", "休", "半"],
+    "tokens": ["でした", "より", "ほう", "いちばん"],
+    "kana_focus": [],
+    "note": "MNN pelajaran 12. Bentuk lampau kata sifat (かった) diturunkan validator dari unit 9; でした masuk sebagai token di sini, bukan lebih awal — lampau memang baru diajarkan sekarang.",
+    "dialog": [
+      { "speaker": "A", "ja": "旅行はどうでしたか。", "id": "Perjalanannya bagaimana?" },
+      { "speaker": "B", "ja": "とても楽しかったです。", "id": "Menyenangkan sekali." },
+      { "speaker": "A", "ja": "天気はよかったですか。", "id": "Cuacanya bagus?" },
+      { "speaker": "B", "ja": "はい。でも、少し暑かったです。", "id": "Ya. Tapi agak panas." },
+      { "speaker": "A", "ja": "夏と冬とどちらが好きですか。", "id": "Musim panas atau musim dingin, suka yang mana?" },
+      { "speaker": "B", "ja": "冬のほうが好きです。", "id": "Lebih suka musim dingin." }
+    ],
+    "sentences": [
+      { "ja": "昨日は寒かったです。", "id": "Kemarin dingin." },
+      { "ja": "今日は昨日より暖かいです。", "id": "Hari ini lebih hangat dari kemarin." },
+      { "ja": "春がいちばん好きです。", "id": "Saya paling suka musim semi." },
+      { "ja": "旅行は楽しくなかったです。", "id": "Perjalanannya tidak menyenangkan." },
+      { "ja": "日本の夏は暑いです。", "id": "Musim panas di Jepang panas." },
+      { "ja": "天気はあまりよくなかったです。", "id": "Cuacanya kurang bagus." }
+    ]
+  },
+  {
+    "n": 14,
+    "title": "Ingin dan mau",
+    "cando": "Aku bisa mengatakan aku ingin benda apa, mau melakukan apa, dan pergi untuk apa.",
+    "reviewed": false,
+    "grammar": ["N が 欲しいです", "V たいです", "N へ V に 行きます"],
+    "vocab": ["欲しい", "誕生日", "服", "靴", "セーター", "傘", "買い物", "プール", "海", "泳ぐ", "遊ぶ", "疲れる", "ちょっと", "喫茶店"],
+    "kanji": ["行", "見", "食", "水"],
+    "tokens": [],
+    "kana_focus": [],
+    "note": "MNN pelajaran 13. たい dibentuk dari batang ます dan berkelakuan seperti kata sifat い — validator menurunkan keduanya. Pola tujuan (泳ぎに行きます) memakai batang telanjang, karena itu batang jadi token turunan.",
+    "dialog": [
+      { "speaker": "A", "ja": "誕生日に何が欲しいですか。", "id": "Ulang tahun nanti mau apa?" },
+      { "speaker": "B", "ja": "新しい靴が欲しいです。", "id": "Mau sepatu baru." },
+      { "speaker": "A", "ja": "日曜日に何をしたいですか。", "id": "Hari Minggu mau melakukan apa?" },
+      { "speaker": "B", "ja": "海へ泳ぎに行きたいです。", "id": "Mau pergi berenang ke laut." },
+      { "speaker": "A", "ja": "私も行きたいです。一緒に行きましょう。", "id": "Saya juga mau. Ayo pergi bersama." }
+    ],
+    "sentences": [
+      { "ja": "私は新しいかばんが欲しいです。", "id": "Saya ingin tas baru." },
+      { "ja": "水が飲みたいです。", "id": "Saya ingin minum air." },
+      { "ja": "今日は何も食べたくないです。", "id": "Hari ini tidak ingin makan apa-apa." },
+      { "ja": "喫茶店へコーヒーを飲みに行きます。", "id": "Saya pergi ke kafe untuk minum kopi." },
+      { "ja": "ちょっと疲れました。", "id": "Saya agak lelah." },
+      { "ja": "買い物に行きたいです。", "id": "Ingin pergi berbelanja." }
+    ]
+  },
+  {
+    "n": 15,
+    "title": "Tolong, dan sedang apa",
+    "cando": "Aku bisa meminta tolong dengan sopan dan mengatakan apa yang sedang terjadi.",
+    "reviewed": false,
+    "grammar": ["V て ください", "V て います（sedang）", "V ましょうか（tawaran）"],
+    "vocab": ["待つ", "座る", "立つ", "開ける", "閉める", "つける", "消す", "使う", "持つ", "降る", "窓", "ドア", "電気", "荷物", "雨"],
+    "kanji": ["雨", "電", "車", "話"],
+    "tokens": [],
+    "kana_focus": [],
+    "note": "MNN pelajaran 14. Bentuk て akhirnya tampil — validator sudah menurunkannya sejak unit 5, unit inilah yang mengajarkannya. ています memakai います dari unit 11: bentuk baru selalu dirakit dari yang lama.",
+    "dialog": [
+      { "speaker": "A", "ja": "すみません、ドアを閉めてください。", "id": "Permisi, tolong tutup pintunya." },
+      { "speaker": "B", "ja": "はい。窓も閉めますか。", "id": "Baik. Jendelanya juga?" },
+      { "speaker": "A", "ja": "いいえ、窓はいいです。", "id": "Tidak, jendelanya biarkan saja." },
+      { "speaker": "B", "ja": "雨が降っていますね。", "id": "Hujan sedang turun, ya." },
+      { "speaker": "A", "ja": "はい。バスで帰りましょう。", "id": "Iya. Ayo pulang naik bus." }
+    ],
+    "sentences": [
+      { "ja": "ちょっと待ってください。", "id": "Tunggu sebentar." },
+      { "ja": "ここに座ってください。", "id": "Silakan duduk di sini." },
+      { "ja": "電気をつけてください。", "id": "Tolong nyalakan lampunya." },
+      { "ja": "先生は今電話をかけています。", "id": "Guru sedang menelepon." },
+      { "ja": "荷物を持ちましょうか。", "id": "Saya bawakan barangnya, ya?" },
+      { "ja": "雨が降っています。", "id": "Hujan sedang turun." }
+    ]
+  },
+  {
+    "n": 16,
+    "title": "Boleh dan tidak boleh",
+    "cando": "Aku bisa meminta izin, melarang, dan menceritakan keadaan yang berlangsung.",
+    "reviewed": false,
+    "grammar": ["V ても いいですか", "V ては いけません", "V て います（status: tinggal, kenal）"],
+    "vocab": ["たばこ", "吸う", "住む", "知る", "会う", "病気", "薬", "風邪", "頭", "痛い", "病院", "医者", "飲み物", "食べ物"],
+    "kanji": ["月", "土", "友"],
+    "tokens": ["いけません"],
+    "kana_focus": [],
+    "note": "MNN pelajaran 15. ています meluas dari 'sedang' ke status (住んでいます, 知っています). Tema sakit-dan-obat masuk di sini karena izin/larangan paling sering dipakai di situasi itu.",
+    "dialog": [
+      { "speaker": "A", "ja": "ここで写真を撮ってもいいですか。", "id": "Boleh mengambil foto di sini?" },
+      { "speaker": "B", "ja": "はい、いいですよ。", "id": "Ya, boleh kok." },
+      { "speaker": "A", "ja": "ここでたばこを吸ってもいいですか。", "id": "Boleh merokok di sini?" },
+      { "speaker": "B", "ja": "いいえ、吸ってはいけません。", "id": "Tidak, tidak boleh merokok." },
+      { "speaker": "A", "ja": "すみません。", "id": "Maaf." }
+    ],
+    "sentences": [
+      { "ja": "この辞書を使ってもいいですか。", "id": "Boleh memakai kamus ini?" },
+      { "ja": "ここで遊んではいけません。", "id": "Tidak boleh bermain di sini." },
+      { "ja": "私は駅の近くに住んでいます。", "id": "Saya tinggal di dekat stasiun." },
+      { "ja": "あの医者を知っていますか。", "id": "Kamu kenal dokter itu?" },
+      { "ja": "風邪ですから、薬を飲んでいます。", "id": "Karena flu, saya sedang minum obat." },
+      { "ja": "頭が痛いですから、病院へ行きます。", "id": "Karena sakit kepala, saya pergi ke rumah sakit." },
+      { "ja": "明日友達に会います。", "id": "Besok saya bertemu teman." }
+    ]
   }
 ]

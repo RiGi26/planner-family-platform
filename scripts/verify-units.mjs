@@ -92,32 +92,40 @@ const A_ROW = { く: 'か', ぐ: 'が', す: 'さ', つ: 'た', ぬ: 'な', ぶ:
 const TE_ROW = { く: 'いて', ぐ: 'いで', す: 'して', つ: 'って', ぬ: 'んで', ぶ: 'んで', む: 'んで', る: 'って', う: 'って' }
 const POLITE = ['ます', 'ません', 'ました', 'ませんでした', 'ましょう']
 
-/** Polite, te, ta and nai forms for one spelling of one verb. */
+/**
+ * Everything that hangs off the polite stem: the ます paradigm, たい (which then
+ * conjugates as an i-adjective), and the bare stem itself — 泳ぎに行きます puts
+ * the stem alone in front of に, so it has to be a known token in its own right.
+ */
+function stemForms(stem) {
+  const out = [stem, `${stem}たい`, `${stem}たくない`, `${stem}たかった`, `${stem}たくなかった`]
+  for (const p of POLITE) out.push(`${stem}${p}`)
+  return out
+}
+
+/** Polite, te, ta, nai and tai forms for one spelling of one verb. */
 function verbForms(base, group) {
   const out = []
   if (group === 'irregular') {
     if (base === 'する') {
-      for (const p of POLITE) out.push(`し${p}`)
-      out.push('して', 'した', 'しない', 'しなかった')
+      out.push(...stemForms('し'), 'して', 'した', 'しない', 'しなかった')
     } else {
       // 来る / くる — the only other irregular at N5
       const stem = base === '来る' ? '来' : 'き'
-      for (const p of POLITE) out.push(`${stem}${p}`)
-      out.push(`${stem}て`, `${stem}た`, base === '来る' ? '来ない' : 'こない')
+      out.push(...stemForms(stem), `${stem}て`, `${stem}た`, base === '来る' ? '来ない' : 'こない')
     }
     return out
   }
   const stem = base.slice(0, -1)
   if (group === 'ichidan') {
-    for (const p of POLITE) out.push(`${stem}${p}`)
-    out.push(`${stem}て`, `${stem}た`, `${stem}ない`, `${stem}なかった`)
+    out.push(...stemForms(stem), `${stem}て`, `${stem}た`, `${stem}ない`, `${stem}なかった`)
     return out
   }
   // godan
   const last = base.slice(-1)
   const i = I_ROW[last]
   if (!i) return out
-  for (const p of POLITE) out.push(`${stem}${i}${p}`)
+  out.push(...stemForms(`${stem}${i}`))
   const te = base.endsWith('行く') || base === 'いく' ? 'って' : TE_ROW[last]
   out.push(`${stem}${te}`, `${stem}${te.replace('て', 'た').replace('で', 'だ')}`)
   out.push(`${stem}${A_ROW[last]}ない`, `${stem}${A_ROW[last]}なかった`)
@@ -152,7 +160,9 @@ function formsOf(w, entry) {
       : []
   for (const s of spellings) {
     if (group) for (const f of verbForms(s, group)) out.add(f)
-    if (pos.includes('adj-i')) for (const f of adjForms(s)) out.add(f)
+    // adj-ix is JMdict's tag for いい, whose forms come from よい — adjForms
+    // already refuses to conjugate the いい spelling itself.
+    if (pos.some((p) => p === 'adj-i' || p === 'adj-ix')) for (const f of adjForms(s)) out.add(f)
   }
   for (const base of suru) {
     out.add(base)
@@ -197,22 +207,58 @@ for (const u of units) {
 
 const KANJI_RE = /[一-龯]/u
 
-/** Longest-match segmentation against everything known so far. */
+/**
+ * Coverage by dynamic programming, not greedy longest-match.
+ *
+ * Greedy failed on real sentences: はいくらですか segmented as はい+くら…
+ * because はい (unit 1) is longer than は at that position, and the correct
+ * split only exists if you're willing to take the SHORTER word first. DP asks
+ * the right question — does ANY segmentation cover the sentence — which is
+ * also the question the learner's eye answers when reading.
+ */
+const MAX_TOKEN = 12
+
 function uncovered(text, known) {
-  const missing = []
-  let i = 0
-  outer: while (i < text.length) {
-    for (let len = Math.min(12, text.length - i); len > 0; len--) {
-      const slice = text.slice(i, i + len)
-      if (known.has(slice)) {
-        i += len
-        continue outer
+  const n = text.length
+  // can[i] — text[i..] is fully coverable by known tokens.
+  const can = new Array(n + 1).fill(false)
+  can[n] = true
+  for (let i = n - 1; i >= 0; i--) {
+    for (let len = 1; len <= Math.min(MAX_TOKEN, n - i); len++) {
+      if (can[i + len] && known.has(text.slice(i, i + len))) {
+        can[i] = true
+        break
       }
     }
-    // Unknown character: report the run it starts, then skip one char.
-    const ch = text[i]
-    missing.push(ch)
-    i += 1
+  }
+  if (can[0]) return []
+
+  // Report: walk preferring steps that keep the rest coverable, so the blame
+  // lands on the genuinely unknown characters rather than on a greedy mistake.
+  const missing = []
+  let i = 0
+  while (i < n) {
+    let step = 0
+    for (let len = Math.min(MAX_TOKEN, n - i); len > 0; len--) {
+      if (can[i + len] && known.has(text.slice(i, i + len))) {
+        step = len
+        break
+      }
+    }
+    if (step === 0) {
+      for (let len = Math.min(MAX_TOKEN, n - i); len > 0; len--) {
+        if (known.has(text.slice(i, i + len))) {
+          step = len
+          break
+        }
+      }
+    }
+    if (step === 0) {
+      missing.push(text[i])
+      i += 1
+    } else {
+      i += step
+    }
   }
   return [...new Set(missing)]
 }

@@ -163,7 +163,11 @@ for (const s of supplement) {
 const vocabRows = [...vocabByWord.values()]
 
 const vocab = vocabRows.map((v, i) => {
-  const pos = posByWord.get(v.word) ?? posByWord.get(v.reading) ?? []
+  // Multi-spelling entries ("いい/よい", "見る 観る") are one row whose raw
+  // string is no JMdict key — split into variants and take the first hit, or
+  // いい/よい never learns it is an adjective and よくなかった stays underivable.
+  const candidates = [v.word, v.reading, ...v.word.split(/[/\s]+/), ...(v.reading ?? '').split(/[/\s]+/)]
+  const pos = candidates.map((c) => posByWord.get(c)).find((p) => p) ?? []
   const group = verbGroup(pos)
   return {
     id: `vocab-n5-${v.word}`,

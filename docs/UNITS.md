@@ -27,24 +27,27 @@ itu aplikasi menampilkan label "belum diperiksa penutur asli" per unit.
 | 8 | Memberi dan meminjam | L7 | tervalidasi mesin | tanpa もらいます (tidak ada di daftar N5) |
 | 9 | Seperti apa? | L8 | tervalidasi mesin | kanji pertama: 大小高 |
 | 10 | Suka dan mengerti | L9 | tervalidasi mesin | kanji 人本日学生 |
-| 11–±25 | — | L10–L25 | **belum dikarang** | batch berikutnya |
+| 11 | Ada di mana, ada siapa | L10 | tervalidasi mesin | います + posisi; kanji 上下中前 |
+| 12 | Berapa harganya? | L11 | tervalidasi mesin | satuan hitung; token 円/ください; kanji 百千万金円 |
+| 13 | Kemarin bagaimana? Mana yang lebih? | L12 | tervalidasi mesin | lampau adj + でした + より/ほう/いちばん; kanji 天気休半 |
+| 14 | Ingin dan mau | L13 | tervalidasi mesin | 欲しい/たい + batang に; kanji 行見食水 |
+| 15 | Tolong, dan sedang apa | L14 | tervalidasi mesin | てください + ています; kanji 雨電車話 |
+| 16 | Boleh dan tidak boleh | L15 | tervalidasi mesin | てもいい/てはいけません; kanji 月土友 |
+| 17–±25 | — | L16–L25 | **belum dikarang** | batch berikutnya |
 
-## Rencana batch berikutnya (L10–L25)
+## Rencana batch berikutnya (L16–L25)
 
 Pola granularitas sama — satu pelajaran MNN boleh pecah dua unit bila materinya
 padat (seperti L4 → unit 4+5):
 
-- **L10** ada/berada (あります/います + posisi 上/下/中/前/後ろ…) — います belum
-  ada di daftar N5 sebagai 居る ✓ (ada)
-- **L11** bilangan pembantu (satuan hitung, 一つ〜, 人数) + 百/千/万
-- **L12** lampau kata sifat + perbandingan (より/いちばん)
-- **L13** ほしい/〜たい + pergi untuk 〜に
-- **L14–L15** bentuk て (permintaan, sedang, boleh/tidak boleh) — token ください
-- **L16** menyambung kalimat (て-joining, それから)
-- **L17** bentuk ない
+- **L16** menyambung kalimat (て-joining, それから, adj くて)
+- **L17** bentuk ない (〜ないでください, 〜なければ…) — bentuk sudah diturunkan
+  validator sejak awal
 - **L18** bentuk kamus + できます/趣味
-- **L19** bentuk た + 〜たことがあります
+- **L19** bentuk た + 〜たことがあります + 〜たり〜たり
 - **L20–L25** bentuk biasa, pendapat 〜と思います, klausa relatif, とき, dst.
+- Kanji tersisa (79 − 32 terpakai = 47) dibagi ±5 per unit, selalu dari kata
+  yang sudah dikenal
 
 Kosakata belum terpetakan (677 − terpetakan) tetap bisa dipelajari nanti sebagai
 unit pengayaan akhir — tidak ada kata yang hilang dari kuota.
@@ -54,8 +57,9 @@ unit pengayaan akhir — tidak ada kata yang hilang dari kuota.
 1. Karang unit di `scripts/data/units-n5.json` (vocab hanya dari dataset;
    ekspresi harus persis, termasuk bentuk ganda seperti `いい/よい`)
 2. `npm run verify:units` sampai hijau — validator menurunkan konjugasi
-   (ます/て/た/ない, adj-i) dari `verb_group`, jadi kalimat boleh memakai bentuk
-   sopan tanpa mendaftar bentuk permukaannya
+   (ます/て/た/ない/たい + batang, adj-i/adj-ix) dari `verb_group`, jadi kalimat
+   boleh memakai bentuk sopan tanpa mendaftar bentuk permukaannya; segmentasi
+   memakai DP (bukan greedy), jadi はいくら terbelah benar walau はい juga kata
 3. `npm run jlpt` (menulis `unit` ke item + menyalin units ke `src/data/`)
 4. `npm run fonts` + `npm run verify:fonts` (glyph kalimat baru ikut tersapu)
 5. `tsc` + commit; UAT /jalur/ di live
