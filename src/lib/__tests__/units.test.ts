@@ -1,7 +1,15 @@
 import { describe, expect, it } from 'vitest'
 import { State, newCardState, type CardStateRow } from '../fsrs'
 import type { Item } from '../items'
-import { currentUnit, needsHumanReview, statusOf, unitProgress, unitRemaining, type Unit } from '../units'
+import {
+  currentUnit,
+  needsHumanReview,
+  statusOf,
+  unitItemIds,
+  unitProgress,
+  unitRemaining,
+  type Unit,
+} from '../units'
 
 const now = new Date('2026-08-06T09:00:00Z')
 
@@ -81,8 +89,36 @@ describe('unitProgress', () => {
     expect(p.passed).toBe(true)
   })
 
-  it('does not pass an empty unit, so the path cannot skip ahead on nothing', () => {
+  it('does not pass an empty unit, so progress reporting stays honest', () => {
     expect(unitProgress(unit(9, []), items, new Map(), now).passed).toBe(false)
+  })
+})
+
+describe('Unit 0, taught through whole words', () => {
+  // あさ is written to be read; what is learned and scheduled is あ and さ.
+  const kanaItems = new Map<string, Item>([
+    ['kana-a', { ...item('kana-a', 'kana'), expression: 'あ' }],
+    ['kana-sa', { ...item('kana-sa', 'kana'), expression: 'さ' }],
+    ['kana-ki', { ...item('kana-ki', 'kana'), expression: 'き' }],
+  ])
+  const u0: Unit = { ...unit(0, ['あさ', 'あき']), kana_focus: ['a', 'k'] }
+
+  it('resolves whole words down to the kana characters inside them', () => {
+    expect(unitItemIds(u0, kanaItems)).toEqual(['kana-a', 'kana-sa', 'kana-ki'])
+  })
+
+  it('counts each character once even when several words share it', () => {
+    // あ appears in both words; teaching it twice would be padding.
+    expect(unitItemIds(u0, kanaItems).filter((id) => id === 'kana-a')).toHaveLength(1)
+  })
+})
+
+describe('a unit authored ahead of its data', () => {
+  it('is stepped over rather than stranding the learner on it', () => {
+    // Stopping on a unit with nothing to do is worse than moving past material
+    // that does not exist yet.
+    const units = [unit(1, ['ghost-only']), unit(2, ['a'])]
+    expect(currentUnit(units, items, new Map(), now).n).toBe(2)
   })
 })
 

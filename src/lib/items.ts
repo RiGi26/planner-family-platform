@@ -122,7 +122,13 @@ export async function loadUnits() {
   return m.default as unknown as import('./units').Unit[]
 }
 
-/** Every N5 item, keyed by id — what a unit's item ids resolve against. */
+/**
+ * Everything a unit can name, keyed by id.
+ *
+ * Kana is included: Unit 0 teaches it through whole words, so its item ids
+ * resolve to kana characters. Without them the first unit resolves to nothing
+ * and a total beginner is handed an empty session.
+ */
 export async function loadN5Items(): Promise<Map<string, Item>> {
   const [vocab, kanji, grammar] = await Promise.all([
     loadTrack('N5', 'vocab'),
@@ -130,7 +136,7 @@ export async function loadN5Items(): Promise<Map<string, Item>> {
     loadTrack('N5', 'grammar'),
   ])
   const map = new Map<string, Item>()
-  for (const item of [...vocab, ...kanji, ...grammar]) map.set(item.id, item)
+  for (const item of [...KANA_ITEMS, ...vocab, ...kanji, ...grammar]) map.set(item.id, item)
   return map
 }
 

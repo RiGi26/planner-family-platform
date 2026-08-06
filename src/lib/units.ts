@@ -71,21 +71,53 @@ export type UnitProgress = {
   passed: boolean
 }
 
+/** expression → id, for the items a unit names by spelling rather than by id. */
+function byExpression(items: Map<string, Item>, type: Item['type']): Map<string, string> {
+  const index = new Map<string, string>()
+  for (const item of items.values()) {
+    if (item.type === type && !index.has(item.expression)) index.set(item.expression, item.id)
+  }
+  return index
+}
+
 export function unitItemIds(unit: Unit, items: Map<string, Item>): string[] {
   const ids: string[] = []
+  const seen = new Set<string>()
+  const push = (id: string) => {
+    if (!seen.has(id)) {
+      seen.add(id)
+      ids.push(id)
+    }
+  }
+
+  // Unit 0 teaches kana through whole words: あさ is written to be read, but
+  // what is *learned* — and scheduled — is あ and さ. Writing あ twenty times
+  // memorises one shape; writing あさ、あき、あお memorises the same shapes plus
+  // three words and the feel of a Japanese word's length, for the same effort.
+  const kanaIndex = unit.kana_focus?.length ? byExpression(items, 'kana') : null
+
   for (const w of unit.vocab) {
     const id = `vocab-n5-${w}`
-    if (items.has(id)) ids.push(id)
+    if (items.has(id)) {
+      push(id)
+      continue
+    }
+    if (kanaIndex) {
+      for (const ch of w) {
+        const kanaId = kanaIndex.get(ch)
+        if (kanaId) push(kanaId)
+      }
+    }
   }
   for (const k of unit.kanji) {
     const id = `kanji-n5-${k}`
-    if (items.has(id)) ids.push(id)
+    if (items.has(id)) push(id)
   }
   for (const g of unit.grammar) {
     // Grammar ids are derived from the pattern text and may not match a data
     // row one-for-one; a missing pattern is a note in the unit, not a card.
     const id = `grammar-n5-${g.replace(/\s+/g, '')}`
-    if (items.has(id)) ids.push(id)
+    if (items.has(id)) push(id)
   }
   return ids
 }
@@ -126,7 +158,12 @@ export function currentUnit(
 ): Unit {
   const ordered = [...units].sort((a, b) => a.n - b.n)
   for (const u of ordered) {
-    if (!unitProgress(u, items, byItem, now).passed) return u
+    const p = unitProgress(u, items, byItem, now)
+    // A unit that resolves to no items at all is authored ahead of its data.
+    // Stopping there would strand the learner on a unit with nothing to do —
+    // far worse than moving past material that does not exist yet.
+    if (p.total === 0) continue
+    if (!p.passed) return u
   }
   return ordered[ordered.length - 1]!
 }
