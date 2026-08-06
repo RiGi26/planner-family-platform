@@ -66,7 +66,9 @@ function WritingScreen() {
   const inRow = row ? row.cells.filter((c) => c.kind === 'cell').length : 0
 
   async function save(result: WritingResult) {
-    if (!user || !item) return
+    // The saving guard is not cosmetic: a second tap while the first save is in
+    // flight would record a second review on a due card.
+    if (!user || !item || saving) return
     setSaving(true)
     setError('')
 
@@ -181,7 +183,12 @@ function WritingScreen() {
       ) : null}
 
       <div className="mt-6">
-        <WritingPractice item={item} size={300} onFinished={save} />
+        {/* Keyed by item: moving to the next cell must remount the practice module
+            at Demo. Without this the old instance survives the navigation still
+            sitting at Recall with the previous character's result — the screen
+            looks frozen, and pressing Simpan again would save the PREVIOUS
+            character's strokes into the new cell. */}
+        <WritingPractice key={item.id} item={item} size={300} onFinished={save} />
       </div>
 
       {saving ? (
