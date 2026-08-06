@@ -1,6 +1,9 @@
 'use client'
 
+import { useMemo } from 'react'
 import { useQuery } from '@tanstack/react-query'
+import { useLiveQuery } from 'dexie-react-hooks'
+import { db } from './db'
 import { supabase } from './supabase-client'
 import type { CardStateRow } from './fsrs'
 import type { Point } from './stroke-score'
@@ -93,8 +96,19 @@ export function useCardStates(userId: string | undefined) {
   })
 }
 
+/**
+ * The sheet as best known: server rows with local Dexie rows layered on top.
+ *
+ * The server alone is not enough, because a save is local-first — `recordKanaCell`
+ * lands in Dexie immediately while `pushPending()` races the refetch. Reading only
+ * the server left the row strip one cell behind and, worse, fed the same stale map
+ * into the writing screen's pick of the next unwritten cell — which after the last
+ * cell of a row could point BACK at one already written. Local wins per item: a
+ * local row is always at least as new as the server's copy of it. Server rows fill
+ * in what a fresh device has not pulled yet.
+ */
 export function useKanaSheet(userId: string | undefined) {
-  return useQuery({
+  const server = useQuery({
     queryKey: ['kana_sheet', userId],
     enabled: Boolean(userId),
     queryFn: async (): Promise<Map<string, Point[][]>> => {
@@ -110,4 +124,18 @@ export function useKanaSheet(userId: string | undefined) {
       return map
     },
   })
+
+  const local = useLiveQuery(
+    () => (userId ? db.kanaSheet.where('user_id').equals(userId).toArray() : []),
+    [userId],
+  )
+
+  const data = useMemo(() => {
+    if (!server.data && (!local || local.length === 0)) return server.data
+    const map = new Map(server.data ?? [])
+    for (const row of local ?? []) map.set(row.item_id, row.strokes as Point[][])
+    return map
+  }, [server.data, local])
+
+  return { ...server, data }
 }
