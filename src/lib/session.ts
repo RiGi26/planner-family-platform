@@ -356,15 +356,26 @@ export function cardFaces(item: Item, mode: CardMode): Faces {
   }
 
   // vocab
+  // A kana-only word reads as itself, so showing the reading as the answer
+  // repeats the prompt back — the meaning IS the answer for those.
   return mode === 'recognition'
-    ? {
-        prompt: item.expression,
-        promptKind: 'glyph',
-        badge: 'vocab',
-        answerMain: item.reading,
-        answerSub: [meanings],
-        hintTarget: '',
-      }
+    ? item.reading !== item.expression
+      ? {
+          prompt: item.expression,
+          promptKind: 'glyph',
+          badge: 'vocab',
+          answerMain: item.reading,
+          answerSub: [meanings],
+          hintTarget: '',
+        }
+      : {
+          prompt: item.expression,
+          promptKind: 'glyph',
+          badge: 'vocab',
+          answerMain: meanings,
+          answerSub: [],
+          hintTarget: '',
+        }
     : {
         prompt: item.meanings[0] ?? '',
         promptKind: 'text',

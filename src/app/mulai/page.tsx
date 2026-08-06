@@ -266,7 +266,7 @@ function OnboardingScreen() {
 
           <div className="mt-6 flex flex-col gap-2 border-t border-rule pt-4">
             <p className="tnum text-[13px] text-ink-muted">
-              {fmt(t.onboarding.arithmetic, { items: left, days: quota.workingDays })}
+              {fmt(t.onboarding.arithmetic, { items: totalLeft, days: quota.workingDays })}
             </p>
             {plan.plans.map((p) => (
               <p key={p.track} className="tnum text-[13px] text-ink-muted">
