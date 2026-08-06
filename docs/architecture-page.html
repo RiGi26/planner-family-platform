@@ -189,7 +189,7 @@
       bagaimana bagian-bagiannya bertaut, dan diperbarui tiap kali sistemnya berubah —
       bukan tiap kali seseorang ingat.
     </p>
-    <span class="stamp">Terverifikasi lawan produksi · <b>5 Agustus 2026</b></span>
+    <span class="stamp">Terverifikasi lawan produksi · <b>6 Agustus 2026</b> · sesudah Sprint 1</span>
   </header>
 
   <section>
@@ -279,6 +279,54 @@
         RLS, jadi setiap tabel punya policy eksplisit tanpa kecuali.
       </figcaption>
     </figure>
+  </section>
+
+  <section>
+    <h2><span class="cell done"></span> Sebelas layar, sebelas dokumen</h2>
+    <p>
+      Karena tidak ada lapisan server, tidak ada pula shell yang dirender server dan
+      dipakai bersama: <strong>tiap rute adalah dokumen tersendiri</strong>, dan
+      melintasi batas rute berarti memuat ulang seluruh aplikasi. Itu sebabnya jumlah
+      rute ditahan sesedikit mungkin. Sekarang sebelas, dua di antaranya baru —
+      <code>/mulai/</code> untuk onboarding dan <code>/sesi/</code> untuk sesi review.
+      Tautan “Mulai sesi” di Hari Ini kini benar-benar menuju sesuatu; sebelum ini ia
+      404.
+    </p>
+
+    <div class="scroller">
+      <table>
+        <thead>
+          <tr><th>Rute</th><th>Isinya</th><th>Penjaga</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>/</code></td><td>Hari Ini — kuota hari itu, pita runtun, satu CTA</td><td>auth + goal</td></tr>
+          <tr><td><code>/mulai/</code></td><td>Onboarding: level, jadwal ujian, rencana yang menyusul darinya</td><td>auth</td></tr>
+          <tr><td><code>/sesi/</code></td><td>Sesi review — recognition dan recall</td><td>auth + goal</td></tr>
+          <tr><td><code>/menulis/</code></td><td>Latihan menulis: contoh → jiplak → tulis dari ingatan di kanvas</td><td>auth</td></tr>
+          <tr><td><code>/kana/</code></td><td>Lembar Kana, gojūon yang diisi sendiri</td><td>auth</td></tr>
+          <tr><td><code>/setelan/</code></td><td>Profil, keluar akun, hapus akun</td><td>auth</td></tr>
+          <tr><td><code>/masuk/</code> · <code>/daftar/</code></td><td>Masuk · menebus kode undangan</td><td class="no">publik</td></tr>
+          <tr><td><code>/lupa-password/</code> · <code>/atur-password/</code></td><td>Minta tautan reset · menyetel password dari tautan email</td><td class="no">publik</td></tr>
+          <tr><td><code>/tentang/</code></td><td>Atribusi lisensi — sengaja terbuka tanpa akun</td><td class="no">publik</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>
+      <code>RequireGoal</code> menempel tepat pada dua rute: <code>/</code> dan
+      <code>/sesi/</code>. Keduanya mencetak kuota, dan kuota tanpa target adalah
+      angka tanpa sumber. Ia sengaja <strong>tidak</strong> dipasang di
+      <code>/kana/</code>, <code>/menulis/</code>, atau <code>/setelan/</code> — ketiganya
+      berfungsi sebelum onboarding, dan menaruh Setelan di baliknya akan menjebak siapa
+      pun yang tidak sanggup menyelesaikan onboarding, termasuk orang yang justru perlu
+      keluar akun dan mencoba akun lain.
+    </p>
+    <p>
+      Onboarding sendiri dua langkah di dalam <strong>satu</strong> rute, dengan nomor
+      langkah disimpan di state komponen. Itu batasan static export yang menembus ke
+      permukaan: dua rute berarti memuat ulang seluruh aplikasi di tengah alur dan
+      membuang pilihan yang belum sempat tersimpan.
+    </p>
   </section>
 
   <section>
@@ -407,9 +455,10 @@
   <section>
     <h2><span class="cell done"></span> Loop harian, offline lebih dulu</h2>
     <p>
-      Sesi review tidak menyentuh jaringan sama sekali. Ia membaca dari IndexedDB dan
-      menulis ke antrean lokal; sinkronisasi terjadi belakangan, di latar, atau tidak
-      hari ini. Mengulang di kereta adalah kasus utama, bukan kasus pinggir.
+      Sesi review di <code>/sesi/</code> tidak menyentuh jaringan sama sekali. Ia
+      membaca dari IndexedDB dan menulis ke antrean lokal; sinkronisasi terjadi
+      belakangan, di latar, atau tidak hari ini. Mengulang di kereta adalah kasus utama,
+      bukan kasus pinggir.
     </p>
 
     <figure>
@@ -442,9 +491,11 @@
           </g>
           <g font-family="ui-monospace, monospace" font-size="11" fill="currentColor" opacity="0.62">
             <text x="330" y="68">ts-fsrs menjadwalkan</text>
-            <text x="58" y="208">jatuh tempo hari ini</text>
-            <text x="336" y="208">kartu + log, satu transaksi</text>
-            <text x="638" y="208">card_states · reviews</text>
+            <text x="58" y="204">jatuh tempo hari ini</text>
+            <text x="336" y="204">kartu + log + kemajuan,</text>
+            <text x="336" y="218">satu transaksi</text>
+            <text x="638" y="204">card_states · reviews</text>
+            <text x="638" y="218">kana_sheet · daily_progress</text>
           </g>
 
           <g stroke="currentColor" stroke-width="1.4" fill="none" marker-end="url(#c-ink)">
@@ -473,10 +524,426 @@
         Tiap baris di antrean membawa <b>id yang dibuat klien sebelum jaringan terlibat</b>.
         Itulah seluruh cerita idempotensinya: pengiriman ulang menulis kunci yang sama,
         constraint unik menyerapnya, dan koneksi yang buruk tidak bisa menggandakan
-        maupun menghilangkan satu review pun. Diuji dengan sesi 20 kartu offline yang
-        tiba lengkap dengan 20 kunci berbeda.
+        maupun menghilangkan satu review pun. Dibuktikan, bukan diyakini: enam kartu
+        dijawab dengan jaringan dimatikan, lalu <b>tepat enam baris review</b> mendarat
+        dengan enam <code>client_review_id</code> yang semuanya berbeda — dan tetap enam
+        sesudah sinkronisasi dipaksa ulang tiga kali.
       </figcaption>
     </figure>
+  </section>
+
+  <section>
+    <h2><span class="cell done"></span> Antrean sesi: urutannya diputuskan sebelum kartu pertama</h2>
+    <p>
+      <code>src/lib/session.ts</code> murni — tanpa Dexie, tanpa React, tanpa jaringan.
+      Layar yang mengambil barisnya dan menerapkan efeknya; modulnya hanya memutuskan
+      apa yang datang berikutnya dan apa arti jawabannya. Pemisahan itulah yang membuat
+      “apa yang terjadi kalau orang berhenti di kartu keempat belas” menjadi tes, bukan
+      tebakan.
+    </p>
+
+    <figure>
+      <div class="frame">
+        <svg viewBox="0 0 860 356" role="img"
+             aria-label="Antrean sesi disusun berurutan: ulangan jatuh tempo dulu, lalu kartu baru recognition, lalu kartu baru recall; kartu menulis dikeluarkan dari antrean cepat dan diserahkan ke halaman menulis lewat layar ringkasan.">
+          <defs>
+            <marker id="d-ink" viewBox="0 0 10 10" refX="9" refY="5"
+                    markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path d="M 0 1 L 9 5 L 0 9 z" fill="currentColor"/>
+            </marker>
+            <marker id="d-shu" viewBox="0 0 10 10" refX="9" refY="5"
+                    markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path d="M 0 1 L 9 5 L 0 9 z" style="fill: var(--shu)"/>
+            </marker>
+          </defs>
+
+          <g fill="none" stroke="currentColor" stroke-width="1.5">
+            <rect x="48" y="24" width="440" height="58" rx="3"/>
+            <rect x="48" y="112" width="440" height="58" rx="3"/>
+            <rect x="48" y="200" width="440" height="58" rx="3"/>
+            <rect x="48" y="288" width="440" height="46" rx="3"/>
+            <rect x="580" y="288" width="240" height="46" rx="3"/>
+          </g>
+
+          <g font-family="ui-monospace, monospace" font-size="12.5" fill="currentColor">
+            <text x="68" y="50">1 · ulangan jatuh tempo</text>
+            <text x="68" y="138">2 · kartu baru · recognition</text>
+            <text x="68" y="226">3 · kartu baru · recall</text>
+            <text x="68" y="316">layar ringkasan</text>
+            <text x="600" y="310">/menulis/ — kanvas</text>
+          </g>
+          <g font-family="ui-monospace, monospace" font-size="11" fill="currentColor" opacity="0.62">
+            <text x="68" y="68">yang paling lama menunggu duluan</text>
+            <text x="68" y="156">satu ketukan per kartu</text>
+            <text x="68" y="244">jawaban harus datang dari ingatan</text>
+            <text x="600" y="327">segoresan demi segoresan</text>
+          </g>
+
+          <g stroke="currentColor" stroke-width="1.4" fill="none" marker-end="url(#d-ink)">
+            <line x1="268" y1="82" x2="268" y2="106"/>
+            <line x1="268" y1="258" x2="268" y2="282"/>
+            <line x1="488" y1="311" x2="574" y2="311"/>
+          </g>
+          <line x1="268" y1="170" x2="268" y2="194" stroke-width="2.2" fill="none"
+                style="stroke: var(--shu)" marker-end="url(#d-shu)"/>
+
+          <g font-family="ui-monospace, monospace" font-size="11" fill="currentColor">
+            <text x="292" y="100">utang dibayar dulu</text>
+            <text x="292" y="276">antrean cepat habis</text>
+            <text x="531" y="300" text-anchor="middle">kartu menulis</text>
+          </g>
+          <text x="292" y="188" font-family="ui-monospace, monospace" font-size="11.5"
+                font-weight="600" style="fill: var(--shu)">
+            semua recognition sebelum semua recall
+          </text>
+        </svg>
+      </div>
+      <figcaption>
+        Panah bertanda merah itu satu-satunya aturan yang tidak boleh dilonggarkan.
+        <b>Taruh recognition あ tepat sebelum recall あ, dan recall-nya dijawab dari kartu
+        sebelumnya</b>, bukan dari ingatan — sesi tetap terasa lancar sementara angkanya
+        berbohong. Ulangan didahulukan karena review adalah utang: orang yang berhenti di
+        tengah sebaiknya sudah melunasinya, bukan malah berkenalan dengan materi baru yang
+        kemudian ia lupakan.
+      </figcaption>
+    </figure>
+
+    <p>
+      Kartu menulis dikeluarkan ke jalur <code>canvas</code> dan diserahkan ke
+      <code>/menulis/</code> dari layar ringkasan. Pemisahannya menurut <strong>biaya
+      interaksi, bukan nama mode</strong>, dan hidup di satu konstanta
+      <code>CANVAS_MODES</code>: kartu recognition adalah satu ketukan, kartu menulis
+      adalah kanvas selama setengah menit segoresan demi segoresan, dan mencampurnya
+      merusak janji sesi empat menit. Membuang menulis dari alur harian sama sekali
+      justru lebih buruk — FSRS tetap menjadwalkannya seperti kartu lain, jadi kalau ia
+      tak pernah muncul, ia menumpuk diam-diam sampai jadwalnya berhenti bermakna.
+    </p>
+
+    <p>Dua aturan kecil yang tepinya tajam:</p>
+    <ul>
+      <li>
+        <strong><code>hintBudget</code> = jumlah grafem − 1</strong>, tidak pernah sel
+        terakhir yang tersembunyi. Petunjuk yang melengkapi jawaban adalah bocoran
+        berkedok bantuan, dan diam-diam menggelembungkan rating yang lalu diberikan user
+        untuk dirinya sendiri. Kana satu karakter dapat nol, jadi tombolnya tidak
+        ditawarkan sama sekali.
+      </li>
+      <li>
+        <strong>“Again” mengulang kartu sekali, di ekor antrean</strong> — sekali, bukan
+        berputar. Malam yang buruk harus tetap bisa berakhir.
+      </li>
+    </ul>
+  </section>
+
+  <section>
+    <h2><span class="cell done"></span> Hari Ini, berdata, tiga keadaan</h2>
+    <p>
+      Layar pertama membaca angka sungguhan sekarang: kuota hari itu, sisa yang jatuh
+      tempo, dan pita runtun dari <code>daily_progress</code>. Keadaannya tiga, dan
+      warnanya membawa arti — bukan hiasan.
+    </p>
+
+    <figure>
+      <div class="frame">
+        <svg viewBox="0 0 860 248" role="img"
+             aria-label="Tiga keadaan Hari Ini: sesuai rencana bertanda hijau pinus, tertinggal bertanda oker, dan selesai yang dicap 済 dengan tombol mulai sesi yang menghilang.">
+          <rect x="24" y="36" width="248" height="176" rx="3" fill="none" stroke-width="1.5"
+                style="stroke: var(--pinus)"/>
+          <rect x="306" y="36" width="248" height="176" rx="3" fill="none" stroke-width="1.5"
+                style="stroke: var(--oker)"/>
+          <rect x="588" y="36" width="248" height="176" rx="3" fill="none" stroke="currentColor"
+                stroke-width="1.5"/>
+
+          <text x="46" y="74" font-family="ui-monospace, monospace" font-size="13"
+                font-weight="600" style="fill: var(--pinus)">sesuai rencana</text>
+          <text x="328" y="74" font-family="ui-monospace, monospace" font-size="13"
+                font-weight="600" style="fill: var(--oker)">tertinggal</text>
+          <text x="610" y="74" font-family="ui-monospace, monospace" font-size="13"
+                font-weight="600" fill="currentColor">selesai</text>
+
+          <g style="fill: var(--pinus)">
+            <rect x="46" y="96" width="16" height="16" rx="1"/>
+            <rect x="70" y="96" width="16" height="16" rx="1"/>
+            <rect x="94" y="96" width="16" height="16" rx="1"/>
+          </g>
+          <g fill="none" stroke="currentColor" stroke-width="1" opacity="0.4">
+            <rect x="118" y="96" width="16" height="16" rx="1"/>
+            <rect x="142" y="96" width="16" height="16" rx="1"/>
+          </g>
+
+          <rect x="328" y="96" width="16" height="16" rx="1" style="fill: var(--oker)"/>
+          <g fill="none" stroke="currentColor" stroke-width="1" opacity="0.4">
+            <rect x="352" y="96" width="16" height="16" rx="1"/>
+            <rect x="376" y="96" width="16" height="16" rx="1"/>
+            <rect x="400" y="96" width="16" height="16" rx="1"/>
+            <rect x="424" y="96" width="16" height="16" rx="1"/>
+          </g>
+
+          <g fill="currentColor">
+            <rect x="610" y="96" width="16" height="16" rx="1"/>
+            <rect x="634" y="96" width="16" height="16" rx="1"/>
+            <rect x="658" y="96" width="16" height="16" rx="1"/>
+            <rect x="682" y="96" width="16" height="16" rx="1"/>
+            <rect x="706" y="96" width="16" height="16" rx="1"/>
+          </g>
+
+          <rect x="768" y="52" width="44" height="44" rx="3" fill="none" stroke-width="1.5"
+                style="stroke: var(--shu)"/>
+          <text x="790" y="84" text-anchor="middle" font-size="26"
+                font-family="'Yu Mincho', 'Hiragino Mincho ProN', serif"
+                style="fill: var(--shu)">済</text>
+
+          <g font-family="ui-monospace, monospace" font-size="11" fill="currentColor" opacity="0.72">
+            <text x="46" y="150">kuota hari ini belum habis</text>
+            <text x="46" y="168">CTA: mulai sesi</text>
+            <text x="328" y="150">ulangan menumpuk dari kemarin</text>
+            <text x="328" y="168">oker — tertinggal, bukan gawat</text>
+            <text x="610" y="150">tak ada lagi yang jatuh tempo</text>
+            <text x="610" y="168">CTA menghilang</text>
+          </g>
+        </svg>
+      </div>
+      <figcaption>
+        Tertinggal digambar <b>oker, bukan shu</b>. Merah pada halaman ini berarti “ada
+        yang harus kaulihat sekarang”; punggung tunggakan review bukan kegawatan, dan
+        mewarnainya merah setiap pagi hanya melatih orang mengabaikan warna merah.
+        Keadaan <code>selesai</code> juga tidak boleh datang dari kekosongan: akun yang
+        baru dibuat belum punya kartu apa pun, jadi “tidak ada yang jatuh tempo” benar
+        tentangnya — dan layar pertama yang pernah dilihatnya sempat mengecap 済 di atas
+        hari tanpa kerja <em>sekaligus</em> menyembunyikan satu-satunya tombol yang bisa
+        memulainya. Sekarang <code>selesai</code> menuntut <code>doneToday &gt; 0</code>
+        atau <code>newPerDay === 0</code>.
+      </figcaption>
+    </figure>
+
+    <p>
+      Tanggal di pita runtun adalah <strong>tanggal lokal</strong>, diturunkan lewat
+      <code>src/lib/day.ts</code> dengan <code>Intl</code> dan zona waktu si pembelajar
+      sendiri. <code>toISOString().slice(0, 10)</code> adalah jawaban yang paling gampang
+      dan salah: di Asia/Jakarta ia berganti hari pukul 07:00, jadi sesi jam sembilan
+      malam mendarat di baris besok dan runtunnya menunjukkan bolong pada hari yang
+      sebenarnya dipakai belajar. Bugnya cuma kelihatan antara tengah malam dan jam tujuh
+      pagi WIB — yaitu jam-jam yang tak seorang pun akan pakai untuk mengetesnya.
+    </p>
+  </section>
+
+  <section>
+    <h2><span class="cell done"></span> SyncProvider: dorong dulu, baru tarik</h2>
+    <p>
+      <code>SyncProvider</code> memegang daur hidup basis data lokal — mengosongkannya
+      saat akun berganti, mengisinya dari server, lalu menguras antreannya balik ketika
+      koneksi mengizinkan. Sebelum ia ada, <code>pullCards</code> dan
+      <code>watchForSync</code> <strong>tidak punya satu pun pemanggil di seluruh
+      aplikasi</strong>: Dexie hanya pernah terisi oleh pekerjaan di perangkat yang sama,
+      jadi masuk di ponsel kedua memperlihatkan antrean review yang kosong di atas kartu
+      yang sungguh ada dan hidup di ponsel pertama.
+    </p>
+
+    <figure>
+      <div class="frame">
+        <svg viewBox="0 0 860 286" role="img"
+             aria-label="Sinkronisasi mendorong antrean lokal ke Supabase lebih dulu, baru menarik salinan server ke Dexie; urutan terbalik membuat bulkPut menimpa kartu yang belum sempat terunggah.">
+          <defs>
+            <marker id="e-ai" viewBox="0 0 10 10" refX="9" refY="5"
+                    markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path d="M 0 1 L 9 5 L 0 9 z" style="fill: var(--ai)"/>
+            </marker>
+            <marker id="e-ink" viewBox="0 0 10 10" refX="9" refY="5"
+                    markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path d="M 0 1 L 9 5 L 0 9 z" fill="currentColor"/>
+            </marker>
+          </defs>
+
+          <text x="40" y="32" font-family="ui-monospace, monospace" font-size="11"
+                fill="currentColor" opacity="0.62">urutan yang benar</text>
+
+          <g fill="none" stroke="currentColor" stroke-width="1.5">
+            <rect x="40" y="48" width="196" height="64" rx="3"/>
+            <rect x="332" y="48" width="196" height="64" rx="3"/>
+            <rect x="624" y="48" width="196" height="64" rx="3"/>
+          </g>
+          <g font-family="ui-monospace, monospace" font-size="12" fill="currentColor">
+            <text x="58" y="76">antrean lokal</text>
+            <text x="350" y="76">Supabase</text>
+            <text x="642" y="76">Dexie terisi</text>
+          </g>
+          <g font-family="ui-monospace, monospace" font-size="11" fill="currentColor" opacity="0.62">
+            <text x="58" y="94">yang belum naik</text>
+            <text x="350" y="94">salinan yang lebih baru</text>
+            <text x="642" y="94">bulkPut dari server</text>
+          </g>
+
+          <g fill="none" stroke-width="2" style="stroke: var(--ai)" marker-end="url(#e-ai)">
+            <line x1="240" y1="80" x2="324" y2="80"/>
+            <line x1="532" y1="80" x2="616" y2="80"/>
+          </g>
+          <g font-family="ui-monospace, monospace" font-size="11" text-anchor="middle"
+             font-weight="600" style="fill: var(--ai)">
+            <text x="282" y="66">1 · dorong</text>
+            <text x="574" y="66">2 · tarik</text>
+          </g>
+          <g font-family="ui-monospace, monospace" font-size="10.5" text-anchor="middle"
+             style="fill: var(--ai)" opacity="0.75">
+            <text x="282" y="104">pushPending</text>
+            <text x="574" y="104">pullCards</text>
+          </g>
+
+          <text x="40" y="176" font-family="ui-monospace, monospace" font-size="11"
+                fill="currentColor" opacity="0.62">kalau dibalik</text>
+
+          <g fill="none" stroke="currentColor" stroke-width="1.5" stroke-dasharray="5 4" opacity="0.55">
+            <rect x="40" y="192" width="196" height="64" rx="3"/>
+            <rect x="332" y="192" width="196" height="64" rx="3"/>
+          </g>
+          <g font-family="ui-monospace, monospace" font-size="12" fill="currentColor" opacity="0.72">
+            <text x="58" y="220">tarik duluan</text>
+            <text x="350" y="220">kartu lokal tertimpa</text>
+          </g>
+          <g font-family="ui-monospace, monospace" font-size="11" fill="currentColor" opacity="0.55">
+            <text x="58" y="238">bulkPut menyalin server</text>
+            <text x="350" y="238">review yang belum naik hilang</text>
+          </g>
+          <line x1="240" y1="224" x2="324" y2="224" stroke="currentColor" stroke-width="1.4"
+                stroke-dasharray="5 4" opacity="0.5" fill="none" marker-end="url(#e-ink)"/>
+
+          <line x1="560" y1="192" x2="560" y2="256" stroke-width="4" style="stroke: var(--shu)"/>
+          <text x="580" y="218" font-family="ui-monospace, monospace" font-size="11.5"
+                font-weight="600" style="fill: var(--shu)">urutan ini dilarang</text>
+          <text x="580" y="236" font-family="ui-monospace, monospace" font-size="11"
+                style="fill: var(--shu)" opacity="0.85">dorong dulu, tanpa kecuali</text>
+        </svg>
+      </div>
+      <figcaption>
+        Biru dipakai khusus untuk aliran data, dan arahnya yang jadi isi diagram ini.
+        <code>pullCards</code> mengisi dengan <code>bulkPut</code>, jadi tarikan yang
+        jalan duluan <b>menimpa keadaan kartu yang belum sempat terunggah</b> — membuang
+        diam-diam review yang sudah dijawab user. Menguras antrean lebih dulu membuat
+        server jadi salinan yang lebih baru sebelum kita menerimanya kembali.
+      </figcaption>
+    </figure>
+
+    <p>
+      Penjaga akun (<code>guardLocalData</code>) pindah ke sini dari
+      <code>AuthProvider</code> karena sebab sekelas: dulu keduanya dua efek yang berdiri
+      sendiri, dan React menjalankan efek anak sebelum efek induk — jadi penjaganya bisa
+      menghapus kartu yang baru saja ditulis oleh sebuah tarikan. Urutan yang kebetulan
+      benar bukan urutan. <code>watchForSync</code> menyala saat koneksi kembali dan saat
+      aplikasi kembali ke depan; bukan interval polling, karena hanya dua momen itu yang
+      mengubah jawabannya.
+    </p>
+
+    <h3>Basis data lokal: versi 2</h3>
+    <p>
+      Basis data Dexie <code>masume</code> kini di <strong>versi 2</strong>. Versi 1
+      memuat <code>cards</code>, <code>reviewQueue</code>, <code>pendingCards</code>,
+      <code>kanaSheet</code>, <code>pendingKana</code>, <code>meta</code>; versi 2
+      menambah <code>dailyProgress</code> dan <code>pendingProgress</code>. Menambah versi
+      itu aman — store lama terbawa apa adanya. Mengganti <em>nama</em> basis datanya
+      tidak: itu memutus setiap salinan lokal yang ada, dan hanya selamat selama belum ada
+      orang yang punya data.
+    </p>
+    <p>
+      <code>dailyProgress</code> berkunci <code>date</code> saja, bukan
+      <code>[user_id+date]</code>, karena <code>SyncProvider</code> mengosongkan seluruh
+      basis data begitu akun berganti — store-nya tak pernah memuat lebih dari satu user.
+      Dua kolomnya tidak pernah meninggalkan perangkat dan dicopot sebelum diunggah:
+      <code>ms</code>, akumulator milidetik (membulatkan tiap kartu ke menit utuh
+      menghasilkan nol untuk semua kartu), dan <code>new_done_items</code>, jumlah
+      <em>item</em> yang dilepas hari ini — sengaja bukan angka yang sama dengan
+      <code>new_done</code> yang menghitung kartu, karena satu item bisa jadi dua kartu.
+      Server tak punya kolom itu, dan PostgREST menolak seluruh batch karena satu kolom
+      asing, bukan mengabaikannya.
+    </p>
+
+    <h3>Empat blok dorongan</h3>
+    <p>
+      <code>syncPending</code> mendorong dalam urutan tetap, karena <code>reviews</code>
+      merujuk <code>card_states</code>.
+    </p>
+    <div class="scroller">
+      <table>
+        <thead>
+          <tr><th>#</th><th>Tabel</th><th>onConflict</th><th>Alasannya</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>1</td><td><code>card_states</code></td><td><code>user_id,item_id,mode</code></td><td>Kartu dulu; review menunjuk padanya</td></tr>
+          <tr><td>2</td><td><code>reviews</code></td><td><code>user_id,client_review_id</code> + <code>ignoreDuplicates</code></td><td>Fakta yang hanya ditambahkan: kiriman ulang harus jadi no-op</td></tr>
+          <tr><td>3</td><td><code>kana_sheet</code></td><td><code>user_id,item_id</code></td><td>Satu sel, satu baris</td></tr>
+          <tr><td>4</td><td><code>daily_progress</code></td><td><code>user_id,date</code> — <strong>tanpa</strong> <code>ignoreDuplicates</code></td><td>Total berjalan: kiriman ulang membawa angka yang LEBIH BARU dan harus menimpa</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>
+      Kontras antara blok 2 dan blok 4 adalah hal yang paling perlu dipegang, sekaligus
+      yang paling mungkin disalin keliru. <code>daily_progress</code> ditaruh paling
+      belakang dengan sengaja: tak ada yang merujuk barisnya, dan kehilangan satu baris
+      hanya menghilangkan ringkasan yang bisa dibangun ulang dari <code>reviews</code> —
+      tidak seperti tiga blok di atasnya. <code>pullProgress</code> adalah separuh
+      lainnya, dengan <code>mergeProgress</code> yang memenangkan baris lokal, karena
+      salinan lokal bisa memuat hitungan yang belum sempat naik.
+    </p>
+
+    <div class="note">
+      <span class="label">Bukti, bukan keyakinan</span>
+      <p>
+        Enam kartu dijawab dengan jaringan dimatikan penuh. Sesudah tersambung lagi:
+        tepat enam baris <code>reviews</code>, enam <code>client_review_id</code> yang
+        semuanya unik, dan tetap enam sesudah sinkronisasi dipaksa berjalan tiga kali.
+        Itu satu-satunya cara membuktikan kunci idempoten benar-benar menahan; “kelihatan
+        jalan” tidak pernah membedakan antara antrean yang bersih dan antrean yang belum
+        pernah diuji ulang.
+      </p>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="cell done"></span> Yang disajikan cangkangnya</h2>
+    <p>
+      Muatan statis adalah bagian dari cerita offline, jadi tempatnya di sini.
+    </p>
+    <p>
+      <strong>Font di-host sendiri dan di-subset.</strong>
+      <code>scripts/subset-fonts.mjs</code> menarik persis glif yang dipakai aplikasi
+      lewat parameter <code>text=</code> pada CSS API Google Fonts, dan hasilnya ikut
+      di-commit: <strong>enam berkas woff2, 138 KB, turun dari 865 berkas dan 13,2 MB.</strong>
+      <code>next/font/google</code> dicabut dari layout, diganti aturan
+      <code>@font-face</code> sungguhan di <code>globals.css</code>. Itu perbaikan bug,
+      bukan optimasi ukuran: token <code>--font-gothic</code> menamai family literal
+      sementara <code>next/font</code> mendaftarkan nama ber-hash, jadi tokennya tidak
+      cocok dengan font mana pun yang ada — aplikasi berminggu-minggu dirender
+      <code>system-ui</code> sambil tetap mengunduh dan mem-precache 13,2 MB font Jepang
+      untuk menggambar nol huruf. Hanya body face yang di-preload; mem-preload keenamnya
+      berarti mengulang kesalahan yang sama dalam skala lebih kecil.
+      <code>npm run fonts</code> membangun ulang, <code>npm run verify:fonts</code>
+      memeriksanya.
+    </p>
+    <p>
+      <strong>Ikon adalah raster yang ikut di-commit</strong>, dihasilkan
+      <code>npm run icons</code>: <code>icon-192.png</code>, <code>icon-512.png</code>,
+      <code>icon-maskable-512.png</code>, <code>apple-touch-icon.png</code>. Chrome
+      menolak memunculkan prompt install tanpa raster minimal 192px, jadi manifest yang
+      hanya berisi SVG membuat aplikasi bisa dipakai dan tidak pernah bisa dipasang.
+      <code>any</code> dan <code>maskable</code> jadi <strong>entri terpisah</strong>:
+      menyatakan satu ikon sebagai <code>"any maskable"</code> memberi tahu Android bahwa
+      gambar itu boleh dipotong lingkaran <em>sekaligus</em> dipakai utuh di tempat lain,
+      hasilnya mengecil-dengan-bantalan di tempat yang tidak memotong. iOS mengabaikan
+      ikon di manifest sepenuhnya dan membaca tautan <code>apple-touch-icon</code>; tanpa
+      itu aplikasi terpasang memakai potret halaman sebagai ikon layar depan. Kesepuluh
+      syarat installable kini terpenuhi.
+    </p>
+    <p>
+      <strong>Service worker mengklaim navigasi lebih dulu.</strong> Di
+      <code>src/sw.ts</code> aturan navigasi duduk di depan <code>defaultCache</code> —
+      handler <code>NetworkFirst</code> yang mengisi cache <code>pages</code> — ditambah
+      listener <code>fetch</code> yang mengalihkan URL <code>.txt</code> mana pun yang
+      terlanjur di-commit sebagai dokumen ke rute yang seharusnya. Precache-nya memuat
+      50 entri dan <strong>nol HTML</strong>, jadi setiap navigasi jatuh ke runtime
+      caching yang satu-satunya cache berbentuk halaman adalah
+      <code>pages-rsc</code> dan <code>pages-rsc-prefetch</code>; tak ada yang tersisa
+      untuk menjawab dengan sebuah dokumen. Mengklaim navigasi lebih dulu menutup itu
+      secara konstruksi, sekaligus memperbaiki navigasi offline yang sebelumnya tak
+      pernah jalan: rute yang pernah dibuka kini terbuka lagi di kereta.
+    </p>
   </section>
 
   <section>
@@ -556,6 +1023,22 @@
         </tbody>
       </table>
     </div>
+
+    <p>
+      <strong>Mengganti goal aktif adalah satu RPC, bukan dua tulisan dari klien.</strong>
+      <code>goals_one_active_per_user</code> adalah unique index <em>parsial</em>
+      (<code>WHERE is_active</code>), dan itu membuat kedua urutan salah kalau dikerjakan
+      dari browser: insert-lalu-nonaktifkan melanggar index dan gagal mentah-mentah,
+      sedangkan nonaktifkan-lalu-insert menyisakan jendela tanpa goal aktif sama sekali —
+      dan selama jendela itu <code>RequireGoal</code> melempar user kembali ke onboarding
+      padahal separuh riwayatnya sudah tertulis. PostgREST tidak punya transaksi lintas
+      request, jadi migrasi <code>0007</code> menaruh atomisitasnya di dalam basis data
+      sebagai <code>set_active_goal(text, date, integer)</code>. Sengaja
+      <code>security invoker</code>: RLS <code>goals_all_own</code> tetap yang memutuskan
+      ini baris milik siapa, dan fungsinya cukup jadi satu pernyataan, bukan jadi
+      istimewa. EXECUTE dicabut dari <code>public</code> dan <code>anon</code> dengan cara
+      yang sama seperti <code>0002</code> dan <code>0006</code>.
+    </p>
   </section>
 
   <section>
@@ -594,24 +1077,101 @@
   </section>
 
   <section>
+    <h2><span class="cell done"></span> Jebakan yang sudah pernah dimasuki sistem ini</h2>
+    <p>
+      Disimpan karena masing-masing memakan waktu sungguhan, dan semuanya memenuhi
+      syarat masuk tabel ini: <strong>gejalanya tidak menunjuk ke sebabnya.</strong>
+    </p>
+    <div class="scroller">
+      <table>
+        <thead>
+          <tr><th>Jebakan</th><th>Gejala</th><th>Penjaganya sekarang</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Dua navigasi dijalankan sekaligus</strong></td>
+            <td>Satu layar penuh berisi <code>1:"$Sreact.fragment"</code> mentah — payload rute RSC, dilukis sebagai halaman. Dialami dua user sungguhan. Keluar akun memicu navigasi keras <em>dan</em> <code>router.replace</code> dari RequireAuth, lalu Safari iPhone meng-commit fetch <code>.txt</code> yang masih di jalan itu sebagai dokumen. Tak satu kata pun di layar itu menyebut keluar akun, routing, atau Safari.</td>
+            <td><code>beginSignOut()</code> / <code>isLeaving()</code> di auth-provider; kedua penjaga mundur selama kepergian sedang berlangsung. Dua lapis lagi di service worker: navigasi diklaim sebelum aturan lain, dan <code>.txt</code> yang ter-commit sebagai dokumen dialihkan ke rutenya</td>
+          </tr>
+          <tr>
+            <td><strong>Nama family font yang ber-hash</strong></td>
+            <td>Setiap layar dirender <code>system-ui</code>, sementara 13,2 MB webfont Jepang tetap diunduh dan di-precache untuk menggambar nol huruf. “Token fontnya sudah diisi” terbaca benar di setiap berkas yang terpikir untuk dibuka</td>
+            <td><code>next/font</code> dicabut dari layout; <code>@font-face</code> sungguhan dengan nama family sungguhan, di atas berkas subset yang ikut di-commit. <code>npm run verify:fonts</code></td>
+          </tr>
+          <tr>
+            <td><strong><code>dayState</code> memberi selamat pada hari yang belum disentuh</strong></td>
+            <td>Akun yang baru dibuat belum punya kartu, jadi “tidak ada yang jatuh tempo” memang benar tentangnya — dan layar pertamanya mengecap 済 sekaligus menyembunyikan satu-satunya tombol yang bisa memulai kerja. User baru terjebak di dalam keadaan sukses</td>
+            <td><code>selesai</code> menuntut <code>doneToday &gt; 0</code> atau <code>newPerDay === 0</code>. Tidak ada yang jatuh tempo bukan fakta yang sama dengan tidak ada yang tersisa</td>
+          </tr>
+          <tr>
+            <td><strong>Antrean bersisi dorong tanpa sisi tarik</strong></td>
+            <td>Pita runtun membaca nol di ponsel baru — sepekan petak kosong di atas hari-hari yang sungguh dipakai belajar. Barisnya ada, cuma di perangkat sebelah. Terlihat seperti kehilangan data, padahal fetch yang hilang</td>
+            <td><code>pullProgress()</code> di <code>SyncProvider</code>, dengan <code>mergeProgress()</code> yang memenangkan baris lokal</td>
+          </tr>
+          <tr>
+            <td><strong>Jatah kartu baru dibagikan per mount</strong></td>
+            <td><code>started</code> dulu sebuah ref, jadi memuat ulang atau membuka tab kedua membagikan jatah hari itu lagi — membuka sesi tiga kali melepas materi tiga hari, yang meledakkannya bukan di layar hari ini melainkan di beban review besok</td>
+            <td>Dihitung di <code>new_done_items</code> pada baris harian lokal, yang selamat dari reload dengan cara yang tak mungkin dilakukan ref komponen</td>
+          </tr>
+          <tr>
+            <td><strong><code>quota_target</code> beda satuan</strong></td>
+            <td>Hari yang selesai terbaca 200%. <code>newPerDay</code> menghitung <em>item</em>, <code>new_done</code> menghitung <em>kartu</em>, dan satu item kana jadi dua kartu di jalur cepat — barisnya membandingkan dua satuan dan tak satu pun angkanya kelihatan salah kalau dilihat sendiri-sendiri</td>
+            <td>Targetnya disimpan sebagai jumlah kartu yang mengantre</td>
+          </tr>
+          <tr>
+            <td><strong>BOM di env var Vercel</strong></td>
+            <td>PowerShell menyisipkan U+FEFF saat mem-pipe ke perintah native. URL yang diawali BOM bukan URL absolut, jadi <code>fetch</code> memperlakukannya sebagai <em>relatif</em> dan mengirim semua permintaan ke origin kita sendiri. Log Supabase tetap kosong karena tak ada yang tiba</td>
+            <td><code>cleanEnv()</code> mencopotnya dan bentuk URL divalidasi saat startup; <code>functionsUrl()</code> diturunkan dari origin yang sudah tervalidasi</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
     <h2><span class="cell todo"></span> Yang belum dibangun</h2>
     <p>
       Disebut terang-terangan supaya diagram di atas tidak terbaca sebagai gambaran
       pekerjaan yang sudah selesai.
     </p>
     <ul>
-      <li>Sesi review</li>
-      <li>Hari Ini dengan data sungguhan</li>
-      <li>Mode listening</li>
-      <li>Subsetting font Jepang — 13,5 MB masih terbawa, dan precache offline akan menelannya bulat-bulat</li>
-      <li>Ikon PNG 192/512; manifest baru memuat SVG, dan “Add to Home Screen” belum diuji</li>
+      <li>
+        <strong>Mode listening.</strong> <code>MODE_RANK</code> sudah menyediakan
+        tempatnya, tapi belum ada yang membangkitkan kartunya dan belum ada layar yang
+        memutar audio
+      </li>
+      <li>
+        <strong>Dataset kosakata, kanji, dan grammar.</strong> Berkas JSON-nya ada, tabel
+        isinya belum: <code>items</code> dan <code>item_examples</code> masih migrasi yang
+        belum ditulis, sengaja ditahan sampai schema N3 Japan Arena terlihat — mengunci
+        bentuknya duluan adalah cara memastikan ada migrasi kedua
+      </li>
+      <li>
+        <strong>Curriculum Path untuk N5</strong>, termasuk gerbang akurasi 95% untuk
+        keluar dari kana. Kana masih satu-satunya jalur yang punya isi, dan onboarding
+        hanya menampilkan jalur yang ada isinya
+      </li>
+      <li>
+        <strong>Pendaftaran publik</strong> tanpa kode undangan, yang lebih dulu menuntut
+        rate limiting dan proteksi bot
+      </li>
+      <li>
+        <strong>Bahasa kedua.</strong> Infrastrukturnya siap — satu berkas kembaran yang
+        dideklarasikan <code>satisfies Dictionary</code> — tapi kamusnya belum ditulis
+      </li>
+      <li>
+        <strong>Cangkang Capacitor</strong> untuk Android dan iOS. Adapter penyimpanannya
+        dijaga bisa ditukar sejak awal justru untuk ini
+      </li>
     </ul>
     <p>
-      Sudah ditutup sejak versi pertama halaman ini: <strong>pendaftaran publik</strong>,
-      yang tadinya membuat diagram kedua menggambarkan lubang yang masih terbuka; dan
-      <strong>model household</strong>, yang dicabut utuh saat aplikasi digeneralisasi
-      — halaman Setelan (keluar + hapus akun) dan Tentang (atribusi lisensi) lahir di
-      perubahan yang sama.
+      Dibangun sejak revisi sebelumnya dan turun dari daftar ini: <strong>sesi
+      review</strong>, <strong>Hari Ini yang membaca data sungguhan</strong>,
+      <strong>subsetting font Jepang</strong>, dan <strong>ikon PNG</strong>. Sebelumnya
+      lagi sudah ditutup: pendaftaran publik yang tadinya membuat diagram kedua
+      menggambarkan lubang yang masih terbuka, dan model household yang dicabut utuh saat
+      aplikasi digeneralisasi — halaman Setelan (keluar + hapus akun) dan Tentang
+      (atribusi lisensi) lahir di perubahan yang sama.
     </p>
   </section>
 
