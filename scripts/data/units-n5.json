@@ -1,0 +1,108 @@
+[
+  {
+    "n": 0,
+    "title": "Bunyi Jepang & huruf pertama",
+    "cando": "Aku bisa mengenali bunyi bahasa Jepang dan membaca kata pertamaku dalam hiragana.",
+    "reviewed": false,
+    "grammar": [],
+    "vocab": ["あさ", "あき", "いえ", "うえ", "え", "あお", "かお", "かき", "き", "くち"],
+    "kanji": [],
+    "kana_focus": ["a", "k"],
+    "note": "Unit 0 mengajarkan kana lewat kata utuh, bukan karakter lepas: menulis あさ memberi bentuk + bunyi + rasa panjang kata sekaligus. Baris a dan ka saja — sepuluh kata yang seluruh hurufnya berasal dari dua baris itu.",
+    "dialog": [],
+    "sentences": []
+  },
+  {
+    "n": 1,
+    "title": "Memperkenalkan diri",
+    "cando": "Aku bisa menyebutkan siapa aku dan dari mana asalku, lalu menanyakan hal yang sama.",
+    "reviewed": false,
+    "grammar": ["N は N です", "N は N じゃありません", "N は N ですか"],
+    "vocab": [
+      "私",
+      "あなた",
+      "あの人",
+      "先生",
+      "学生",
+      "日本人",
+      "インドネシア人",
+      "はじめまして",
+      "よろしくお願いします",
+      "ありがとうございます",
+      "すみません",
+      "はい",
+      "いいえ",
+      "そう"
+    ],
+    "kanji": [],
+    "kana_focus": [],
+    "note": "Pola pertama MNN: A は B です. Semua kalimat di bawah hanya memakai kosakata unit ini.",
+    "dialog": [
+      { "speaker": "A", "ja": "はじめまして。私はアリです。", "id": "Salam kenal. Saya Ali." },
+      { "speaker": "B", "ja": "はじめまして。私はさとうです。", "id": "Salam kenal. Saya Sato." },
+      { "speaker": "A", "ja": "さとうさんは先生ですか。", "id": "Apakah Sato-san seorang guru?" },
+      { "speaker": "B", "ja": "はい、そうです。", "id": "Ya, betul." },
+      { "speaker": "A", "ja": "私は学生です。よろしくお願いします。", "id": "Saya mahasiswa. Mohon bantuannya." },
+      { "speaker": "B", "ja": "よろしくお願いします。", "id": "Mohon bantuannya." }
+    ],
+    "sentences": [
+      { "ja": "私は学生です。", "id": "Saya mahasiswa." },
+      { "ja": "私は先生じゃありません。", "id": "Saya bukan guru." },
+      { "ja": "あの人は日本人です。", "id": "Orang itu orang Jepang." },
+      { "ja": "あなたはインドネシア人ですか。", "id": "Apakah Anda orang Indonesia?" },
+      { "ja": "いいえ、日本人です。", "id": "Bukan, saya orang Jepang." }
+    ]
+  },
+  {
+    "n": 2,
+    "title": "Menyebut benda di sekitarku",
+    "cando": "Aku bisa menunjuk sebuah benda, menanyakan itu apa, dan menyebutkan milik siapa.",
+    "reviewed": false,
+    "grammar": ["これ / それ / あれ", "この N / その N / あの N", "N の N", "N は 何 ですか"],
+    "vocab": ["これ", "それ", "あれ", "この", "その", "あの", "本", "ペン", "かばん", "いす", "時計", "何"],
+    "kanji": [],
+    "kana_focus": [],
+    "note": "MNN pelajaran 2. の diperkenalkan sebagai penanda milik, bentuk paling konkret dan paling sering dipakai.",
+    "dialog": [
+      { "speaker": "A", "ja": "これは何ですか。", "id": "Ini apa?" },
+      { "speaker": "B", "ja": "それは時計です。", "id": "Itu jam." },
+      { "speaker": "A", "ja": "あなたの時計ですか。", "id": "Jam Anda?" },
+      { "speaker": "B", "ja": "いいえ、先生のです。", "id": "Bukan, punya guru." },
+      { "speaker": "A", "ja": "この本もあなたのですか。", "id": "Buku ini juga punya Anda?" },
+      { "speaker": "B", "ja": "はい、私のです。", "id": "Ya, punya saya." }
+    ],
+    "sentences": [
+      { "ja": "これは本です。", "id": "Ini buku." },
+      { "ja": "それはペンじゃありません。", "id": "Itu bukan pena." },
+      { "ja": "あれは私のかばんです。", "id": "Itu tas saya." },
+      { "ja": "この時計は先生のです。", "id": "Jam ini punya guru." },
+      { "ja": "あのいすは何ですか。", "id": "Kursi itu apa?" }
+    ]
+  },
+  {
+    "n": 3,
+    "title": "Menanyakan tempat",
+    "cando": "Aku bisa menanyakan di mana sesuatu berada dan menjawabnya.",
+    "reviewed": false,
+    "grammar": ["ここ / そこ / あそこ", "N は どこ ですか", "N は 場所 です"],
+    "vocab": ["ここ", "そこ", "あそこ", "どこ", "駅", "学校", "トイレ", "水", "車", "友達", "人", "英語"],
+    "kanji": [],
+    "kana_focus": [],
+    "note": "MNN pelajaran 3. どこ dipasangkan langsung dengan ここ/そこ/あそこ yang sudah dikenal bentuknya dari unit 2 (これ/それ/あれ).",
+    "dialog": [
+      { "speaker": "A", "ja": "すみません、トイレはどこですか。", "id": "Permisi, toilet di mana?" },
+      { "speaker": "B", "ja": "あそこです。", "id": "Di sebelah sana." },
+      { "speaker": "A", "ja": "ありがとうございます。駅もあそこですか。", "id": "Terima kasih. Stasiun juga di sana?" },
+      { "speaker": "B", "ja": "いいえ、駅はそこです。", "id": "Bukan, stasiunnya di situ." },
+      { "speaker": "A", "ja": "学校はどこですか。", "id": "Sekolahnya di mana?" },
+      { "speaker": "B", "ja": "学校はここです。", "id": "Sekolahnya di sini." }
+    ],
+    "sentences": [
+      { "ja": "駅はどこですか。", "id": "Stasiun di mana?" },
+      { "ja": "学校はここです。", "id": "Sekolahnya di sini." },
+      { "ja": "水はそこです。", "id": "Airnya di situ." },
+      { "ja": "私の車はあそこです。", "id": "Mobil saya di sebelah sana." },
+      { "ja": "友達はあそこですか。", "id": "Temanmu di sebelah sana?" }
+    ]
+  }
+]

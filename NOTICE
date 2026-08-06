@@ -69,13 +69,36 @@ draws on:
     Creative Commons Attribution 3.0
   - Tatoeba example sentences, Creative Commons Attribution 2.0 France
 
+Part-of-speech tags (and the verb group derived from them) come from
+jmdict-simplified (https://github.com/scriptin/jmdict-simplified), a JSON
+edition of the same JMdict data listed above, under the same CC BY-SA licence.
+
 What was changed: entries were reshaped into the app's generic item form, and at
 most two example sentences were kept per item. The derived files remain under
 CC BY-SA 4.0.
 
 Grammar points not present in OpenJLPT (29 of 49) are written for this project and
-marked "source": "compiled" in the data, as opposed to "source": "openjlpt". They
-are not copied from Bunpro, JLPT Sensei, or any other commercial source.
+marked "source": "compiled" in the data, as opposed to "source": "openjlpt". The
+same marking covers the vocabulary supplement (greetings, 日本語, and 私 read as
+わたし rather than the humble わたくし JMdict lists first) — the Waller lists file
+greetings separately, so OpenJLPT never carried them. None of it is copied from
+Bunpro, JLPT Sensei, Minna no Nihongo, Irodori, or any other course material.
+
+
+Unit curriculum — scripts/data/units-n5.json
+--------------------------------------------
+
+Written for this project. The ORDER in which grammar is introduced follows the
+sequence used by Minna no Nihongo, which is a fact about a widely-published
+syllabus rather than a copyrightable work — the same sequence third parties
+publish openly and other apps offer as a study path. No sentence, dialogue,
+illustration or explanation from that book, from Irodori, or from any other
+course is reproduced here: every dialogue and example sentence in this file was
+written for Masume, and machine-checked by scripts/verify-units.mjs to use only
+material the learner has already been taught.
+
+Each unit carries "reviewed": false until a native speaker or teacher has read
+it. Until then the app says so on screen — see docs/PETA-MATERI.md.
 
 
 Licensing of the datasets in this repository

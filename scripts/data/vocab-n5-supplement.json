@@ -1,0 +1,23 @@
+[
+  {
+    "expression": "私",
+    "reading": "わたし",
+    "meanings": ["I", "me"],
+    "note": "JMdict lists 私 under わたくし (humble). Every beginner course teaches わたし; both readings are the same word, and this entry is the one the learner will hear."
+  },
+  { "expression": "日本", "reading": "にほん", "meanings": ["Japan"] },
+  { "expression": "日本語", "reading": "にほんご", "meanings": ["Japanese language"] },
+  { "expression": "日本人", "reading": "にほんじん", "meanings": ["Japanese person"] },
+  { "expression": "インドネシア", "reading": "インドネシア", "meanings": ["Indonesia"] },
+  { "expression": "インドネシア人", "reading": "インドネシアじん", "meanings": ["Indonesian person"] },
+  { "expression": "はじめまして", "reading": "はじめまして", "meanings": ["how do you do", "nice to meet you"] },
+  { "expression": "よろしくお願いします", "reading": "よろしくおねがいします", "meanings": ["pleased to meet you", "please treat me well"] },
+  { "expression": "おはようございます", "reading": "おはようございます", "meanings": ["good morning"] },
+  { "expression": "こんにちは", "reading": "こんにちは", "meanings": ["hello", "good afternoon"] },
+  { "expression": "こんばんは", "reading": "こんばんは", "meanings": ["good evening"] },
+  { "expression": "さようなら", "reading": "さようなら", "meanings": ["goodbye"] },
+  { "expression": "ありがとうございます", "reading": "ありがとうございます", "meanings": ["thank you"] },
+  { "expression": "すみません", "reading": "すみません", "meanings": ["excuse me", "sorry"] },
+  { "expression": "そう", "reading": "そう", "meanings": ["so", "that's right"] },
+  { "expression": "あの人", "reading": "あのひと", "meanings": ["that person", "he", "she"] }
+]
