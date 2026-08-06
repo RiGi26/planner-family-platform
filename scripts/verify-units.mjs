@@ -128,7 +128,12 @@ function verbForms(base, group) {
   out.push(...stemForms(`${stem}${i}`))
   const te = base.endsWith('行く') || base === 'いく' ? 'って' : TE_ROW[last]
   out.push(`${stem}${te}`, `${stem}${te.replace('て', 'た').replace('で', 'だ')}`)
-  out.push(`${stem}${A_ROW[last]}ない`, `${stem}${A_ROW[last]}なかった`)
+  if (base === 'ある') {
+    // The one verb whose plain negative is suppletive: ない, never あらない.
+    out.push('ない', 'なかった')
+  } else {
+    out.push(`${stem}${A_ROW[last]}ない`, `${stem}${A_ROW[last]}なかった`)
+  }
   return out
 }
 
@@ -158,15 +163,26 @@ function formsOf(w, entry) {
     entry?.reading?.endsWith('する') && entry.expression !== 'する'
       ? [...variants(entry.expression), entry.reading.slice(0, -2)]
       : []
+  const derived = []
   for (const s of spellings) {
-    if (group) for (const f of verbForms(s, group)) out.add(f)
+    if (group) derived.push(...verbForms(s, group))
     // adj-ix is JMdict's tag for いい, whose forms come from よい — adjForms
     // already refuses to conjugate the いい spelling itself.
-    if (pos.some((p) => p === 'adj-i' || p === 'adj-ix')) for (const f of adjForms(s)) out.add(f)
+    if (pos.some((p) => p === 'adj-i' || p === 'adj-ix')) derived.push(...adjForms(s))
   }
   for (const base of suru) {
     out.add(base)
-    for (const f of verbForms('する', 'irregular')) out.add(`${base}${f}`)
+    for (const f of verbForms('する', 'irregular')) derived.push(`${base}${f}`)
+  }
+  // Second-order forms hang off DERIVED forms only — never off raw spellings,
+  // or 明日 (…た) would beget あしたら. ない→なくて/なければ,
+  // た・だ→たら（kondisional）+ たり（daftar kegiatan）.
+  for (const f of derived) {
+    if (f.endsWith('ない')) derived.push(`${f.slice(0, -2)}なくて`, `${f.slice(0, -2)}なければ`)
+  }
+  for (const f of derived) {
+    if (f.endsWith('た') || f.endsWith('だ')) out.add(`${f}ら`).add(`${f}り`)
+    out.add(f)
   }
   return out
 }
@@ -178,8 +194,12 @@ const warn = []
 // 1 & 2 — ids exist, and nothing is claimed twice
 // ---------------------------------------------------------------------------
 
+// vocab_n5.json already contains the supplement, ENRICHED with JMdict POS by
+// fetch-jlpt. Overlaying the raw supplement rows on top would strip verb_group
+// and silently kill conjugation for もらう/くれる/思う — only fill true gaps
+// (running before a rebuild).
 const vocabByExpr = new Map(vocab.map((v) => [v.expression, v]))
-for (const s of supplement) vocabByExpr.set(s.expression, s)
+for (const s of supplement) if (!vocabByExpr.has(s.expression)) vocabByExpr.set(s.expression, s)
 const kanjiByExpr = new Map(kanji.map((k) => [k.expression, k]))
 const kanaByExpr = new Map(kana.map((k) => [k.expression, k]))
 

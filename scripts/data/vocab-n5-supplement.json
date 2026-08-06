@@ -19,5 +19,25 @@
   { "expression": "ありがとうございます", "reading": "ありがとうございます", "meanings": ["thank you"] },
   { "expression": "すみません", "reading": "すみません", "meanings": ["excuse me", "sorry"] },
   { "expression": "そう", "reading": "そう", "meanings": ["so", "that's right"] },
-  { "expression": "あの人", "reading": "あのひと", "meanings": ["that person", "he", "she"] }
+  { "expression": "あの人", "reading": "あのひと", "meanings": ["that person", "he", "she"] },
+  {
+    "expression": "思う",
+    "reading": "おもう",
+    "meanings": ["to think", "to feel"],
+    "note": "Absen dari daftar Waller/OpenJLPT padahal MNN L21 (〜と思います) tidak jalan tanpanya. POS/verb_group tetap diambil dari JMdict saat build."
+  },
+  { "expression": "趣味", "reading": "しゅみ", "meanings": ["hobby", "interest"] },
+  {
+    "expression": "とき",
+    "reading": "とき",
+    "meanings": ["time", "when ..."],
+    "note": "MNN L23 (〜とき). Dieja kana — di N5 bentuk 時-nya dipakai untuk jam, bukan konjungsi."
+  },
+  {
+    "expression": "もらう",
+    "reading": "もらう",
+    "meanings": ["to receive", "to get"],
+    "note": "Daftar Waller hanya membawa sisi memberi (上げる). Segitiga memberi-menerima MNN L7/L24 butuh keduanya."
+  },
+  { "expression": "くれる", "reading": "くれる", "meanings": ["to give (to me)", "to do for me"] }
 ]

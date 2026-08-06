@@ -16,8 +16,9 @@ Setiap angka diberi label kejujuran:
 
 Tangga di bawah adalah peta MAKRO — berapa banyak materi per level. Yang dialami
 pengguna sehari-hari adalah struktur MIKRO di dalamnya: **unit berurutan**, tiap
-unit satu kemampuan baru (±25 unit untuk N5, urutan Minna no Nihongo, judul gaya
-can-do ala Irodori).
+unit satu kemampuan baru (26 unit untuk N5 — lengkap sejak 6 Agustus 2026,
+urutan Minna no Nihongo L1–L25, judul gaya can-do ala Irodori; status per unit
+di `docs/UNITS.md`).
 
 Satu unit = 1–2 pola kalimat + 10–15 kosakata yang dipakai pola itu + 3–5 kanji
 (mulai unit ±8) + 1 percakapan + contoh kalimat, dengan aturan **tidak ada yang

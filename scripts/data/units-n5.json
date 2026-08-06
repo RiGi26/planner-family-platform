@@ -458,8 +458,253 @@
       { "ja": "私は駅の近くに住んでいます。", "id": "Saya tinggal di dekat stasiun." },
       { "ja": "あの医者を知っていますか。", "id": "Kamu kenal dokter itu?" },
       { "ja": "風邪ですから、薬を飲んでいます。", "id": "Karena flu, saya sedang minum obat." },
-      { "ja": "頭が痛いですから、病院へ行きます。", "id": "Karena sakit kepala, saya pergi ke rumah sakit." },
+      { "ja": "頭が痛いですから、病院へ行きます。", "id": "Besok saya pergi ke rumah sakit karena sakit kepala." },
       { "ja": "明日友達に会います。", "id": "Besok saya bertemu teman." }
+    ]
+  },
+  {
+    "n": 17,
+    "title": "Lalu, setelah itu",
+    "cando": "Aku bisa menceritakan urutan kegiatan dalam satu kalimat: bangun, mandi, lalu berangkat.",
+    "reviewed": false,
+    "grammar": ["V て、V て、それから", "い-adj くて / な-adj で（menyambung）"],
+    "vocab": ["それから", "出かける", "出る", "入る", "乗る", "降りる", "歩く", "渡る", "道", "橋", "あびる", "シャワー", "散歩", "洗濯", "掃除"],
+    "kanji": ["出", "入", "来", "何"],
+    "tokens": [],
+    "kana_focus": [],
+    "note": "MNN pelajaran 16. Bentuk て beralih dari permintaan (unit 15) ke penyambung kalimat — cara orang Jepang menceritakan hari mereka.",
+    "dialog": [
+      { "speaker": "A", "ja": "毎朝何をしますか。", "id": "Setiap pagi kamu melakukan apa?" },
+      { "speaker": "B", "ja": "起きて、シャワーをあびて、朝ごはんを食べます。", "id": "Bangun, mandi, lalu sarapan." },
+      { "speaker": "A", "ja": "それから？", "id": "Setelah itu?" },
+      { "speaker": "B", "ja": "電車に乗って、会社へ行きます。", "id": "Naik kereta, lalu ke kantor." },
+      { "speaker": "A", "ja": "駅から歩きますか。", "id": "Dari stasiun jalan kaki?" },
+      { "speaker": "B", "ja": "はい、少し歩きます。", "id": "Ya, jalan sedikit." }
+    ],
+    "sentences": [
+      { "ja": "朝起きて、日本語を勉強します。", "id": "Pagi bangun, lalu belajar bahasa Jepang." },
+      { "ja": "昨日は洗濯をして、掃除をしました。", "id": "Kemarin saya mencuci dan bersih-bersih." },
+      { "ja": "この町は静かで、きれいです。", "id": "Kota ini tenang dan bersih." },
+      { "ja": "橋を渡って、駅へ行きます。", "id": "Menyeberangi jembatan, lalu ke stasiun." },
+      { "ja": "バスを降りて、少し歩きます。", "id": "Turun dari bus, lalu jalan sedikit." },
+      { "ja": "部屋に入ってください。", "id": "Silakan masuk ke kamar." }
+    ]
+  },
+  {
+    "n": 18,
+    "title": "Jangan, dan harus",
+    "cando": "Aku bisa melarang dengan sopan dan mengatakan apa yang wajib atau tidak perlu dilakukan.",
+    "reviewed": false,
+    "grammar": ["V ないで ください", "V なければ なりません", "V なくても いいです"],
+    "vocab": ["なる", "忘れる", "無くす", "返す", "出す", "覚える", "答える", "名前", "宿題", "テスト", "漢字", "言葉", "意味", "質問", "作文", "問題"],
+    "kanji": ["書", "読", "聞", "毎", "名"],
+    "tokens": [],
+    "kana_focus": [],
+    "note": "MNN pelajaran 17. Bentuk ない dan turunannya (なくて/なければ) diturunkan validator dari verb_group — なる ikut diklaim di sini karena なりません adalah separuh dari pola wajibnya.",
+    "dialog": [
+      { "speaker": "A", "ja": "先生、宿題を忘れました。", "id": "Bu guru, saya lupa PR." },
+      { "speaker": "B", "ja": "明日出してください。", "id": "Kumpulkan besok." },
+      { "speaker": "A", "ja": "テストはいつですか。", "id": "Ujiannya kapan?" },
+      { "speaker": "B", "ja": "月曜日です。漢字を覚えなければなりません。", "id": "Hari Senin. Kanjinya harus dihafal." },
+      { "speaker": "A", "ja": "辞書を使ってもいいですか。", "id": "Boleh memakai kamus?" },
+      { "speaker": "B", "ja": "いいえ、使ってはいけません。", "id": "Tidak, tidak boleh." }
+    ],
+    "sentences": [
+      { "ja": "ここに名前を書いてください。", "id": "Tulis nama di sini." },
+      { "ja": "写真を撮らないでください。", "id": "Jangan mengambil foto." },
+      { "ja": "明日は学校へ来なくてもいいです。", "id": "Besok tidak perlu datang ke sekolah." },
+      { "ja": "この言葉の意味が分かりません。", "id": "Saya tidak mengerti arti kata ini." },
+      { "ja": "質問に答えなければなりません。", "id": "Pertanyaannya harus dijawab." },
+      { "ja": "切符を無くさないでください。", "id": "Jangan sampai menghilangkan tiketnya." }
+    ]
+  },
+  {
+    "n": 19,
+    "title": "Bisa, dan hobiku",
+    "cando": "Aku bisa mengatakan apa yang bisa kulakukan, menyebut hobiku, dan mengatakan 'sebelum'.",
+    "reviewed": false,
+    "grammar": ["V(kamus) ことが できます", "趣味は V ことです", "V る 前に"],
+    "vocab": ["できる", "趣味", "話す", "歌", "歌う", "ギター", "弾く", "外国", "外国人", "留学生", "作る", "見せる", "花", "違う", "かかる"],
+    "kanji": ["語", "校", "先", "外", "国"],
+    "tokens": ["こと"],
+    "kana_focus": [],
+    "note": "MNN pelajaran 18. Bentuk kamus akhirnya diberi peran — selama ini ia hanya kunci kartu; sekarang menjadi bentuk yang benar-benar dipakai kalimat (ことができます). 趣味 dan 思う datang dari suplemen: daftar Waller tidak memuatnya.",
+    "dialog": [
+      { "speaker": "A", "ja": "アリさんの趣味は何ですか。", "id": "Hobi Ali apa?" },
+      { "speaker": "B", "ja": "歌を歌うことです。", "id": "Menyanyi." },
+      { "speaker": "A", "ja": "ギターを弾くことができますか。", "id": "Bisa bermain gitar?" },
+      { "speaker": "B", "ja": "いいえ、できません。", "id": "Tidak bisa." },
+      { "speaker": "A", "ja": "私は少しできます。", "id": "Saya bisa sedikit." }
+    ],
+    "sentences": [
+      { "ja": "私は日本語を話すことができます。", "id": "Saya bisa berbicara bahasa Jepang." },
+      { "ja": "漢字を読むことができますか。", "id": "Bisa membaca kanji?" },
+      { "ja": "趣味は料理を作ることです。", "id": "Hobiku memasak." },
+      { "ja": "寝る前に、本を読みます。", "id": "Sebelum tidur, saya membaca buku." },
+      { "ja": "外国へ行く前に、言葉を勉強します。", "id": "Sebelum ke luar negeri, saya belajar bahasanya." },
+      { "ja": "留学生に日本の歌を教えます。", "id": "Saya mengajari mahasiswa asing lagu Jepang." }
+    ]
+  },
+  {
+    "n": 20,
+    "title": "Pernah, dan kadang-kadang",
+    "cando": "Aku bisa menceritakan pengalaman yang pernah kualami dan kegiatan yang berganti-ganti.",
+    "reviewed": false,
+    "grammar": ["V たことが あります", "V たり V たり します", "adj く / N に なります"],
+    "vocab": ["時々", "登る", "山", "もう一度", "鳴く", "飛ぶ", "咲く", "生まれる", "並ぶ", "売る", "困る", "要る", "頼む", "消える"],
+    "kanji": ["一", "二", "三", "山", "木"],
+    "tokens": [],
+    "kana_focus": [],
+    "note": "MNN pelajaran 19. Bentuk た sudah lama diturunkan validator; unit inilah yang mengajarkannya. Kanji angka akhirnya dipelajari sebagai aksara — kata-katanya sudah dikenal sejak unit 4.",
+    "dialog": [
+      { "speaker": "A", "ja": "山に登ったことがありますか。", "id": "Pernah mendaki gunung?" },
+      { "speaker": "B", "ja": "はい、あります。", "id": "Ya, pernah." },
+      { "speaker": "A", "ja": "どうでしたか。", "id": "Bagaimana rasanya?" },
+      { "speaker": "B", "ja": "とても楽しかったです。でも、疲れました。", "id": "Menyenangkan sekali. Tapi capek." },
+      { "speaker": "A", "ja": "日曜日は何をしますか。", "id": "Hari Minggu biasanya melakukan apa?" },
+      { "speaker": "B", "ja": "本を読んだり、音楽を聞いたりします。", "id": "Kadang membaca, kadang mendengarkan musik." }
+    ],
+    "sentences": [
+      { "ja": "日本のごはんを食べたことがあります。", "id": "Saya pernah makan masakan Jepang." },
+      { "ja": "外国へ行ったことがありません。", "id": "Saya belum pernah ke luar negeri." },
+      { "ja": "春になりました。花が咲いています。", "id": "Musim semi tiba. Bunga-bunga bermekaran." },
+      { "ja": "暖かくなりましたね。", "id": "Sudah menghangat, ya." },
+      { "ja": "犬が鳴いています。", "id": "Anjing sedang menggonggong." },
+      { "ja": "店の前に人が並んでいます。", "id": "Orang-orang mengantre di depan toko." }
+    ]
+  },
+  {
+    "n": 21,
+    "title": "Menurutku",
+    "cando": "Aku bisa menyampaikan pendapat, mengutip perkataan orang, dan menebak dengan sopan.",
+    "reviewed": false,
+    "grammar": ["〜と 思います", "「…」と 言いました", "〜でしょう"],
+    "vocab": ["思う", "言う", "たぶん", "白い", "黒い", "雪", "晴れる", "曇る", "みんな", "全部", "もっと", "大丈夫", "ニュース", "難しい"],
+    "kanji": ["今", "白", "四", "五", "六"],
+    "tokens": ["でしょう"],
+    "kana_focus": [],
+    "note": "MNN pelajaran 21 (pelajaran 20, ragam akrab, sengaja dilewati — ragam sopan dulu sampai kuat). Klausa sebelum と memakai bentuk biasa yang semuanya sudah diturunkan: 降る/降らない/降った.",
+    "dialog": [
+      { "speaker": "A", "ja": "明日の天気はどうでしょうか。", "id": "Besok cuacanya bagaimana, ya?" },
+      { "speaker": "B", "ja": "たぶん雨が降ると思います。", "id": "Menurutku mungkin hujan." },
+      { "speaker": "A", "ja": "ニュースは何と言いましたか。", "id": "Beritanya bilang apa?" },
+      { "speaker": "B", "ja": "「午後から雪が降るでしょう」と言いました。", "id": "Katanya, \"siang nanti kemungkinan turun salju\"." },
+      { "speaker": "A", "ja": "寒くなりますね。", "id": "Bakal makin dingin, ya." }
+    ],
+    "sentences": [
+      { "ja": "明日は晴れるでしょう。", "id": "Besok kemungkinan cerah." },
+      { "ja": "日本語はおもしろいと思います。", "id": "Menurutku bahasa Jepang menarik." },
+      { "ja": "あの人は来ないと思います。", "id": "Kupikir orang itu tidak akan datang." },
+      { "ja": "みんな「大丈夫です」と言いました。", "id": "Semuanya berkata, \"tidak apa-apa\"." },
+      { "ja": "このテストは難しくないと思います。", "id": "Menurutku ujian ini tidak sulit." },
+      { "ja": "雪はとても白いです。", "id": "Salju itu putih sekali." }
+    ]
+  },
+  {
+    "n": 22,
+    "title": "Keluargaku",
+    "cando": "Aku bisa memperkenalkan keluargaku dan menerangkan orang atau benda dengan sebuah klausa.",
+    "reviewed": false,
+    "grammar": ["klausa + N（私が作った料理）", "V ている N", "何人ですか"],
+    "vocab": ["家族", "お父さん", "お母さん", "兄", "姉", "弟", "妹", "両親", "子供", "男", "女", "男の子", "女の子", "奥さん", "仕事"],
+    "kanji": ["父", "母", "子", "男", "女"],
+    "tokens": [],
+    "kana_focus": [],
+    "note": "MNN pelajaran 22. Klausa pewatas memakai bentuk biasa yang sudah dikenal dari unit 21 — tidak ada bentuk baru, hanya posisi baru: kalimat kecil menempel di depan kata benda.",
+    "dialog": [
+      { "speaker": "A", "ja": "家族は何人ですか。", "id": "Keluargamu berapa orang?" },
+      { "speaker": "B", "ja": "五人です。両親と、兄と、妹と、私です。", "id": "Lima. Orang tua, kakak laki-laki, adik perempuan, dan saya." },
+      { "speaker": "A", "ja": "お父さんの仕事は何ですか。", "id": "Pekerjaan ayahmu apa?" },
+      { "speaker": "B", "ja": "銀行で働いています。", "id": "Bekerja di bank." },
+      { "speaker": "A", "ja": "妹さんは学生ですか。", "id": "Adikmu pelajar?" },
+      { "speaker": "B", "ja": "はい、日本語を勉強している学生です。", "id": "Ya, pelajar yang sedang belajar bahasa Jepang." }
+    ],
+    "sentences": [
+      { "ja": "これは母が作った料理です。", "id": "Ini masakan buatan ibu." },
+      { "ja": "あそこで本を読んでいる人は兄です。", "id": "Orang yang sedang membaca di sana itu kakakku." },
+      { "ja": "父が買った時計です。", "id": "Ini jam yang dibeli ayah." },
+      { "ja": "私が撮った写真を見せましょうか。", "id": "Mau kutunjukkan foto yang kuambil?" },
+      { "ja": "女の子が歌っている歌は有名です。", "id": "Lagu yang sedang dinyanyikan anak perempuan itu terkenal." },
+      { "ja": "弟は子供と遊ぶことが好きです。", "id": "Adikku suka bermain dengan anak-anak." }
+    ]
+  },
+  {
+    "n": 23,
+    "title": "Kalau begini, saat begitu",
+    "cando": "Aku bisa memberi petunjuk arah dan mengatakan 'kalau … maka' serta 'pada saat …'.",
+    "reviewed": false,
+    "grammar": ["V(kamus) と、〜", "〜とき、〜", "右 / 左 に 曲がります"],
+    "vocab": ["とき", "右", "左", "東", "西", "南", "北", "まっすぐ", "曲る", "押す", "引く", "開く", "閉まる", "ボタン", "止まる"],
+    "kanji": ["右", "左", "東", "西", "南", "北"],
+    "tokens": [],
+    "kana_focus": [],
+    "note": "MNN pelajaran 23. とき dari suplemen (daftar Waller hanya punya 時々). Kanji arah dipelajari bersama kata-katanya sendiri — enam sekaligus karena mereka satu keluarga bentuk.",
+    "dialog": [
+      { "speaker": "A", "ja": "すみません、郵便局はどこですか。", "id": "Permisi, kantor pos di mana?" },
+      { "speaker": "B", "ja": "この道をまっすぐ行くと、右にあります。", "id": "Lurus di jalan ini, nanti ada di kanan." },
+      { "speaker": "A", "ja": "分からないとき、もう一度聞いてもいいですか。", "id": "Kalau tidak paham, boleh bertanya sekali lagi?" },
+      { "speaker": "B", "ja": "はい、大丈夫ですよ。", "id": "Ya, tentu saja." }
+    ],
+    "sentences": [
+      { "ja": "このボタンを押すと、ドアが開きます。", "id": "Kalau tombol ini ditekan, pintunya terbuka." },
+      { "ja": "左にまがると、駅があります。", "id": "Kalau belok kiri, ada stasiun." },
+      { "ja": "電車に乗るとき、切符を買います。", "id": "Saat naik kereta, saya membeli tiket." },
+      { "ja": "時間がないとき、タクシーで行きます。", "id": "Saat tidak ada waktu, saya naik taksi." },
+      { "ja": "東はどちらですか。", "id": "Timur sebelah mana?" },
+      { "ja": "冬になると、北の山は白くなります。", "id": "Saat musim dingin tiba, gunung di utara memutih." }
+    ]
+  },
+  {
+    "n": 24,
+    "title": "Diberi dan menerima",
+    "cando": "Aku bisa mengatakan siapa memberi apa kepada siapa — dari kedua arah.",
+    "reviewed": false,
+    "grammar": ["N に N を もらいます", "N が N を くれます", "N に N を あげます（ulang）"],
+    "vocab": ["もらう", "くれる", "今年", "去年", "先週", "来週", "今週", "先月", "今月", "結婚", "眼鏡", "切手", "靴下"],
+    "kanji": ["年", "七", "八", "九", "十"],
+    "tokens": [],
+    "kana_focus": [],
+    "note": "MNN pelajaran 24, sekaligus melunasi utang unit 8: もらう dan くれる tidak ada di daftar Waller, jadi keduanya masuk lewat suplemen — sekarang segitiga memberi-menerima lengkap.",
+    "dialog": [
+      { "speaker": "A", "ja": "いい時計ですね。", "id": "Jamnya bagus, ya." },
+      { "speaker": "B", "ja": "誕生日に父にもらいました。", "id": "Dapat dari ayah waktu ulang tahun." },
+      { "speaker": "A", "ja": "お母さんは何をくれましたか。", "id": "Ibumu memberi apa?" },
+      { "speaker": "B", "ja": "母はセーターをくれました。", "id": "Ibu memberiku sweter." },
+      { "speaker": "A", "ja": "私は妹に靴下をあげました。", "id": "Kalau aku, memberi adikku kaus kaki." }
+    ],
+    "sentences": [
+      { "ja": "友達に切手をもらいました。", "id": "Saya mendapat perangko dari teman." },
+      { "ja": "兄は私に辞書をくれました。", "id": "Kakak memberiku kamus." },
+      { "ja": "去年結婚しました。", "id": "Saya menikah tahun lalu." },
+      { "ja": "先週友達に手紙を出しました。", "id": "Minggu lalu saya mengirim surat ke teman." },
+      { "ja": "今年日本へ行きます。", "id": "Tahun ini saya pergi ke Jepang." },
+      { "ja": "母に眼鏡をあげます。", "id": "Saya memberi ibu kacamata." }
+    ]
+  },
+  {
+    "n": 25,
+    "title": "Kalau, dan walaupun",
+    "cando": "Aku bisa berandai-andai dengan たら dan tetap teguh dengan ても — pola terakhir N5.",
+    "reviewed": false,
+    "grammar": ["V たら、〜", "V ても、〜", "adj くても"],
+    "vocab": ["長い", "短い", "若い", "暗い", "強い", "川/河", "火曜日", "水曜日", "木曜日", "金曜日", "着る", "はく", "脱ぐ"],
+    "kanji": ["時", "間", "長", "後", "午", "火", "川"],
+    "tokens": [],
+    "kana_focus": [],
+    "note": "MNN pelajaran 25 — unit penutup jalur N5. たら diturunkan dari bentuk た (行った→行ったら), ても dari て+も. Kanji unit ini merapikan sisa daftar: semuanya berjangkar pada kata yang sudah lama dipakai (何時・時間・午前・火曜日).",
+    "dialog": [
+      { "speaker": "A", "ja": "明日晴れたら、川へ行きませんか。", "id": "Kalau besok cerah, ke sungai yuk?" },
+      { "speaker": "B", "ja": "いいですね。雨が降ったら、どうしますか。", "id": "Boleh. Kalau hujan, bagaimana?" },
+      { "speaker": "A", "ja": "雨が降っても、行きたいです。", "id": "Walaupun hujan, aku tetap ingin pergi." },
+      { "speaker": "B", "ja": "分かりました。金曜日に行きましょう。", "id": "Baiklah. Ayo pergi hari Jumat." }
+    ],
+    "sentences": [
+      { "ja": "お金があったら、旅行に行きたいです。", "id": "Kalau punya uang, saya ingin pergi berwisata." },
+      { "ja": "分からなかったら、聞いてください。", "id": "Kalau tidak paham, tanyakanlah." },
+      { "ja": "寒かったら、セーターを着てください。", "id": "Kalau dingin, pakailah sweter." },
+      { "ja": "火曜日に来ても、先生はいません。", "id": "Walaupun datang hari Selasa, gurunya tidak ada." },
+      { "ja": "この川は長いです。", "id": "Sungai ini panjang." },
+      { "ja": "部屋に入るとき、靴を脱いでください。", "id": "Saat masuk kamar, lepaskan sepatu." }
     ]
   }
 ]

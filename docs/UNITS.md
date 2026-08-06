@@ -33,21 +33,26 @@ itu aplikasi menampilkan label "belum diperiksa penutur asli" per unit.
 | 14 | Ingin dan mau | L13 | tervalidasi mesin | 欲しい/たい + batang に; kanji 行見食水 |
 | 15 | Tolong, dan sedang apa | L14 | tervalidasi mesin | てください + ています; kanji 雨電車話 |
 | 16 | Boleh dan tidak boleh | L15 | tervalidasi mesin | てもいい/てはいけません; kanji 月土友 |
-| 17–±25 | — | L16–L25 | **belum dikarang** | batch berikutnya |
+| 17 | Lalu, setelah itu | L16 | tervalidasi mesin | て-joining; kanji 出入来何 |
+| 18 | Jangan, dan harus | L17 | tervalidasi mesin | ない/なければ/なくても; kanji 書読聞毎名 |
+| 19 | Bisa, dan hobiku | L18 | tervalidasi mesin | ことができます; suplemen 趣味; kanji 語校先外国 |
+| 20 | Pernah, dan kadang-kadang | L19 | tervalidasi mesin | たことがあります + たり; kanji 一二三山木 |
+| 21 | Menurutku | L21 | tervalidasi mesin | と思います (suplemen 思う) + でしょう; kanji 今白四五六 |
+| 22 | Keluargaku | L22 | tervalidasi mesin | klausa pewatas; kanji 父母子男女 |
+| 23 | Kalau begini, saat begitu | L23 | tervalidasi mesin | と kondisional + とき (suplemen); kanji 右左東西南北 |
+| 24 | Diberi dan menerima | L24 | tervalidasi mesin | もらう/くれる (suplemen — Waller tak punya); kanji 年七八九十 |
+| 25 | Kalau, dan walaupun | L25 | tervalidasi mesin | たら/ても — penutup; kanji 時間長後午火川 |
 
-## Rencana batch berikutnya (L16–L25)
+**Jalur N5 lengkap: 26 unit (0–25), MNN L1–L25 (L20 ragam akrab sengaja
+dilewati), 378 kosakata terpetakan, 283 kalimat, 79/79 kanji.** 314 kosakata
+sisanya tetap ada di dataset dan bisa dipelajari; mereka calon unit pengayaan —
+tidak ada kata yang hilang dari kuota.
 
-Pola granularitas sama — satu pelajaran MNN boleh pecah dua unit bila materinya
-padat (seperti L4 → unit 4+5):
+## Yang belum (gerbang rilis)
 
-- **L16** menyambung kalimat (て-joining, それから, adj くて)
-- **L17** bentuk ない (〜ないでください, 〜なければ…) — bentuk sudah diturunkan
-  validator sejak awal
-- **L18** bentuk kamus + できます/趣味
-- **L19** bentuk た + 〜たことがあります + 〜たり〜たり
-- **L20–L25** bentuk biasa, pendapat 〜と思います, klausa relatif, とき, dst.
-- Kanji tersisa (79 − 32 terpakai = 47) dibagi ±5 per unit, selalu dari kata
-  yang sudah dikenal
+- **Review penutur asli** untuk 26 unit — satu-satunya jalan mengubah status;
+  label jujur tampil sampai itu terjadi
+- Unit pengayaan untuk 314 kata tak terpetakan (opsional, setelah review)
 
 Kosakata belum terpetakan (677 − terpetakan) tetap bisa dipelajari nanti sebagai
 unit pengayaan akhir — tidak ada kata yang hilang dari kuota.
