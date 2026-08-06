@@ -14,6 +14,9 @@ import { useT } from '@/lib/i18n'
  */
 const TABS = [
   { href: '/', glyph: '今', key: 'hariIni' },
+  // 道 — the path. The guided curriculum, where "what do I learn next" is
+  // answered rather than asked.
+  { href: '/jalur/', glyph: '道', key: 'jalur' },
   { href: '/kana/', glyph: 'あ', key: 'kana' },
   { href: '/menulis/', glyph: '筆', key: 'menulis' },
   // 設 from 設定 — the family tab this replaced pointed at a screen that no

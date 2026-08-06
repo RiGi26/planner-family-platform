@@ -14,13 +14,13 @@ import { db, localProgress } from '@/lib/db'
 import { parseExamDate, upcomingSittings } from '@/lib/exam-dates'
 import { catchUpOptions, computeQuota } from '@/lib/goal-engine'
 import { fmt, useT } from '@/lib/i18n'
-import { loadTrack, type Item } from '@/lib/items'
+import { loadN5Items, loadUnits, type Item } from '@/lib/items'
 import { pathState } from '@/lib/path'
+import { currentUnit, unitRemaining, type Unit } from '@/lib/units'
 import { dayState, overdueBefore, shouldStamp, weekTicks } from '@/lib/progress'
 import { useGoal, useProfile } from '@/lib/queries'
 import { localCards } from '@/lib/study'
 
-type N5Items = { vocab: Item[]; kanji: Item[]; grammar: Item[] }
 
 /**
  * Hari Ini.
@@ -57,18 +57,14 @@ function TodayScreen() {
   )
   const stampedOn = useLiveQuery(() => db.meta.get('hanko_on').then((m) => m?.value), [])
 
-  // The N5 datasets load only once the kana gate is open — same rule as the
-  // session, so the two screens can never disagree about the daily pace.
-  const [n5, setN5] = useState<N5Items | null>(null)
+  // The unit spine, loaded once. This screen and the session must agree about
+  // which unit is current, so both read it from the same place.
+  const [path, setPath] = useState<{ units: Unit[]; items: Map<string, Item> } | null>(null)
   useEffect(() => {
-    if (!cards || n5) return
-    if (!pathState(cards, null).gate.open) return
-    void Promise.all([
-      loadTrack('N5', 'vocab'),
-      loadTrack('N5', 'kanji'),
-      loadTrack('N5', 'grammar'),
-    ]).then(([vocab, kanji, grammar]) => setN5({ vocab, kanji, grammar }))
-  }, [cards, n5])
+    void Promise.all([loadUnits(), loadN5Items()]).then(([units, items]) =>
+      setPath({ units, items }),
+    )
+  }, [])
 
   if (!cards || !progressRows || !goal) {
     return (
@@ -85,12 +81,15 @@ function TodayScreen() {
   const due = cards.filter((c) => new Date(c.due) <= now)
   const overdue = overdueBefore(cards, today, timezone)
 
-  // `208 - states.size` stopped being right the day N5 cards could exist:
-  // states counts every item with cards, whatever its level.
-  const path = pathState(cards, n5, now)
+  // What is left to learn: the kana sheet, which runs as its own curriculum,
+  // plus whatever the current unit still owes. Counted the same way the session
+  // counts it, so the two screens never disagree about the pace.
+  const unitNow = path ? currentUnit(path.units, path.items, states, now) : null
+  const unitLeft = unitNow ? unitRemaining(unitNow, path!.items, states).length : 0
+  const remainingNew = pathState(cards, null, now).remainingNew + unitLeft
 
   const quota = computeQuota({
-    remainingNew: path.remainingNew,
+    remainingNew,
     dueToday: due.length,
     dueWriting: due.filter((c) => c.mode === 'writing').length,
     targetExamDate: parseExamDate(goal.target_exam_date),
@@ -120,7 +119,7 @@ function TodayScreen() {
   const moveOption =
     state === 'tertinggal' || quota.unrealistic
       ? catchUpOptions({
-          remainingNew: path.remainingNew,
+          remainingNew,
           overdue,
           targetExamDate: examDate,
           today: now,
@@ -260,27 +259,43 @@ function TodayScreen() {
           )}
         </section>
 
-        {/* The ladder, one line: where kana stands, and what that means for N5.
-            The gate is stated as a fact with a number, not as a lock icon —
-            "62% of the way to opening N5" is a plan; a padlock is a wall. */}
-        <section className="mt-8 rounded-[3px] bg-paper-raised px-4 py-3">
-          <div className="flex items-center justify-between">
-            <span className="flex items-center gap-3">
+        {/* Where the learner stands, in the two things that move: the unit they
+            are on, and the kana sheet that runs alongside it. */}
+        <Link
+          href="/jalur/"
+          className="mt-8 block rounded-[3px] bg-paper-raised px-4 py-3 transition-colors hover:bg-paper-sunken"
+        >
+          <div className="flex items-center justify-between gap-3">
+            <span className="flex min-w-0 items-center gap-3">
               <span aria-hidden className="text-[22px] leading-none text-ink-faint">
+                道
+              </span>
+              <span className="min-w-0">
+                <span className="block truncate text-[15px] text-ink">
+                  {unitNow ? unitNow.title : t.jalur.title}
+                </span>
+                <span className="tnum block text-[12px] text-ink-muted">
+                  {unitNow ? fmt(t.jalur.unitN, { n: unitNow.n }) : ''}
+                </span>
+              </span>
+            </span>
+            <span aria-hidden className="text-[13px] text-ai">
+              →
+            </span>
+          </div>
+
+          <div className="mt-2 flex items-center justify-between border-t border-rule pt-2">
+            <span className="flex items-center gap-3">
+              <span aria-hidden className="text-[18px] leading-none text-ink-faint">
                 あ
               </span>
               <span className="text-[13px] text-ink-muted">{t.hariIni.kanaStrength}</span>
             </span>
-            <span className="tnum text-[15px] text-ink">
+            <span className="tnum text-[14px] text-ink">
               {fmt(t.hariIni.kanaStrengthValue, { strong: kana.strong, total: kana.total })}
             </span>
           </div>
-          <p className="tnum mt-2 border-t border-rule pt-2 text-[12px] leading-relaxed text-ink-muted">
-            {path.gate.open
-              ? t.hariIni.gateOpen
-              : fmt(t.hariIni.gateLocked, { pct: Math.floor(path.gate.ratio * 100) })}
-          </p>
-        </section>
+        </Link>
 
         <section className="mt-8">
           <div className="flex items-baseline justify-between">

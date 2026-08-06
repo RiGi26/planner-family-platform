@@ -22,6 +22,7 @@ export const id = {
   nav: {
     label: 'Navigasi utama',
     hariIni: 'Hari Ini',
+    jalur: 'Jalur',
     kana: 'Kana',
     menulis: 'Menulis',
     setelan: 'Setelan',
@@ -118,6 +119,24 @@ export const id = {
     kanaStrengthValue: '{strong} / {total}',
     noQuotaYet: 'Belum ada yang dijadwalkan hari ini.',
     startFirst: 'Mulai belajar',
+  },
+
+  jalur: {
+    title: 'Jalur belajar',
+    position: 'Unit {n} dari {total}',
+    intro:
+      'Satu unit, satu kemampuan baru. Kerjakan berurutan — tiap unit hanya memakai materi yang sudah kamu pelajari sebelumnya.',
+    unitN: 'Unit {n}',
+    itemProgress: '{strong} dari {total} materi sudah kuat',
+    continueUnit: 'Lanjut Unit {n}',
+    backToPath: 'Jalur belajar',
+    patternHeading: 'Pola kalimat',
+    dialogHeading: 'Percakapan',
+    sentenceHeading: 'Contoh kalimat',
+    playLine: 'Dengarkan',
+    notReviewed:
+      'Percakapan dan contoh kalimat di unit ini disusun untuk Masume dan diperiksa mesin — hanya memakai materi yang sudah diajarkan. Belum diperiksa penutur asli.',
+    moreSoon: 'Unit berikutnya sedang disusun.',
   },
 
   sesi: {
