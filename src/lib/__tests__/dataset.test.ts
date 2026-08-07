@@ -17,7 +17,7 @@ import { modesForItem } from '../items'
  * renders, still schedules, still counts as answered. It just says nothing.
  *
  * So this file asserts the one thing fixtures cannot — that all 1,018 real items
- * still produce readable cards. See §2.5 of docs/BRIEF-01-glosa-id.md.
+ * still produce readable cards. See §2.6 of docs/BRIEF-01-glosa-id.md.
  */
 
 const SETS: Array<{ name: string; items: Item[]; kana: boolean }> = [
@@ -61,7 +61,7 @@ describe('dataset yang dikirim', () => {
   })
 
   /**
-   * Guards §2.5: fetch-jlpt.mjs rebuilds these files and must carry the review
+   * Guards §2.6: fetch-jlpt.mjs rebuilds these files and must carry the review
    * bookkeeping across. If that preservation is ever dropped, the fields vanish
    * from the rebuilt file and this fails — which is the only automatic warning
    * there is, since nothing downstream writes `gloss_reviewed` back.

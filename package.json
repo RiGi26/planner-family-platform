@@ -20,7 +20,9 @@
     "icons": "node scripts/render-icons.mjs",
     "jlpt": "node scripts/fetch-jlpt.mjs",
     "verify:units": "node scripts/verify-units.mjs",
-    "verify:gloss": "node scripts/verify-gloss.mjs"
+    "verify:gloss": "node scripts/verify-gloss.mjs",
+    "gloss:siapkan": "node scripts/gloss-siapkan.mjs",
+    "gloss:terapkan": "node scripts/gloss-terapkan.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.58.0",
@@ -34,7 +36,6 @@
     "ts-fsrs": "5.4.1"
   },
   "devDependencies": {
-    "@anthropic-ai/sdk": "^0.115.0",
     "@eslint/eslintrc": "^3.3.6",
     "@serwist/next": "9.5.12",
     "@tailwindcss/postcss": "^4.1.0",

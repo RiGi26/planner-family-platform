@@ -100,7 +100,33 @@ array kosong, bukan `id` — dan itu memang benar, karena `en` adalah data sumbe
 yang `fetch-jlpt.mjs` tolak untuk ditulis kalau kosong, jadi tidak ada apa pun
 untuk dijadikan cadangan.
 
-### 2.5 fetch-jlpt.mjs wajib mempertahankan glosa
+### 2.5 `scripts/lib/gloss-rules.mjs` — satu sumber klasifikasi
+
+Aturan yang bisa dinilai mesin — kelas kata (§4.2), deteksi penggolong (§3.6),
+dan aturan bentuk per-glosa (§3.1, §3.10) — hidup di satu modul yang dipakai
+**generator dan validator**:
+
+| Berkas | Perannya |
+|---|---|
+| `scripts/lib/gloss-rules.mjs` | aturan: `wordClass`, `peerKey`, `isCounter`, `ATURAN_BENTUK`, `cekPenggolong` |
+| `scripts/lib/gloss-data.mjs` | dataset, irisan §3, penyusunan batch, konteks §4, pemeriksaan |
+| `scripts/gloss-siapkan.mjs` · `gloss-terapkan.mjs` | generator (§5) |
+| `scripts/verify-gloss.mjs` | validator (§6) |
+
+**Dua salinan berbahaya, dan diam-diam.** Kalau generator mengelompokkan item
+dengan satu definisi kelas kata dan validator memeriksanya dengan definisi lain,
+keunikan §4.2 terpenuhi di pengelompokan yang satu dan gagal di yang lain. Tidak
+ada yang error, tidak ada yang berbeda saat dibaca — glosanya cuma mulai
+bertabrakan di tempat yang tak seorang pun periksa. Dan karena §4.2 baru bisa
+dilanggar setelah cukup banyak item berglosa, penyimpangan itu baru muncul jauh di
+belakang, ketika 810 item sudah ditulis dan memperbaikinya berarti memilih ulang
+kata untuk sebagian besar dari mereka.
+
+Penjelasan gaya — apa yang membuat sebuah kata *bagus* — tetap di §3 dokumen ini,
+bukan di kode. Prosa tidak bisa dieksekusi, dan aturan yang bisa dieksekusi tidak
+perlu dua kali ditulis.
+
+### 2.6 fetch-jlpt.mjs wajib mempertahankan glosa
 
 `fetch-jlpt.mjs` membangun ulang `vocab_n5.json`, `kanji_n5.json` dan
 `grammar_n5.json` **secara utuh** dari sumber. Sumbernya tidak pernah punya
@@ -118,7 +144,7 @@ Pembagian kepemilikannya:
 | `data.gloss_note_id` | kita | **dipertahankan** |
 
 `gloss_reviewed` yang paling berbahaya kalau hilang, dan justru paling tidak
-kelihatan. Tidak ada apa pun yang menulisnya kembali: `gloss-id.mjs` melewati
+kelihatan. Tidak ada apa pun yang menulisnya kembali: `gloss:siapkan` melewati
 item yang `meanings.id`-nya sudah terisi (§5, idempoten), jadi item yang statusnya
 ter-reset ke `false` tidak akan pernah disentuh generator lagi. Glosanya sendiri
 masih ada dan terbaca benar di layar — yang berubah cuma satu boolean, dan
@@ -361,47 +387,157 @@ Dari yang wajib ke yang diusahakan:
 
 ---
 
-## 5. Pipeline — `scripts/gloss-id.mjs`
+## 5. Pipeline — dua perintah, tanpa jaringan
+
+Pengisian glosa dikerjakan **di dalam sesi Claude Code**, bukan lewat panggilan
+API berbayar. Generator tidak menyentuh jaringan sama sekali: ia menyiapkan
+pertanyaannya, dan perintah kedua mencatat jawabannya.
+
+```sh
+npm run gloss:siapkan -- --lingkup 0-5    # tulis SATU batch ke gloss-batch.json
+#   ← isi "meanings_id" tiap item di sesi Claude Code
+npm run gloss:terapkan                    # validasi → tulis ke dataset → audit
+npm run verify:gloss                      # yang berwenang
+```
+
+Ulangi sampai `gloss:siapkan` melaporkan tidak ada batch tersisa.
+
+Selain menghapus tagihan per-token, pemisahan ini menaruh **satu titik baca
+manusia di antara menghasilkan dan menulis** — persis yang diminta Commit 4 di §8,
+tapi berlaku untuk tiap batch, bukan cuma yang pertama.
+
+### 5.1 `gloss:siapkan` — menyiapkan satu batch
 
 ```
 ├─ baca vocab_n5.json / kanji_n5.json / grammar_n5.json
 ├─ lewati item yang meanings.id-nya sudah terisi  (idempoten)
-├─ batch per 25 item, kirim bersama:
-│     • seluruh §3 sebagai system prompt
-│     • expression, reading, meanings.en, pos, verb_group
-│     • nomor + judul unit item itu  (konteks makna)
-│     • daftar meanings.id yang sudah dipakai di unit itu        (§4.1)
-│     • daftar meanings.id yang sudah dipakai item sejenis &
-│       sekelas kata, dari SELURUH dataset                        (§4.2)
-├─ tulis balik meanings.id + gloss_reviewed: false
-└─ tulis scripts/data/gloss-audit.json — en/id berdampingan, dikelompokkan per unit
+├─ ambil SATU batch (±25 item) dan tulis scripts/data/gloss-batch.json:
+│     • panduan_3        — seluruh §3, diiris dari brief ini apa adanya
+│     • aturan_catatan   — batasan gloss_note_id
+│     • item[]           — id, ekspresi, bacaan, inggris, pos, verb_group,
+│                          unit + judulnya, penanda penggolong
+│     • glosa_terpakai.per_unit    — §4.1
+│     • glosa_terpakai.per_kelas   — §4.2, LINTAS-UNIT
+│     • pasangan_vt_vi             — §3.3
+└─ cetak berapa batch tersisa
 ```
 
-Batch 25 supaya konteks unit muat dan kegagalan satu batch tidak merusak seluruh
-berkas. Idempoten supaya bisa dijalankan bertahap sambil review berjalan.
+`--lingkup` **wajib, tanpa nilai bawaan**: `0-5` · `6-25` · `3,7,9` · `none`
+(item yang tak diklaim unit mana pun) · `semua` (seluruh 810 — harus diketik).
+Nilai bawaan "semuanya" mengubah satu salah ketik jadi run 810 item, dan mengisi
+justru item yang Commit 4 ada untuk dibiarkan dulu.
+
+**Satu batch per perintah, disengaja.** Daftar §4 dihitung saat perintah
+dijalankan, jadi batch N otomatis melihat semua yang ditulis batch N−1 — tidak ada
+daftar tersimpan yang bisa basi. Mengeluarkan 33 batch sekaligus akan membekukan
+daftar itu di keadaan awal, dan §4 mati di dalam run serta hanya hidup antar-run:
+bentrokannya baru ketemu setelah seluruh 810 item ditulis.
+
+`gloss-batch.json` adalah lembar kerja sementara dan masuk `.gitignore`;
+`gloss-audit.json` yang dibaca reviewer justru di-commit.
+
+### 5.2 `gloss:terapkan` — mencatat jawabannya
+
+```
+├─ baca scripts/data/gloss-batch.json
+├─ TOLAK berkas yang belum diisi sama sekali    ← lihat peringatan di bawah
+├─ validasi tiap glosa lawan scripts/lib/gloss-rules.mjs
+├─ yang lolos  → meanings.id + gloss_reviewed: false (+ gloss_note_id bila ada)
+├─ yang gagal  → DIBIARKAN tanpa glosa, alasannya dicatat
+└─ bangun ulang scripts/data/gloss-audit.json — en/id berdampingan, per unit
+```
+
+> ⚠️ **`gloss:terapkan` menolak berkas yang `meanings_id`-nya masih kosong
+> seluruhnya, dan berhenti sebelum menyentuh apa pun.** Tanpa gerbang itu,
+> menjalankannya atas berkas kosong tidak menulis apa-apa tapi tetap membangun
+> ulang audit — dan hasilnya terbaca seolah batch-nya sudah dikerjakan.
+
+Item yang sudah berglosa di dataset juga dilewati walau ada di berkas batch:
+menerapkan berkas yang sama dua kali tidak boleh menimpa glosa yang barangkali
+sudah dikoreksi manusia.
 
 ### Keunikan §4.2 itu LINTAS-UNIT
 
 Mengirim hanya glosa yang sudah dipakai di unit itu cukup untuk §4.1 dan tidak
 cukup untuk apa pun selain itu. §4.2 menuntut keunikan di antara item sejenis dan
-sekelas kata, dan himpunan itu **melintasi unit**: 入る ada di unit 17, 入れる di
-unit 14, jadi keduanya tidak pernah sekelompok. Daftar yang hanya berisi glosa
-satu unit tidak akan pernah mencegah keduanya lahir sebagai "masuk" — dan
-bentrokannya baru ketahuan setelah 810 item jadi, yaitu persis kegagalan yang
-§8 susun urutan commit-nya untuk mencegah.
+sekelas kata, dan himpunan itu **melintasi unit**: 入る ada di unit 17, 入れる
+tidak diklaim unit mana pun, jadi keduanya tidak pernah sekelompok. Daftar yang
+hanya berisi glosa satu unit tidak akan pernah mencegah keduanya lahir sebagai
+"masuk" — dan bentrokannya baru ketahuan setelah 810 item jadi, yaitu persis
+kegagalan yang §8 susun urutan commit-nya untuk mencegah.
 
 Karena itu tiap batch juga membawa glosa yang sudah dipakai item sejenis +
 sekelas kata dari seluruh dataset. Daftarnya dipersempit ke kelas kata yang
 benar-benar ada di batch itu, supaya panjangnya sebanding dengan permintaannya,
 bukan dengan ukuran dataset.
 
-Hal yang sama berlaku pada **penyusunan batch**, bukan cuma pada konteksnya:
-pasangan 他動詞/自動詞 seakar (§3.3) dijaga tetap dalam satu batch walau unitnya
-berjauhan. Kalau terpisah, tiap panggilan hanya melihat separuh pasangan dan
-dengan wajar menulis "masuk" untuk keduanya — perbedaan yang justru menjadi
-alasan §3.3 ada, hilang sebelum validator sempat melihatnya.
+Hal yang sama berlaku pada **penyusunan batch**: pasangan 他動詞/自動詞 seakar
+(§3.3) dijaga tetap dalam satu batch walau unitnya berjauhan. Kalau terpisah, tiap
+batch hanya melihat separuh pasangan dan dengan wajar menulis "masuk" untuk
+keduanya — perbedaan yang justru menjadi alasan §3.3 ada, hilang sebelum validator
+sempat melihatnya.
 
-Urutan pengerjaan: **unit 0–5 dulu**, lalu 6–25, lalu 304 kosakata yang belum
+Batching tidak bisa menolong satu kasus: sisi lain pasangan sudah berglosa dari
+batch sebelumnya, jadi ia tidak ada di antrean dan tidak bisa ditarik masuk. Untuk
+itu `pasangan_vt_vi` membawa glosa pasangannya secara eksplisit, berikut instruksi
+bahwa awalannya harus berbeda (me-/mem-/meng- lawan bentuk dasar atau ter-/ber-).
+§4.2 sendiri tidak menyelamatkan ini: ia cuma menuntut keduanya *berbeda*,
+sementara §3.3 menuntut keduanya berbeda *dengan cara tertentu*.
+
+### §3 dibaca dari brief saat runtime
+
+Panduan gaya **tidak disalin** ke dalam skrip. Ia diiris dari berkas ini saat
+`gloss:siapkan` dijalankan (antara judul `## 3.` dan `## 4.`) lalu ditaruh apa
+adanya di `gloss-batch.json`. Salinan kedua akan menyimpang dari brief begitu
+salah satunya disunting, dan penyimpangannya tak terlihat — glosanya cuma mulai
+mengikuti versi aturan yang tak seorang pun ingat pernah menulisnya.
+
+Karena itu ekstraksinya **diperiksa keras, bukan diandaikan**. Judul yang hilang
+adalah kegagalan yang mudah — ia melempar. Yang berbahaya adalah judul yang masih
+cocok sementara isinya kosong, terpotong, atau dinomori ulang: batch-nya tersimpan
+dengan `panduan_3` kosong, siapa pun yang mengisinya bekerja dari ingatan alih-alih
+dari spec, dan tidak ada apa pun yang melaporkan masalah.
+
+Tiga pemeriksaan, semuanya gagal keras: judul `## 3.` dan `## 4.` ada dan urut ·
+hasil irisannya **di atas 3.000 karakter** (§3 sekarang ~6.500) · memuat subbagian
+`### 3.1`, `### 3.6`, `### 3.7`, `### 3.10`.
+
+### Kebijakan tolak
+
+Usulan yang melanggar aturan yang bisa dinilai dari satu batch — bentuk glosa,
+keunikan §4.1/§4.2, aturan penggolong §3.6, glosa yang identik dengan sumber
+Inggris — ditolak, dan itemnya **dibiarkan tanpa glosa** beserta alasannya, bukan
+ditulis apa adanya.
+
+Item ber-`meanings.id` kosong akan diambil lagi oleh `gloss:siapkan` berikutnya
+(idempoten) dan tetap dihitung kurang oleh `verify:gloss --lengkap`. Menulis glosa
+yang diketahui buruk melakukan kebalikannya: menandai item itu selesai,
+menyembunyikannya dari keduanya, dan meninggalkan pelanggaran yang hanya ketemu
+kalau ada manusia membaca ulang §6. Kandidat yang ditolak beserta alasannya tetap
+dicatat di `gloss-audit.json`.
+
+Pemeriksaan di `gloss:terapkan` adalah **saringan cepat, bukan implementasi kedua
+dari §6**. Ia menangkap yang bisa dinilai dari satu batch sendirian, selagi
+konteksnya masih di tangan. `npm run verify:gloss` tetap yang berwenang —
+jalankan setelah tiap terapkan.
+
+### Batasan `gloss_note_id`
+
+Batch menyediakan `gloss_note_id`, tapi ia diisi **hanya dalam dua keadaan**:
+
+1. ungkapan tetap §3.7 — catat fungsinya atau adat pemakaiannya
+2. item dengan jebakan pemakaian nyata, yaitu ketika glosanya sendiri akan
+   menyesatkan kalau dipakai apa adanya (mis. あなた jarang dipakai kepada orang
+   yang namanya sudah diketahui)
+
+Selain itu `null`. Maksimal 80 karakter; catatan yang lebih panjang dibuang
+sementara glosanya tetap dipakai — §6 memperlakukan panjang catatan sebagai
+peringatan, bukan kegagalan, dan tidak sebanding membuang glosa yang baik
+karenanya. Catatan yang diisi untuk tiap item menjadi kebisingan dan reviewer
+berhenti membacanya, termasuk dua catatan yang benar-benar penting. `null` yang
+sudah ada tidak ditimpa, jadi catatan yang ditulis manusia aman.
+
+Urutan pengerjaan: **unit 0–5 dulu**, lalu 6–25, lalu kosakata yang belum
 terpetakan ke unit mana pun.
 
 ---
@@ -446,7 +582,7 @@ terlihat, hanya tidak menggagalkan.
 - [ ] `meanings.en` tidak berubah dari commit sebelumnya (jaga data sumber)
 - [ ] `data.gloss_reviewed` tidak mundur dari `true` ke `false` dibanding commit
       sebelumnya — cermin dari aturan di atasnya, dan satu-satunya hal yang
-      menangkap preservasi `fetch-jlpt.mjs` yang rusak sebagian (§2.5)
+      menangkap preservasi `fetch-jlpt.mjs` yang rusak sebagian (§2.6)
 
 Dua aturan terakhir **tidak** dibatasi pada item yang sudah berglosa. Keduanya
 menanyakan apa yang BERUBAH antar dua commit, bukan apa yang tertulis di sebuah
@@ -489,7 +625,7 @@ Ikut pola `reviewed` yang sudah ada di unit — jangan bikin mekanisme kedua.
   tempat pertanyaan "sudah semua belum?" ditanyakan, dan jawabannya memang
   seharusnya "sudah"
 - Gerbang rilis store: seluruh item **non-kana** unit 0–25 `gloss_reviewed: true`.
-  Kana tidak punya field itu sama sekali (§2.2, §2.5): romaji bukan terjemahan,
+  Kana tidak punya field itu sama sekali (§2.2, §2.6): romaji bukan terjemahan,
   jadi tidak ada yang bisa disetujui penutur asli, dan memasukkannya ke gerbang
   berarti 208 item yang tidak akan pernah jujur bisa dinyatakan lulus
 - Reviewer dikasih `gloss-audit.json` berdampingan en/id per unit, bukan JSON mentah
@@ -511,7 +647,7 @@ dua-duanya). `tsc` hijau, aplikasi jalan seperti semula dengan glosa Inggris.
 setelah jadi jauh lebih mahal daripada mencegahnya.
 
 **Commit 3 — generator**
-`gloss-id.mjs` sesuai §5. Belum dijalankan.
+`gloss-siapkan.mjs` + `gloss-terapkan.mjs` sesuai §5. Belum dijalankan.
 
 **Commit 4 — jalankan unit 0–5, lalu BERHENTI**
 Sekitar 80 item. Baca hasilnya sendiri sebelum lanjut. Di titik ini ketahuan

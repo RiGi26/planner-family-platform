@@ -14,6 +14,8 @@
 
 export const MAKS_ELEMEN = 3
 export const MAKS_KARAKTER = 40
+/** §6 warns above this; the generator is told the same number so it aims under it. */
+export const MAKS_CATATAN = 80
 
 export const norm = (s) => s.trim().toLowerCase()
 export const berglosa = (item) => item.meanings.id.length > 0

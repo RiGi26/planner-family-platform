@@ -154,7 +154,7 @@ if (grammarCompiled.length !== EXPECTED.grammarCompiled)
  * `en`; we own `id`, `gloss_reviewed` and `gloss_note_id`.
  *
  * `gloss_reviewed` matters as much as the gloss itself. Nothing writes it back:
- * gloss-id.mjs skips items whose Indonesian is already filled, so an item reset
+ * gloss:siapkan skips items whose Indonesian is already filled, so an item reset
  * to `false` here stays `false` forever, and the store release gate — every unit
  * reviewed — silently moves out of reach. Losing the flag is worse than losing
  * the text, because losing the text is at least visible.

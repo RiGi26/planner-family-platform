@@ -126,7 +126,7 @@ const englishOf = (row) => (Array.isArray(row.meanings) ? row.meanings : (row.me
 // rules
 //
 // Classification (wordClass, peerKey, isCounter) and the per-gloss shape rules
-// live in scripts/lib/gloss-rules.mjs, because gloss-id.mjs has to satisfy the
+// live in scripts/lib/gloss-rules.mjs, because the generator has to satisfy the
 // very same rules before it writes anything. Two copies would let the generator
 // group items one way and this validator check another — a disagreement that
 // only surfaces after 810 glosses exist.
@@ -229,15 +229,15 @@ if (baseline) {
 
   /**
    * The mirror of the rule above, and the only thing that catches a partly broken
-   * preservation in fetch-jlpt.mjs (§2.5). dataset.test.ts notices a field that
+   * preservation in fetch-jlpt.mjs (§2.6). dataset.test.ts notices a field that
    * VANISHED; it cannot notice `true` quietly becoming `false`, because both are
    * valid booleans and the gloss on screen still reads correctly. Nothing writes
-   * the flag back either — gloss-id.mjs skips items that already have a gloss —
+   * the flag back either — gloss:siapkan skips items that already have a gloss —
    * so a reset is permanent and silent unless it is caught here.
    */
   rule(
     failures,
-    'gloss_reviewed mundur dari true ke false (§2.5)',
+    'gloss_reviewed mundur dari true ke false (§2.6)',
     items
       .filter((i) => baseline.get(i.id)?.data?.gloss_reviewed === true)
       .filter((i) => i.data.gloss_reviewed !== true)

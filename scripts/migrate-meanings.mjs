@@ -11,7 +11,7 @@
  *
  * `data.gloss_reviewed` and `data.gloss_note_id` are seeded here rather than left
  * to the generator, because fetch-jlpt.mjs has to preserve `gloss_reviewed` across
- * a refetch (§2.5) and cannot preserve a field that does not exist yet. The
+ * a refetch (§2.6) and cannot preserve a field that does not exist yet. The
  * generator skips items whose gloss is already written, so for those it would
  * never write the status back either.
  *
