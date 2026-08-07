@@ -1,0 +1,596 @@
+{
+  "petunjuk": [
+    "Isi \"meanings_id\" tiap item dengan glosa bahasa Indonesia, mengikuti panduan_3 di bawah.",
+    "Maksimal 3 elemen; elemen pertama = arti yang dipakai di unit item itu.",
+    "Jangan mengubah field lain, dan jangan menyentuh \"inggris\" — itu data sumber CC BY-SA.",
+    "Setelah terisi, jalankan: npm run gloss:terapkan"
+  ],
+  "aturan_catatan": [
+    "Isi \"gloss_note_id\" HANYA dalam dua keadaan:",
+    "1. ungkapan tetap §3.7 — catat fungsinya atau adat pemakaiannya",
+    "   (mis. いただきます → harfiah: \"saya menerima\")",
+    "2. item dengan jebakan pemakaian NYATA, yaitu ketika glosanya sendiri akan",
+    "   menyesatkan kalau dipakai apa adanya (mis. あなた: jarang dipakai kepada",
+    "   orang yang namanya sudah diketahui — pakai namanya)",
+    "Selain itu null. Maksimal 80 karakter.",
+    "Catatan yang diisi untuk tiap item menjadi kebisingan dan reviewer berhenti",
+    "membacanya — termasuk dua catatan yang benar-benar penting."
+  ],
+  "lingkup": "0-5",
+  "batch_tersisa": 3,
+  "panduan_3": "## 3. Panduan gaya glosa\n\n### 3.1 Aturan umum\n\n- Huruf kecil semua, kecuali nama diri\n- Maksimal **3 elemen** dalam array `id`\n- Makna berbeda → elemen array terpisah. Sinonim dekat → satu elemen, dipisah koma\n- Elemen pertama = arti yang dipakai di unit tempat item itu muncul; sisanya\n  urutan frekuensi\n- Tanpa titik di akhir\n- Kurung untuk pembeda singkat (`itu (jauh)`), bukan untuk penjelasan\n- Penjelasan panjang → `gloss_note_id`, bukan glosa\n\n### 3.2 Kata benda\n\nKata benda telanjang. Tanpa \"sebuah\", tanpa \"yang\".\n\n| Ekspresi | en | id |\n|---|---|---|\n| 学生 | student | mahasiswa |\n| 先生 | teacher | guru |\n| お風呂 | bath | kamar mandi |\n\nBahasa Inggris sering lebih kabur dari yang dibutuhkan — `student` bisa 学生\n(mahasiswa) atau 生徒 (murid sekolah). Bahasa Indonesia memaksa pilihan.\nManfaatkan, jangan tiru kekaburannya.\n\n### 3.3 Kata kerja — transitif vs intransitif\n\nKata kerja telanjang, **tanpa \"untuk\"**. `to eat` → `makan`.\n\nYang terpenting: pasangan 他動詞/自動詞 dapat glosa Inggris yang identik, padahal\nitu salah satu jebakan terbesar bahasa Jepang. Bahasa Indonesia memisahkannya\ngratis.\n\n| Jenis | Ekspresi | en | id |\n|---|---|---|---|\n| 他動詞 | 開けます | to open | membuka |\n| 自動詞 | 開きます | to open | terbuka |\n| 他動詞 | 出します | to take out | mengeluarkan |\n| 自動詞 | 出ます | to go out | keluar |\n| 他動詞 | 入れます | to put in | memasukkan |\n| 自動詞 | 入ります | to enter | masuk |\n\nAturan: transitif pakai awalan **me-/mem-/meng-**, intransitif pakai bentuk dasar\natau **ter-/ber-**.\n\n**Datanya sudah ada.** `data.pos` memuat tag `vt` (68 item) dan `vi` (64 item)\ndari JMdict. Tidak perlu turunan baru — validator bisa langsung membacanya.\n\n### 3.4 Kata sifat\n\nTelanjang. Pembedaan い/な hidup di `data`, bukan di glosa.\n\n| Ekspresi | id |\n|---|---|\n| 高い | `[\"tinggi\", \"mahal\"]` — dua makna, dua elemen |\n| 大きい | `[\"besar\"]` |\n| 静か | `[\"tenang, sepi\"]` — sinonim dekat, satu elemen |\n\n### 3.5 Deiksis こ・そ・あ・ど\n\nJepang punya **tiga** tingkat jarak, Inggris dua — itu sebab `あそこ / あっち /\nそちら / そっち / 向こう` semuanya jadi \"over there\". Bahasa Indonesia untuk\n**tempat** punya tiga: **sini / situ / sana**.\n\nKata tempat — selesai tanpa kurung sama sekali:\n\n| Ekspresi | en | id |\n|---|---|---|\n| ここ | here | di sini |\n| そこ | there | di situ |\n| あそこ | over there | di sana |\n| こちら | this way | sebelah sini |\n| そちら | over there | sebelah situ |\n| あちら | over there | sebelah sana |\n| こっち / そっち / あっち | — | sini / situ / sana (akrab) |\n| 向こう | over there | seberang sana |\n\nKata benda & penunjuk — butuh kurung, karena untuk benda Indonesia hanya punya\ndua tingkat:\n\n| Ekspresi | id |\n|---|---|\n| これ / この | ini |\n| それ / その | itu (dekat lawan bicara) |\n| あれ / あの | itu (jauh dari kita berdua) |\n\nSisa kelompok bentrok lainnya:\n\n| Kelompok | id |\n|---|---|\n| ある / 居る | ada (benda) / ada (orang, hewan) |\n| はい / ええ | ya / ya (lebih santai) |\n| どう / いかが | bagaimana / bagaimana (sopan) |\n| お風呂 / ふろ | kamar mandi / kamar mandi (santai) |\n\n### 3.6 Penggolong (助数詞)\n\nInggris menjelaskan penggolong dengan satu klausa. Bahasa Indonesia punya sistem\npenggolong sendiri — satu kata cukup, dan konsepnya sudah dikuasai pemelajar\nsejak kecil.\n\n| Ekspresi | en | id |\n|---|---|---|\n| 〜人 | counter for people | orang |\n| 〜本 | counter for long cylindrical objects | batang |\n| 〜枚 | counter for flat objects | lembar |\n| 〜匹 | counter for small animals | ekor |\n| 〜冊 | counter for books | jilid |\n| 〜台 | counter for machines/vehicles | unit |\n| 〜個 | counter for small objects | buah |\n\nValidator: item penggolong → `meanings.id` harus **satu elemen, satu kata, tanpa\nkurung**.\n\n**Deteksinya BUKAN `pos.includes('ctr')`.** JMdict menandai 山, 風, 頭 dan ページ\nsebagai `ctr` karena kata-kata itu *bisa* dipakai sebagai penggolong — padahal\nentri di dataset ini adalah nominanya: 山 berarti \"gunung\", dan menuntut satu kata\ntelanjang untuknya berarti menegakkan aturan ini atas item yang bukan urusannya.\n`suf`/`n-suf` lebih buruk lagi: よく (`[\"often\", \"well\"]`) punya dua makna berbeda\nyang justru menurut §3.4 harus jadi dua elemen. Kesepuluh item itu akan gagal\nselamanya atas aturan yang tidak pernah tentang mereka.\n\nUjinya karena itu adalah **apa entrinya**, bukan apa yang bisa dilakukan\nkepalanya: awalan `〜` (bentuk yang dipakai tabel di atas), atau glosa Inggris yang\nmenyebut dirinya sendiri *counter*.\n\n**Catatan jujur: dataset belum punya satu pun entri 助数詞, jadi aturan ini\nsekarang tidak mengenai apa pun.** Tidak ada 〜人/〜本/〜枚/〜匹/〜冊/〜台/〜個 sebagai\nitem; 本 tercatat sebagai nomina \"book\". Tiga kanji memang memuat \"counter for\"\ndi glosa Inggrisnya (mis. 日 → \"counter for days\"), tapi itu item kanji yang\ndiatur §3.8, bukan penggolong. Validator mencetak catatan ini tiap kali\ndijalankan supaya kehampaannya terlihat, bukan disangka lulus. Aturannya sudah\nmenunggu kalau entri penggolong ditambahkan nanti.\n\n### 3.7 Ungkapan tetap\n\nTerjemahkan **fungsinya**. Makna harfiah yang mengajarkan sesuatu masuk ke\n`gloss_note_id`.\n\n| Ekspresi | meanings.id | gloss_note_id |\n|---|---|---|\n| はじめまして | salam kenal | dipakai hanya saat pertama kali bertemu |\n| よろしくお願いします | mohon bantuannya | ditutup dengan membungkuk sedikit |\n| いただきます | selamat makan | harfiah: \"saya menerima\" |\n| すみません | permisi, maaf | juga dipakai untuk memanggil pelayan |\n| いってきます | saya pergi dulu | dijawab いってらっしゃい |\n\n### 3.8 Kanji\n\nGlosa kanji itu **pegangan ingatan, bukan definisi.** Satu sampai dua kata.\nOn/kun-yomi punya tempatnya sendiri.\n\n| Kanji | en | id |\n|---|---|---|\n| 人 | person | orang |\n| 上 | above, up, over | atas |\n| 生 | life, birth, genuine | hidup |\n\nJangan salin seluruh daftar KANJIDIC. Ambil yang dipakai di kosakata N5.\n\n### 3.9 Grammar\n\n49 item, dan glosanya yang paling buruk sekarang (`〜が` → \"but; however\").\nAturan: **jelaskan apa yang dia LAKUKAN, bukan namanya.**\n\n| Pola | Jangan | Pakai |\n|---|---|---|\n| 〜は | topic marker | menandai hal yang sedang dibicarakan |\n| 〜を | direct object particle | menandai yang dikenai perbuatan |\n| 〜が (konjungsi) | but; however | menyambung dua kalimat yang berlawanan |\n| 〜ませんか | negative question | mengajak melakukan sesuatu |\n\nIstilah linguistik boleh muncul di `gloss_note_id`, tidak di glosa utama.\n\n### 3.10 Larangan\n\n- ❌ \"untuk makan\" → ✅ \"makan\"\n- ❌ \"sebuah buku\" → ✅ \"buku\"\n- ❌ \"yang tinggi\" → ✅ \"tinggi\"\n- ❌ serapan Inggris kalau ada padanan (\"kalkulasi\" → \"hitungan\")\n  — **kecuali** kata pinjaman Jepang yang memang serapan:\n  カメラ → \"kamera\", テレビ → \"televisi\", パン → \"roti\"\n- ❌ menyalin kekaburan Inggris saat Indonesia bisa tegas\n- ❌ glosa lebih dari 40 karakter\n\n---",
+  "glosa_terpakai": {
+    "catatan": "Elemen pertama yang SUDAH dipakai — glosa baru tidak boleh kembar dengannya. per_unit = §4.1. per_kelas = §4.2, dan itu LINTAS-UNIT: dua item bisa jadi pengecoh satu sama lain walau unitnya berjauhan.",
+    "per_unit": {},
+    "per_kelas": {}
+  },
+  "pasangan_vt_vi": {
+    "catatan": "Pasangan 他動詞/自動詞 seakar yang sisi lainnya sudah berglosa (§3.3). Kalau sisinya berbeda (vt lawan vi), awalan glosanya WAJIB berbeda: transitif pakai me-/mem-/meng-, intransitif pakai bentuk dasar atau ter-/ber-. Berbeda saja tidak cukup. Item bertanda vt/vi ambitransitif: tetap bedakan dari pasangannya.",
+    "daftar": []
+  },
+  "item": [
+    {
+      "id": "vocab-n5-あなた",
+      "ekspresi": "あなた",
+      "bacaan": "あなた",
+      "jenis": "vocab",
+      "kelas_kata": "vocab/pronomina",
+      "inggris": [
+        "you"
+      ],
+      "pos": [
+        "pn"
+      ],
+      "verb_group": null,
+      "unit": 1,
+      "judul_unit": "Memperkenalkan diri",
+      "penggolong": false,
+      "riwayat_penolakan": null,
+      "meanings_id": [
+        "kamu, Anda"
+      ],
+      "gloss_note_id": "jarang dipakai kalau nama lawan bicara diketahui — sebut namanya"
+    },
+    {
+      "id": "vocab-n5-いいえ",
+      "ekspresi": "いいえ",
+      "bacaan": "いいえ",
+      "jenis": "vocab",
+      "kelas_kata": "vocab/lain",
+      "inggris": [
+        "no"
+      ],
+      "pos": [
+        "int"
+      ],
+      "verb_group": null,
+      "unit": 1,
+      "judul_unit": "Memperkenalkan diri",
+      "penggolong": false,
+      "riwayat_penolakan": null,
+      "meanings_id": [
+        "tidak, bukan"
+      ],
+      "gloss_note_id": null
+    },
+    {
+      "id": "vocab-n5-はい",
+      "ekspresi": "はい",
+      "bacaan": "はい",
+      "jenis": "vocab",
+      "kelas_kata": "vocab/lain",
+      "inggris": [
+        "yes"
+      ],
+      "pos": [
+        "int"
+      ],
+      "verb_group": null,
+      "unit": 1,
+      "judul_unit": "Memperkenalkan diri",
+      "penggolong": false,
+      "riwayat_penolakan": null,
+      "meanings_id": [
+        "ya"
+      ],
+      "gloss_note_id": null
+    },
+    {
+      "id": "vocab-n5-学生",
+      "ekspresi": "学生",
+      "bacaan": "がくせい",
+      "jenis": "vocab",
+      "kelas_kata": "vocab/nomina",
+      "inggris": [
+        "student"
+      ],
+      "pos": [
+        "n"
+      ],
+      "verb_group": null,
+      "unit": 1,
+      "judul_unit": "Memperkenalkan diri",
+      "penggolong": false,
+      "riwayat_penolakan": null,
+      "meanings_id": [
+        "mahasiswa"
+      ],
+      "gloss_note_id": null
+    },
+    {
+      "id": "vocab-n5-私",
+      "ekspresi": "私",
+      "bacaan": "わたし",
+      "jenis": "vocab",
+      "kelas_kata": "vocab/pronomina",
+      "inggris": [
+        "I",
+        "me"
+      ],
+      "pos": [
+        "pn"
+      ],
+      "verb_group": null,
+      "unit": 1,
+      "judul_unit": "Memperkenalkan diri",
+      "penggolong": false,
+      "riwayat_penolakan": null,
+      "meanings_id": [
+        "saya"
+      ],
+      "gloss_note_id": null
+    },
+    {
+      "id": "vocab-n5-先生",
+      "ekspresi": "先生",
+      "bacaan": "せんせい",
+      "jenis": "vocab",
+      "kelas_kata": "vocab/nomina",
+      "inggris": [
+        "teacher",
+        "doctor"
+      ],
+      "pos": [
+        "n"
+      ],
+      "verb_group": null,
+      "unit": 1,
+      "judul_unit": "Memperkenalkan diri",
+      "penggolong": false,
+      "riwayat_penolakan": null,
+      "meanings_id": [
+        "guru",
+        "dokter"
+      ],
+      "gloss_note_id": null
+    },
+    {
+      "id": "vocab-n5-日本人",
+      "ekspresi": "日本人",
+      "bacaan": "にほんじん",
+      "jenis": "vocab",
+      "kelas_kata": "vocab/nomina",
+      "inggris": [
+        "Japanese person"
+      ],
+      "pos": [
+        "n"
+      ],
+      "verb_group": null,
+      "unit": 1,
+      "judul_unit": "Memperkenalkan diri",
+      "penggolong": false,
+      "riwayat_penolakan": null,
+      "meanings_id": [
+        "orang Jepang"
+      ],
+      "gloss_note_id": null
+    },
+    {
+      "id": "vocab-n5-インドネシア人",
+      "ekspresi": "インドネシア人",
+      "bacaan": "インドネシアじん",
+      "jenis": "vocab",
+      "kelas_kata": "vocab/lain",
+      "inggris": [
+        "Indonesian person"
+      ],
+      "pos": null,
+      "verb_group": null,
+      "unit": 1,
+      "judul_unit": "Memperkenalkan diri",
+      "penggolong": false,
+      "riwayat_penolakan": null,
+      "meanings_id": [
+        "orang Indonesia"
+      ],
+      "gloss_note_id": null
+    },
+    {
+      "id": "vocab-n5-はじめまして",
+      "ekspresi": "はじめまして",
+      "bacaan": "はじめまして",
+      "jenis": "vocab",
+      "kelas_kata": "vocab/lain",
+      "inggris": [
+        "how do you do",
+        "nice to meet you"
+      ],
+      "pos": [
+        "exp"
+      ],
+      "verb_group": null,
+      "unit": 1,
+      "judul_unit": "Memperkenalkan diri",
+      "penggolong": false,
+      "riwayat_penolakan": null,
+      "meanings_id": [
+        "salam kenal"
+      ],
+      "gloss_note_id": "dipakai hanya saat pertama kali bertemu"
+    },
+    {
+      "id": "vocab-n5-よろしくお願いします",
+      "ekspresi": "よろしくお願いします",
+      "bacaan": "よろしくおねがいします",
+      "jenis": "vocab",
+      "kelas_kata": "vocab/lain",
+      "inggris": [
+        "pleased to meet you",
+        "please treat me well"
+      ],
+      "pos": [
+        "exp"
+      ],
+      "verb_group": null,
+      "unit": 1,
+      "judul_unit": "Memperkenalkan diri",
+      "penggolong": false,
+      "riwayat_penolakan": null,
+      "meanings_id": [
+        "mohon bantuannya"
+      ],
+      "gloss_note_id": "ditutup dengan membungkuk sedikit"
+    },
+    {
+      "id": "vocab-n5-ありがとうございます",
+      "ekspresi": "ありがとうございます",
+      "bacaan": "ありがとうございます",
+      "jenis": "vocab",
+      "kelas_kata": "vocab/lain",
+      "inggris": [
+        "thank you"
+      ],
+      "pos": [
+        "exp"
+      ],
+      "verb_group": null,
+      "unit": 1,
+      "judul_unit": "Memperkenalkan diri",
+      "penggolong": false,
+      "riwayat_penolakan": null,
+      "meanings_id": [
+        "terima kasih"
+      ],
+      "gloss_note_id": null
+    },
+    {
+      "id": "vocab-n5-すみません",
+      "ekspresi": "すみません",
+      "bacaan": "すみません",
+      "jenis": "vocab",
+      "kelas_kata": "vocab/lain",
+      "inggris": [
+        "excuse me",
+        "sorry"
+      ],
+      "pos": [
+        "exp",
+        "int"
+      ],
+      "verb_group": null,
+      "unit": 1,
+      "judul_unit": "Memperkenalkan diri",
+      "penggolong": false,
+      "riwayat_penolakan": null,
+      "meanings_id": [
+        "permisi, maaf"
+      ],
+      "gloss_note_id": "juga dipakai untuk memanggil pelayan"
+    },
+    {
+      "id": "vocab-n5-そう",
+      "ekspresi": "そう",
+      "bacaan": "そう",
+      "jenis": "vocab",
+      "kelas_kata": "vocab/adjektiva",
+      "inggris": [
+        "so",
+        "that's right"
+      ],
+      "pos": [
+        "aux",
+        "adj-na"
+      ],
+      "verb_group": null,
+      "unit": 1,
+      "judul_unit": "Memperkenalkan diri",
+      "penggolong": false,
+      "riwayat_penolakan": null,
+      "meanings_id": [
+        "betul, benar",
+        "begitu"
+      ],
+      "gloss_note_id": null
+    },
+    {
+      "id": "vocab-n5-あの人",
+      "ekspresi": "あの人",
+      "bacaan": "あのひと",
+      "jenis": "vocab",
+      "kelas_kata": "vocab/pronomina",
+      "inggris": [
+        "that person",
+        "he",
+        "she"
+      ],
+      "pos": [
+        "pn"
+      ],
+      "verb_group": null,
+      "unit": 1,
+      "judul_unit": "Memperkenalkan diri",
+      "penggolong": false,
+      "riwayat_penolakan": null,
+      "meanings_id": [
+        "orang itu",
+        "dia"
+      ],
+      "gloss_note_id": null
+    },
+    {
+      "id": "vocab-n5-あの",
+      "ekspresi": "あの",
+      "bacaan": "あの",
+      "jenis": "vocab",
+      "kelas_kata": "vocab/adjektiva",
+      "inggris": [
+        "that over there"
+      ],
+      "pos": [
+        "adj-pn"
+      ],
+      "verb_group": null,
+      "unit": 2,
+      "judul_unit": "Menyebut benda di sekitarku",
+      "penggolong": false,
+      "riwayat_penolakan": null,
+      "meanings_id": [
+        "itu (jauh, + kata benda)"
+      ],
+      "gloss_note_id": null
+    },
+    {
+      "id": "vocab-n5-あれ",
+      "ekspresi": "あれ",
+      "bacaan": "あれ",
+      "jenis": "vocab",
+      "kelas_kata": "vocab/pronomina",
+      "inggris": [
+        "that"
+      ],
+      "pos": [
+        "pn"
+      ],
+      "verb_group": null,
+      "unit": 2,
+      "judul_unit": "Menyebut benda di sekitarku",
+      "penggolong": false,
+      "riwayat_penolakan": null,
+      "meanings_id": [
+        "itu (jauh dari kita berdua)"
+      ],
+      "gloss_note_id": null
+    },
+    {
+      "id": "vocab-n5-いす",
+      "ekspresi": "いす",
+      "bacaan": "いす",
+      "jenis": "vocab",
+      "kelas_kata": "vocab/nomina",
+      "inggris": [
+        "chair"
+      ],
+      "pos": [
+        "n"
+      ],
+      "verb_group": null,
+      "unit": 2,
+      "judul_unit": "Menyebut benda di sekitarku",
+      "penggolong": false,
+      "riwayat_penolakan": null,
+      "meanings_id": [
+        "kursi"
+      ],
+      "gloss_note_id": null
+    },
+    {
+      "id": "vocab-n5-かばん",
+      "ekspresi": "かばん",
+      "bacaan": "かばん",
+      "jenis": "vocab",
+      "kelas_kata": "vocab/nomina",
+      "inggris": [
+        "bag",
+        "basket"
+      ],
+      "pos": [
+        "n"
+      ],
+      "verb_group": null,
+      "unit": 2,
+      "judul_unit": "Menyebut benda di sekitarku",
+      "penggolong": false,
+      "riwayat_penolakan": null,
+      "meanings_id": [
+        "tas"
+      ],
+      "gloss_note_id": null
+    },
+    {
+      "id": "vocab-n5-この",
+      "ekspresi": "この",
+      "bacaan": "この",
+      "jenis": "vocab",
+      "kelas_kata": "vocab/numeralia",
+      "inggris": [
+        "this"
+      ],
+      "pos": [
+        "num"
+      ],
+      "verb_group": null,
+      "unit": 2,
+      "judul_unit": "Menyebut benda di sekitarku",
+      "penggolong": false,
+      "riwayat_penolakan": null,
+      "meanings_id": [
+        "ini (+ kata benda)"
+      ],
+      "gloss_note_id": null
+    },
+    {
+      "id": "vocab-n5-これ",
+      "ekspresi": "これ",
+      "bacaan": "これ",
+      "jenis": "vocab",
+      "kelas_kata": "vocab/pronomina",
+      "inggris": [
+        "this"
+      ],
+      "pos": [
+        "pn"
+      ],
+      "verb_group": null,
+      "unit": 2,
+      "judul_unit": "Menyebut benda di sekitarku",
+      "penggolong": false,
+      "riwayat_penolakan": null,
+      "meanings_id": [
+        "ini"
+      ],
+      "gloss_note_id": null
+    },
+    {
+      "id": "vocab-n5-その",
+      "ekspresi": "その",
+      "bacaan": "その",
+      "jenis": "vocab",
+      "kelas_kata": "vocab/adjektiva",
+      "inggris": [
+        "that"
+      ],
+      "pos": [
+        "adj-pn"
+      ],
+      "verb_group": null,
+      "unit": 2,
+      "judul_unit": "Menyebut benda di sekitarku",
+      "penggolong": false,
+      "riwayat_penolakan": null,
+      "meanings_id": [
+        "itu (dekat, + kata benda)"
+      ],
+      "gloss_note_id": null
+    },
+    {
+      "id": "vocab-n5-それ",
+      "ekspresi": "それ",
+      "bacaan": "それ",
+      "jenis": "vocab",
+      "kelas_kata": "vocab/pronomina",
+      "inggris": [
+        "that"
+      ],
+      "pos": [
+        "pn"
+      ],
+      "verb_group": null,
+      "unit": 2,
+      "judul_unit": "Menyebut benda di sekitarku",
+      "penggolong": false,
+      "riwayat_penolakan": null,
+      "meanings_id": [
+        "itu (dekat lawan bicara)"
+      ],
+      "gloss_note_id": null
+    },
+    {
+      "id": "vocab-n5-ペン",
+      "ekspresi": "ペン",
+      "bacaan": "ペン",
+      "jenis": "vocab",
+      "kelas_kata": "vocab/nomina",
+      "inggris": [
+        "pen"
+      ],
+      "pos": [
+        "n"
+      ],
+      "verb_group": null,
+      "unit": 2,
+      "judul_unit": "Menyebut benda di sekitarku",
+      "penggolong": false,
+      "riwayat_penolakan": null,
+      "meanings_id": [
+        "pulpen"
+      ],
+      "gloss_note_id": null
+    },
+    {
+      "id": "vocab-n5-何",
+      "ekspresi": "何",
+      "bacaan": "なん/なに",
+      "jenis": "vocab",
+      "kelas_kata": "vocab/pronomina",
+      "inggris": [
+        "what"
+      ],
+      "pos": [
+        "pn"
+      ],
+      "verb_group": null,
+      "unit": 2,
+      "judul_unit": "Menyebut benda di sekitarku",
+      "penggolong": false,
+      "riwayat_penolakan": null,
+      "meanings_id": [
+        "apa"
+      ],
+      "gloss_note_id": null
+    },
+    {
+      "id": "vocab-n5-時計",
+      "ekspresi": "時計",
+      "bacaan": "とけい",
+      "jenis": "vocab",
+      "kelas_kata": "vocab/nomina",
+      "inggris": [
+        "watch",
+        "clock"
+      ],
+      "pos": [
+        "n"
+      ],
+      "verb_group": null,
+      "unit": 2,
+      "judul_unit": "Menyebut benda di sekitarku",
+      "penggolong": false,
+      "riwayat_penolakan": null,
+      "meanings_id": [
+        "jam"
+      ],
+      "gloss_note_id": null
+    }
+  ]
+}

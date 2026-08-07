@@ -9,7 +9,7 @@
  * another.
  */
 
-import { readFileSync } from 'node:fs'
+import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from 'node:fs'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import {
@@ -27,6 +27,7 @@ export const ROOT = join(HERE, '..', '..')
 export const DATA = join(ROOT, 'src', 'data')
 export const BATCH = join(ROOT, 'scripts', 'data', 'gloss-batch.json')
 export const AUDIT = join(ROOT, 'scripts', 'data', 'gloss-audit.json')
+export const ARSIP = join(ROOT, 'scripts', 'data', 'riwayat-batch')
 const BRIEF = join(ROOT, 'docs', 'BRIEF-01-glosa-id.md')
 
 export const FILES = ['vocab_n5.json', 'kanji_n5.json', 'grammar_n5.json']
@@ -35,6 +36,57 @@ export const UKURAN_BATCH = 25
 export function gagal(pesan) {
   console.error(`gloss: ${pesan}`)
   process.exit(1)
+}
+
+// ---------------------------------------------------------------------------
+// arsip batch
+// ---------------------------------------------------------------------------
+
+const NAMA_ARSIP = /^(\d{3})\.json$/
+
+/**
+ * Menyalin `gloss-batch.json` ke `riwayat-batch/NNN.json` sebelum ia ditimpa.
+ *
+ * Berkas batch adalah rekaman PERTANYAAN — panduan §3 yang berlaku saat itu,
+ * daftar §4 saat itu, pasangan vt/vi saat itu — dan `gloss:siapkan` menimpanya
+ * setiap kali dipanggil. Tanpa arsip, satu-satunya salinan yang tersisa adalah
+ * yang terakhir, dan pertanyaan "panduan versi mana yang menghasilkan glosa ini"
+ * jadi tak terjawab justru untuk batch yang paling lama umurnya.
+ *
+ * Kalibrasi batch 1 membuktikan itu bukan kekhawatiran karangan: §3.5 berubah
+ * SETELAH batch 1 diisi, jadi arsip 001 memuat tabel deiksis lama sementara batch
+ * 2 dan seterusnya memuat yang baru. Riwayat git menyimpannya juga, tapi hanya
+ * bagi orang yang sudah tahu commit mana yang harus dicari.
+ *
+ * Salinan yang byte-nya identik dengan arsip terakhir dilewati: menjalankan
+ * `gloss:siapkan` dua kali tanpa mengisi apa pun tidak menghasilkan pertanyaan
+ * baru, dan menomori ulang isi yang sama membuat arsipnya berbohong soal berapa
+ * banyak batch yang pernah dikerjakan.
+ */
+export function arsipkanBatch() {
+  if (!existsSync(BATCH)) return null
+
+  const isi = readFileSync(BATCH, 'utf8')
+  mkdirSync(ARSIP, { recursive: true })
+
+  const nomorAda = readdirSync(ARSIP)
+    .map((n) => n.match(NAMA_ARSIP))
+    .filter(Boolean)
+    .map((m) => Number(m[1]))
+    .sort((a, b) => a - b)
+
+  const terakhir = nomorAda.at(-1)
+  if (terakhir !== undefined) {
+    const berkasTerakhir = join(ARSIP, `${String(terakhir).padStart(3, '0')}.json`)
+    if (readFileSync(berkasTerakhir, 'utf8') === isi) {
+      return { nomor: terakhir, berkas: berkasTerakhir, dilewati: true }
+    }
+  }
+
+  const nomor = (terakhir ?? 0) + 1
+  const berkas = join(ARSIP, `${String(nomor).padStart(3, '0')}.json`)
+  writeFileSync(berkas, isi, 'utf8')
+  return { nomor, berkas, dilewati: false }
 }
 
 // ---------------------------------------------------------------------------

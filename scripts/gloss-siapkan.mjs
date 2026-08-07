@@ -31,6 +31,7 @@ import {
   AUDIT,
   BATCH,
   UKURAN_BATCH,
+  arsipkanBatch,
   bacaPanduan,
   gagal,
   konteksKeunikan,
@@ -186,10 +187,22 @@ const isi = {
   }),
 }
 
+// Berkas lama diarsipkan DULU: begitu writeFileSync di bawah berjalan, isi
+// sebelumnya — termasuk versi §3 yang berlaku waktu itu — hilang untuk selamanya.
+const arsip = arsipkanBatch()
+
 mkdirSync(dirname(BATCH), { recursive: true })
 writeFileSync(BATCH, JSON.stringify(isi, null, 2) + '\n', 'utf8')
 
 console.log('')
+if (arsip) {
+  const nomor = String(arsip.nomor).padStart(3, '0')
+  console.log(
+    arsip.dilewati
+      ? `arsip     : batch lama sama persis dengan ${nomor}.json — tidak dinomori ulang`
+      : `arsip     : batch lama disalin ke riwayat-batch/${nomor}.json`,
+  )
+}
 console.log(`ditulis   : ${BATCH}`)
 console.log(`isi       : ${batch.length} item, unit ${[...new Set(batch.map((i) => i.data.unit ?? 'tanpa'))].join(', ')}`)
 console.log(`§4.1      : ${Object.keys(konteks.perUnit).length} unit dengan glosa terpakai`)

@@ -529,6 +529,36 @@ Sejak API dicabut, isinya dikerjakan manusia, dan itu mengubah sifatnya:
   yang mana. `gloss-audit.json` menyimpan hasilnya; hanya berkas batch yang
   menyimpan pertanyaannya.
 
+### Tiap batch diarsipkan sebelum ditimpa
+
+`gloss:siapkan` menyalin `gloss-batch.json` yang lama ke
+`scripts/data/riwayat-batch/NNN.json` — bernomor urut, batch 1 = `001.json` —
+**sebelum** menulis batch berikutnya. Salinan yang byte-nya sama persis dengan
+arsip terakhir dilewati, supaya menjalankan perintahnya dua kali tanpa mengisi apa
+pun tidak menghasilkan nomor baru yang membohongi berapa batch yang benar-benar
+dikerjakan.
+
+**Yang mana memegang keadaan sekarang, dan yang mana memegang riwayat:**
+
+| Berkas | Menjawab | Berubah kalau |
+|---|---|---|
+| `src/data/*.json` | glosa item ini sekarang apa | glosanya dikoreksi |
+| `scripts/data/gloss-audit.json` | seluruh keadaan sekarang, untuk reviewer §7 | dataset berubah |
+| `riwayat-batch/NNN.json` | **panduan versi mana yang menghasilkan glosa itu** | tidak pernah |
+
+`gloss-batch.json` bukan cermin keadaan akhir, dan tidak boleh dirapikan agar
+menjadi cermin. Ia rekaman pertanyaan pada satu titik waktu: panduan §3 yang
+berlaku waktu itu, daftar §4 yang terlihat waktu itu, pasangan vt/vi yang ada waktu
+itu. Kalau glosanya dikoreksi belakangan, yang berubah dataset dan audit — arsipnya
+tetap memuat jawaban asli, karena itulah yang menjelaskan kenapa jawabannya begitu.
+
+Kalibrasi batch 1 sudah membuktikan ini bukan kekhawatiran karangan: §3.5 diperbaiki
+**setelah** batch 1 diisi, jadi `001.json` memuat tabel deiksis lama yang menjamin
+pelanggaran §4.1, sementara `002.json` dan seterusnya memuat tabel yang dikunci.
+Reviewer §7 yang bertanya "kenapa それ pernah ditulis panjang begitu?" mendapat
+jawabannya dari `001.json` dan tidak dari mana pun yang lain. Riwayat git menyimpan
+hal yang sama, tapi hanya bagi orang yang sudah tahu commit mana yang dicari.
+
 ### Riwayat penolakan ikut dibawa
 
 Item yang ditolak `gloss:terapkan` kembali ke antrean tanpa glosa, dan
