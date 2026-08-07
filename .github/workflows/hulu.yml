@@ -1,0 +1,54 @@
+name: Cek hulu
+
+# Ini yang sebenarnya layak dijadwalkan — bukan clone repo, tapi pertanyaan
+# "apakah sumber data di hulu masih sama dengan yang kita commit?".
+#
+# kvg-strokes.json diturunkan dari KanjiVG. Kalau KanjiVG memperbaiki sebuah
+# goresan, salinan kita diam-diam jadi usang dan tidak ada yang memberi tahu.
+# Kegagalan mingguan di sini adalah pemberitahuan itu.
+
+on:
+  schedule:
+    # Minggu 22:00 UTC = Senin 05:00 WIB. Hasilnya sudah menunggu waktu kamu
+    # buka laptop di awal minggu, bukan menyela di tengah kerja.
+    - cron: '0 22 * * 0'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  kanjivg:
+    name: Bandingkan kvg-strokes.json dengan KanjiVG hari ini
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - run: npm ci
+
+      - name: Ambil ulang dari KanjiVG
+        run: npm run kvg
+
+      # Data hulu yang berubah belum tentu data hulu yang benar. Audit 150-dari-150
+      # dijalankan atas hasil unduhan baru, bukan atas salinan lama.
+      - name: Verifikasi jumlah goresan atas data baru
+        run: npm run verify:strokes
+
+      - name: Laporkan kalau berbeda dari yang di-commit
+        run: |
+          if git diff --quiet -- src/data/kvg-strokes.json; then
+            echo "Hulu tidak berubah. Salinan yang di-commit masih mutakhir."
+            exit 0
+          fi
+
+          echo "::error::kvg-strokes.json berbeda dari KanjiVG hari ini."
+          git --no-pager diff --stat -- src/data/kvg-strokes.json
+          echo ""
+          echo "Tindakan: jalankan 'npm run kvg' lalu 'npm run verify:strokes'"
+          echo "di lokal, periksa diff-nya, dan commit kalau memang benar."
+          exit 1

@@ -1,0 +1,95 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+# Push beruntun ke branch yang sama membatalkan run sebelumnya.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  # ---------------------------------------------------------------------------
+  # Murni: tanpa jaringan, tanpa env, tanpa rahasia.
+  # Merah di sini SELALU berarti ada yang salah di kode atau data repo ini.
+  # ---------------------------------------------------------------------------
+  periksa:
+    name: Periksa
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - run: npm ci
+
+      # Tiap pemeriksaan jadi step sendiri, tidak dirangkai dengan &&.
+      # Kalau dirangkai, GitHub cuma menampilkan "Run checks" yang merah dan
+      # kamu harus buka log untuk tahu yang mana. Dipisah begini, tanda merah
+      # menunjuk langsung ke penyebabnya.
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Test
+        run: npm test
+
+      - name: Verifikasi unit — aturan i+1
+        run: npm run verify:units
+
+      - name: Verifikasi jumlah goresan
+        run: npm run verify:strokes
+
+      - name: Verifikasi cakupan glyph font
+        run: npm run verify:fonts
+
+      # Brief 01 Commit 2 menambahkan step berikut. Sengaja tidak ditulis
+      # sekarang: berkas ini hanya menyatakan yang sudah ada hari ini.
+      #
+      # - name: Verifikasi glosa Indonesia
+      #   run: npm run verify:gloss
+
+  # ---------------------------------------------------------------------------
+  # Bangun: lebih lambat dan butuh env. Sejak prebuild dicabut, build tidak lagi
+  # menyentuh jaringan — tapi tetap dipisah supaya kegagalan membangun tidak
+  # tercampur dengan kegagalan pemeriksaan murni di atas.
+  # ---------------------------------------------------------------------------
+  bangun:
+    name: Bangun static export
+    runs-on: ubuntu-latest
+    env:
+      # Nilai boneka. Keduanya memang publik dan dilindungi RLS, tapi CI tidak
+      # butuh proyek sungguhan — build hanya perlu lolos validasi bentuk di
+      # cleanEnv(). Deploy asli tetap di Vercel dengan nilai sebenarnya.
+      NEXT_PUBLIC_SUPABASE_URL: https://ci-placeholder.supabase.co
+      NEXT_PUBLIC_SUPABASE_ANON_KEY: ci-placeholder-anon-key
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      # Static export yang "sukses" tapi tidak menghasilkan dokumen adalah
+      # kegagalan yang lolos diam-diam. Ini yang menutupnya.
+      - name: Pastikan out/ berisi dokumen
+        run: |
+          test -f out/index.html || { echo "out/index.html tidak ada"; exit 1; }
+          echo "halaman terbentuk: $(find out -name '*.html' | wc -l)"
