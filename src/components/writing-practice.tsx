@@ -6,7 +6,7 @@ import { StrokeFigure, StrokeStartMarkers } from '@/components/stroke-figure'
 import { clsx } from '@/lib/clsx'
 import { consonantOf } from '@/lib/curriculum'
 import { fmt, useT } from '@/lib/i18n'
-import type { Item } from '@/lib/items'
+import { glossOf, type Item } from '@/lib/items'
 import { kvgCharacter, medians, strokeCount } from '@/lib/kvg'
 import {
   describe as describeStroke,
@@ -149,7 +149,7 @@ export function WritingPractice({
         <span className="tnum text-[12px] tracking-[0.14em] text-ink-muted uppercase">
           {item.type === 'kana'
             ? `${consonantOf(item.reading)} · ${item.data.col as string}`
-            : (item.meanings[0] ?? '')}
+            : (glossOf(item)[0] ?? '')}
         </span>
         <span className="tnum text-[12px] text-ink-muted">
           {fmt(t.menulis.strokeCount, { n: total })}

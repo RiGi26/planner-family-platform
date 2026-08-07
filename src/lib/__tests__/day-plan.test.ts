@@ -17,7 +17,7 @@ const today = '2026-08-06'
 const goal = { target_exam_date: '2026-12-06', baseline_new_per_day: 5 }
 
 function item(id: string): Item {
-  return { id, level: 'N5', type: 'vocab', expression: id, reading: id, meanings: ['x'], seq: 1, data: {} }
+  return { id, level: 'N5', type: 'vocab', expression: id, reading: id, meanings: { en: ['x'], id: [] }, seq: 1, data: {} }
 }
 
 const WORDS = ['a', 'b', 'c', 'd', 'e', 'f']

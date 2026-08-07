@@ -92,16 +92,20 @@ function buildScript(script, seqStart) {
 
   // `source` is always the hiragana form, so lookups keyed on it work for both scripts.
   const push = (expression, source, reading, group, row, rowLabel, col) => {
-    const meanings = [reading]
+    const en = [reading]
     const note = READING_NOTES[source]
-    if (note) meanings.push(note)
+    if (note) en.push(note)
     items.push({
       id: idFor(script, group, reading, expression),
       level: 'KANA',
       type: 'kana',
       expression,
       reading,
-      meanings,
+      // Kana "meanings" are romaji, not English — there is nothing to translate,
+      // so both languages get the same value. Written out rather than left empty
+      // so the two arrays stay symmetrical for anything that reads them, and so
+      // the gloss validator can skip kana on `type` alone.
+      meanings: { en, id: [...en] },
       seq: seq++,
       data: {
         script,
@@ -181,7 +185,7 @@ expect(
 // ぢ/づ and ヂ/ヅ share a romanisation with じ/ず, so all four carry a disambiguator.
 for (const glyph of ['ぢ', 'づ', 'ヂ', 'ヅ']) {
   const item = all.find((i) => i.expression === glyph)
-  expect(`${glyph} disambiguated`, item?.meanings.length ?? 0, 2)
+  expect(`${glyph} disambiguated`, item?.meanings.en.length ?? 0, 2)
 }
 
 if (process.exitCode) process.exit(1)

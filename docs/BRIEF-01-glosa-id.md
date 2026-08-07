@@ -62,7 +62,7 @@ kalau tidak, 208 item akan gagal aturan "glosa identik dengan sumber".
 (`items.ts` baris 82–90, 121). Dexie hanya memegang `card_states`, `reviews`,
 `progress` — tak satu pun menyimpan glosa. Jadi perubahan ini murni build-time.
 
-### 2.4 Berkas yang tersentuh — 11 pemakaian, 6 berkas
+### 2.4 Berkas yang tersentuh — 12 pemakaian, 6 berkas
 
 | Berkas | Baris | Kerja |
 |---|---|---|
@@ -70,8 +70,21 @@ kalau tidak, 208 item akan gagal aturan "glosa identik dengan sumber".
 | `src/lib/session.ts` | 401, 408, 445, 460, 505 | lewat helper |
 | `src/components/writing-practice.tsx` | 152 | lewat helper |
 | `src/app/menulis/page.tsx` | 172 | lewat helper |
-| `scripts/fetch-jlpt.mjs` | 158, 178, 206, 254 | tulis bentuk baru + cek `en` tak kosong |
+| `scripts/fetch-jlpt.mjs` | 178, 206, **234**, 254 | tulis bentuk baru + cek `en` tak kosong |
 | `scripts/generate-kana.mjs` | 184 | cek panjang `meanings.en` |
+
+Baris 234 (`meanings: [g.meaning]`, konstruksi item grammar) terlewat di susunan
+awal tabel ini. Tanpanya 49 item grammar keluar dari generator dalam bentuk lama
+sementara vocab dan kanji sudah bentuk baru — dan karena `data` bertipe longgar,
+tidak ada satu pun error tipe yang akan mengatakannya.
+
+**Baris 158 sengaja TIDAK diubah.** Baris itu ada di dalam penggabungan berkas
+suplemen (`vocabByWord.set(...)`), yang menyusun baris antara berbentuk sumber —
+`{ word, reading, meanings, examples, source }` — supaya seragam dengan baris dari
+OpenJLPT sebelum keduanya masuk ke satu `.map()`. Bentuknya berubah sekali saja,
+di batas tempat baris sumber menjadi item (178). Membungkusnya lebih awal berarti
+dua bentuk berbeda hidup berdampingan di satu pipeline, dan setiap pembaca
+berikutnya harus tahu baris mana sudah dibungkus dan mana belum.
 
 Helper tunggal, jangan percabangan di tiap komponen:
 
@@ -81,6 +94,54 @@ export function glossOf(item: Item, locale: 'id' | 'en' = 'id'): string[] {
   return m[locale]?.length ? m[locale] : m.en
 }
 ```
+
+Fallback-nya searah. `glossOf(item, 'en')` pada item tanpa `en` mengembalikan
+array kosong, bukan `id` — dan itu memang benar, karena `en` adalah data sumber
+yang `fetch-jlpt.mjs` tolak untuk ditulis kalau kosong, jadi tidak ada apa pun
+untuk dijadikan cadangan.
+
+### 2.5 fetch-jlpt.mjs wajib mempertahankan glosa
+
+`fetch-jlpt.mjs` membangun ulang `vocab_n5.json`, `kanji_n5.json` dan
+`grammar_n5.json` **secara utuh** dari sumber. Sumbernya tidak pernah punya
+bahasa Indonesia. Jadi begitu Commit 4 mulai mengisi `meanings.id`, satu
+`npm run jlpt` — perintah yang wajar dijalankan siapa pun yang ingin menyegarkan
+data — akan menghapus seluruh 810 glosa tanpa satu baris peringatan.
+
+Pembagian kepemilikannya:
+
+| Field | Pemilik | Saat refetch |
+|---|---|---|
+| `meanings.en` | OpenJLPT (CC BY-SA) | ditimpa dari sumber |
+| `meanings.id` | kita | **dipertahankan** |
+| `data.gloss_reviewed` | kita | **dipertahankan** |
+| `data.gloss_note_id` | kita | **dipertahankan** |
+
+`gloss_reviewed` yang paling berbahaya kalau hilang, dan justru paling tidak
+kelihatan. Tidak ada apa pun yang menulisnya kembali: `gloss-id.mjs` melewati
+item yang `meanings.id`-nya sudah terisi (§5, idempoten), jadi item yang statusnya
+ter-reset ke `false` tidak akan pernah disentuh generator lagi. Glosanya sendiri
+masih ada dan terbaca benar di layar — yang berubah cuma satu boolean, dan
+akibatnya gerbang rilis di §7 diam-diam bergeser menjauh. Kehilangan teks
+setidaknya terlihat; kehilangan status tidak.
+
+Karena itu `data.gloss_reviewed` dan `data.gloss_note_id` disemai oleh skrip
+migrasi Commit 1, bukan oleh generator: preservasi tidak bisa mempertahankan
+field yang belum ada.
+
+Yang menjaganya: `src/lib/__tests__/dataset.test.ts` menyapu seluruh dataset yang
+dikirim dan gagal kalau ada item non-kana yang kehilangan kedua field itu, atau
+kalau ada muka kartu yang berteks kosong. Tes itu berjalan atas berkas nyata,
+bukan fixture — satu-satunya cara menangkap regenerator yang menjatuhkan field.
+
+Batasnya jujur disebut: tes itu menangkap field yang **hilang**, bukan status
+yang **ter-reset dari `true` ke `false`** — keduanya sama-sama `boolean` yang sah.
+Yang menangkap itu adalah `verify:gloss` (§6) begitu glosa mulai terisi.
+
+Kana dikecualikan dari kedua field (§2.2): romaji bukan terjemahan, jadi tidak ada
+yang bisa disetujui penutur asli, dan `gloss_reviewed: false` yang tidak mungkin
+jujur menjadi `true` hanya akan menaruh 208 kegagalan permanen di depan gerbang
+rilis §7.
 
 ---
 
@@ -373,5 +434,5 @@ apakah §3 sudah cukup jelas untuk model atau perlu contoh tambahan. Kalibrasi d
 | Item dengan elemen pertama bentrok | 96 dalam 45 kelompok |
 | Rata-rata arti per kosakata | 1,2 (maks 3) |
 | Tag `vt` / `vi` tersedia | 68 / 64 |
-| Pemakaian `.meanings` di kode | 11, di 6 berkas |
+| Pemakaian `.meanings` di kode | 12, di 6 berkas (§2.4 — naik satu setelah baris 234 ketemu) |
 | Contoh kalimat (lingkup Brief 02) | 1.276 |

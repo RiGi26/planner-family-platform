@@ -5,9 +5,14 @@
     "type": "kana",
     "expression": "あ",
     "reading": "a",
-    "meanings": [
-      "a"
-    ],
+    "meanings": {
+      "en": [
+        "a"
+      ],
+      "id": [
+        "a"
+      ]
+    },
     "seq": 1,
     "data": {
       "script": "hiragana",
@@ -24,9 +29,14 @@
     "type": "kana",
     "expression": "い",
     "reading": "i",
-    "meanings": [
-      "i"
-    ],
+    "meanings": {
+      "en": [
+        "i"
+      ],
+      "id": [
+        "i"
+      ]
+    },
     "seq": 2,
     "data": {
       "script": "hiragana",
@@ -43,9 +53,14 @@
     "type": "kana",
     "expression": "う",
     "reading": "u",
-    "meanings": [
-      "u"
-    ],
+    "meanings": {
+      "en": [
+        "u"
+      ],
+      "id": [
+        "u"
+      ]
+    },
     "seq": 3,
     "data": {
       "script": "hiragana",
@@ -62,9 +77,14 @@
     "type": "kana",
     "expression": "え",
     "reading": "e",
-    "meanings": [
-      "e"
-    ],
+    "meanings": {
+      "en": [
+        "e"
+      ],
+      "id": [
+        "e"
+      ]
+    },
     "seq": 4,
     "data": {
       "script": "hiragana",
@@ -81,9 +101,14 @@
     "type": "kana",
     "expression": "お",
     "reading": "o",
-    "meanings": [
-      "o"
-    ],
+    "meanings": {
+      "en": [
+        "o"
+      ],
+      "id": [
+        "o"
+      ]
+    },
     "seq": 5,
     "data": {
       "script": "hiragana",
@@ -100,9 +125,14 @@
     "type": "kana",
     "expression": "か",
     "reading": "ka",
-    "meanings": [
-      "ka"
-    ],
+    "meanings": {
+      "en": [
+        "ka"
+      ],
+      "id": [
+        "ka"
+      ]
+    },
     "seq": 6,
     "data": {
       "script": "hiragana",
@@ -119,9 +149,14 @@
     "type": "kana",
     "expression": "き",
     "reading": "ki",
-    "meanings": [
-      "ki"
-    ],
+    "meanings": {
+      "en": [
+        "ki"
+      ],
+      "id": [
+        "ki"
+      ]
+    },
     "seq": 7,
     "data": {
       "script": "hiragana",
@@ -138,9 +173,14 @@
     "type": "kana",
     "expression": "く",
     "reading": "ku",
-    "meanings": [
-      "ku"
-    ],
+    "meanings": {
+      "en": [
+        "ku"
+      ],
+      "id": [
+        "ku"
+      ]
+    },
     "seq": 8,
     "data": {
       "script": "hiragana",
@@ -157,9 +197,14 @@
     "type": "kana",
     "expression": "け",
     "reading": "ke",
-    "meanings": [
-      "ke"
-    ],
+    "meanings": {
+      "en": [
+        "ke"
+      ],
+      "id": [
+        "ke"
+      ]
+    },
     "seq": 9,
     "data": {
       "script": "hiragana",
@@ -176,9 +221,14 @@
     "type": "kana",
     "expression": "こ",
     "reading": "ko",
-    "meanings": [
-      "ko"
-    ],
+    "meanings": {
+      "en": [
+        "ko"
+      ],
+      "id": [
+        "ko"
+      ]
+    },
     "seq": 10,
     "data": {
       "script": "hiragana",
@@ -195,9 +245,14 @@
     "type": "kana",
     "expression": "さ",
     "reading": "sa",
-    "meanings": [
-      "sa"
-    ],
+    "meanings": {
+      "en": [
+        "sa"
+      ],
+      "id": [
+        "sa"
+      ]
+    },
     "seq": 11,
     "data": {
       "script": "hiragana",
@@ -214,9 +269,14 @@
     "type": "kana",
     "expression": "し",
     "reading": "shi",
-    "meanings": [
-      "shi"
-    ],
+    "meanings": {
+      "en": [
+        "shi"
+      ],
+      "id": [
+        "shi"
+      ]
+    },
     "seq": 12,
     "data": {
       "script": "hiragana",
@@ -233,9 +293,14 @@
     "type": "kana",
     "expression": "す",
     "reading": "su",
-    "meanings": [
-      "su"
-    ],
+    "meanings": {
+      "en": [
+        "su"
+      ],
+      "id": [
+        "su"
+      ]
+    },
     "seq": 13,
     "data": {
       "script": "hiragana",
@@ -252,9 +317,14 @@
     "type": "kana",
     "expression": "せ",
     "reading": "se",
-    "meanings": [
-      "se"
-    ],
+    "meanings": {
+      "en": [
+        "se"
+      ],
+      "id": [
+        "se"
+      ]
+    },
     "seq": 14,
     "data": {
       "script": "hiragana",
@@ -271,9 +341,14 @@
     "type": "kana",
     "expression": "そ",
     "reading": "so",
-    "meanings": [
-      "so"
-    ],
+    "meanings": {
+      "en": [
+        "so"
+      ],
+      "id": [
+        "so"
+      ]
+    },
     "seq": 15,
     "data": {
       "script": "hiragana",
@@ -290,9 +365,14 @@
     "type": "kana",
     "expression": "た",
     "reading": "ta",
-    "meanings": [
-      "ta"
-    ],
+    "meanings": {
+      "en": [
+        "ta"
+      ],
+      "id": [
+        "ta"
+      ]
+    },
     "seq": 16,
     "data": {
       "script": "hiragana",
@@ -309,9 +389,14 @@
     "type": "kana",
     "expression": "ち",
     "reading": "chi",
-    "meanings": [
-      "chi"
-    ],
+    "meanings": {
+      "en": [
+        "chi"
+      ],
+      "id": [
+        "chi"
+      ]
+    },
     "seq": 17,
     "data": {
       "script": "hiragana",
@@ -328,9 +413,14 @@
     "type": "kana",
     "expression": "つ",
     "reading": "tsu",
-    "meanings": [
-      "tsu"
-    ],
+    "meanings": {
+      "en": [
+        "tsu"
+      ],
+      "id": [
+        "tsu"
+      ]
+    },
     "seq": 18,
     "data": {
       "script": "hiragana",
@@ -347,9 +437,14 @@
     "type": "kana",
     "expression": "て",
     "reading": "te",
-    "meanings": [
-      "te"
-    ],
+    "meanings": {
+      "en": [
+        "te"
+      ],
+      "id": [
+        "te"
+      ]
+    },
     "seq": 19,
     "data": {
       "script": "hiragana",
@@ -366,9 +461,14 @@
     "type": "kana",
     "expression": "と",
     "reading": "to",
-    "meanings": [
-      "to"
-    ],
+    "meanings": {
+      "en": [
+        "to"
+      ],
+      "id": [
+        "to"
+      ]
+    },
     "seq": 20,
     "data": {
       "script": "hiragana",
@@ -385,9 +485,14 @@
     "type": "kana",
     "expression": "な",
     "reading": "na",
-    "meanings": [
-      "na"
-    ],
+    "meanings": {
+      "en": [
+        "na"
+      ],
+      "id": [
+        "na"
+      ]
+    },
     "seq": 21,
     "data": {
       "script": "hiragana",
@@ -404,9 +509,14 @@
     "type": "kana",
     "expression": "に",
     "reading": "ni",
-    "meanings": [
-      "ni"
-    ],
+    "meanings": {
+      "en": [
+        "ni"
+      ],
+      "id": [
+        "ni"
+      ]
+    },
     "seq": 22,
     "data": {
       "script": "hiragana",
@@ -423,9 +533,14 @@
     "type": "kana",
     "expression": "ぬ",
     "reading": "nu",
-    "meanings": [
-      "nu"
-    ],
+    "meanings": {
+      "en": [
+        "nu"
+      ],
+      "id": [
+        "nu"
+      ]
+    },
     "seq": 23,
     "data": {
       "script": "hiragana",
@@ -442,9 +557,14 @@
     "type": "kana",
     "expression": "ね",
     "reading": "ne",
-    "meanings": [
-      "ne"
-    ],
+    "meanings": {
+      "en": [
+        "ne"
+      ],
+      "id": [
+        "ne"
+      ]
+    },
     "seq": 24,
     "data": {
       "script": "hiragana",
@@ -461,9 +581,14 @@
     "type": "kana",
     "expression": "の",
     "reading": "no",
-    "meanings": [
-      "no"
-    ],
+    "meanings": {
+      "en": [
+        "no"
+      ],
+      "id": [
+        "no"
+      ]
+    },
     "seq": 25,
     "data": {
       "script": "hiragana",
@@ -480,9 +605,14 @@
     "type": "kana",
     "expression": "は",
     "reading": "ha",
-    "meanings": [
-      "ha"
-    ],
+    "meanings": {
+      "en": [
+        "ha"
+      ],
+      "id": [
+        "ha"
+      ]
+    },
     "seq": 26,
     "data": {
       "script": "hiragana",
@@ -499,9 +629,14 @@
     "type": "kana",
     "expression": "ひ",
     "reading": "hi",
-    "meanings": [
-      "hi"
-    ],
+    "meanings": {
+      "en": [
+        "hi"
+      ],
+      "id": [
+        "hi"
+      ]
+    },
     "seq": 27,
     "data": {
       "script": "hiragana",
@@ -518,9 +653,14 @@
     "type": "kana",
     "expression": "ふ",
     "reading": "fu",
-    "meanings": [
-      "fu"
-    ],
+    "meanings": {
+      "en": [
+        "fu"
+      ],
+      "id": [
+        "fu"
+      ]
+    },
     "seq": 28,
     "data": {
       "script": "hiragana",
@@ -537,9 +677,14 @@
     "type": "kana",
     "expression": "へ",
     "reading": "he",
-    "meanings": [
-      "he"
-    ],
+    "meanings": {
+      "en": [
+        "he"
+      ],
+      "id": [
+        "he"
+      ]
+    },
     "seq": 29,
     "data": {
       "script": "hiragana",
@@ -556,9 +701,14 @@
     "type": "kana",
     "expression": "ほ",
     "reading": "ho",
-    "meanings": [
-      "ho"
-    ],
+    "meanings": {
+      "en": [
+        "ho"
+      ],
+      "id": [
+        "ho"
+      ]
+    },
     "seq": 30,
     "data": {
       "script": "hiragana",
@@ -575,9 +725,14 @@
     "type": "kana",
     "expression": "ま",
     "reading": "ma",
-    "meanings": [
-      "ma"
-    ],
+    "meanings": {
+      "en": [
+        "ma"
+      ],
+      "id": [
+        "ma"
+      ]
+    },
     "seq": 31,
     "data": {
       "script": "hiragana",
@@ -594,9 +749,14 @@
     "type": "kana",
     "expression": "み",
     "reading": "mi",
-    "meanings": [
-      "mi"
-    ],
+    "meanings": {
+      "en": [
+        "mi"
+      ],
+      "id": [
+        "mi"
+      ]
+    },
     "seq": 32,
     "data": {
       "script": "hiragana",
@@ -613,9 +773,14 @@
     "type": "kana",
     "expression": "む",
     "reading": "mu",
-    "meanings": [
-      "mu"
-    ],
+    "meanings": {
+      "en": [
+        "mu"
+      ],
+      "id": [
+        "mu"
+      ]
+    },
     "seq": 33,
     "data": {
       "script": "hiragana",
@@ -632,9 +797,14 @@
     "type": "kana",
     "expression": "め",
     "reading": "me",
-    "meanings": [
-      "me"
-    ],
+    "meanings": {
+      "en": [
+        "me"
+      ],
+      "id": [
+        "me"
+      ]
+    },
     "seq": 34,
     "data": {
       "script": "hiragana",
@@ -651,9 +821,14 @@
     "type": "kana",
     "expression": "も",
     "reading": "mo",
-    "meanings": [
-      "mo"
-    ],
+    "meanings": {
+      "en": [
+        "mo"
+      ],
+      "id": [
+        "mo"
+      ]
+    },
     "seq": 35,
     "data": {
       "script": "hiragana",
@@ -670,9 +845,14 @@
     "type": "kana",
     "expression": "や",
     "reading": "ya",
-    "meanings": [
-      "ya"
-    ],
+    "meanings": {
+      "en": [
+        "ya"
+      ],
+      "id": [
+        "ya"
+      ]
+    },
     "seq": 36,
     "data": {
       "script": "hiragana",
@@ -689,9 +869,14 @@
     "type": "kana",
     "expression": "ゆ",
     "reading": "yu",
-    "meanings": [
-      "yu"
-    ],
+    "meanings": {
+      "en": [
+        "yu"
+      ],
+      "id": [
+        "yu"
+      ]
+    },
     "seq": 37,
     "data": {
       "script": "hiragana",
@@ -708,9 +893,14 @@
     "type": "kana",
     "expression": "よ",
     "reading": "yo",
-    "meanings": [
-      "yo"
-    ],
+    "meanings": {
+      "en": [
+        "yo"
+      ],
+      "id": [
+        "yo"
+      ]
+    },
     "seq": 38,
     "data": {
       "script": "hiragana",
@@ -727,9 +917,14 @@
     "type": "kana",
     "expression": "ら",
     "reading": "ra",
-    "meanings": [
-      "ra"
-    ],
+    "meanings": {
+      "en": [
+        "ra"
+      ],
+      "id": [
+        "ra"
+      ]
+    },
     "seq": 39,
     "data": {
       "script": "hiragana",
@@ -746,9 +941,14 @@
     "type": "kana",
     "expression": "り",
     "reading": "ri",
-    "meanings": [
-      "ri"
-    ],
+    "meanings": {
+      "en": [
+        "ri"
+      ],
+      "id": [
+        "ri"
+      ]
+    },
     "seq": 40,
     "data": {
       "script": "hiragana",
@@ -765,9 +965,14 @@
     "type": "kana",
     "expression": "る",
     "reading": "ru",
-    "meanings": [
-      "ru"
-    ],
+    "meanings": {
+      "en": [
+        "ru"
+      ],
+      "id": [
+        "ru"
+      ]
+    },
     "seq": 41,
     "data": {
       "script": "hiragana",
@@ -784,9 +989,14 @@
     "type": "kana",
     "expression": "れ",
     "reading": "re",
-    "meanings": [
-      "re"
-    ],
+    "meanings": {
+      "en": [
+        "re"
+      ],
+      "id": [
+        "re"
+      ]
+    },
     "seq": 42,
     "data": {
       "script": "hiragana",
@@ -803,9 +1013,14 @@
     "type": "kana",
     "expression": "ろ",
     "reading": "ro",
-    "meanings": [
-      "ro"
-    ],
+    "meanings": {
+      "en": [
+        "ro"
+      ],
+      "id": [
+        "ro"
+      ]
+    },
     "seq": 43,
     "data": {
       "script": "hiragana",
@@ -822,9 +1037,14 @@
     "type": "kana",
     "expression": "わ",
     "reading": "wa",
-    "meanings": [
-      "wa"
-    ],
+    "meanings": {
+      "en": [
+        "wa"
+      ],
+      "id": [
+        "wa"
+      ]
+    },
     "seq": 44,
     "data": {
       "script": "hiragana",
@@ -841,9 +1061,14 @@
     "type": "kana",
     "expression": "を",
     "reading": "wo",
-    "meanings": [
-      "wo"
-    ],
+    "meanings": {
+      "en": [
+        "wo"
+      ],
+      "id": [
+        "wo"
+      ]
+    },
     "seq": 45,
     "data": {
       "script": "hiragana",
@@ -860,9 +1085,14 @@
     "type": "kana",
     "expression": "ん",
     "reading": "n",
-    "meanings": [
-      "n"
-    ],
+    "meanings": {
+      "en": [
+        "n"
+      ],
+      "id": [
+        "n"
+      ]
+    },
     "seq": 46,
     "data": {
       "script": "hiragana",
@@ -879,9 +1109,14 @@
     "type": "kana",
     "expression": "が",
     "reading": "ga",
-    "meanings": [
-      "ga"
-    ],
+    "meanings": {
+      "en": [
+        "ga"
+      ],
+      "id": [
+        "ga"
+      ]
+    },
     "seq": 47,
     "data": {
       "script": "hiragana",
@@ -898,9 +1133,14 @@
     "type": "kana",
     "expression": "ぎ",
     "reading": "gi",
-    "meanings": [
-      "gi"
-    ],
+    "meanings": {
+      "en": [
+        "gi"
+      ],
+      "id": [
+        "gi"
+      ]
+    },
     "seq": 48,
     "data": {
       "script": "hiragana",
@@ -917,9 +1157,14 @@
     "type": "kana",
     "expression": "ぐ",
     "reading": "gu",
-    "meanings": [
-      "gu"
-    ],
+    "meanings": {
+      "en": [
+        "gu"
+      ],
+      "id": [
+        "gu"
+      ]
+    },
     "seq": 49,
     "data": {
       "script": "hiragana",
@@ -936,9 +1181,14 @@
     "type": "kana",
     "expression": "げ",
     "reading": "ge",
-    "meanings": [
-      "ge"
-    ],
+    "meanings": {
+      "en": [
+        "ge"
+      ],
+      "id": [
+        "ge"
+      ]
+    },
     "seq": 50,
     "data": {
       "script": "hiragana",
@@ -955,9 +1205,14 @@
     "type": "kana",
     "expression": "ご",
     "reading": "go",
-    "meanings": [
-      "go"
-    ],
+    "meanings": {
+      "en": [
+        "go"
+      ],
+      "id": [
+        "go"
+      ]
+    },
     "seq": 51,
     "data": {
       "script": "hiragana",
@@ -974,9 +1229,14 @@
     "type": "kana",
     "expression": "ざ",
     "reading": "za",
-    "meanings": [
-      "za"
-    ],
+    "meanings": {
+      "en": [
+        "za"
+      ],
+      "id": [
+        "za"
+      ]
+    },
     "seq": 52,
     "data": {
       "script": "hiragana",
@@ -993,9 +1253,14 @@
     "type": "kana",
     "expression": "じ",
     "reading": "ji",
-    "meanings": [
-      "ji"
-    ],
+    "meanings": {
+      "en": [
+        "ji"
+      ],
+      "id": [
+        "ji"
+      ]
+    },
     "seq": 53,
     "data": {
       "script": "hiragana",
@@ -1012,9 +1277,14 @@
     "type": "kana",
     "expression": "ず",
     "reading": "zu",
-    "meanings": [
-      "zu"
-    ],
+    "meanings": {
+      "en": [
+        "zu"
+      ],
+      "id": [
+        "zu"
+      ]
+    },
     "seq": 54,
     "data": {
       "script": "hiragana",
@@ -1031,9 +1301,14 @@
     "type": "kana",
     "expression": "ぜ",
     "reading": "ze",
-    "meanings": [
-      "ze"
-    ],
+    "meanings": {
+      "en": [
+        "ze"
+      ],
+      "id": [
+        "ze"
+      ]
+    },
     "seq": 55,
     "data": {
       "script": "hiragana",
@@ -1050,9 +1325,14 @@
     "type": "kana",
     "expression": "ぞ",
     "reading": "zo",
-    "meanings": [
-      "zo"
-    ],
+    "meanings": {
+      "en": [
+        "zo"
+      ],
+      "id": [
+        "zo"
+      ]
+    },
     "seq": 56,
     "data": {
       "script": "hiragana",
@@ -1069,9 +1349,14 @@
     "type": "kana",
     "expression": "だ",
     "reading": "da",
-    "meanings": [
-      "da"
-    ],
+    "meanings": {
+      "en": [
+        "da"
+      ],
+      "id": [
+        "da"
+      ]
+    },
     "seq": 57,
     "data": {
       "script": "hiragana",
@@ -1088,10 +1373,16 @@
     "type": "kana",
     "expression": "ぢ",
     "reading": "ji",
-    "meanings": [
-      "ji",
-      "di"
-    ],
+    "meanings": {
+      "en": [
+        "ji",
+        "di"
+      ],
+      "id": [
+        "ji",
+        "di"
+      ]
+    },
     "seq": 58,
     "data": {
       "script": "hiragana",
@@ -1108,10 +1399,16 @@
     "type": "kana",
     "expression": "づ",
     "reading": "zu",
-    "meanings": [
-      "zu",
-      "du"
-    ],
+    "meanings": {
+      "en": [
+        "zu",
+        "du"
+      ],
+      "id": [
+        "zu",
+        "du"
+      ]
+    },
     "seq": 59,
     "data": {
       "script": "hiragana",
@@ -1128,9 +1425,14 @@
     "type": "kana",
     "expression": "で",
     "reading": "de",
-    "meanings": [
-      "de"
-    ],
+    "meanings": {
+      "en": [
+        "de"
+      ],
+      "id": [
+        "de"
+      ]
+    },
     "seq": 60,
     "data": {
       "script": "hiragana",
@@ -1147,9 +1449,14 @@
     "type": "kana",
     "expression": "ど",
     "reading": "do",
-    "meanings": [
-      "do"
-    ],
+    "meanings": {
+      "en": [
+        "do"
+      ],
+      "id": [
+        "do"
+      ]
+    },
     "seq": 61,
     "data": {
       "script": "hiragana",
@@ -1166,9 +1473,14 @@
     "type": "kana",
     "expression": "ば",
     "reading": "ba",
-    "meanings": [
-      "ba"
-    ],
+    "meanings": {
+      "en": [
+        "ba"
+      ],
+      "id": [
+        "ba"
+      ]
+    },
     "seq": 62,
     "data": {
       "script": "hiragana",
@@ -1185,9 +1497,14 @@
     "type": "kana",
     "expression": "び",
     "reading": "bi",
-    "meanings": [
-      "bi"
-    ],
+    "meanings": {
+      "en": [
+        "bi"
+      ],
+      "id": [
+        "bi"
+      ]
+    },
     "seq": 63,
     "data": {
       "script": "hiragana",
@@ -1204,9 +1521,14 @@
     "type": "kana",
     "expression": "ぶ",
     "reading": "bu",
-    "meanings": [
-      "bu"
-    ],
+    "meanings": {
+      "en": [
+        "bu"
+      ],
+      "id": [
+        "bu"
+      ]
+    },
     "seq": 64,
     "data": {
       "script": "hiragana",
@@ -1223,9 +1545,14 @@
     "type": "kana",
     "expression": "べ",
     "reading": "be",
-    "meanings": [
-      "be"
-    ],
+    "meanings": {
+      "en": [
+        "be"
+      ],
+      "id": [
+        "be"
+      ]
+    },
     "seq": 65,
     "data": {
       "script": "hiragana",
@@ -1242,9 +1569,14 @@
     "type": "kana",
     "expression": "ぼ",
     "reading": "bo",
-    "meanings": [
-      "bo"
-    ],
+    "meanings": {
+      "en": [
+        "bo"
+      ],
+      "id": [
+        "bo"
+      ]
+    },
     "seq": 66,
     "data": {
       "script": "hiragana",
@@ -1261,9 +1593,14 @@
     "type": "kana",
     "expression": "ぱ",
     "reading": "pa",
-    "meanings": [
-      "pa"
-    ],
+    "meanings": {
+      "en": [
+        "pa"
+      ],
+      "id": [
+        "pa"
+      ]
+    },
     "seq": 67,
     "data": {
       "script": "hiragana",
@@ -1280,9 +1617,14 @@
     "type": "kana",
     "expression": "ぴ",
     "reading": "pi",
-    "meanings": [
-      "pi"
-    ],
+    "meanings": {
+      "en": [
+        "pi"
+      ],
+      "id": [
+        "pi"
+      ]
+    },
     "seq": 68,
     "data": {
       "script": "hiragana",
@@ -1299,9 +1641,14 @@
     "type": "kana",
     "expression": "ぷ",
     "reading": "pu",
-    "meanings": [
-      "pu"
-    ],
+    "meanings": {
+      "en": [
+        "pu"
+      ],
+      "id": [
+        "pu"
+      ]
+    },
     "seq": 69,
     "data": {
       "script": "hiragana",
@@ -1318,9 +1665,14 @@
     "type": "kana",
     "expression": "ぺ",
     "reading": "pe",
-    "meanings": [
-      "pe"
-    ],
+    "meanings": {
+      "en": [
+        "pe"
+      ],
+      "id": [
+        "pe"
+      ]
+    },
     "seq": 70,
     "data": {
       "script": "hiragana",
@@ -1337,9 +1689,14 @@
     "type": "kana",
     "expression": "ぽ",
     "reading": "po",
-    "meanings": [
-      "po"
-    ],
+    "meanings": {
+      "en": [
+        "po"
+      ],
+      "id": [
+        "po"
+      ]
+    },
     "seq": 71,
     "data": {
       "script": "hiragana",
@@ -1356,9 +1713,14 @@
     "type": "kana",
     "expression": "きゃ",
     "reading": "kya",
-    "meanings": [
-      "kya"
-    ],
+    "meanings": {
+      "en": [
+        "kya"
+      ],
+      "id": [
+        "kya"
+      ]
+    },
     "seq": 72,
     "data": {
       "script": "hiragana",
@@ -1375,9 +1737,14 @@
     "type": "kana",
     "expression": "きゅ",
     "reading": "kyu",
-    "meanings": [
-      "kyu"
-    ],
+    "meanings": {
+      "en": [
+        "kyu"
+      ],
+      "id": [
+        "kyu"
+      ]
+    },
     "seq": 73,
     "data": {
       "script": "hiragana",
@@ -1394,9 +1761,14 @@
     "type": "kana",
     "expression": "きょ",
     "reading": "kyo",
-    "meanings": [
-      "kyo"
-    ],
+    "meanings": {
+      "en": [
+        "kyo"
+      ],
+      "id": [
+        "kyo"
+      ]
+    },
     "seq": 74,
     "data": {
       "script": "hiragana",
@@ -1413,9 +1785,14 @@
     "type": "kana",
     "expression": "しゃ",
     "reading": "sha",
-    "meanings": [
-      "sha"
-    ],
+    "meanings": {
+      "en": [
+        "sha"
+      ],
+      "id": [
+        "sha"
+      ]
+    },
     "seq": 75,
     "data": {
       "script": "hiragana",
@@ -1432,9 +1809,14 @@
     "type": "kana",
     "expression": "しゅ",
     "reading": "shu",
-    "meanings": [
-      "shu"
-    ],
+    "meanings": {
+      "en": [
+        "shu"
+      ],
+      "id": [
+        "shu"
+      ]
+    },
     "seq": 76,
     "data": {
       "script": "hiragana",
@@ -1451,9 +1833,14 @@
     "type": "kana",
     "expression": "しょ",
     "reading": "sho",
-    "meanings": [
-      "sho"
-    ],
+    "meanings": {
+      "en": [
+        "sho"
+      ],
+      "id": [
+        "sho"
+      ]
+    },
     "seq": 77,
     "data": {
       "script": "hiragana",
@@ -1470,9 +1857,14 @@
     "type": "kana",
     "expression": "ちゃ",
     "reading": "cha",
-    "meanings": [
-      "cha"
-    ],
+    "meanings": {
+      "en": [
+        "cha"
+      ],
+      "id": [
+        "cha"
+      ]
+    },
     "seq": 78,
     "data": {
       "script": "hiragana",
@@ -1489,9 +1881,14 @@
     "type": "kana",
     "expression": "ちゅ",
     "reading": "chu",
-    "meanings": [
-      "chu"
-    ],
+    "meanings": {
+      "en": [
+        "chu"
+      ],
+      "id": [
+        "chu"
+      ]
+    },
     "seq": 79,
     "data": {
       "script": "hiragana",
@@ -1508,9 +1905,14 @@
     "type": "kana",
     "expression": "ちょ",
     "reading": "cho",
-    "meanings": [
-      "cho"
-    ],
+    "meanings": {
+      "en": [
+        "cho"
+      ],
+      "id": [
+        "cho"
+      ]
+    },
     "seq": 80,
     "data": {
       "script": "hiragana",
@@ -1527,9 +1929,14 @@
     "type": "kana",
     "expression": "にゃ",
     "reading": "nya",
-    "meanings": [
-      "nya"
-    ],
+    "meanings": {
+      "en": [
+        "nya"
+      ],
+      "id": [
+        "nya"
+      ]
+    },
     "seq": 81,
     "data": {
       "script": "hiragana",
@@ -1546,9 +1953,14 @@
     "type": "kana",
     "expression": "にゅ",
     "reading": "nyu",
-    "meanings": [
-      "nyu"
-    ],
+    "meanings": {
+      "en": [
+        "nyu"
+      ],
+      "id": [
+        "nyu"
+      ]
+    },
     "seq": 82,
     "data": {
       "script": "hiragana",
@@ -1565,9 +1977,14 @@
     "type": "kana",
     "expression": "にょ",
     "reading": "nyo",
-    "meanings": [
-      "nyo"
-    ],
+    "meanings": {
+      "en": [
+        "nyo"
+      ],
+      "id": [
+        "nyo"
+      ]
+    },
     "seq": 83,
     "data": {
       "script": "hiragana",
@@ -1584,9 +2001,14 @@
     "type": "kana",
     "expression": "ひゃ",
     "reading": "hya",
-    "meanings": [
-      "hya"
-    ],
+    "meanings": {
+      "en": [
+        "hya"
+      ],
+      "id": [
+        "hya"
+      ]
+    },
     "seq": 84,
     "data": {
       "script": "hiragana",
@@ -1603,9 +2025,14 @@
     "type": "kana",
     "expression": "ひゅ",
     "reading": "hyu",
-    "meanings": [
-      "hyu"
-    ],
+    "meanings": {
+      "en": [
+        "hyu"
+      ],
+      "id": [
+        "hyu"
+      ]
+    },
     "seq": 85,
     "data": {
       "script": "hiragana",
@@ -1622,9 +2049,14 @@
     "type": "kana",
     "expression": "ひょ",
     "reading": "hyo",
-    "meanings": [
-      "hyo"
-    ],
+    "meanings": {
+      "en": [
+        "hyo"
+      ],
+      "id": [
+        "hyo"
+      ]
+    },
     "seq": 86,
     "data": {
       "script": "hiragana",
@@ -1641,9 +2073,14 @@
     "type": "kana",
     "expression": "みゃ",
     "reading": "mya",
-    "meanings": [
-      "mya"
-    ],
+    "meanings": {
+      "en": [
+        "mya"
+      ],
+      "id": [
+        "mya"
+      ]
+    },
     "seq": 87,
     "data": {
       "script": "hiragana",
@@ -1660,9 +2097,14 @@
     "type": "kana",
     "expression": "みゅ",
     "reading": "myu",
-    "meanings": [
-      "myu"
-    ],
+    "meanings": {
+      "en": [
+        "myu"
+      ],
+      "id": [
+        "myu"
+      ]
+    },
     "seq": 88,
     "data": {
       "script": "hiragana",
@@ -1679,9 +2121,14 @@
     "type": "kana",
     "expression": "みょ",
     "reading": "myo",
-    "meanings": [
-      "myo"
-    ],
+    "meanings": {
+      "en": [
+        "myo"
+      ],
+      "id": [
+        "myo"
+      ]
+    },
     "seq": 89,
     "data": {
       "script": "hiragana",
@@ -1698,9 +2145,14 @@
     "type": "kana",
     "expression": "りゃ",
     "reading": "rya",
-    "meanings": [
-      "rya"
-    ],
+    "meanings": {
+      "en": [
+        "rya"
+      ],
+      "id": [
+        "rya"
+      ]
+    },
     "seq": 90,
     "data": {
       "script": "hiragana",
@@ -1717,9 +2169,14 @@
     "type": "kana",
     "expression": "りゅ",
     "reading": "ryu",
-    "meanings": [
-      "ryu"
-    ],
+    "meanings": {
+      "en": [
+        "ryu"
+      ],
+      "id": [
+        "ryu"
+      ]
+    },
     "seq": 91,
     "data": {
       "script": "hiragana",
@@ -1736,9 +2193,14 @@
     "type": "kana",
     "expression": "りょ",
     "reading": "ryo",
-    "meanings": [
-      "ryo"
-    ],
+    "meanings": {
+      "en": [
+        "ryo"
+      ],
+      "id": [
+        "ryo"
+      ]
+    },
     "seq": 92,
     "data": {
       "script": "hiragana",
@@ -1755,9 +2217,14 @@
     "type": "kana",
     "expression": "ぎゃ",
     "reading": "gya",
-    "meanings": [
-      "gya"
-    ],
+    "meanings": {
+      "en": [
+        "gya"
+      ],
+      "id": [
+        "gya"
+      ]
+    },
     "seq": 93,
     "data": {
       "script": "hiragana",
@@ -1774,9 +2241,14 @@
     "type": "kana",
     "expression": "ぎゅ",
     "reading": "gyu",
-    "meanings": [
-      "gyu"
-    ],
+    "meanings": {
+      "en": [
+        "gyu"
+      ],
+      "id": [
+        "gyu"
+      ]
+    },
     "seq": 94,
     "data": {
       "script": "hiragana",
@@ -1793,9 +2265,14 @@
     "type": "kana",
     "expression": "ぎょ",
     "reading": "gyo",
-    "meanings": [
-      "gyo"
-    ],
+    "meanings": {
+      "en": [
+        "gyo"
+      ],
+      "id": [
+        "gyo"
+      ]
+    },
     "seq": 95,
     "data": {
       "script": "hiragana",
@@ -1812,9 +2289,14 @@
     "type": "kana",
     "expression": "じゃ",
     "reading": "ja",
-    "meanings": [
-      "ja"
-    ],
+    "meanings": {
+      "en": [
+        "ja"
+      ],
+      "id": [
+        "ja"
+      ]
+    },
     "seq": 96,
     "data": {
       "script": "hiragana",
@@ -1831,9 +2313,14 @@
     "type": "kana",
     "expression": "じゅ",
     "reading": "ju",
-    "meanings": [
-      "ju"
-    ],
+    "meanings": {
+      "en": [
+        "ju"
+      ],
+      "id": [
+        "ju"
+      ]
+    },
     "seq": 97,
     "data": {
       "script": "hiragana",
@@ -1850,9 +2337,14 @@
     "type": "kana",
     "expression": "じょ",
     "reading": "jo",
-    "meanings": [
-      "jo"
-    ],
+    "meanings": {
+      "en": [
+        "jo"
+      ],
+      "id": [
+        "jo"
+      ]
+    },
     "seq": 98,
     "data": {
       "script": "hiragana",
@@ -1869,9 +2361,14 @@
     "type": "kana",
     "expression": "びゃ",
     "reading": "bya",
-    "meanings": [
-      "bya"
-    ],
+    "meanings": {
+      "en": [
+        "bya"
+      ],
+      "id": [
+        "bya"
+      ]
+    },
     "seq": 99,
     "data": {
       "script": "hiragana",
@@ -1888,9 +2385,14 @@
     "type": "kana",
     "expression": "びゅ",
     "reading": "byu",
-    "meanings": [
-      "byu"
-    ],
+    "meanings": {
+      "en": [
+        "byu"
+      ],
+      "id": [
+        "byu"
+      ]
+    },
     "seq": 100,
     "data": {
       "script": "hiragana",
@@ -1907,9 +2409,14 @@
     "type": "kana",
     "expression": "びょ",
     "reading": "byo",
-    "meanings": [
-      "byo"
-    ],
+    "meanings": {
+      "en": [
+        "byo"
+      ],
+      "id": [
+        "byo"
+      ]
+    },
     "seq": 101,
     "data": {
       "script": "hiragana",
@@ -1926,9 +2433,14 @@
     "type": "kana",
     "expression": "ぴゃ",
     "reading": "pya",
-    "meanings": [
-      "pya"
-    ],
+    "meanings": {
+      "en": [
+        "pya"
+      ],
+      "id": [
+        "pya"
+      ]
+    },
     "seq": 102,
     "data": {
       "script": "hiragana",
@@ -1945,9 +2457,14 @@
     "type": "kana",
     "expression": "ぴゅ",
     "reading": "pyu",
-    "meanings": [
-      "pyu"
-    ],
+    "meanings": {
+      "en": [
+        "pyu"
+      ],
+      "id": [
+        "pyu"
+      ]
+    },
     "seq": 103,
     "data": {
       "script": "hiragana",
@@ -1964,9 +2481,14 @@
     "type": "kana",
     "expression": "ぴょ",
     "reading": "pyo",
-    "meanings": [
-      "pyo"
-    ],
+    "meanings": {
+      "en": [
+        "pyo"
+      ],
+      "id": [
+        "pyo"
+      ]
+    },
     "seq": 104,
     "data": {
       "script": "hiragana",
@@ -1983,9 +2505,14 @@
     "type": "kana",
     "expression": "ア",
     "reading": "a",
-    "meanings": [
-      "a"
-    ],
+    "meanings": {
+      "en": [
+        "a"
+      ],
+      "id": [
+        "a"
+      ]
+    },
     "seq": 105,
     "data": {
       "script": "katakana",
@@ -2002,9 +2529,14 @@
     "type": "kana",
     "expression": "イ",
     "reading": "i",
-    "meanings": [
-      "i"
-    ],
+    "meanings": {
+      "en": [
+        "i"
+      ],
+      "id": [
+        "i"
+      ]
+    },
     "seq": 106,
     "data": {
       "script": "katakana",
@@ -2021,9 +2553,14 @@
     "type": "kana",
     "expression": "ウ",
     "reading": "u",
-    "meanings": [
-      "u"
-    ],
+    "meanings": {
+      "en": [
+        "u"
+      ],
+      "id": [
+        "u"
+      ]
+    },
     "seq": 107,
     "data": {
       "script": "katakana",
@@ -2040,9 +2577,14 @@
     "type": "kana",
     "expression": "エ",
     "reading": "e",
-    "meanings": [
-      "e"
-    ],
+    "meanings": {
+      "en": [
+        "e"
+      ],
+      "id": [
+        "e"
+      ]
+    },
     "seq": 108,
     "data": {
       "script": "katakana",
@@ -2059,9 +2601,14 @@
     "type": "kana",
     "expression": "オ",
     "reading": "o",
-    "meanings": [
-      "o"
-    ],
+    "meanings": {
+      "en": [
+        "o"
+      ],
+      "id": [
+        "o"
+      ]
+    },
     "seq": 109,
     "data": {
       "script": "katakana",
@@ -2078,9 +2625,14 @@
     "type": "kana",
     "expression": "カ",
     "reading": "ka",
-    "meanings": [
-      "ka"
-    ],
+    "meanings": {
+      "en": [
+        "ka"
+      ],
+      "id": [
+        "ka"
+      ]
+    },
     "seq": 110,
     "data": {
       "script": "katakana",
@@ -2097,9 +2649,14 @@
     "type": "kana",
     "expression": "キ",
     "reading": "ki",
-    "meanings": [
-      "ki"
-    ],
+    "meanings": {
+      "en": [
+        "ki"
+      ],
+      "id": [
+        "ki"
+      ]
+    },
     "seq": 111,
     "data": {
       "script": "katakana",
@@ -2116,9 +2673,14 @@
     "type": "kana",
     "expression": "ク",
     "reading": "ku",
-    "meanings": [
-      "ku"
-    ],
+    "meanings": {
+      "en": [
+        "ku"
+      ],
+      "id": [
+        "ku"
+      ]
+    },
     "seq": 112,
     "data": {
       "script": "katakana",
@@ -2135,9 +2697,14 @@
     "type": "kana",
     "expression": "ケ",
     "reading": "ke",
-    "meanings": [
-      "ke"
-    ],
+    "meanings": {
+      "en": [
+        "ke"
+      ],
+      "id": [
+        "ke"
+      ]
+    },
     "seq": 113,
     "data": {
       "script": "katakana",
@@ -2154,9 +2721,14 @@
     "type": "kana",
     "expression": "コ",
     "reading": "ko",
-    "meanings": [
-      "ko"
-    ],
+    "meanings": {
+      "en": [
+        "ko"
+      ],
+      "id": [
+        "ko"
+      ]
+    },
     "seq": 114,
     "data": {
       "script": "katakana",
@@ -2173,9 +2745,14 @@
     "type": "kana",
     "expression": "サ",
     "reading": "sa",
-    "meanings": [
-      "sa"
-    ],
+    "meanings": {
+      "en": [
+        "sa"
+      ],
+      "id": [
+        "sa"
+      ]
+    },
     "seq": 115,
     "data": {
       "script": "katakana",
@@ -2192,9 +2769,14 @@
     "type": "kana",
     "expression": "シ",
     "reading": "shi",
-    "meanings": [
-      "shi"
-    ],
+    "meanings": {
+      "en": [
+        "shi"
+      ],
+      "id": [
+        "shi"
+      ]
+    },
     "seq": 116,
     "data": {
       "script": "katakana",
@@ -2211,9 +2793,14 @@
     "type": "kana",
     "expression": "ス",
     "reading": "su",
-    "meanings": [
-      "su"
-    ],
+    "meanings": {
+      "en": [
+        "su"
+      ],
+      "id": [
+        "su"
+      ]
+    },
     "seq": 117,
     "data": {
       "script": "katakana",
@@ -2230,9 +2817,14 @@
     "type": "kana",
     "expression": "セ",
     "reading": "se",
-    "meanings": [
-      "se"
-    ],
+    "meanings": {
+      "en": [
+        "se"
+      ],
+      "id": [
+        "se"
+      ]
+    },
     "seq": 118,
     "data": {
       "script": "katakana",
@@ -2249,9 +2841,14 @@
     "type": "kana",
     "expression": "ソ",
     "reading": "so",
-    "meanings": [
-      "so"
-    ],
+    "meanings": {
+      "en": [
+        "so"
+      ],
+      "id": [
+        "so"
+      ]
+    },
     "seq": 119,
     "data": {
       "script": "katakana",
@@ -2268,9 +2865,14 @@
     "type": "kana",
     "expression": "タ",
     "reading": "ta",
-    "meanings": [
-      "ta"
-    ],
+    "meanings": {
+      "en": [
+        "ta"
+      ],
+      "id": [
+        "ta"
+      ]
+    },
     "seq": 120,
     "data": {
       "script": "katakana",
@@ -2287,9 +2889,14 @@
     "type": "kana",
     "expression": "チ",
     "reading": "chi",
-    "meanings": [
-      "chi"
-    ],
+    "meanings": {
+      "en": [
+        "chi"
+      ],
+      "id": [
+        "chi"
+      ]
+    },
     "seq": 121,
     "data": {
       "script": "katakana",
@@ -2306,9 +2913,14 @@
     "type": "kana",
     "expression": "ツ",
     "reading": "tsu",
-    "meanings": [
-      "tsu"
-    ],
+    "meanings": {
+      "en": [
+        "tsu"
+      ],
+      "id": [
+        "tsu"
+      ]
+    },
     "seq": 122,
     "data": {
       "script": "katakana",
@@ -2325,9 +2937,14 @@
     "type": "kana",
     "expression": "テ",
     "reading": "te",
-    "meanings": [
-      "te"
-    ],
+    "meanings": {
+      "en": [
+        "te"
+      ],
+      "id": [
+        "te"
+      ]
+    },
     "seq": 123,
     "data": {
       "script": "katakana",
@@ -2344,9 +2961,14 @@
     "type": "kana",
     "expression": "ト",
     "reading": "to",
-    "meanings": [
-      "to"
-    ],
+    "meanings": {
+      "en": [
+        "to"
+      ],
+      "id": [
+        "to"
+      ]
+    },
     "seq": 124,
     "data": {
       "script": "katakana",
@@ -2363,9 +2985,14 @@
     "type": "kana",
     "expression": "ナ",
     "reading": "na",
-    "meanings": [
-      "na"
-    ],
+    "meanings": {
+      "en": [
+        "na"
+      ],
+      "id": [
+        "na"
+      ]
+    },
     "seq": 125,
     "data": {
       "script": "katakana",
@@ -2382,9 +3009,14 @@
     "type": "kana",
     "expression": "ニ",
     "reading": "ni",
-    "meanings": [
-      "ni"
-    ],
+    "meanings": {
+      "en": [
+        "ni"
+      ],
+      "id": [
+        "ni"
+      ]
+    },
     "seq": 126,
     "data": {
       "script": "katakana",
@@ -2401,9 +3033,14 @@
     "type": "kana",
     "expression": "ヌ",
     "reading": "nu",
-    "meanings": [
-      "nu"
-    ],
+    "meanings": {
+      "en": [
+        "nu"
+      ],
+      "id": [
+        "nu"
+      ]
+    },
     "seq": 127,
     "data": {
       "script": "katakana",
@@ -2420,9 +3057,14 @@
     "type": "kana",
     "expression": "ネ",
     "reading": "ne",
-    "meanings": [
-      "ne"
-    ],
+    "meanings": {
+      "en": [
+        "ne"
+      ],
+      "id": [
+        "ne"
+      ]
+    },
     "seq": 128,
     "data": {
       "script": "katakana",
@@ -2439,9 +3081,14 @@
     "type": "kana",
     "expression": "ノ",
     "reading": "no",
-    "meanings": [
-      "no"
-    ],
+    "meanings": {
+      "en": [
+        "no"
+      ],
+      "id": [
+        "no"
+      ]
+    },
     "seq": 129,
     "data": {
       "script": "katakana",
@@ -2458,9 +3105,14 @@
     "type": "kana",
     "expression": "ハ",
     "reading": "ha",
-    "meanings": [
-      "ha"
-    ],
+    "meanings": {
+      "en": [
+        "ha"
+      ],
+      "id": [
+        "ha"
+      ]
+    },
     "seq": 130,
     "data": {
       "script": "katakana",
@@ -2477,9 +3129,14 @@
     "type": "kana",
     "expression": "ヒ",
     "reading": "hi",
-    "meanings": [
-      "hi"
-    ],
+    "meanings": {
+      "en": [
+        "hi"
+      ],
+      "id": [
+        "hi"
+      ]
+    },
     "seq": 131,
     "data": {
       "script": "katakana",
@@ -2496,9 +3153,14 @@
     "type": "kana",
     "expression": "フ",
     "reading": "fu",
-    "meanings": [
-      "fu"
-    ],
+    "meanings": {
+      "en": [
+        "fu"
+      ],
+      "id": [
+        "fu"
+      ]
+    },
     "seq": 132,
     "data": {
       "script": "katakana",
@@ -2515,9 +3177,14 @@
     "type": "kana",
     "expression": "ヘ",
     "reading": "he",
-    "meanings": [
-      "he"
-    ],
+    "meanings": {
+      "en": [
+        "he"
+      ],
+      "id": [
+        "he"
+      ]
+    },
     "seq": 133,
     "data": {
       "script": "katakana",
@@ -2534,9 +3201,14 @@
     "type": "kana",
     "expression": "ホ",
     "reading": "ho",
-    "meanings": [
-      "ho"
-    ],
+    "meanings": {
+      "en": [
+        "ho"
+      ],
+      "id": [
+        "ho"
+      ]
+    },
     "seq": 134,
     "data": {
       "script": "katakana",
@@ -2553,9 +3225,14 @@
     "type": "kana",
     "expression": "マ",
     "reading": "ma",
-    "meanings": [
-      "ma"
-    ],
+    "meanings": {
+      "en": [
+        "ma"
+      ],
+      "id": [
+        "ma"
+      ]
+    },
     "seq": 135,
     "data": {
       "script": "katakana",
@@ -2572,9 +3249,14 @@
     "type": "kana",
     "expression": "ミ",
     "reading": "mi",
-    "meanings": [
-      "mi"
-    ],
+    "meanings": {
+      "en": [
+        "mi"
+      ],
+      "id": [
+        "mi"
+      ]
+    },
     "seq": 136,
     "data": {
       "script": "katakana",
@@ -2591,9 +3273,14 @@
     "type": "kana",
     "expression": "ム",
     "reading": "mu",
-    "meanings": [
-      "mu"
-    ],
+    "meanings": {
+      "en": [
+        "mu"
+      ],
+      "id": [
+        "mu"
+      ]
+    },
     "seq": 137,
     "data": {
       "script": "katakana",
@@ -2610,9 +3297,14 @@
     "type": "kana",
     "expression": "メ",
     "reading": "me",
-    "meanings": [
-      "me"
-    ],
+    "meanings": {
+      "en": [
+        "me"
+      ],
+      "id": [
+        "me"
+      ]
+    },
     "seq": 138,
     "data": {
       "script": "katakana",
@@ -2629,9 +3321,14 @@
     "type": "kana",
     "expression": "モ",
     "reading": "mo",
-    "meanings": [
-      "mo"
-    ],
+    "meanings": {
+      "en": [
+        "mo"
+      ],
+      "id": [
+        "mo"
+      ]
+    },
     "seq": 139,
     "data": {
       "script": "katakana",
@@ -2648,9 +3345,14 @@
     "type": "kana",
     "expression": "ヤ",
     "reading": "ya",
-    "meanings": [
-      "ya"
-    ],
+    "meanings": {
+      "en": [
+        "ya"
+      ],
+      "id": [
+        "ya"
+      ]
+    },
     "seq": 140,
     "data": {
       "script": "katakana",
@@ -2667,9 +3369,14 @@
     "type": "kana",
     "expression": "ユ",
     "reading": "yu",
-    "meanings": [
-      "yu"
-    ],
+    "meanings": {
+      "en": [
+        "yu"
+      ],
+      "id": [
+        "yu"
+      ]
+    },
     "seq": 141,
     "data": {
       "script": "katakana",
@@ -2686,9 +3393,14 @@
     "type": "kana",
     "expression": "ヨ",
     "reading": "yo",
-    "meanings": [
-      "yo"
-    ],
+    "meanings": {
+      "en": [
+        "yo"
+      ],
+      "id": [
+        "yo"
+      ]
+    },
     "seq": 142,
     "data": {
       "script": "katakana",
@@ -2705,9 +3417,14 @@
     "type": "kana",
     "expression": "ラ",
     "reading": "ra",
-    "meanings": [
-      "ra"
-    ],
+    "meanings": {
+      "en": [
+        "ra"
+      ],
+      "id": [
+        "ra"
+      ]
+    },
     "seq": 143,
     "data": {
       "script": "katakana",
@@ -2724,9 +3441,14 @@
     "type": "kana",
     "expression": "リ",
     "reading": "ri",
-    "meanings": [
-      "ri"
-    ],
+    "meanings": {
+      "en": [
+        "ri"
+      ],
+      "id": [
+        "ri"
+      ]
+    },
     "seq": 144,
     "data": {
       "script": "katakana",
@@ -2743,9 +3465,14 @@
     "type": "kana",
     "expression": "ル",
     "reading": "ru",
-    "meanings": [
-      "ru"
-    ],
+    "meanings": {
+      "en": [
+        "ru"
+      ],
+      "id": [
+        "ru"
+      ]
+    },
     "seq": 145,
     "data": {
       "script": "katakana",
@@ -2762,9 +3489,14 @@
     "type": "kana",
     "expression": "レ",
     "reading": "re",
-    "meanings": [
-      "re"
-    ],
+    "meanings": {
+      "en": [
+        "re"
+      ],
+      "id": [
+        "re"
+      ]
+    },
     "seq": 146,
     "data": {
       "script": "katakana",
@@ -2781,9 +3513,14 @@
     "type": "kana",
     "expression": "ロ",
     "reading": "ro",
-    "meanings": [
-      "ro"
-    ],
+    "meanings": {
+      "en": [
+        "ro"
+      ],
+      "id": [
+        "ro"
+      ]
+    },
     "seq": 147,
     "data": {
       "script": "katakana",
@@ -2800,9 +3537,14 @@
     "type": "kana",
     "expression": "ワ",
     "reading": "wa",
-    "meanings": [
-      "wa"
-    ],
+    "meanings": {
+      "en": [
+        "wa"
+      ],
+      "id": [
+        "wa"
+      ]
+    },
     "seq": 148,
     "data": {
       "script": "katakana",
@@ -2819,9 +3561,14 @@
     "type": "kana",
     "expression": "ヲ",
     "reading": "wo",
-    "meanings": [
-      "wo"
-    ],
+    "meanings": {
+      "en": [
+        "wo"
+      ],
+      "id": [
+        "wo"
+      ]
+    },
     "seq": 149,
     "data": {
       "script": "katakana",
@@ -2838,9 +3585,14 @@
     "type": "kana",
     "expression": "ン",
     "reading": "n",
-    "meanings": [
-      "n"
-    ],
+    "meanings": {
+      "en": [
+        "n"
+      ],
+      "id": [
+        "n"
+      ]
+    },
     "seq": 150,
     "data": {
       "script": "katakana",
@@ -2857,9 +3609,14 @@
     "type": "kana",
     "expression": "ガ",
     "reading": "ga",
-    "meanings": [
-      "ga"
-    ],
+    "meanings": {
+      "en": [
+        "ga"
+      ],
+      "id": [
+        "ga"
+      ]
+    },
     "seq": 151,
     "data": {
       "script": "katakana",
@@ -2876,9 +3633,14 @@
     "type": "kana",
     "expression": "ギ",
     "reading": "gi",
-    "meanings": [
-      "gi"
-    ],
+    "meanings": {
+      "en": [
+        "gi"
+      ],
+      "id": [
+        "gi"
+      ]
+    },
     "seq": 152,
     "data": {
       "script": "katakana",
@@ -2895,9 +3657,14 @@
     "type": "kana",
     "expression": "グ",
     "reading": "gu",
-    "meanings": [
-      "gu"
-    ],
+    "meanings": {
+      "en": [
+        "gu"
+      ],
+      "id": [
+        "gu"
+      ]
+    },
     "seq": 153,
     "data": {
       "script": "katakana",
@@ -2914,9 +3681,14 @@
     "type": "kana",
     "expression": "ゲ",
     "reading": "ge",
-    "meanings": [
-      "ge"
-    ],
+    "meanings": {
+      "en": [
+        "ge"
+      ],
+      "id": [
+        "ge"
+      ]
+    },
     "seq": 154,
     "data": {
       "script": "katakana",
@@ -2933,9 +3705,14 @@
     "type": "kana",
     "expression": "ゴ",
     "reading": "go",
-    "meanings": [
-      "go"
-    ],
+    "meanings": {
+      "en": [
+        "go"
+      ],
+      "id": [
+        "go"
+      ]
+    },
     "seq": 155,
     "data": {
       "script": "katakana",
@@ -2952,9 +3729,14 @@
     "type": "kana",
     "expression": "ザ",
     "reading": "za",
-    "meanings": [
-      "za"
-    ],
+    "meanings": {
+      "en": [
+        "za"
+      ],
+      "id": [
+        "za"
+      ]
+    },
     "seq": 156,
     "data": {
       "script": "katakana",
@@ -2971,9 +3753,14 @@
     "type": "kana",
     "expression": "ジ",
     "reading": "ji",
-    "meanings": [
-      "ji"
-    ],
+    "meanings": {
+      "en": [
+        "ji"
+      ],
+      "id": [
+        "ji"
+      ]
+    },
     "seq": 157,
     "data": {
       "script": "katakana",
@@ -2990,9 +3777,14 @@
     "type": "kana",
     "expression": "ズ",
     "reading": "zu",
-    "meanings": [
-      "zu"
-    ],
+    "meanings": {
+      "en": [
+        "zu"
+      ],
+      "id": [
+        "zu"
+      ]
+    },
     "seq": 158,
     "data": {
       "script": "katakana",
@@ -3009,9 +3801,14 @@
     "type": "kana",
     "expression": "ゼ",
     "reading": "ze",
-    "meanings": [
-      "ze"
-    ],
+    "meanings": {
+      "en": [
+        "ze"
+      ],
+      "id": [
+        "ze"
+      ]
+    },
     "seq": 159,
     "data": {
       "script": "katakana",
@@ -3028,9 +3825,14 @@
     "type": "kana",
     "expression": "ゾ",
     "reading": "zo",
-    "meanings": [
-      "zo"
-    ],
+    "meanings": {
+      "en": [
+        "zo"
+      ],
+      "id": [
+        "zo"
+      ]
+    },
     "seq": 160,
     "data": {
       "script": "katakana",
@@ -3047,9 +3849,14 @@
     "type": "kana",
     "expression": "ダ",
     "reading": "da",
-    "meanings": [
-      "da"
-    ],
+    "meanings": {
+      "en": [
+        "da"
+      ],
+      "id": [
+        "da"
+      ]
+    },
     "seq": 161,
     "data": {
       "script": "katakana",
@@ -3066,10 +3873,16 @@
     "type": "kana",
     "expression": "ヂ",
     "reading": "ji",
-    "meanings": [
-      "ji",
-      "di"
-    ],
+    "meanings": {
+      "en": [
+        "ji",
+        "di"
+      ],
+      "id": [
+        "ji",
+        "di"
+      ]
+    },
     "seq": 162,
     "data": {
       "script": "katakana",
@@ -3086,10 +3899,16 @@
     "type": "kana",
     "expression": "ヅ",
     "reading": "zu",
-    "meanings": [
-      "zu",
-      "du"
-    ],
+    "meanings": {
+      "en": [
+        "zu",
+        "du"
+      ],
+      "id": [
+        "zu",
+        "du"
+      ]
+    },
     "seq": 163,
     "data": {
       "script": "katakana",
@@ -3106,9 +3925,14 @@
     "type": "kana",
     "expression": "デ",
     "reading": "de",
-    "meanings": [
-      "de"
-    ],
+    "meanings": {
+      "en": [
+        "de"
+      ],
+      "id": [
+        "de"
+      ]
+    },
     "seq": 164,
     "data": {
       "script": "katakana",
@@ -3125,9 +3949,14 @@
     "type": "kana",
     "expression": "ド",
     "reading": "do",
-    "meanings": [
-      "do"
-    ],
+    "meanings": {
+      "en": [
+        "do"
+      ],
+      "id": [
+        "do"
+      ]
+    },
     "seq": 165,
     "data": {
       "script": "katakana",
@@ -3144,9 +3973,14 @@
     "type": "kana",
     "expression": "バ",
     "reading": "ba",
-    "meanings": [
-      "ba"
-    ],
+    "meanings": {
+      "en": [
+        "ba"
+      ],
+      "id": [
+        "ba"
+      ]
+    },
     "seq": 166,
     "data": {
       "script": "katakana",
@@ -3163,9 +3997,14 @@
     "type": "kana",
     "expression": "ビ",
     "reading": "bi",
-    "meanings": [
-      "bi"
-    ],
+    "meanings": {
+      "en": [
+        "bi"
+      ],
+      "id": [
+        "bi"
+      ]
+    },
     "seq": 167,
     "data": {
       "script": "katakana",
@@ -3182,9 +4021,14 @@
     "type": "kana",
     "expression": "ブ",
     "reading": "bu",
-    "meanings": [
-      "bu"
-    ],
+    "meanings": {
+      "en": [
+        "bu"
+      ],
+      "id": [
+        "bu"
+      ]
+    },
     "seq": 168,
     "data": {
       "script": "katakana",
@@ -3201,9 +4045,14 @@
     "type": "kana",
     "expression": "ベ",
     "reading": "be",
-    "meanings": [
-      "be"
-    ],
+    "meanings": {
+      "en": [
+        "be"
+      ],
+      "id": [
+        "be"
+      ]
+    },
     "seq": 169,
     "data": {
       "script": "katakana",
@@ -3220,9 +4069,14 @@
     "type": "kana",
     "expression": "ボ",
     "reading": "bo",
-    "meanings": [
-      "bo"
-    ],
+    "meanings": {
+      "en": [
+        "bo"
+      ],
+      "id": [
+        "bo"
+      ]
+    },
     "seq": 170,
     "data": {
       "script": "katakana",
@@ -3239,9 +4093,14 @@
     "type": "kana",
     "expression": "パ",
     "reading": "pa",
-    "meanings": [
-      "pa"
-    ],
+    "meanings": {
+      "en": [
+        "pa"
+      ],
+      "id": [
+        "pa"
+      ]
+    },
     "seq": 171,
     "data": {
       "script": "katakana",
@@ -3258,9 +4117,14 @@
     "type": "kana",
     "expression": "ピ",
     "reading": "pi",
-    "meanings": [
-      "pi"
-    ],
+    "meanings": {
+      "en": [
+        "pi"
+      ],
+      "id": [
+        "pi"
+      ]
+    },
     "seq": 172,
     "data": {
       "script": "katakana",
@@ -3277,9 +4141,14 @@
     "type": "kana",
     "expression": "プ",
     "reading": "pu",
-    "meanings": [
-      "pu"
-    ],
+    "meanings": {
+      "en": [
+        "pu"
+      ],
+      "id": [
+        "pu"
+      ]
+    },
     "seq": 173,
     "data": {
       "script": "katakana",
@@ -3296,9 +4165,14 @@
     "type": "kana",
     "expression": "ペ",
     "reading": "pe",
-    "meanings": [
-      "pe"
-    ],
+    "meanings": {
+      "en": [
+        "pe"
+      ],
+      "id": [
+        "pe"
+      ]
+    },
     "seq": 174,
     "data": {
       "script": "katakana",
@@ -3315,9 +4189,14 @@
     "type": "kana",
     "expression": "ポ",
     "reading": "po",
-    "meanings": [
-      "po"
-    ],
+    "meanings": {
+      "en": [
+        "po"
+      ],
+      "id": [
+        "po"
+      ]
+    },
     "seq": 175,
     "data": {
       "script": "katakana",
@@ -3334,9 +4213,14 @@
     "type": "kana",
     "expression": "キャ",
     "reading": "kya",
-    "meanings": [
-      "kya"
-    ],
+    "meanings": {
+      "en": [
+        "kya"
+      ],
+      "id": [
+        "kya"
+      ]
+    },
     "seq": 176,
     "data": {
       "script": "katakana",
@@ -3353,9 +4237,14 @@
     "type": "kana",
     "expression": "キュ",
     "reading": "kyu",
-    "meanings": [
-      "kyu"
-    ],
+    "meanings": {
+      "en": [
+        "kyu"
+      ],
+      "id": [
+        "kyu"
+      ]
+    },
     "seq": 177,
     "data": {
       "script": "katakana",
@@ -3372,9 +4261,14 @@
     "type": "kana",
     "expression": "キョ",
     "reading": "kyo",
-    "meanings": [
-      "kyo"
-    ],
+    "meanings": {
+      "en": [
+        "kyo"
+      ],
+      "id": [
+        "kyo"
+      ]
+    },
     "seq": 178,
     "data": {
       "script": "katakana",
@@ -3391,9 +4285,14 @@
     "type": "kana",
     "expression": "シャ",
     "reading": "sha",
-    "meanings": [
-      "sha"
-    ],
+    "meanings": {
+      "en": [
+        "sha"
+      ],
+      "id": [
+        "sha"
+      ]
+    },
     "seq": 179,
     "data": {
       "script": "katakana",
@@ -3410,9 +4309,14 @@
     "type": "kana",
     "expression": "シュ",
     "reading": "shu",
-    "meanings": [
-      "shu"
-    ],
+    "meanings": {
+      "en": [
+        "shu"
+      ],
+      "id": [
+        "shu"
+      ]
+    },
     "seq": 180,
     "data": {
       "script": "katakana",
@@ -3429,9 +4333,14 @@
     "type": "kana",
     "expression": "ショ",
     "reading": "sho",
-    "meanings": [
-      "sho"
-    ],
+    "meanings": {
+      "en": [
+        "sho"
+      ],
+      "id": [
+        "sho"
+      ]
+    },
     "seq": 181,
     "data": {
       "script": "katakana",
@@ -3448,9 +4357,14 @@
     "type": "kana",
     "expression": "チャ",
     "reading": "cha",
-    "meanings": [
-      "cha"
-    ],
+    "meanings": {
+      "en": [
+        "cha"
+      ],
+      "id": [
+        "cha"
+      ]
+    },
     "seq": 182,
     "data": {
       "script": "katakana",
@@ -3467,9 +4381,14 @@
     "type": "kana",
     "expression": "チュ",
     "reading": "chu",
-    "meanings": [
-      "chu"
-    ],
+    "meanings": {
+      "en": [
+        "chu"
+      ],
+      "id": [
+        "chu"
+      ]
+    },
     "seq": 183,
     "data": {
       "script": "katakana",
@@ -3486,9 +4405,14 @@
     "type": "kana",
     "expression": "チョ",
     "reading": "cho",
-    "meanings": [
-      "cho"
-    ],
+    "meanings": {
+      "en": [
+        "cho"
+      ],
+      "id": [
+        "cho"
+      ]
+    },
     "seq": 184,
     "data": {
       "script": "katakana",
@@ -3505,9 +4429,14 @@
     "type": "kana",
     "expression": "ニャ",
     "reading": "nya",
-    "meanings": [
-      "nya"
-    ],
+    "meanings": {
+      "en": [
+        "nya"
+      ],
+      "id": [
+        "nya"
+      ]
+    },
     "seq": 185,
     "data": {
       "script": "katakana",
@@ -3524,9 +4453,14 @@
     "type": "kana",
     "expression": "ニュ",
     "reading": "nyu",
-    "meanings": [
-      "nyu"
-    ],
+    "meanings": {
+      "en": [
+        "nyu"
+      ],
+      "id": [
+        "nyu"
+      ]
+    },
     "seq": 186,
     "data": {
       "script": "katakana",
@@ -3543,9 +4477,14 @@
     "type": "kana",
     "expression": "ニョ",
     "reading": "nyo",
-    "meanings": [
-      "nyo"
-    ],
+    "meanings": {
+      "en": [
+        "nyo"
+      ],
+      "id": [
+        "nyo"
+      ]
+    },
     "seq": 187,
     "data": {
       "script": "katakana",
@@ -3562,9 +4501,14 @@
     "type": "kana",
     "expression": "ヒャ",
     "reading": "hya",
-    "meanings": [
-      "hya"
-    ],
+    "meanings": {
+      "en": [
+        "hya"
+      ],
+      "id": [
+        "hya"
+      ]
+    },
     "seq": 188,
     "data": {
       "script": "katakana",
@@ -3581,9 +4525,14 @@
     "type": "kana",
     "expression": "ヒュ",
     "reading": "hyu",
-    "meanings": [
-      "hyu"
-    ],
+    "meanings": {
+      "en": [
+        "hyu"
+      ],
+      "id": [
+        "hyu"
+      ]
+    },
     "seq": 189,
     "data": {
       "script": "katakana",
@@ -3600,9 +4549,14 @@
     "type": "kana",
     "expression": "ヒョ",
     "reading": "hyo",
-    "meanings": [
-      "hyo"
-    ],
+    "meanings": {
+      "en": [
+        "hyo"
+      ],
+      "id": [
+        "hyo"
+      ]
+    },
     "seq": 190,
     "data": {
       "script": "katakana",
@@ -3619,9 +4573,14 @@
     "type": "kana",
     "expression": "ミャ",
     "reading": "mya",
-    "meanings": [
-      "mya"
-    ],
+    "meanings": {
+      "en": [
+        "mya"
+      ],
+      "id": [
+        "mya"
+      ]
+    },
     "seq": 191,
     "data": {
       "script": "katakana",
@@ -3638,9 +4597,14 @@
     "type": "kana",
     "expression": "ミュ",
     "reading": "myu",
-    "meanings": [
-      "myu"
-    ],
+    "meanings": {
+      "en": [
+        "myu"
+      ],
+      "id": [
+        "myu"
+      ]
+    },
     "seq": 192,
     "data": {
       "script": "katakana",
@@ -3657,9 +4621,14 @@
     "type": "kana",
     "expression": "ミョ",
     "reading": "myo",
-    "meanings": [
-      "myo"
-    ],
+    "meanings": {
+      "en": [
+        "myo"
+      ],
+      "id": [
+        "myo"
+      ]
+    },
     "seq": 193,
     "data": {
       "script": "katakana",
@@ -3676,9 +4645,14 @@
     "type": "kana",
     "expression": "リャ",
     "reading": "rya",
-    "meanings": [
-      "rya"
-    ],
+    "meanings": {
+      "en": [
+        "rya"
+      ],
+      "id": [
+        "rya"
+      ]
+    },
     "seq": 194,
     "data": {
       "script": "katakana",
@@ -3695,9 +4669,14 @@
     "type": "kana",
     "expression": "リュ",
     "reading": "ryu",
-    "meanings": [
-      "ryu"
-    ],
+    "meanings": {
+      "en": [
+        "ryu"
+      ],
+      "id": [
+        "ryu"
+      ]
+    },
     "seq": 195,
     "data": {
       "script": "katakana",
@@ -3714,9 +4693,14 @@
     "type": "kana",
     "expression": "リョ",
     "reading": "ryo",
-    "meanings": [
-      "ryo"
-    ],
+    "meanings": {
+      "en": [
+        "ryo"
+      ],
+      "id": [
+        "ryo"
+      ]
+    },
     "seq": 196,
     "data": {
       "script": "katakana",
@@ -3733,9 +4717,14 @@
     "type": "kana",
     "expression": "ギャ",
     "reading": "gya",
-    "meanings": [
-      "gya"
-    ],
+    "meanings": {
+      "en": [
+        "gya"
+      ],
+      "id": [
+        "gya"
+      ]
+    },
     "seq": 197,
     "data": {
       "script": "katakana",
@@ -3752,9 +4741,14 @@
     "type": "kana",
     "expression": "ギュ",
     "reading": "gyu",
-    "meanings": [
-      "gyu"
-    ],
+    "meanings": {
+      "en": [
+        "gyu"
+      ],
+      "id": [
+        "gyu"
+      ]
+    },
     "seq": 198,
     "data": {
       "script": "katakana",
@@ -3771,9 +4765,14 @@
     "type": "kana",
     "expression": "ギョ",
     "reading": "gyo",
-    "meanings": [
-      "gyo"
-    ],
+    "meanings": {
+      "en": [
+        "gyo"
+      ],
+      "id": [
+        "gyo"
+      ]
+    },
     "seq": 199,
     "data": {
       "script": "katakana",
@@ -3790,9 +4789,14 @@
     "type": "kana",
     "expression": "ジャ",
     "reading": "ja",
-    "meanings": [
-      "ja"
-    ],
+    "meanings": {
+      "en": [
+        "ja"
+      ],
+      "id": [
+        "ja"
+      ]
+    },
     "seq": 200,
     "data": {
       "script": "katakana",
@@ -3809,9 +4813,14 @@
     "type": "kana",
     "expression": "ジュ",
     "reading": "ju",
-    "meanings": [
-      "ju"
-    ],
+    "meanings": {
+      "en": [
+        "ju"
+      ],
+      "id": [
+        "ju"
+      ]
+    },
     "seq": 201,
     "data": {
       "script": "katakana",
@@ -3828,9 +4837,14 @@
     "type": "kana",
     "expression": "ジョ",
     "reading": "jo",
-    "meanings": [
-      "jo"
-    ],
+    "meanings": {
+      "en": [
+        "jo"
+      ],
+      "id": [
+        "jo"
+      ]
+    },
     "seq": 202,
     "data": {
       "script": "katakana",
@@ -3847,9 +4861,14 @@
     "type": "kana",
     "expression": "ビャ",
     "reading": "bya",
-    "meanings": [
-      "bya"
-    ],
+    "meanings": {
+      "en": [
+        "bya"
+      ],
+      "id": [
+        "bya"
+      ]
+    },
     "seq": 203,
     "data": {
       "script": "katakana",
@@ -3866,9 +4885,14 @@
     "type": "kana",
     "expression": "ビュ",
     "reading": "byu",
-    "meanings": [
-      "byu"
-    ],
+    "meanings": {
+      "en": [
+        "byu"
+      ],
+      "id": [
+        "byu"
+      ]
+    },
     "seq": 204,
     "data": {
       "script": "katakana",
@@ -3885,9 +4909,14 @@
     "type": "kana",
     "expression": "ビョ",
     "reading": "byo",
-    "meanings": [
-      "byo"
-    ],
+    "meanings": {
+      "en": [
+        "byo"
+      ],
+      "id": [
+        "byo"
+      ]
+    },
     "seq": 205,
     "data": {
       "script": "katakana",
@@ -3904,9 +4933,14 @@
     "type": "kana",
     "expression": "ピャ",
     "reading": "pya",
-    "meanings": [
-      "pya"
-    ],
+    "meanings": {
+      "en": [
+        "pya"
+      ],
+      "id": [
+        "pya"
+      ]
+    },
     "seq": 206,
     "data": {
       "script": "katakana",
@@ -3923,9 +4957,14 @@
     "type": "kana",
     "expression": "ピュ",
     "reading": "pyu",
-    "meanings": [
-      "pyu"
-    ],
+    "meanings": {
+      "en": [
+        "pyu"
+      ],
+      "id": [
+        "pyu"
+      ]
+    },
     "seq": 207,
     "data": {
       "script": "katakana",
@@ -3942,9 +4981,14 @@
     "type": "kana",
     "expression": "ピョ",
     "reading": "pyo",
-    "meanings": [
-      "pyo"
-    ],
+    "meanings": {
+      "en": [
+        "pyo"
+      ],
+      "id": [
+        "pyo"
+      ]
+    },
     "seq": 208,
     "data": {
       "script": "katakana",

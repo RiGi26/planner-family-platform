@@ -15,7 +15,7 @@ function fakeItems(type: Item['type'], n: number): Item[] {
     type,
     expression: `x${i}`,
     reading: `x${i}`,
-    meanings: ['x'],
+    meanings: { en: ['x'], id: [] },
     seq: i + 1,
     data: {},
   }))

@@ -22,7 +22,7 @@
  * Run: npm run jlpt
  */
 
-import { readFileSync, writeFileSync } from 'node:fs'
+import { existsSync, readFileSync, writeFileSync } from 'node:fs'
 import { gunzipSync } from 'node:zlib'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
@@ -141,6 +141,47 @@ if (grammarCompiled.length !== EXPECTED.grammarCompiled)
   fail(`grammar susunan: ${grammarCompiled.length} entri, diharapkan ${EXPECTED.grammarCompiled}`)
 
 // ---------------------------------------------------------------------------
+// glosses — English is upstream's, Indonesian is ours and must survive a refetch
+// ---------------------------------------------------------------------------
+
+/**
+ * Everything about a gloss that is ours, not upstream's, keyed by item id.
+ *
+ * This script rebuilds the dataset files wholesale, so without reading the
+ * previous output back first, one `npm run jlpt` would silently delete every
+ * Indonesian gloss in the repo — work that took a human review pass to produce,
+ * gone to refresh a source that never had it in the first place. Upstream owns
+ * `en`; we own `id`, `gloss_reviewed` and `gloss_note_id`.
+ *
+ * `gloss_reviewed` matters as much as the gloss itself. Nothing writes it back:
+ * gloss-id.mjs skips items whose Indonesian is already filled, so an item reset
+ * to `false` here stays `false` forever, and the store release gate — every unit
+ * reviewed — silently moves out of reach. Losing the flag is worse than losing
+ * the text, because losing the text is at least visible.
+ */
+const keptGloss = new Map()
+for (const name of ['vocab_n5.json', 'kanji_n5.json', 'grammar_n5.json']) {
+  const path = join(DATA, name)
+  if (!existsSync(path)) continue
+  for (const row of JSON.parse(readFileSync(path, 'utf8'))) {
+    keptGloss.set(row.id, {
+      id: Array.isArray(row.meanings?.id) ? row.meanings.id : [],
+      gloss_reviewed: row.data?.gloss_reviewed === true,
+      gloss_note_id: row.data?.gloss_note_id ?? null,
+    })
+  }
+}
+
+/** Wraps upstream's array in the two-language shape, keeping any gloss we own. */
+const meaningsFor = (itemId, en) => ({ en, id: keptGloss.get(itemId)?.id ?? [] })
+
+/** The review bookkeeping for an item, defaulting to "nobody has looked at this". */
+const glossMetaFor = (itemId) => ({
+  gloss_reviewed: keptGloss.get(itemId)?.gloss_reviewed ?? false,
+  gloss_note_id: keptGloss.get(itemId)?.gloss_note_id ?? null,
+})
+
+// ---------------------------------------------------------------------------
 // vocab — kana-only words read as themselves; the source leaves those blank
 // ---------------------------------------------------------------------------
 
@@ -169,13 +210,14 @@ const vocab = vocabRows.map((v, i) => {
   const candidates = [v.word, v.reading, ...v.word.split(/[/\s]+/), ...(v.reading ?? '').split(/[/\s]+/)]
   const pos = candidates.map((c) => posByWord.get(c)).find((p) => p) ?? []
   const group = verbGroup(pos)
+  const id = `vocab-n5-${v.word}`
   return {
-    id: `vocab-n5-${v.word}`,
+    id,
     level: 'N5',
     type: 'vocab',
     expression: v.word,
     reading: v.reading || v.word,
-    meanings: v.meanings,
+    meanings: meaningsFor(id, v.meanings),
     seq: i + 1,
     data: {
       examples: (v.examples ?? []).slice(0, MAX_EXAMPLES),
@@ -185,6 +227,7 @@ const vocab = vocabRows.map((v, i) => {
       pos,
       ...(group ? { verb_group: group } : {}),
       source: v.source,
+      ...glossMetaFor(id),
     },
   }
 })
@@ -197,13 +240,14 @@ const vocab = vocabRows.map((v, i) => {
 const kanji = kanjiSrc.map((k, i) => {
   const kun = (k.kunyomi ?? []).find((r) => !r.startsWith('-'))
   const on = (k.onyomi ?? [])[0]
+  const id = `kanji-n5-${k.character}`
   return {
-    id: `kanji-n5-${k.character}`,
+    id,
     level: 'N5',
     type: 'kanji',
     expression: k.character,
     reading: kun ?? on ?? '',
-    meanings: k.meanings,
+    meanings: meaningsFor(id, k.meanings),
     seq: i + 1,
     data: {
       onyomi: k.onyomi ?? [],
@@ -214,6 +258,7 @@ const kanji = kanjiSrc.map((k, i) => {
       strokes_key: k.character,
       unit: kanjiUnitOf.get(k.character) ?? null,
       source: 'openjlpt',
+      ...glossMetaFor(id),
     },
   }
 })
@@ -231,13 +276,14 @@ const grammar = [
   type: 'grammar',
   expression: stripGloss(g.pattern),
   reading: '',
-  meanings: [g.meaning],
+  meanings: meaningsFor(grammarId(g.pattern), [g.meaning]),
   seq: i + 1,
   data: {
     formation: g.formation,
     examples: (g.examples ?? []).slice(0, MAX_EXAMPLES),
     tags: g.tags ?? [],
     source: g.source,
+    ...glossMetaFor(grammarId(g.pattern)),
   },
 }))
 
@@ -251,7 +297,8 @@ for (const item of all) {
   if (ids.has(item.id)) fail(`id ganda: ${item.id}`)
   ids.add(item.id)
   if (!item.expression) fail(`expression kosong: ${item.id}`)
-  if (!item.meanings || item.meanings.length === 0) fail(`meanings kosong: ${item.id}`)
+  // Only `en` is asserted: `id` is empty by design until Brief 01 fills it.
+  if (!item.meanings?.en?.length) fail(`meanings.en kosong: ${item.id}`)
 }
 for (const v of vocab) if (!v.reading) fail(`reading kosong: ${v.id}`)
 

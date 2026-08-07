@@ -19,7 +19,7 @@ import {
 } from '@/lib/curriculum'
 import { dueCards } from '@/lib/db'
 import { useT } from '@/lib/i18n'
-import { itemMapFor, type Item } from '@/lib/items'
+import { glossOf, itemMapFor, type Item } from '@/lib/items'
 import { useCardStates, useKanaSheet, useProfile } from '@/lib/queries'
 import { bumpProgress, pushPending, saveWriting } from '@/lib/study'
 
@@ -169,7 +169,7 @@ function WritingScreen() {
         </header>
 
         <div className="mt-5 rounded-[3px] border border-rule bg-paper-raised px-4 py-3">
-          <p className="text-[16px] leading-snug text-ink">{item.meanings.join('; ')}</p>
+          <p className="text-[16px] leading-snug text-ink">{glossOf(item).join('; ')}</p>
           <p className="mt-1 text-[13px] text-ink-muted">
             {[kun && `訓 ${kun}`, on && `音 ${on}`].filter(Boolean).join(' ／ ')}
           </p>

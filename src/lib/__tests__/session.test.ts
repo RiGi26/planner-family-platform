@@ -47,7 +47,7 @@ describe('spokenForm', () => {
     type: 'vocab',
     expression: 'x',
     reading: 'x',
-    meanings: ['x'],
+    meanings: { en: ['x'], id: [] },
     seq: 1,
     data: {},
     ...over,

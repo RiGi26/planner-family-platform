@@ -198,7 +198,7 @@ describe('modesForItem', () => {
     type,
     expression: 'x',
     reading: 'x',
-    meanings: ['x'],
+    meanings: { en: ['x'], id: [] },
     seq: 1,
     data: {},
   })

@@ -13,6 +13,43 @@ import type { CardMode } from './fsrs'
 
 export type ItemType = 'kana' | 'vocab' | 'kanji' | 'grammar'
 
+/**
+ * Glosses, one array per language.
+ *
+ * `en` is source data from OpenJLPT (CC BY-SA 4.0) and is never edited by hand:
+ * it is what keeps provenance traceable and an upstream refresh possible. `id` is
+ * what the app actually shows.
+ *
+ * Nested rather than a flat `meanings_id` field because an item already has its
+ * own `id` — `meanings_id` sitting beside it reads as "the id of meanings".
+ * `item.meanings.id` versus `item.id` cannot be misread.
+ */
+export type Meanings = {
+  en: string[]
+  id: string[]
+}
+
+/**
+ * Gloss bookkeeping, the only part of `data` that is typed.
+ *
+ * The rest of `data` is deliberately open — a kana's row, a kanji's readings, a
+ * grammar point's formation — because the engine never reads it. These two it
+ * does: `gloss_reviewed` decides whether a screen still shows the honest "not yet
+ * checked by a native speaker" label, and the store release gate is every unit
+ * reading `true`.
+ *
+ * Optional rather than required, and read with a presence check rather than a
+ * truthiness one: `false` is both the default and a meaningful value, so
+ * `if (!item.data.gloss_reviewed)` cannot tell "reviewed and rejected" from
+ * "never looked at". Same trap as Unit 0 being a real unit whose number is 0.
+ */
+export type GlossMeta = {
+  /** Default false. True only once a human who reads both languages has signed off. */
+  gloss_reviewed?: boolean
+  /** Default null. A short note that belongs beside the gloss, not inside it. */
+  gloss_note_id?: string | null
+}
+
 export type Item = {
   id: string
   /** 'KANA' | 'N5' | 'N4' … */
@@ -20,10 +57,24 @@ export type Item = {
   type: ItemType
   expression: string
   reading: string
-  meanings: string[]
+  meanings: Meanings
   /** Curriculum order within its file. */
   seq: number
-  data: Record<string, unknown>
+  data: Record<string, unknown> & GlossMeta
+}
+
+/**
+ * The one place that decides which language a screen shows.
+ *
+ * Falls back to `en` while `id` is still empty, so the app keeps working through
+ * the whole of Brief 01 instead of going blank between the schema change and the
+ * last translated batch. Every display site goes through here — a fallback that
+ * some components implement and others forget is how half a screen ends up in a
+ * different language.
+ */
+export function glossOf(item: Item, locale: 'id' | 'en' = 'id'): string[] {
+  const m = item.meanings
+  return m[locale]?.length ? m[locale] : m.en
 }
 
 export type Example = { ja: string; en: string }

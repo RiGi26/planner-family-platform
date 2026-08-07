@@ -20,7 +20,7 @@ function item(id: string, type: Item['type'] = 'vocab'): Item {
     type,
     expression: id,
     reading: id,
-    meanings: ['x'],
+    meanings: { en: ['x'], id: [] },
     seq: 1,
     data: {},
   }

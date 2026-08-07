@@ -1,4 +1,4 @@
-import type { Item } from './items'
+import { glossOf, type Item } from './items'
 import type { CardMode, CardStateRow, UserRating } from './fsrs'
 
 /**
@@ -398,14 +398,15 @@ export function lessonFace(item: Item): {
   return {
     expression: item.expression,
     reading: item.reading && item.reading !== item.expression ? item.reading : '',
-    meaning: item.meanings.join('; '),
+    meaning: glossOf(item).join('; '),
     detail,
     speak: spokenForm(item),
   }
 }
 
 export function cardFaces(item: Item, mode: CardMode): Faces {
-  const meanings = item.meanings.join('; ')
+  const gloss = glossOf(item)
+  const meanings = gloss.join('; ')
 
   if (item.type === 'kana') {
     const script = (item.data.script as string) === 'katakana' ? 'katakana' : 'hiragana'
@@ -442,7 +443,7 @@ export function cardFaces(item: Item, mode: CardMode): Faces {
           hintTarget: '',
         }
       : {
-          prompt: item.meanings[0] ?? '',
+          prompt: gloss[0] ?? '',
           promptKind: 'text',
           badge: 'kanji',
           answerMain: item.expression,
@@ -457,7 +458,7 @@ export function cardFaces(item: Item, mode: CardMode): Faces {
       prompt: item.expression,
       promptKind: 'glyph',
       badge: 'grammar',
-      answerMain: item.meanings[0] ?? '',
+      answerMain: gloss[0] ?? '',
       answerSub: formation ? [formation] : [],
       hintTarget: '',
     }
@@ -502,7 +503,7 @@ export function cardFaces(item: Item, mode: CardMode): Faces {
           hintTarget: '',
         }
     : {
-        prompt: item.meanings[0] ?? '',
+        prompt: gloss[0] ?? '',
         promptKind: 'text',
         badge: 'vocab',
         answerMain: item.expression,
