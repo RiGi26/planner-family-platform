@@ -32,6 +32,15 @@
 
 import { execFileSync } from 'node:child_process'
 import { readFileSync } from 'node:fs'
+import {
+  ATURAN_BENTUK,
+  MAKS_ELEMEN,
+  berglosa as glossed,
+  cekPenggolong,
+  isCounter,
+  norm,
+  peerKey,
+} from './lib/gloss-rules.mjs'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
@@ -113,52 +122,14 @@ const baseline = loadBaseline()
 const englishOf = (row) => (Array.isArray(row.meanings) ? row.meanings : (row.meanings?.en ?? []))
 
 // ---------------------------------------------------------------------------
-// classification
-// ---------------------------------------------------------------------------
-
-/**
- * The coarse word class two items must share before they can be each other's
- * decoy (§4.2). A noun and a verb never appear as alternatives in the same
- * multiple-choice question, so holding them to a shared uniqueness rule would
- * reject glosses that could not possibly be confused.
- */
-function wordClass(item) {
-  if (item.type !== 'vocab') return item.type
-  const pos = Array.isArray(item.data.pos) ? item.data.pos : []
-  if (pos.some((p) => p.startsWith('v'))) return 'verba'
-  if (pos.some((p) => p.startsWith('adj'))) return 'adjektiva'
-  if (pos.includes('adv')) return 'adverbia'
-  if (pos.includes('pn')) return 'pronomina'
-  if (pos.includes('num')) return 'numeralia'
-  if (pos.includes('n')) return 'nomina'
-  return 'lain'
-}
-
-/**
- * 助数詞 in the sense §3.6 means: an item whose whole job is to count things.
- *
- * Deliberately NOT `pos.includes('ctr')`. JMdict tags 山, 風, 頭 and ページ as
- * `ctr` because those words CAN serve as counters, but the item in this dataset
- * is the noun — 山 is "mountain", and demanding a single bare word for it would
- * be enforcing §3.6 against entries it was never about. Worse, `suf`/`n-suf`
- * would drag in よく ("often", "well"), whose two distinct meanings §3.4 says
- * belong in two elements.
- *
- * So the test is what the entry IS, not what its headword could be used for: the
- * 〜 prefix the brief writes counters with, or an English gloss that says outright
- * that this is a counter.
- */
-function isCounter(item) {
-  if (item.type !== 'vocab') return false
-  if (item.expression.startsWith('〜') || item.expression.startsWith('~')) return true
-  return item.meanings.en.some((m) => /\bcounter for\b/i.test(m))
-}
-
-const glossed = (i) => i.meanings.id.length > 0
-const norm = (s) => s.trim().toLowerCase()
-
 // ---------------------------------------------------------------------------
 // rules
+//
+// Classification (wordClass, peerKey, isCounter) and the per-gloss shape rules
+// live in scripts/lib/gloss-rules.mjs, because gloss-id.mjs has to satisfy the
+// very same rules before it writes anything. Two copies would let the generator
+// group items one way and this validator check another — a disagreement that
+// only surfaces after 810 glosses exist.
 // ---------------------------------------------------------------------------
 
 const failures = []
@@ -205,7 +176,7 @@ rule(failures, 'glosa pertama kembar di dalam satu unit (§4.1)', collisions(byU
 
 const byClass = new Map()
 for (const i of berglosa) {
-  const key = `${i.type}/${wordClass(i)}`
+  const key = peerKey(i)
   if (!byClass.has(key)) byClass.set(key, [])
   byClass.get(key).push(i)
 }
@@ -219,40 +190,28 @@ rule(
     .map((i) => ({ id: i.id, detail: i.meanings.id.join('; ') })),
 )
 
-rule(
-  failures,
-  'glosa diawali "untuk " (§3.10)',
-  flagGloss(berglosa, (g) => /^untuk\s/i.test(g.trim())),
-)
-
-rule(
-  failures,
-  'glosa lebih dari 40 karakter (§3.10)',
-  flagGloss(berglosa, (g) => g.length > 40),
-)
+// Delegated to scripts/lib/gloss-rules.mjs so the generator can pre-check the
+// exact same rules before it spends a batch (§3.10, §3.1).
+for (const { nama, cek } of ATURAN_BENTUK) {
+  rule(failures, `bentuk glosa: ${nama}`, flagGloss(berglosa, (g) => cek(g) !== null))
+}
 
 rule(
   failures,
   'penggolong harus satu elemen, satu kata, tanpa kurung (§3.6)',
   berglosa
     .filter(isCounter)
-    .filter((i) => {
-      const [first, ...rest] = i.meanings.id
-      return rest.length > 0 || /[\s,]/.test(first.trim()) || /[()]/.test(first)
-    })
-    .map((i) => ({ id: i.id, detail: i.meanings.id.join('; ') })),
+    .map((i) => ({ item: i, sebab: cekPenggolong(i.meanings.id) }))
+    .filter((x) => x.sebab)
+    .map((x) => ({ id: x.item.id, detail: x.sebab })),
 )
 
 rule(
   failures,
-  'lebih dari 3 elemen (§3.1)',
-  berglosa.filter((i) => i.meanings.id.length > 3).map((i) => ({ id: i.id, detail: `${i.meanings.id.length} elemen` })),
-)
-
-rule(
-  failures,
-  'glosa diakhiri titik (§3.1)',
-  flagGloss(berglosa, (g) => g.trim().endsWith('.')),
+  `lebih dari ${MAKS_ELEMEN} elemen (§3.1)`,
+  berglosa
+    .filter((i) => i.meanings.id.length > MAKS_ELEMEN)
+    .map((i) => ({ id: i.id, detail: `${i.meanings.id.length} elemen` })),
 )
 
 if (baseline) {

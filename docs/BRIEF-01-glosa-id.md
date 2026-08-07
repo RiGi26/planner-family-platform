@@ -370,13 +370,36 @@ Dari yang wajib ke yang diusahakan:
 │     • seluruh §3 sebagai system prompt
 │     • expression, reading, meanings.en, pos, verb_group
 │     • nomor + judul unit item itu  (konteks makna)
-│     • daftar meanings.id yang sudah dipakai di unit itu  (untuk §4)
+│     • daftar meanings.id yang sudah dipakai di unit itu        (§4.1)
+│     • daftar meanings.id yang sudah dipakai item sejenis &
+│       sekelas kata, dari SELURUH dataset                        (§4.2)
 ├─ tulis balik meanings.id + gloss_reviewed: false
 └─ tulis scripts/data/gloss-audit.json — en/id berdampingan, dikelompokkan per unit
 ```
 
 Batch 25 supaya konteks unit muat dan kegagalan satu batch tidak merusak seluruh
 berkas. Idempoten supaya bisa dijalankan bertahap sambil review berjalan.
+
+### Keunikan §4.2 itu LINTAS-UNIT
+
+Mengirim hanya glosa yang sudah dipakai di unit itu cukup untuk §4.1 dan tidak
+cukup untuk apa pun selain itu. §4.2 menuntut keunikan di antara item sejenis dan
+sekelas kata, dan himpunan itu **melintasi unit**: 入る ada di unit 17, 入れる di
+unit 14, jadi keduanya tidak pernah sekelompok. Daftar yang hanya berisi glosa
+satu unit tidak akan pernah mencegah keduanya lahir sebagai "masuk" — dan
+bentrokannya baru ketahuan setelah 810 item jadi, yaitu persis kegagalan yang
+§8 susun urutan commit-nya untuk mencegah.
+
+Karena itu tiap batch juga membawa glosa yang sudah dipakai item sejenis +
+sekelas kata dari seluruh dataset. Daftarnya dipersempit ke kelas kata yang
+benar-benar ada di batch itu, supaya panjangnya sebanding dengan permintaannya,
+bukan dengan ukuran dataset.
+
+Hal yang sama berlaku pada **penyusunan batch**, bukan cuma pada konteksnya:
+pasangan 他動詞/自動詞 seakar (§3.3) dijaga tetap dalam satu batch walau unitnya
+berjauhan. Kalau terpisah, tiap panggilan hanya melihat separuh pasangan dan
+dengan wajar menulis "masuk" untuk keduanya — perbedaan yang justru menjadi
+alasan §3.3 ada, hilang sebelum validator sempat melihatnya.
 
 Urutan pengerjaan: **unit 0–5 dulu**, lalu 6–25, lalu 304 kosakata yang belum
 terpetakan ke unit mana pun.
