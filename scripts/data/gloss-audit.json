@@ -1,0 +1,388 @@
+{
+  "catatan": "Dibaca reviewer penutur asli (§7). en = data sumber OpenJLPT (CC BY-SA), jangan diubah. id_glosa = glosa yang dinilai. direview:false artinya belum ada manusia yang membacanya.",
+  "ringkasan": {
+    "berglosa": 25,
+    "belum": 785,
+    "direview": 0
+  },
+  "unit": [
+    {
+      "n": 1,
+      "judul": "Memperkenalkan diri",
+      "item": [
+        {
+          "id": "vocab-n5-あなた",
+          "ekspresi": "あなた",
+          "bacaan": "あなた",
+          "jenis": "vocab",
+          "en": [
+            "you"
+          ],
+          "id_glosa": [
+            "kamu, Anda"
+          ],
+          "catatan": "jarang dipakai kalau nama lawan bicara diketahui — sebut namanya",
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-いいえ",
+          "ekspresi": "いいえ",
+          "bacaan": "いいえ",
+          "jenis": "vocab",
+          "en": [
+            "no"
+          ],
+          "id_glosa": [
+            "tidak, bukan"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-はい",
+          "ekspresi": "はい",
+          "bacaan": "はい",
+          "jenis": "vocab",
+          "en": [
+            "yes"
+          ],
+          "id_glosa": [
+            "ya"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-学生",
+          "ekspresi": "学生",
+          "bacaan": "がくせい",
+          "jenis": "vocab",
+          "en": [
+            "student"
+          ],
+          "id_glosa": [
+            "pelajar, mahasiswa"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-私",
+          "ekspresi": "私",
+          "bacaan": "わたし",
+          "jenis": "vocab",
+          "en": [
+            "I",
+            "me"
+          ],
+          "id_glosa": [
+            "saya"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-先生",
+          "ekspresi": "先生",
+          "bacaan": "せんせい",
+          "jenis": "vocab",
+          "en": [
+            "teacher",
+            "doctor"
+          ],
+          "id_glosa": [
+            "guru",
+            "dokter"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-日本人",
+          "ekspresi": "日本人",
+          "bacaan": "にほんじん",
+          "jenis": "vocab",
+          "en": [
+            "Japanese person"
+          ],
+          "id_glosa": [
+            "orang Jepang"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-インドネシア人",
+          "ekspresi": "インドネシア人",
+          "bacaan": "インドネシアじん",
+          "jenis": "vocab",
+          "en": [
+            "Indonesian person"
+          ],
+          "id_glosa": [
+            "orang Indonesia"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-はじめまして",
+          "ekspresi": "はじめまして",
+          "bacaan": "はじめまして",
+          "jenis": "vocab",
+          "en": [
+            "how do you do",
+            "nice to meet you"
+          ],
+          "id_glosa": [
+            "salam kenal"
+          ],
+          "catatan": "dipakai hanya saat pertama kali bertemu",
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-よろしくお願いします",
+          "ekspresi": "よろしくお願いします",
+          "bacaan": "よろしくおねがいします",
+          "jenis": "vocab",
+          "en": [
+            "pleased to meet you",
+            "please treat me well"
+          ],
+          "id_glosa": [
+            "mohon bantuannya"
+          ],
+          "catatan": "ditutup dengan membungkuk sedikit",
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-ありがとうございます",
+          "ekspresi": "ありがとうございます",
+          "bacaan": "ありがとうございます",
+          "jenis": "vocab",
+          "en": [
+            "thank you"
+          ],
+          "id_glosa": [
+            "terima kasih"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-すみません",
+          "ekspresi": "すみません",
+          "bacaan": "すみません",
+          "jenis": "vocab",
+          "en": [
+            "excuse me",
+            "sorry"
+          ],
+          "id_glosa": [
+            "permisi, maaf"
+          ],
+          "catatan": "juga dipakai untuk memanggil pelayan",
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-そう",
+          "ekspresi": "そう",
+          "bacaan": "そう",
+          "jenis": "vocab",
+          "en": [
+            "so",
+            "that's right"
+          ],
+          "id_glosa": [
+            "betul, benar",
+            "begitu"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-あの人",
+          "ekspresi": "あの人",
+          "bacaan": "あのひと",
+          "jenis": "vocab",
+          "en": [
+            "that person",
+            "he",
+            "she"
+          ],
+          "id_glosa": [
+            "orang itu",
+            "dia"
+          ],
+          "catatan": null,
+          "direview": false
+        }
+      ]
+    },
+    {
+      "n": 2,
+      "judul": "Menyebut benda di sekitarku",
+      "item": [
+        {
+          "id": "vocab-n5-あの",
+          "ekspresi": "あの",
+          "bacaan": "あの",
+          "jenis": "vocab",
+          "en": [
+            "that over there"
+          ],
+          "id_glosa": [
+            "itu jauh (+ kata benda)"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-あれ",
+          "ekspresi": "あれ",
+          "bacaan": "あれ",
+          "jenis": "vocab",
+          "en": [
+            "that"
+          ],
+          "id_glosa": [
+            "itu (jauh)"
+          ],
+          "catatan": "benda yang jauh dari pembicara maupun lawan bicara",
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-いす",
+          "ekspresi": "いす",
+          "bacaan": "いす",
+          "jenis": "vocab",
+          "en": [
+            "chair"
+          ],
+          "id_glosa": [
+            "kursi"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-かばん",
+          "ekspresi": "かばん",
+          "bacaan": "かばん",
+          "jenis": "vocab",
+          "en": [
+            "bag",
+            "basket"
+          ],
+          "id_glosa": [
+            "tas"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-この",
+          "ekspresi": "この",
+          "bacaan": "この",
+          "jenis": "vocab",
+          "en": [
+            "this"
+          ],
+          "id_glosa": [
+            "ini (+ kata benda)"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-これ",
+          "ekspresi": "これ",
+          "bacaan": "これ",
+          "jenis": "vocab",
+          "en": [
+            "this"
+          ],
+          "id_glosa": [
+            "ini"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-その",
+          "ekspresi": "その",
+          "bacaan": "その",
+          "jenis": "vocab",
+          "en": [
+            "that"
+          ],
+          "id_glosa": [
+            "itu dekat (+ kata benda)"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-それ",
+          "ekspresi": "それ",
+          "bacaan": "それ",
+          "jenis": "vocab",
+          "en": [
+            "that"
+          ],
+          "id_glosa": [
+            "itu (dekat)"
+          ],
+          "catatan": "benda yang dekat dengan lawan bicara",
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-ペン",
+          "ekspresi": "ペン",
+          "bacaan": "ペン",
+          "jenis": "vocab",
+          "en": [
+            "pen"
+          ],
+          "id_glosa": [
+            "pulpen"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-何",
+          "ekspresi": "何",
+          "bacaan": "なん/なに",
+          "jenis": "vocab",
+          "en": [
+            "what"
+          ],
+          "id_glosa": [
+            "apa"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-時計",
+          "ekspresi": "時計",
+          "bacaan": "とけい",
+          "jenis": "vocab",
+          "en": [
+            "watch",
+            "clock"
+          ],
+          "id_glosa": [
+            "jam"
+          ],
+          "catatan": null,
+          "direview": false
+        }
+      ]
+    }
+  ],
+  "ditolak": [],
+  "belum_diisi": [],
+  "catatan_dibuang": []
+}

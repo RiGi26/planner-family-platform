@@ -108,7 +108,7 @@ dan aturan bentuk per-glosa (§3.1, §3.10) — hidup di satu modul yang dipakai
 
 | Berkas | Perannya |
 |---|---|
-| `scripts/lib/gloss-rules.mjs` | aturan: `wordClass`, `peerKey`, `isCounter`, `ATURAN_BENTUK`, `cekPenggolong` |
+| `scripts/lib/gloss-rules.mjs` | aturan: `wordClass`, `peerKey`, `isCounter`, `ATURAN_BENTUK`, `cekPenggolong`, `KELAS_PAKSA` |
 | `scripts/lib/gloss-data.mjs` | dataset, irisan §3, penyusunan batch, konteks §4, pemeriksaan |
 | `scripts/gloss-siapkan.mjs` · `gloss-terapkan.mjs` | generator (§5) |
 | `scripts/verify-gloss.mjs` | validator (§6) |
@@ -125,6 +125,21 @@ kata untuk sebagian besar dari mereka.
 Penjelasan gaya — apa yang membuat sebuah kata *bagus* — tetap di §3 dokumen ini,
 bukan di kode. Prosa tidak bisa dieksekusi, dan aturan yang bisa dieksekusi tidak
 perlu dua kali ditulis.
+
+**`KELAS_PAKSA` — koreksi kelas kata, di modul aturan, bukan di dataset.**
+`pos` datang dari hulu dan kadang salah menaruh item ke ember §4.2. Contoh nyata
+dari kalibrasi batch 1: この bertanda `["num"]` sehingga masuk `vocab/numeralia`
+sendirian, padahal その dan あの (`adj-pn`) duduk berdua di `vocab/adjektiva`.
+Ketiganya satu paradigma 連体詞 dan justru satu sama lain pengecoh yang paling
+mungkin — keunikan yang melewatkan tepat item paling rawan bentrok itu keunikan
+yang cuma namanya.
+
+Perbaikannya **tidak boleh** dengan menyunting `pos` di `src/data/*.json`: §2.6
+menjelaskan `fetch-jlpt.mjs` membangun ulang berkas-berkas itu utuh dari sumber, dan
+tidak ada preservasi untuk `pos` seperti yang ada untuk `meanings.id`. Suntingan
+dataset akan hidup sampai `npm run jlpt` berikutnya lalu diam-diam kembali salah.
+Koreksi yang hidup di `KELAS_PAKSA` selamat dari tiap refetch, dan terbaca di satu
+tempat alih-alih terkubur di berkas 682 item.
 
 ### 2.6 fetch-jlpt.mjs wajib mempertahankan glosa
 
@@ -186,7 +201,10 @@ rilis §7.
 
 ### 3.1 Aturan umum
 
-- Huruf kecil semua, kecuali nama diri
+- Huruf kecil semua, kecuali nama diri **dan kata yang ejaan bakunya memang
+  berhuruf besar** — "Anda" selalu kapital dalam bahasa Indonesia meski ia bukan
+  nama diri, dan menurunkannya jadi "anda" melanggar ejaan demi aturan yang tidak
+  pernah tentang itu
 - Maksimal **3 elemen** dalam array `id`
 - Makna berbeda → elemen array terpisah. Sinonim dekat → satu elemen, dipisah koma
 - Elemen pertama = arti yang dipakai di unit tempat item itu muncul; sisanya
@@ -195,19 +213,44 @@ rilis §7.
 - Kurung untuk pembeda singkat (`itu (jauh)`), bukan untuk penjelasan
 - Penjelasan panjang → `gloss_note_id`, bukan glosa
 
+**Batas "sinonim dekat" lawan "makna berbeda" adalah pertimbangan bahasa, bukan
+aturan mesin.** いいえ jadi satu elemen (`tidak, bukan` — dua kata yang mengisi
+fungsi yang sama sebagai jawaban), 先生 jadi dua (`guru` · `dokter` — dua rujukan
+yang benar-benar berbeda). Tidak ada uji yang memisahkan keduanya, dan `verify:gloss`
+sengaja **tidak** mencoba: ia menghitung elemen, bukan menilai apakah pembagiannya
+masuk akal. Yang berwenang atas batas itu adalah reviewer penutur asli di §7 —
+pengisi batch memilih yang paling masuk akal baginya dan meneruskan, bukan berhenti
+menunggu putusan yang memang bukan wewenang mesin.
+
 ### 3.2 Kata benda
 
 Kata benda telanjang. Tanpa "sebuah", tanpa "yang".
 
 | Ekspresi | en | id |
 |---|---|---|
-| 学生 | student | mahasiswa |
+| 兄 | older brother | kakak (laki-laki) |
+| 弟 | younger brother | adik (laki-laki) |
 | 先生 | teacher | guru |
 | お風呂 | bath | kamar mandi |
 
-Bahasa Inggris sering lebih kabur dari yang dibutuhkan — `student` bisa 学生
-(mahasiswa) atau 生徒 (murid sekolah). Bahasa Indonesia memaksa pilihan.
-Manfaatkan, jangan tiru kekaburannya.
+Bahasa Inggris sering lebih kabur dari yang dibutuhkan — `brother` menghapus
+pembedaan yang justru wajib ada di 兄 dan 弟. Bahasa Indonesia memaksa pilihan yang
+sama seperti bahasa Jepang. Manfaatkan, jangan tiru kekaburan Inggrisnya.
+
+**Tapi jangan memaksa membelah ketika Indonesia memang menyatukan.** Arahnya
+berlaku dua kali:
+
+| Ekspresi | en | id | kenapa |
+|---|---|---|---|
+| 兄 / 弟 | brother | kakak / adik | Jepang membedakan, Inggris tidak → Indonesia ikut membedakan |
+| 時計 | watch, clock | jam | Inggris membedakan, Jepang tidak → Indonesia ikut menyatukan |
+
+Ujinya adalah **kata sumbernya**, bukan glosa Inggrisnya. 時計 tidak berarti
+"arloji"; menulis `jam · jam tangan` menambahkan ketegasan yang tidak ada di kata
+Jepangnya dan mengajarkan pembedaan palsu. Contoh yang dipakai versi awal — 学生 →
+"mahasiswa" — punya cacat yang sama: 学生 sendiri tidak setegas itu, jadi contohnya
+mengajarkan ketajaman yang bukan milik kata sumbernya. Yang benar untuknya
+`pelajar, mahasiswa`.
 
 ### 3.3 Kata kerja — transitif vs intransitif
 
@@ -262,13 +305,28 @@ Kata tempat — selesai tanpa kurung sama sekali:
 | 向こう | over there | seberang sana |
 
 Kata benda & penunjuk — butuh kurung, karena untuk benda Indonesia hanya punya
-dua tingkat:
+dua tingkat. Bentuknya **dikunci di sini**, tidak diserahkan ke pengisi batch:
 
-| Ekspresi | id |
-|---|---|
-| これ / この | ini |
-| それ / その | itu (dekat lawan bicara) |
-| あれ / あの | itu (jauh dari kita berdua) |
+| Deiksis | pronomina (これ/それ/あれ) | prenominal (この/その/あの) |
+|---|---|---|
+| こ | `ini` | `ini (+ kata benda)` |
+| そ | `itu (dekat)` | `itu dekat (+ kata benda)` |
+| あ | `itu (jauh)` | `itu jauh (+ kata benda)` |
+
+Penjelasan penuhnya — dekat *dengan siapa*, jauh *dari siapa* — pindah ke
+`gloss_note_id`, dan **hanya pada それ dan あれ**. Pasangan prenominalnya mewarisi
+makna itu dari bentuk pronominalnya; mengulang catatan yang sama empat kali persis
+kebisingan yang §3.7 larang.
+
+**Kenapa tabel lama diganti.** Versi sebelumnya menyamakan これ/この → "ini",
+それ/その → "itu (dekat lawan bicara)", あれ/あの → "itu (jauh dari kita berdua)" —
+satu glosa untuk dua item. Keenamnya duduk di unit 2, dan §4.1 melarang elemen
+pertama kembar di dalam satu unit. Tabel itu karena itu **menjamin tiga
+pelanggaran**: mengikutinya berarti ditolak, dan menyimpang darinya berarti tiap
+batch mengarang pembedanya sendiri — この bisa lahir sebagai "ini (+ kata benda)"
+hari ini dan "ini (untuk benda)" bulan depan, dua bentuk untuk satu pola yang sama.
+Aturan gaya yang bertabrakan dengan aturan keunikan bukan pilihan gaya; ia cacat
+spesifikasi, dan tempat memperbaikinya di sini, sekali.
 
 Sisa kelompok bentrok lainnya:
 

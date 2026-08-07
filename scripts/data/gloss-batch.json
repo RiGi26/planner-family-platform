@@ -46,8 +46,10 @@
       "judul_unit": "Memperkenalkan diri",
       "penggolong": false,
       "riwayat_penolakan": null,
-      "meanings_id": [],
-      "gloss_note_id": null
+      "meanings_id": [
+        "kamu, Anda"
+      ],
+      "gloss_note_id": "jarang dipakai kalau nama lawan bicara diketahui — sebut namanya"
     },
     {
       "id": "vocab-n5-いいえ",
@@ -66,7 +68,9 @@
       "judul_unit": "Memperkenalkan diri",
       "penggolong": false,
       "riwayat_penolakan": null,
-      "meanings_id": [],
+      "meanings_id": [
+        "tidak, bukan"
+      ],
       "gloss_note_id": null
     },
     {
@@ -86,7 +90,9 @@
       "judul_unit": "Memperkenalkan diri",
       "penggolong": false,
       "riwayat_penolakan": null,
-      "meanings_id": [],
+      "meanings_id": [
+        "ya"
+      ],
       "gloss_note_id": null
     },
     {
@@ -106,7 +112,9 @@
       "judul_unit": "Memperkenalkan diri",
       "penggolong": false,
       "riwayat_penolakan": null,
-      "meanings_id": [],
+      "meanings_id": [
+        "mahasiswa"
+      ],
       "gloss_note_id": null
     },
     {
@@ -127,7 +135,9 @@
       "judul_unit": "Memperkenalkan diri",
       "penggolong": false,
       "riwayat_penolakan": null,
-      "meanings_id": [],
+      "meanings_id": [
+        "saya"
+      ],
       "gloss_note_id": null
     },
     {
@@ -148,7 +158,10 @@
       "judul_unit": "Memperkenalkan diri",
       "penggolong": false,
       "riwayat_penolakan": null,
-      "meanings_id": [],
+      "meanings_id": [
+        "guru",
+        "dokter"
+      ],
       "gloss_note_id": null
     },
     {
@@ -168,7 +181,9 @@
       "judul_unit": "Memperkenalkan diri",
       "penggolong": false,
       "riwayat_penolakan": null,
-      "meanings_id": [],
+      "meanings_id": [
+        "orang Jepang"
+      ],
       "gloss_note_id": null
     },
     {
@@ -186,7 +201,9 @@
       "judul_unit": "Memperkenalkan diri",
       "penggolong": false,
       "riwayat_penolakan": null,
-      "meanings_id": [],
+      "meanings_id": [
+        "orang Indonesia"
+      ],
       "gloss_note_id": null
     },
     {
@@ -207,8 +224,10 @@
       "judul_unit": "Memperkenalkan diri",
       "penggolong": false,
       "riwayat_penolakan": null,
-      "meanings_id": [],
-      "gloss_note_id": null
+      "meanings_id": [
+        "salam kenal"
+      ],
+      "gloss_note_id": "dipakai hanya saat pertama kali bertemu"
     },
     {
       "id": "vocab-n5-よろしくお願いします",
@@ -228,8 +247,10 @@
       "judul_unit": "Memperkenalkan diri",
       "penggolong": false,
       "riwayat_penolakan": null,
-      "meanings_id": [],
-      "gloss_note_id": null
+      "meanings_id": [
+        "mohon bantuannya"
+      ],
+      "gloss_note_id": "ditutup dengan membungkuk sedikit"
     },
     {
       "id": "vocab-n5-ありがとうございます",
@@ -248,7 +269,9 @@
       "judul_unit": "Memperkenalkan diri",
       "penggolong": false,
       "riwayat_penolakan": null,
-      "meanings_id": [],
+      "meanings_id": [
+        "terima kasih"
+      ],
       "gloss_note_id": null
     },
     {
@@ -270,8 +293,10 @@
       "judul_unit": "Memperkenalkan diri",
       "penggolong": false,
       "riwayat_penolakan": null,
-      "meanings_id": [],
-      "gloss_note_id": null
+      "meanings_id": [
+        "permisi, maaf"
+      ],
+      "gloss_note_id": "juga dipakai untuk memanggil pelayan"
     },
     {
       "id": "vocab-n5-そう",
@@ -292,7 +317,10 @@
       "judul_unit": "Memperkenalkan diri",
       "penggolong": false,
       "riwayat_penolakan": null,
-      "meanings_id": [],
+      "meanings_id": [
+        "betul, benar",
+        "begitu"
+      ],
       "gloss_note_id": null
     },
     {
@@ -314,7 +342,10 @@
       "judul_unit": "Memperkenalkan diri",
       "penggolong": false,
       "riwayat_penolakan": null,
-      "meanings_id": [],
+      "meanings_id": [
+        "orang itu",
+        "dia"
+      ],
       "gloss_note_id": null
     },
     {
@@ -334,7 +365,9 @@
       "judul_unit": "Menyebut benda di sekitarku",
       "penggolong": false,
       "riwayat_penolakan": null,
-      "meanings_id": [],
+      "meanings_id": [
+        "itu (jauh, + kata benda)"
+      ],
       "gloss_note_id": null
     },
     {
@@ -354,7 +387,9 @@
       "judul_unit": "Menyebut benda di sekitarku",
       "penggolong": false,
       "riwayat_penolakan": null,
-      "meanings_id": [],
+      "meanings_id": [
+        "itu (jauh dari kita berdua)"
+      ],
       "gloss_note_id": null
     },
     {
@@ -374,7 +409,9 @@
       "judul_unit": "Menyebut benda di sekitarku",
       "penggolong": false,
       "riwayat_penolakan": null,
-      "meanings_id": [],
+      "meanings_id": [
+        "kursi"
+      ],
       "gloss_note_id": null
     },
     {
@@ -395,7 +432,9 @@
       "judul_unit": "Menyebut benda di sekitarku",
       "penggolong": false,
       "riwayat_penolakan": null,
-      "meanings_id": [],
+      "meanings_id": [
+        "tas"
+      ],
       "gloss_note_id": null
     },
     {
@@ -415,7 +454,9 @@
       "judul_unit": "Menyebut benda di sekitarku",
       "penggolong": false,
       "riwayat_penolakan": null,
-      "meanings_id": [],
+      "meanings_id": [
+        "ini (+ kata benda)"
+      ],
       "gloss_note_id": null
     },
     {
@@ -435,7 +476,9 @@
       "judul_unit": "Menyebut benda di sekitarku",
       "penggolong": false,
       "riwayat_penolakan": null,
-      "meanings_id": [],
+      "meanings_id": [
+        "ini"
+      ],
       "gloss_note_id": null
     },
     {
@@ -455,7 +498,9 @@
       "judul_unit": "Menyebut benda di sekitarku",
       "penggolong": false,
       "riwayat_penolakan": null,
-      "meanings_id": [],
+      "meanings_id": [
+        "itu (dekat, + kata benda)"
+      ],
       "gloss_note_id": null
     },
     {
@@ -475,7 +520,9 @@
       "judul_unit": "Menyebut benda di sekitarku",
       "penggolong": false,
       "riwayat_penolakan": null,
-      "meanings_id": [],
+      "meanings_id": [
+        "itu (dekat lawan bicara)"
+      ],
       "gloss_note_id": null
     },
     {
@@ -495,7 +542,9 @@
       "judul_unit": "Menyebut benda di sekitarku",
       "penggolong": false,
       "riwayat_penolakan": null,
-      "meanings_id": [],
+      "meanings_id": [
+        "pulpen"
+      ],
       "gloss_note_id": null
     },
     {
@@ -515,7 +564,9 @@
       "judul_unit": "Menyebut benda di sekitarku",
       "penggolong": false,
       "riwayat_penolakan": null,
-      "meanings_id": [],
+      "meanings_id": [
+        "apa"
+      ],
       "gloss_note_id": null
     },
     {
@@ -536,7 +587,9 @@
       "judul_unit": "Menyebut benda di sekitarku",
       "penggolong": false,
       "riwayat_penolakan": null,
-      "meanings_id": [],
+      "meanings_id": [
+        "jam"
+      ],
       "gloss_note_id": null
     }
   ]

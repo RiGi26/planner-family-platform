@@ -26,8 +26,27 @@ export const berglosa = (item) => item.meanings.id.length > 0
  * multiple-choice question, so holding them to a shared uniqueness rule would
  * reject glosses that could not possibly be confused.
  */
+/**
+ * Items whose upstream `pos` puts them in the wrong §4.2 bucket.
+ *
+ * この carries `["num"]` and lands in `vocab/numeralia` — alone, next to no other
+ * item, while その and あの (tagged `adj-pn`) sit together in `vocab/adjektiva`.
+ * They are one paradigm: three 連体詞 that differ only in distance, and they are
+ * each other's most likely decoy in a multiple-choice card. Uniqueness that skips
+ * exactly the item most likely to collide is uniqueness in name only.
+ *
+ * The dataset is NOT edited to fix this. `fetch-jlpt.mjs` rebuilds those files
+ * wholesale from upstream (§2.6), so a corrected `pos` would survive until the
+ * next refetch and then quietly revert — and unlike `meanings.id`, nothing
+ * preserves it. A correction that lives in the rules module survives every
+ * refetch, and it is visible in one place instead of buried in a 682-item file.
+ */
+export const KELAS_PAKSA = new Map([['vocab-n5-この', 'adjektiva']])
+
 export function wordClass(item) {
   if (item.type !== 'vocab') return item.type
+  const paksa = KELAS_PAKSA.get(item.id)
+  if (paksa) return paksa
   const pos = Array.isArray(item.data.pos) ? item.data.pos : []
   if (pos.some((p) => p.startsWith('v'))) return 'verba'
   if (pos.some((p) => p.startsWith('adj'))) return 'adjektiva'
