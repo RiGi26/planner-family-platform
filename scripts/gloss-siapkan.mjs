@@ -24,10 +24,11 @@
  *   npm run gloss:siapkan -- --lingkup semua   (seluruh 810 — harus diketik)
  */
 
-import { mkdirSync, writeFileSync } from 'node:fs'
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { dirname } from 'node:path'
 import { MAKS_CATATAN, MAKS_ELEMEN, berglosa, isCounter, peerKey } from './lib/gloss-rules.mjs'
 import {
+  AUDIT,
   BATCH,
   UKURAN_BATCH,
   bacaPanduan,
@@ -92,9 +93,38 @@ if (!batches.length) {
   process.exit(0)
 }
 
+/**
+ * What was already tried on these items, and why it was refused.
+ *
+ * An item comes back into the queue precisely because `gloss:terapkan` rejected
+ * it, and without its history the next person to fill the batch is blind: they
+ * see an empty `meanings_id` with no hint that "kamu" has already been proposed
+ * and refused, and can propose it again indefinitely. When the API call was in
+ * the loop, the retry carried its own rejection reasons back to the model; that
+ * feedback left with the API, and this is what replaces it.
+ */
+function riwayatPenolakan() {
+  if (!existsSync(AUDIT)) return new Map()
+  let audit
+  try {
+    audit = JSON.parse(readFileSync(AUDIT, 'utf8'))
+  } catch {
+    return new Map()
+  }
+  const peta = new Map()
+  for (const t of Array.isArray(audit.ditolak) ? audit.ditolak : []) {
+    if (!t?.id || !t.alasan) continue
+    if (!peta.has(t.id)) peta.set(t.id, [])
+    peta.get(t.id).push({ usulan: t.kandidat ?? [], alasan: t.alasan })
+  }
+  return peta
+}
+
 const batch = batches[0]
 const konteks = konteksKeunikan(batch, semua)
 const pasangan = pasanganSudahBerglosa(batch, semua)
+const riwayat = riwayatPenolakan()
+const batchBerRiwayat = batch.filter((i) => riwayat.has(i.id)).length
 
 const isi = {
   petunjuk: [
@@ -147,6 +177,9 @@ const isi = {
       unit: item.data.unit ?? null,
       judul_unit: item.data.unit != null ? (judulUnit.get(item.data.unit) ?? null) : null,
       penggolong: isCounter(item),
+      // Ada hanya kalau item ini pernah ditolak — usulan lalu beserta alasannya,
+      // supaya pengisi berikutnya tidak mengusulkan hal yang sama lagi.
+      riwayat_penolakan: riwayat.get(item.id) ?? null,
       meanings_id: [],
       gloss_note_id: null,
     }
@@ -162,5 +195,6 @@ console.log(`isi       : ${batch.length} item, unit ${[...new Set(batch.map((i) 
 console.log(`§4.1      : ${Object.keys(konteks.perUnit).length} unit dengan glosa terpakai`)
 console.log(`§4.2      : ${Object.keys(konteks.perKelas).length} kelas kata dengan glosa terpakai`)
 console.log(`§3.3      : ${pasangan.length} pasangan vt/vi yang sisi lainnya sudah berglosa`)
+console.log(`riwayat   : ${batchBerRiwayat} item pernah ditolak, usulan lalunya ikut dibawa`)
 console.log('')
 console.log('BERIKUTNYA: isi "meanings_id" tiap item, lalu `npm run gloss:terapkan`')

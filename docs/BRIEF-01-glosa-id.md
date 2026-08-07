@@ -433,8 +433,7 @@ daftar tersimpan yang bisa basi. Mengeluarkan 33 batch sekaligus akan membekukan
 daftar itu di keadaan awal, dan §4 mati di dalam run serta hanya hidup antar-run:
 bentrokannya baru ketemu setelah seluruh 810 item ditulis.
 
-`gloss-batch.json` adalah lembar kerja sementara dan masuk `.gitignore`;
-`gloss-audit.json` yang dibaca reviewer justru di-commit.
+Berkas batch dan `gloss-audit.json` sama-sama di-commit — alasannya di bawah.
 
 ### 5.2 `gloss:terapkan` — mencatat jawabannya
 
@@ -455,6 +454,74 @@ bentrokannya baru ketemu setelah seluruh 810 item ditulis.
 Item yang sudah berglosa di dataset juga dilewati walau ada di berkas batch:
 menerapkan berkas yang sama dua kali tidak boleh menimpa glosa yang barangkali
 sudah dikoreksi manusia.
+
+### `gloss-batch.json` di-commit, bukan diabaikan
+
+Berkas batch **masuk git**. Ketika pengisian masih lewat panggilan API, ia memang
+lembar kerja sementara — dibangkitkan, dikirim, dibuang dalam hitungan detik.
+Sejak API dicabut, isinya dikerjakan manusia, dan itu mengubah sifatnya:
+
+- **Kerja yang belum selesai punya tempat.** Mengisi 25 item butuh waktu. Kalau
+  sesi putus di tengah jalan dan berkasnya tidak terlacak git, tidak ada apa pun
+  yang bisa dipulihkan — pekerjaannya hilang tanpa jejak, dan tidak ada cara tahu
+  seberapa jauh tadi sudah sampai.
+- **Ia satu-satunya rekaman prompt yang menghasilkan glosa tertentu.** Reviewer
+  penutur asli (§7) yang menemukan glosa aneh akan bertanya "apa yang dilihat
+  pengisinya waktu itu?" — daftar §4 yang mana, pasangan vt/vi yang mana, versi §3
+  yang mana. `gloss-audit.json` menyimpan hasilnya; hanya berkas batch yang
+  menyimpan pertanyaannya.
+
+### Riwayat penolakan ikut dibawa
+
+Item yang ditolak `gloss:terapkan` kembali ke antrean tanpa glosa, dan
+`gloss:siapkan` berikutnya melampirkan **usulan sebelumnya beserta alasannya** di
+`riwayat_penolakan`:
+
+```json
+{
+  "id": "vocab-n5-はい",
+  "riwayat_penolakan": [
+    { "usulan": ["yes"], "alasan": "identik dengan sumber Inggris — belum diterjemahkan (§6)" }
+  ]
+}
+```
+
+Sumbernya `ditolak` di `gloss-audit.json`. Ketika panggilan API masih ada di
+dalam gelung, percobaan perbaikan membawa alasan penolakannya sendiri kembali ke
+model; umpan balik itu ikut tercabut bersama API, dan ini yang menggantikannya.
+Tanpanya pengisi berikutnya buta — ia melihat `meanings_id` kosong tanpa petunjuk
+bahwa "yes" sudah pernah diusulkan dan ditolak, dan bisa mengusulkannya lagi
+tanpa batas.
+
+Dua akibat yang menyertainya:
+
+- **Baris yang belum diisi bukan penolakan.** `gloss:terapkan` memisahkan
+  `belum_diisi` dari `ditolak`. Keduanya berarti hal berbeda bagi pembaca
+  berikutnya: satu berkata "ini sudah dicoba dan begini salahnya", satunya cuma
+  "belum dikerjakan". Mencampurnya membuat ringkasan berbunyi *13 ditolak*
+  padahal yang benar-benar ditolak satu, dan membanjiri riwayat dengan entri yang
+  tidak memberi tahu apa-apa.
+- **Penolakan lama tidak dilupakan.** Audit dibangun ulang tiap kali, jadi
+  `gloss:terapkan` membawa serta penolakan dari run sebelumnya untuk item yang
+  masih belum berglosa dan tidak diputuskan lagi kali ini. Tanpa itu, item yang
+  ditolak di run 1 lalu sekadar tidak dicoba di run 2 kehilangan riwayatnya.
+
+### Nama kunci: dataset lawan berkas kerja
+
+Skema dataset **tidak berubah** — ia persis §2.1. Berkas kerja memakai kosakata
+sendiri yang lebih datar, karena barisnya adalah lembar isian, bukan `Item`.
+Pemetaannya:
+
+| `gloss-batch.json` | `gloss-audit.json` | dataset (§2.1) |
+|---|---|---|
+| `meanings_id` | `id_glosa` | `meanings.id` |
+| `inggris` | `en` | `meanings.en` |
+| `gloss_note_id` | `catatan` | `data.gloss_note_id` |
+| — | `direview` | `data.gloss_reviewed` |
+
+Nama datar dipakai di berkas kerja karena barisnya tidak bersarang: `meanings.id`
+tidak punya arti di objek yang tidak punya `meanings`. Di dataset, alasan §2.1
+tetap berlaku — `meanings_id` di sebelah `id` terbaca sebagai "ID dari meanings".
 
 ### Keunikan §4.2 itu LINTAS-UNIT
 

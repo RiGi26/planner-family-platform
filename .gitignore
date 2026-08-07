@@ -22,5 +22,3 @@ next-env.d.ts
 .playwright-mcp/
 .vercel
 
-# Lembar kerja antara gloss:siapkan dan gloss:terapkan — selalu dibangkitkan ulang.
-scripts/data/gloss-batch.json

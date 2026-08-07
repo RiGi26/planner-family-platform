@@ -63,6 +63,16 @@ const diterima = new Map()
 /** id → gloss_note_id. */
 const catatanDiterima = new Map()
 const ditolak = []
+/**
+ * Baris yang memang tidak diisi — bukan usulan yang ditolak.
+ *
+ * Dipisah karena keduanya berarti hal yang berbeda bagi pembaca berikutnya. Satu
+ * berkata "ini sudah dicoba dan begini salahnya"; satunya cuma berkata "belum
+ * dikerjakan". Mencampurnya membuat ringkasan berbunyi 13 ditolak padahal yang
+ * benar-benar ditolak satu, dan membanjiri riwayat penolakan dengan entri yang
+ * tidak memberi tahu apa-apa.
+ */
+const belumDiisi = []
 const catatanDibuang = []
 
 for (const baris of barisBatch) {
@@ -78,7 +88,7 @@ for (const baris of barisBatch) {
     continue
   }
   if (!Array.isArray(baris.meanings_id) || baris.meanings_id.length === 0) {
-    ditolak.push({ id: baris.id, kandidat: [], alasan: 'meanings_id belum diisi' })
+    belumDiisi.push({ id: baris.id })
     continue
   }
 
@@ -137,11 +147,42 @@ for (const [nama, baris] of berkas) {
 // ---------------------------------------------------------------------------
 
 /**
+ * Rejections carried over from earlier runs, for items that are STILL without a
+ * gloss and were not decided again this run.
+ *
+ * The audit is rebuilt from scratch each time, so without this the `ditolak`
+ * list would only ever hold the most recent run's rejections. An item rejected
+ * in run 1 and simply not attempted in run 2 would lose its history — and
+ * `gloss:siapkan` reads exactly that list to tell the next person what was
+ * already tried and why. Forgetting it puts them back where they started.
+ */
+function penolakanLama() {
+  if (!existsSync(AUDIT)) return []
+  let lama
+  try {
+    lama = JSON.parse(readFileSync(AUDIT, 'utf8'))
+  } catch {
+    return []
+  }
+  if (!Array.isArray(lama.ditolak)) return []
+  const diputuskanKini = new Set([
+    ...diterima.keys(),
+    ...ditolak.map((t) => t.id),
+    ...belumDiisi.map((t) => t.id),
+  ])
+  return lama.ditolak.filter((t) => {
+    if (diputuskanKini.has(t.id)) return false
+    const item = indeks.get(t.id)
+    return item ? !berglosa(item) : false
+  })
+}
+
+/**
  * Rebuilt from the dataset every run rather than appended to, so it always
  * describes what is actually in the files. A stale audit is worse than none,
  * because it is read as though it were current.
  */
-function tulisAudit() {
+function tulisAudit(ditolakGabungan) {
   const perUnit = new Map()
   for (const item of semua) {
     if (!berglosa(item)) continue
@@ -180,7 +221,8 @@ function tulisAudit() {
       judul: typeof n === 'number' ? (judulUnit.get(n) ?? null) : null,
       item: perUnit.get(n),
     })),
-    ditolak,
+    ditolak: ditolakGabungan,
+    belum_diisi: belumDiisi,
     catatan_dibuang: catatanDibuang,
   }
 
@@ -189,10 +231,14 @@ function tulisAudit() {
   console.log(`ditulis   : ${AUDIT}`)
 }
 
-tulisAudit()
+const ditolakGabungan = [...ditolak, ...penolakanLama()]
+tulisAudit(ditolakGabungan)
 
 console.log('')
-console.log(`selesai   : ${ditulis} glosa diterapkan, ${ditolak.length} ditolak`)
+console.log(
+  `selesai   : ${ditulis} glosa diterapkan, ${ditolak.length} ditolak, ` +
+    `${belumDiisi.length} belum diisi`,
+)
 for (const t of ditolak.slice(0, 10)) console.log(`            ${t.id} — ${t.alasan}`)
 if (ditolak.length > 10) console.log(`            … dan ${ditolak.length - 10} lagi (lihat gloss-audit.json)`)
 console.log('')
