@@ -19,7 +19,8 @@
     "fonts": "node scripts/subset-fonts.mjs",
     "icons": "node scripts/render-icons.mjs",
     "jlpt": "node scripts/fetch-jlpt.mjs",
-    "verify:units": "node scripts/verify-units.mjs"
+    "verify:units": "node scripts/verify-units.mjs",
+    "verify:gloss": "node scripts/verify-gloss.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.58.0",

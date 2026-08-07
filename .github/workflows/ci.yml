@@ -23,6 +23,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          # verify:gloss membandingkan dengan titik tempat kerja ini dimulai —
+          # tip branch sebelum push, atau basis PR. Keduanya bisa berjarak
+          # berapa pun commit, jadi kedalaman tetap tidak pernah cukup.
+          fetch-depth: 0
 
       - uses: actions/setup-node@v4
         with:
@@ -53,11 +58,24 @@ jobs:
       - name: Verifikasi cakupan glyph font
         run: npm run verify:fonts
 
-      # Brief 01 Commit 2 menambahkan step berikut. Sengaja tidak ditulis
-      # sekarang: berkas ini hanya menyatakan yang sudah ada hari ini.
+      # Dua aturan di verify:gloss membandingkan dengan sebuah titik di riwayat,
+      # dan titik itu harus tempat kerjanya DIMULAI — bukan HEAD (di sini HEAD
+      # adalah perubahan itu sendiri, jadi perbandingannya melawan diri sendiri)
+      # dan bukan HEAD^ (push berisi tiga commit hanya akan diperiksa commit
+      # terakhirnya, sehingga regresi di commit pertama lolos sambil hijau).
       #
-      # - name: Verifikasi glosa Indonesia
-      #   run: npm run verify:gloss
+      # push  → github.event.before, tip branch sebelum push berapa pun isinya
+      # PR    → basis PR, jadi yang dinilai seluruh cabangnya
+      # push pertama ke branch baru → SHA nol; skrip melaporkannya DILEWATI.
+      #
+      # Kelengkapan sengaja TIDAK diuji di sini: glosa yang belum ditulis adalah
+      # keadaan normal berminggu-minggu, dan gerbang merah karenanya membuat
+      # "merah" berhenti berarti "ada yang rusak". Gerbang rilis §7 memakai
+      # `npm run verify:gloss -- --lengkap`.
+      - name: Verifikasi glosa Indonesia
+        env:
+          VERIFY_GLOSS_BASE: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before }}
+        run: npm run verify:gloss
 
   # ---------------------------------------------------------------------------
   # Bangun: lebih lambat dan butuh env. Sejak prebuild dicabut, build tidak lagi

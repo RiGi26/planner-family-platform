@@ -129,14 +129,25 @@ Karena itu `data.gloss_reviewed` dan `data.gloss_note_id` disemai oleh skrip
 migrasi Commit 1, bukan oleh generator: preservasi tidak bisa mempertahankan
 field yang belum ada.
 
-Yang menjaganya: `src/lib/__tests__/dataset.test.ts` menyapu seluruh dataset yang
-dikirim dan gagal kalau ada item non-kana yang kehilangan kedua field itu, atau
-kalau ada muka kartu yang berteks kosong. Tes itu berjalan atas berkas nyata,
-bukan fixture — satu-satunya cara menangkap regenerator yang menjatuhkan field.
+Yang menjaganya ada dua, dan keduanya diperlukan karena masing-masing buta
+terhadap separuh masalahnya:
 
-Batasnya jujur disebut: tes itu menangkap field yang **hilang**, bukan status
-yang **ter-reset dari `true` ke `false`** — keduanya sama-sama `boolean` yang sah.
-Yang menangkap itu adalah `verify:gloss` (§6) begitu glosa mulai terisi.
+**`src/lib/__tests__/dataset.test.ts`** menyapu seluruh dataset yang dikirim dan
+gagal kalau ada item non-kana yang **kehilangan** kedua field itu, atau kalau ada
+muka kartu yang berteks kosong. Tes itu berjalan atas berkas nyata, bukan fixture
+— satu-satunya cara menangkap regenerator yang menjatuhkan field.
+
+Batasnya: tes itu **tidak bisa** menangkap status yang **ter-reset dari `true` ke
+`false`**. Field-nya masih ada, isinya `boolean` yang sah, glosanya masih terbaca
+benar di layar, dan tidak ada nilai "seharusnya" yang bisa dibandingkan dari dalam
+satu snapshot. Preservasi yang rusak SEBAGIAN — `meanings.id` selamat tapi
+`gloss_reviewed` tidak — lolos tanpa jejak.
+
+**Aturan GAGAL nomor 11 di §6** yang menutup lubang itu: `gloss_reviewed` tidak
+boleh mundur dari `true` ke `false` dibanding commit sebelumnya. Ia melihat dua
+titik waktu, yang justru hal yang tidak bisa dilakukan tes snapshot, dan ia adalah
+cermin persis dari aturan "`meanings.en` tidak berubah" yang menjaga data sumber
+dari arah sebaliknya.
 
 Kana dikecualikan dari kedua field (§2.2): romaji bukan terjemahan, jadi tidak ada
 yang bisa disetujui penutur asli, dan `gloss_reviewed: false` yang tidak mungkin
@@ -258,8 +269,28 @@ sejak kecil.
 | 〜台 | counter for machines/vehicles | unit |
 | 〜個 | counter for small objects | buah |
 
-Validator: item ber-`pos` penggolong/suffix → `meanings.id` harus **satu elemen,
-satu kata, tanpa kurung**.
+Validator: item penggolong → `meanings.id` harus **satu elemen, satu kata, tanpa
+kurung**.
+
+**Deteksinya BUKAN `pos.includes('ctr')`.** JMdict menandai 山, 風, 頭 dan ページ
+sebagai `ctr` karena kata-kata itu *bisa* dipakai sebagai penggolong — padahal
+entri di dataset ini adalah nominanya: 山 berarti "gunung", dan menuntut satu kata
+telanjang untuknya berarti menegakkan aturan ini atas item yang bukan urusannya.
+`suf`/`n-suf` lebih buruk lagi: よく (`["often", "well"]`) punya dua makna berbeda
+yang justru menurut §3.4 harus jadi dua elemen. Kesepuluh item itu akan gagal
+selamanya atas aturan yang tidak pernah tentang mereka.
+
+Ujinya karena itu adalah **apa entrinya**, bukan apa yang bisa dilakukan
+kepalanya: awalan `〜` (bentuk yang dipakai tabel di atas), atau glosa Inggris yang
+menyebut dirinya sendiri *counter*.
+
+**Catatan jujur: dataset belum punya satu pun entri 助数詞, jadi aturan ini
+sekarang tidak mengenai apa pun.** Tidak ada 〜人/〜本/〜枚/〜匹/〜冊/〜台/〜個 sebagai
+item; 本 tercatat sebagai nomina "book". Tiga kanji memang memuat "counter for"
+di glosa Inggrisnya (mis. 日 → "counter for days"), tapi itu item kanji yang
+diatur §3.8, bukan penggolong. Validator mencetak catatan ini tiap kali
+dijalankan supaya kehampaannya terlihat, bukan disangka lulus. Aturannya sudah
+menunggu kalau entri penggolong ditambahkan nanti.
 
 ### 3.7 Ungkapan tetap
 
@@ -356,9 +387,31 @@ terpetakan ke unit mana pun.
 
 `type === 'kana'` dilewati seluruhnya (lihat §2.2).
 
-**Gagal — harus diperbaiki sebelum commit:**
+### Kebenaran dan kelengkapan adalah dua pertanyaan
 
-- [ ] setiap item punya `meanings.id` tidak kosong
+Validator ini menjawab **"apakah yang sudah ditulis itu benar?"** dan diam soal
+yang belum ditulis. Dua pertanyaan itu dipisah karena dijawab pada waktu yang
+berbeda oleh orang yang berbeda.
+
+Selama Brief 01 dikerjakan — berminggu-minggu, unit demi unit — glosa yang belum
+ada adalah **keadaan normal**, bukan kerusakan. Kalau ketiadaannya dihitung
+sebagai kegagalan, CI merah setiap hari karena alasan yang tidak bisa ditindak
+siapa pun, dan merah berhenti berarti "ada yang rusak". Sinyal yang sudah dua
+minggu berteriak serigala akan menyambut kerusakan sungguhan dengan penonton yang
+sudah berhenti menoleh.
+
+Jadi:
+
+| | Perintah | Kapan |
+|---|---|---|
+| Kebenaran | `npm run verify:gloss` | tiap push, di `ci.yml` |
+| Kelengkapan | `npm run verify:gloss -- --lengkap` | gerbang rilis §7 |
+
+Jumlah yang belum berglosa tetap dicetak di ringkasan tiap kali dijalankan — ia
+terlihat, hanya tidak menggagalkan.
+
+**Gagal — kebenaran, dinilai hanya atas item yang SUDAH punya `meanings.id`:**
+
 - [ ] `meanings.id[0]` unik dalam satu unit (§4.1)
 - [ ] `meanings.id[0]` unik antar item sejenis (§4.2)
 - [ ] tidak ada `meanings.id` identik dengan `meanings.en` (tanda belum diterjemahkan)
@@ -368,6 +421,28 @@ terpetakan ke unit mana pun.
 - [ ] maksimal 3 elemen array
 - [ ] tidak ada titik di akhir
 - [ ] `meanings.en` tidak berubah dari commit sebelumnya (jaga data sumber)
+- [ ] `data.gloss_reviewed` tidak mundur dari `true` ke `false` dibanding commit
+      sebelumnya — cermin dari aturan di atasnya, dan satu-satunya hal yang
+      menangkap preservasi `fetch-jlpt.mjs` yang rusak sebagian (§2.5)
+
+Dua aturan terakhir **tidak** dibatasi pada item yang sudah berglosa. Keduanya
+menanyakan apa yang BERUBAH antar dua commit, bukan apa yang tertulis di sebuah
+glosa, jadi `meanings.id` kosong tidak bisa membuatnya menyala — dan membatasinya
+justru akan mencabut penjaga data sumber CC BY-SA dari 810 item yang belum
+berglosa, yaitu semuanya hari ini.
+
+Pembandingnya berbeda menurut kapan ditanya. Di laptop perubahannya belum
+di-commit, jadi "commit sebelumnya" berarti `HEAD` (bawaan). Di CI perubahan itu
+sudah menjadi `HEAD`, jadi `ci.yml` mengisi `VERIFY_GLOSS_BASE` dengan titik
+tempat kerjanya dimulai: `github.event.before` untuk push, basis PR untuk PR.
+Bukan `HEAD^` — sebuah push berisi tiga commit hanya akan diperiksa commit
+terakhirnya, sehingga regresi yang masuk di commit pertama lolos sambil runnya
+tetap hijau. Tanpa riwayat sama sekali (SHA nol pada push pertama ke branch baru,
+atau ref tak terbaca), keduanya dilaporkan **dilewati**, bukan lulus.
+
+**Kelengkapan — hanya dengan `--lengkap`:**
+
+- [ ] setiap item punya `meanings.id` tidak kosong
 
 **Peringatan — boleh lolos, dicatat:**
 
@@ -386,7 +461,14 @@ Ikut pola `reviewed` yang sudah ada di unit — jangan bikin mekanisme kedua.
 - `gloss_reviewed: false` sampai dibaca manusia yang paham Jepang **dan** Indonesia
 - Aplikasi menampilkan label jujur per item sampai itu terjadi, sama seperti label
   unit sekarang
-- Gerbang rilis store: seluruh item unit 0–25 `gloss_reviewed: true`
+- Gerbang rilis store dijalankan dengan `npm run verify:gloss -- --lengkap` —
+  mode yang mengembalikan kelengkapan jadi kegagalan (§6). Ini satu-satunya
+  tempat pertanyaan "sudah semua belum?" ditanyakan, dan jawabannya memang
+  seharusnya "sudah"
+- Gerbang rilis store: seluruh item **non-kana** unit 0–25 `gloss_reviewed: true`.
+  Kana tidak punya field itu sama sekali (§2.2, §2.5): romaji bukan terjemahan,
+  jadi tidak ada yang bisa disetujui penutur asli, dan memasukkannya ke gerbang
+  berarti 208 item yang tidak akan pernah jujur bisa dinyatakan lulus
 - Reviewer dikasih `gloss-audit.json` berdampingan en/id per unit, bukan JSON mentah
 
 ---
