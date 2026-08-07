@@ -1,8 +1,8 @@
 {
   "catatan": "Dibaca reviewer penutur asli (§7). en = data sumber OpenJLPT (CC BY-SA), jangan diubah. id_glosa = glosa yang dinilai. direview:false artinya belum ada manusia yang membacanya.",
   "ringkasan": {
-    "berglosa": 25,
-    "belum": 785,
+    "berglosa": 49,
+    "belum": 761,
     "direview": 0
   },
   "unit": [
@@ -378,11 +378,370 @@
           ],
           "catatan": null,
           "direview": false
+        },
+        {
+          "id": "vocab-n5-本",
+          "ekspresi": "本",
+          "bacaan": "ほん",
+          "jenis": "vocab",
+          "en": [
+            "book"
+          ],
+          "id_glosa": [
+            "buku"
+          ],
+          "catatan": null,
+          "direview": false
+        }
+      ]
+    },
+    {
+      "n": 3,
+      "judul": "Menanyakan tempat",
+      "item": [
+        {
+          "id": "vocab-n5-あそこ",
+          "ekspresi": "あそこ",
+          "bacaan": "あそこ",
+          "jenis": "vocab",
+          "en": [
+            "over there"
+          ],
+          "id_glosa": [
+            "di sana"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-ここ",
+          "ekspresi": "ここ",
+          "bacaan": "ここ",
+          "jenis": "vocab",
+          "en": [
+            "here"
+          ],
+          "id_glosa": [
+            "di sini"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-そこ",
+          "ekspresi": "そこ",
+          "bacaan": "そこ",
+          "jenis": "vocab",
+          "en": [
+            "that place"
+          ],
+          "id_glosa": [
+            "di situ"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-トイレ",
+          "ekspresi": "トイレ",
+          "bacaan": "トイレ",
+          "jenis": "vocab",
+          "en": [
+            "toilet"
+          ],
+          "id_glosa": [
+            "toilet, WC"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-どこ",
+          "ekspresi": "どこ",
+          "bacaan": "どこ",
+          "jenis": "vocab",
+          "en": [
+            "where"
+          ],
+          "id_glosa": [
+            "di mana"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-英語",
+          "ekspresi": "英語",
+          "bacaan": "えいご",
+          "jenis": "vocab",
+          "en": [
+            "English language"
+          ],
+          "id_glosa": [
+            "bahasa Inggris"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-駅",
+          "ekspresi": "駅",
+          "bacaan": "えき",
+          "jenis": "vocab",
+          "en": [
+            "station"
+          ],
+          "id_glosa": [
+            "stasiun"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-学校",
+          "ekspresi": "学校",
+          "bacaan": "がっこう",
+          "jenis": "vocab",
+          "en": [
+            "school"
+          ],
+          "id_glosa": [
+            "sekolah"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-車",
+          "ekspresi": "車",
+          "bacaan": "くるま",
+          "jenis": "vocab",
+          "en": [
+            "car",
+            "vehicle"
+          ],
+          "id_glosa": [
+            "mobil"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-人",
+          "ekspresi": "人",
+          "bacaan": "ひと",
+          "jenis": "vocab",
+          "en": [
+            "person"
+          ],
+          "id_glosa": [
+            "orang"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-水",
+          "ekspresi": "水",
+          "bacaan": "みず",
+          "jenis": "vocab",
+          "en": [
+            "water"
+          ],
+          "id_glosa": [
+            "air"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-友達",
+          "ekspresi": "友達",
+          "bacaan": "ともだち",
+          "jenis": "vocab",
+          "en": [
+            "friend"
+          ],
+          "id_glosa": [
+            "teman"
+          ],
+          "catatan": null,
+          "direview": false
+        }
+      ]
+    },
+    {
+      "n": 4,
+      "judul": "Jam berapa sekarang?",
+      "item": [
+        {
+          "id": "vocab-n5-一",
+          "ekspresi": "一",
+          "bacaan": "いち",
+          "jenis": "vocab",
+          "en": [
+            "one"
+          ],
+          "id_glosa": [
+            "satu"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-九",
+          "ekspresi": "九",
+          "bacaan": "きゅう / く",
+          "jenis": "vocab",
+          "en": [
+            "nine"
+          ],
+          "id_glosa": [
+            "sembilan"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-五",
+          "ekspresi": "五",
+          "bacaan": "ご",
+          "jenis": "vocab",
+          "en": [
+            "five"
+          ],
+          "id_glosa": [
+            "lima"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-午後",
+          "ekspresi": "午後",
+          "bacaan": "ごご",
+          "jenis": "vocab",
+          "en": [
+            "afternoon"
+          ],
+          "id_glosa": [
+            "setelah tengah hari",
+            "siang, sore"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-午前",
+          "ekspresi": "午前",
+          "bacaan": "ごぜん",
+          "jenis": "vocab",
+          "en": [
+            "morning"
+          ],
+          "id_glosa": [
+            "sebelum tengah hari",
+            "pagi"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-今",
+          "ekspresi": "今",
+          "bacaan": "いま",
+          "jenis": "vocab",
+          "en": [
+            "now"
+          ],
+          "id_glosa": [
+            "sekarang"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-三",
+          "ekspresi": "三",
+          "bacaan": "さん",
+          "jenis": "vocab",
+          "en": [
+            "three"
+          ],
+          "id_glosa": [
+            "tiga"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-四",
+          "ekspresi": "四",
+          "bacaan": "し / よん",
+          "jenis": "vocab",
+          "en": [
+            "four"
+          ],
+          "id_glosa": [
+            "empat"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-七",
+          "ekspresi": "七",
+          "bacaan": "しち / なな",
+          "jenis": "vocab",
+          "en": [
+            "seven"
+          ],
+          "id_glosa": [
+            "tujuh"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-十",
+          "ekspresi": "十",
+          "bacaan": "じゅう とお",
+          "jenis": "vocab",
+          "en": [
+            "ten"
+          ],
+          "id_glosa": [
+            "sepuluh"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-図書館",
+          "ekspresi": "図書館",
+          "bacaan": "としょかん",
+          "jenis": "vocab",
+          "en": [
+            "library"
+          ],
+          "id_glosa": [
+            "perpustakaan"
+          ],
+          "catatan": null,
+          "direview": false
         }
       ]
     }
   ],
-  "ditolak": [],
+  "ditolak": [
+    {
+      "id": "vocab-n5-銀行",
+      "kandidat": [
+        "bank"
+      ],
+      "alasan": "identik dengan sumber Inggris — belum diterjemahkan (§6)"
+    }
+  ],
   "belum_diisi": [],
   "catatan_dibuang": []
 }
