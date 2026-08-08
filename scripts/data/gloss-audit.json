@@ -1,8 +1,8 @@
 {
   "catatan": "Dibaca reviewer penutur asli (§7). en = data sumber OpenJLPT (CC BY-SA), jangan diubah. id_glosa = glosa yang dinilai. direview:false artinya belum ada manusia yang membacanya.",
   "ringkasan": {
-    "berglosa": 69,
-    "belum": 741,
+    "berglosa": 119,
+    "belum": 691,
     "direview": 0
   },
   "unit": [
@@ -1014,6 +1014,754 @@
           ],
           "id_glosa": [
             "besok"
+          ],
+          "catatan": null,
+          "direview": false
+        }
+      ]
+    },
+    {
+      "n": 6,
+      "judul": "Pergi dan pulang",
+      "item": [
+        {
+          "id": "vocab-n5-いつ",
+          "ekspresi": "いつ",
+          "bacaan": "いつ",
+          "jenis": "vocab",
+          "en": [
+            "when"
+          ],
+          "id_glosa": [
+            "kapan"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-タクシー",
+          "ekspresi": "タクシー",
+          "bacaan": "タクシー",
+          "jenis": "vocab",
+          "en": [
+            "taxi"
+          ],
+          "id_glosa": [
+            "taksi"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-バス",
+          "ekspresi": "バス",
+          "bacaan": "バス",
+          "jenis": "vocab",
+          "en": [
+            "bus"
+          ],
+          "id_glosa": [
+            "bus"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-家",
+          "ekspresi": "家",
+          "bacaan": "いえ",
+          "jenis": "vocab",
+          "en": [
+            "house"
+          ],
+          "id_glosa": [
+            "rumah"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-会社",
+          "ekspresi": "会社",
+          "bacaan": "かいしゃ",
+          "jenis": "vocab",
+          "en": [
+            "company"
+          ],
+          "id_glosa": [
+            "perusahaan"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-帰る",
+          "ekspresi": "帰る",
+          "bacaan": "かえる",
+          "jenis": "vocab",
+          "en": [
+            "to go back"
+          ],
+          "id_glosa": [
+            "pulang"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-月曜日",
+          "ekspresi": "月曜日",
+          "bacaan": "げつようび",
+          "jenis": "vocab",
+          "en": [
+            "Monday"
+          ],
+          "id_glosa": [
+            "Senin"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-行く",
+          "ekspresi": "行く",
+          "bacaan": "いく",
+          "jenis": "vocab",
+          "en": [
+            "to go"
+          ],
+          "id_glosa": [
+            "pergi"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-自転車",
+          "ekspresi": "自転車",
+          "bacaan": "じてんしゃ",
+          "jenis": "vocab",
+          "en": [
+            "bicycle"
+          ],
+          "id_glosa": [
+            "sepeda"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-電車",
+          "ekspresi": "電車",
+          "bacaan": "でんしゃ",
+          "jenis": "vocab",
+          "en": [
+            "electric train"
+          ],
+          "id_glosa": [
+            "kereta"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-土曜日",
+          "ekspresi": "土曜日",
+          "bacaan": "どようび",
+          "jenis": "vocab",
+          "en": [
+            "Saturday"
+          ],
+          "id_glosa": [
+            "Sabtu"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-日曜日",
+          "ekspresi": "日曜日",
+          "bacaan": "にちようび",
+          "jenis": "vocab",
+          "en": [
+            "Sunday"
+          ],
+          "id_glosa": [
+            "Minggu"
+          ],
+          "catatan": "kapital = nama hari; \"minggu\" huruf kecil berarti pekan",
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-飛行機",
+          "ekspresi": "飛行機",
+          "bacaan": "ひこうき",
+          "jenis": "vocab",
+          "en": [
+            "aeroplane"
+          ],
+          "id_glosa": [
+            "pesawat"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-来る",
+          "ekspresi": "来る",
+          "bacaan": "くる",
+          "jenis": "vocab",
+          "en": [
+            "to come"
+          ],
+          "id_glosa": [
+            "datang"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-来年",
+          "ekspresi": "来年",
+          "bacaan": "らいねん",
+          "jenis": "vocab",
+          "en": [
+            "next year"
+          ],
+          "id_glosa": [
+            "tahun depan"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-日本",
+          "ekspresi": "日本",
+          "bacaan": "にほん",
+          "jenis": "vocab",
+          "en": [
+            "Japan"
+          ],
+          "id_glosa": [
+            "Jepang"
+          ],
+          "catatan": null,
+          "direview": false
+        }
+      ]
+    },
+    {
+      "n": 7,
+      "judul": "Makan, minum, membeli",
+      "item": [
+        {
+          "id": "vocab-n5-お茶",
+          "ekspresi": "お茶",
+          "bacaan": "おちゃ",
+          "jenis": "vocab",
+          "en": [
+            "green tea"
+          ],
+          "id_glosa": [
+            "teh"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-コーヒー",
+          "ekspresi": "コーヒー",
+          "bacaan": "コーヒー",
+          "jenis": "vocab",
+          "en": [
+            "coffee"
+          ],
+          "id_glosa": [
+            "kopi"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-する",
+          "ekspresi": "する",
+          "bacaan": "する",
+          "jenis": "vocab",
+          "en": [
+            "to do"
+          ],
+          "id_glosa": [
+            "melakukan"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-テレビ",
+          "ekspresi": "テレビ",
+          "bacaan": "テレビ",
+          "jenis": "vocab",
+          "en": [
+            "television"
+          ],
+          "id_glosa": [
+            "televisi"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-パン",
+          "ekspresi": "パン",
+          "bacaan": "パン",
+          "jenis": "vocab",
+          "en": [
+            "bread"
+          ],
+          "id_glosa": [
+            "roti"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-一緒",
+          "ekspresi": "一緒",
+          "bacaan": "いっしょ",
+          "jenis": "vocab",
+          "en": [
+            "together"
+          ],
+          "id_glosa": [
+            "bersama"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-飲む",
+          "ekspresi": "飲む",
+          "bacaan": "のむ",
+          "jenis": "vocab",
+          "en": [
+            "to drink"
+          ],
+          "id_glosa": [
+            "minum"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-映画",
+          "ekspresi": "映画",
+          "bacaan": "えいが",
+          "jenis": "vocab",
+          "en": [
+            "movie"
+          ],
+          "id_glosa": [
+            "film"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-音楽",
+          "ekspresi": "音楽",
+          "bacaan": "おんがく",
+          "jenis": "vocab",
+          "en": [
+            "music"
+          ],
+          "id_glosa": [
+            "musik"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-見る 観る",
+          "ekspresi": "見る 観る",
+          "bacaan": "みる",
+          "jenis": "vocab",
+          "en": [
+            "to see",
+            "to watch"
+          ],
+          "id_glosa": [
+            "menonton",
+            "melihat"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-御飯",
+          "ekspresi": "御飯",
+          "bacaan": "ごはん",
+          "jenis": "vocab",
+          "en": [
+            "cooked rice",
+            "meal"
+          ],
+          "id_glosa": [
+            "nasi",
+            "makanan"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-食べる",
+          "ekspresi": "食べる",
+          "bacaan": "たべる",
+          "jenis": "vocab",
+          "en": [
+            "to eat"
+          ],
+          "id_glosa": [
+            "makan"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-新聞",
+          "ekspresi": "新聞",
+          "bacaan": "しんぶん",
+          "jenis": "vocab",
+          "en": [
+            "newspaper"
+          ],
+          "id_glosa": [
+            "koran"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-読む",
+          "ekspresi": "読む",
+          "bacaan": "よむ",
+          "jenis": "vocab",
+          "en": [
+            "to read"
+          ],
+          "id_glosa": [
+            "membaca"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-買う",
+          "ekspresi": "買う",
+          "bacaan": "かう",
+          "jenis": "vocab",
+          "en": [
+            "to buy"
+          ],
+          "id_glosa": [
+            "membeli"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-聞く",
+          "ekspresi": "聞く",
+          "bacaan": "きく",
+          "jenis": "vocab",
+          "en": [
+            "to hear",
+            "to listen to",
+            "to ask"
+          ],
+          "id_glosa": [
+            "mendengarkan",
+            "bertanya"
+          ],
+          "catatan": null,
+          "direview": false
+        }
+      ]
+    },
+    {
+      "n": 8,
+      "judul": "Memberi dan meminjam",
+      "item": [
+        {
+          "id": "vocab-n5-かける",
+          "ekspresi": "かける",
+          "bacaan": "かける",
+          "jenis": "vocab",
+          "en": [
+            "to call by phone"
+          ],
+          "id_glosa": [
+            "menelepon"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-はし",
+          "ekspresi": "はし",
+          "bacaan": "はし",
+          "jenis": "vocab",
+          "en": [
+            "chopsticks"
+          ],
+          "id_glosa": [
+            "sumpit"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-教える",
+          "ekspresi": "教える",
+          "bacaan": "おしえる",
+          "jenis": "vocab",
+          "en": [
+            "to teach",
+            "to tell"
+          ],
+          "id_glosa": [
+            "mengajar",
+            "memberi tahu"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-撮る",
+          "ekspresi": "撮る",
+          "bacaan": "とる",
+          "jenis": "vocab",
+          "en": [
+            "to take a photo or record a film"
+          ],
+          "id_glosa": [
+            "memotret",
+            "merekam"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-辞書",
+          "ekspresi": "辞書",
+          "bacaan": "じしょ",
+          "jenis": "vocab",
+          "en": [
+            "dictionary"
+          ],
+          "id_glosa": [
+            "kamus"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-写真",
+          "ekspresi": "写真",
+          "bacaan": "しゃしん",
+          "jenis": "vocab",
+          "en": [
+            "photograph"
+          ],
+          "id_glosa": [
+            "foto"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-借りる",
+          "ekspresi": "借りる",
+          "bacaan": "かりる",
+          "jenis": "vocab",
+          "en": [
+            "to borrow"
+          ],
+          "id_glosa": [
+            "meminjam"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-手紙",
+          "ekspresi": "手紙",
+          "bacaan": "てがみ",
+          "jenis": "vocab",
+          "en": [
+            "letter"
+          ],
+          "id_glosa": [
+            "surat"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-習う",
+          "ekspresi": "習う",
+          "bacaan": "ならう",
+          "jenis": "vocab",
+          "en": [
+            "to learn"
+          ],
+          "id_glosa": [
+            "belajar (dari guru)"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-書く",
+          "ekspresi": "書く",
+          "bacaan": "かく",
+          "jenis": "vocab",
+          "en": [
+            "to write"
+          ],
+          "id_glosa": [
+            "menulis"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-上げる",
+          "ekspresi": "上げる",
+          "bacaan": "あげる",
+          "jenis": "vocab",
+          "en": [
+            "to give"
+          ],
+          "id_glosa": [
+            "memberi"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-貸す",
+          "ekspresi": "貸す",
+          "bacaan": "かす",
+          "jenis": "vocab",
+          "en": [
+            "to lend"
+          ],
+          "id_glosa": [
+            "meminjamkan"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-電話",
+          "ekspresi": "電話",
+          "bacaan": "でんわ",
+          "jenis": "vocab",
+          "en": [
+            "telephone"
+          ],
+          "id_glosa": [
+            "telepon"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-日本語",
+          "ekspresi": "日本語",
+          "bacaan": "にほんご",
+          "jenis": "vocab",
+          "en": [
+            "Japanese language"
+          ],
+          "id_glosa": [
+            "bahasa Jepang"
+          ],
+          "catatan": null,
+          "direview": false
+        }
+      ]
+    },
+    {
+      "n": 9,
+      "judul": "Seperti apa?",
+      "item": [
+        {
+          "id": "vocab-n5-あまり",
+          "ekspresi": "あまり",
+          "bacaan": "あまり",
+          "jenis": "vocab",
+          "en": [
+            "not very"
+          ],
+          "id_glosa": [
+            "tidak begitu, tidak terlalu"
+          ],
+          "catatan": "selalu berpasangan dengan bentuk negatif: あまり…ません",
+          "direview": false
+        },
+        {
+          "id": "kanji-n5-大",
+          "ekspresi": "大",
+          "bacaan": "おお-",
+          "jenis": "kanji",
+          "en": [
+            "large",
+            "big"
+          ],
+          "id_glosa": [
+            "besar"
+          ],
+          "catatan": null,
+          "direview": false
+        }
+      ]
+    },
+    {
+      "n": 14,
+      "judul": "Ingin dan mau",
+      "item": [
+        {
+          "id": "vocab-n5-買い物",
+          "ekspresi": "買い物",
+          "bacaan": "かいもの",
+          "jenis": "vocab",
+          "en": [
+            "shopping"
+          ],
+          "id_glosa": [
+            "belanja"
+          ],
+          "catatan": null,
+          "direview": false
+        }
+      ]
+    },
+    {
+      "n": 19,
+      "judul": "Bisa, dan hobiku",
+      "item": [
+        {
+          "id": "vocab-n5-見せる",
+          "ekspresi": "見せる",
+          "bacaan": "みせる",
+          "jenis": "vocab",
+          "en": [
+            "to show"
+          ],
+          "id_glosa": [
+            "memperlihatkan",
+            "menunjukkan"
           ],
           "catatan": null,
           "direview": false
