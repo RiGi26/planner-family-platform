@@ -1,8 +1,8 @@
 {
   "catatan": "Dibaca reviewer penutur asli (§7). en = data sumber OpenJLPT (CC BY-SA), jangan diubah. id_glosa = glosa yang dinilai. direview:false artinya belum ada manusia yang membacanya.",
   "ringkasan": {
-    "berglosa": 119,
-    "belum": 691,
+    "berglosa": 255,
+    "belum": 555,
     "direview": 0
   },
   "unit": [
@@ -1711,6 +1711,209 @@
           "direview": false
         },
         {
+          "id": "vocab-n5-いい/よい",
+          "ekspresi": "いい/よい",
+          "bacaan": "いい/よい",
+          "jenis": "vocab",
+          "en": [
+            "good"
+          ],
+          "id_glosa": [
+            "bagus",
+            "baik"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-おいしい",
+          "ekspresi": "おいしい",
+          "bacaan": "おいしい",
+          "jenis": "vocab",
+          "en": [
+            "delicious"
+          ],
+          "id_glosa": [
+            "enak"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-おもしろい",
+          "ekspresi": "おもしろい",
+          "bacaan": "おもしろい",
+          "jenis": "vocab",
+          "en": [
+            "interesting"
+          ],
+          "id_glosa": [
+            "menarik",
+            "lucu"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-きれい",
+          "ekspresi": "きれい",
+          "bacaan": "きれい",
+          "jenis": "vocab",
+          "en": [
+            "pretty",
+            "clean"
+          ],
+          "id_glosa": [
+            "cantik",
+            "bersih"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-とても",
+          "ekspresi": "とても",
+          "bacaan": "とても",
+          "jenis": "vocab",
+          "en": [
+            "very"
+          ],
+          "id_glosa": [
+            "sangat"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-レストラン",
+          "ekspresi": "レストラン",
+          "bacaan": "レストラン",
+          "jenis": "vocab",
+          "en": [
+            "restaurant"
+          ],
+          "id_glosa": [
+            "restoran"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-安い",
+          "ekspresi": "安い",
+          "bacaan": "やすい",
+          "jenis": "vocab",
+          "en": [
+            "cheap"
+          ],
+          "id_glosa": [
+            "murah"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-古い",
+          "ekspresi": "古い",
+          "bacaan": "ふるい",
+          "jenis": "vocab",
+          "en": [
+            "old (not used for people)"
+          ],
+          "id_glosa": [
+            "lama"
+          ],
+          "catatan": "untuk benda, bukan orang — \"orang tua\" bukan 古い人",
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-高い",
+          "ekspresi": "高い",
+          "bacaan": "たかい",
+          "jenis": "vocab",
+          "en": [
+            "tall",
+            "expensive"
+          ],
+          "id_glosa": [
+            "tinggi",
+            "mahal"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-小さい",
+          "ekspresi": "小さい",
+          "bacaan": "ちいさい",
+          "jenis": "vocab",
+          "en": [
+            "little"
+          ],
+          "id_glosa": [
+            "kecil"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-新しい",
+          "ekspresi": "新しい",
+          "bacaan": "あたらしい",
+          "jenis": "vocab",
+          "en": [
+            "new"
+          ],
+          "id_glosa": [
+            "baru"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-静か",
+          "ekspresi": "静か",
+          "bacaan": "しずか",
+          "jenis": "vocab",
+          "en": [
+            "quiet"
+          ],
+          "id_glosa": [
+            "tenang, sepi"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-町",
+          "ekspresi": "町",
+          "bacaan": "まち",
+          "jenis": "vocab",
+          "en": [
+            "town",
+            "city"
+          ],
+          "id_glosa": [
+            "kota"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-有名",
+          "ekspresi": "有名",
+          "bacaan": "ゆうめい",
+          "jenis": "vocab",
+          "en": [
+            "famous"
+          ],
+          "id_glosa": [
+            "terkenal"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
           "id": "kanji-n5-大",
           "ekspresi": "大",
           "bacaan": "おお-",
@@ -1724,6 +1927,1259 @@
           ],
           "catatan": null,
           "direview": false
+        },
+        {
+          "id": "kanji-n5-高",
+          "ekspresi": "高",
+          "bacaan": "たか.い",
+          "jenis": "kanji",
+          "en": [
+            "tall",
+            "high",
+            "expensive"
+          ],
+          "id_glosa": [
+            "mahal",
+            "tinggi"
+          ],
+          "catatan": null,
+          "direview": false
+        }
+      ]
+    },
+    {
+      "n": 10,
+      "judul": "Suka dan mengerti",
+      "item": [
+        {
+          "id": "vocab-n5-ある",
+          "ekspresi": "ある",
+          "bacaan": "ある",
+          "jenis": "vocab",
+          "en": [
+            "to be",
+            "to have (used for inanimate objects)"
+          ],
+          "id_glosa": [
+            "ada (benda)"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-スポーツ",
+          "ekspresi": "スポーツ",
+          "bacaan": "スポーツ",
+          "jenis": "vocab",
+          "en": [
+            "sport"
+          ],
+          "id_glosa": [
+            "olahraga"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-どうして",
+          "ekspresi": "どうして",
+          "bacaan": "どうして",
+          "jenis": "vocab",
+          "en": [
+            "for what reason"
+          ],
+          "id_glosa": [
+            "kenapa, mengapa"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-下手",
+          "ekspresi": "下手",
+          "bacaan": "へた",
+          "jenis": "vocab",
+          "en": [
+            "unskillful"
+          ],
+          "id_glosa": [
+            "tidak pandai",
+            "payah"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-魚",
+          "ekspresi": "魚",
+          "bacaan": "さかな",
+          "jenis": "vocab",
+          "en": [
+            "fish"
+          ],
+          "id_glosa": [
+            "ikan"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-嫌い",
+          "ekspresi": "嫌い",
+          "bacaan": "きらい",
+          "jenis": "vocab",
+          "en": [
+            "hate"
+          ],
+          "id_glosa": [
+            "tidak suka",
+            "benci"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-元気",
+          "ekspresi": "元気",
+          "bacaan": "げんき",
+          "jenis": "vocab",
+          "en": [
+            "health",
+            "vitality"
+          ],
+          "id_glosa": [
+            "sehat",
+            "bersemangat"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-好き",
+          "ekspresi": "好き",
+          "bacaan": "すき",
+          "jenis": "vocab",
+          "en": [
+            "likeable"
+          ],
+          "id_glosa": [
+            "suka"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-時間",
+          "ekspresi": "時間",
+          "bacaan": "じかん",
+          "jenis": "vocab",
+          "en": [
+            "time"
+          ],
+          "id_glosa": [
+            "waktu"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-少し",
+          "ekspresi": "少し",
+          "bacaan": "すこし",
+          "jenis": "vocab",
+          "en": [
+            "few"
+          ],
+          "id_glosa": [
+            "sedikit"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-上手",
+          "ekspresi": "上手",
+          "bacaan": "じょうず",
+          "jenis": "vocab",
+          "en": [
+            "skillful"
+          ],
+          "id_glosa": [
+            "pandai",
+            "mahir"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-肉",
+          "ekspresi": "肉",
+          "bacaan": "にく",
+          "jenis": "vocab",
+          "en": [
+            "meat"
+          ],
+          "id_glosa": [
+            "daging"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-分かる",
+          "ekspresi": "分かる",
+          "bacaan": "わかる",
+          "jenis": "vocab",
+          "en": [
+            "to be understood"
+          ],
+          "id_glosa": [
+            "mengerti",
+            "paham"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-忙しい",
+          "ekspresi": "忙しい",
+          "bacaan": "いそがしい",
+          "jenis": "vocab",
+          "en": [
+            "busy",
+            "irritated"
+          ],
+          "id_glosa": [
+            "sibuk"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-野菜",
+          "ekspresi": "野菜",
+          "bacaan": "やさい",
+          "jenis": "vocab",
+          "en": [
+            "vegetable"
+          ],
+          "id_glosa": [
+            "sayur"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-料理",
+          "ekspresi": "料理",
+          "bacaan": "りょうり",
+          "jenis": "vocab",
+          "en": [
+            "cuisine"
+          ],
+          "id_glosa": [
+            "masakan",
+            "memasak"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "kanji-n5-日",
+          "ekspresi": "日",
+          "bacaan": "ひ",
+          "jenis": "kanji",
+          "en": [
+            "day",
+            "sun",
+            "Japan",
+            "counter for days"
+          ],
+          "id_glosa": [
+            "hari"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "kanji-n5-人",
+          "ekspresi": "人",
+          "bacaan": "ひと",
+          "jenis": "kanji",
+          "en": [
+            "person"
+          ],
+          "id_glosa": [
+            "orang"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "kanji-n5-本",
+          "ekspresi": "本",
+          "bacaan": "もと",
+          "jenis": "kanji",
+          "en": [
+            "book",
+            "present",
+            "main",
+            "origin",
+            "true",
+            "real",
+            "counter for long cylindrical things"
+          ],
+          "id_glosa": [
+            "buku"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "kanji-n5-生",
+          "ekspresi": "生",
+          "bacaan": "い.きる",
+          "jenis": "kanji",
+          "en": [
+            "life",
+            "genuine",
+            "birth"
+          ],
+          "id_glosa": [
+            "hidup"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "kanji-n5-学",
+          "ekspresi": "学",
+          "bacaan": "まな.ぶ",
+          "jenis": "kanji",
+          "en": [
+            "study",
+            "learning",
+            "science"
+          ],
+          "id_glosa": [
+            "ilmu",
+            "belajar"
+          ],
+          "catatan": null,
+          "direview": false
+        }
+      ]
+    },
+    {
+      "n": 11,
+      "judul": "Ada di mana, ada siapa",
+      "item": [
+        {
+          "id": "vocab-n5-下",
+          "ekspresi": "下",
+          "bacaan": "した",
+          "jenis": "vocab",
+          "en": [
+            "below"
+          ],
+          "id_glosa": [
+            "bawah"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-机",
+          "ekspresi": "机",
+          "bacaan": "つくえ",
+          "jenis": "vocab",
+          "en": [
+            "desk"
+          ],
+          "id_glosa": [
+            "meja"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-居る",
+          "ekspresi": "居る",
+          "bacaan": "いる",
+          "jenis": "vocab",
+          "en": [
+            "to be",
+            "to have (used for people and animals)"
+          ],
+          "id_glosa": [
+            "ada (orang, hewan)"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-近く",
+          "ekspresi": "近く",
+          "bacaan": "ちかく",
+          "jenis": "vocab",
+          "en": [
+            "near"
+          ],
+          "id_glosa": [
+            "dekat"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-犬",
+          "ekspresi": "犬",
+          "bacaan": "いぬ",
+          "jenis": "vocab",
+          "en": [
+            "dog"
+          ],
+          "id_glosa": [
+            "anjing"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-後ろ",
+          "ekspresi": "後ろ",
+          "bacaan": "うしろ",
+          "jenis": "vocab",
+          "en": [
+            "behind"
+          ],
+          "id_glosa": [
+            "belakang"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-上",
+          "ekspresi": "上",
+          "bacaan": "うえ",
+          "jenis": "vocab",
+          "en": [
+            "on top of"
+          ],
+          "id_glosa": [
+            "atas"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-前",
+          "ekspresi": "前",
+          "bacaan": "まえ",
+          "jenis": "vocab",
+          "en": [
+            "before"
+          ],
+          "id_glosa": [
+            "depan",
+            "sebelum"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-中",
+          "ekspresi": "中",
+          "bacaan": "なか",
+          "jenis": "vocab",
+          "en": [
+            "middle"
+          ],
+          "id_glosa": [
+            "tengah"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-庭",
+          "ekspresi": "庭",
+          "bacaan": "にわ",
+          "jenis": "vocab",
+          "en": [
+            "garden"
+          ],
+          "id_glosa": [
+            "kebun",
+            "halaman"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-店",
+          "ekspresi": "店",
+          "bacaan": "みせ",
+          "jenis": "vocab",
+          "en": [
+            "shop"
+          ],
+          "id_glosa": [
+            "toko"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-猫",
+          "ekspresi": "猫",
+          "bacaan": "ねこ",
+          "jenis": "vocab",
+          "en": [
+            "cat"
+          ],
+          "id_glosa": [
+            "kucing"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-部屋",
+          "ekspresi": "部屋",
+          "bacaan": "へや",
+          "jenis": "vocab",
+          "en": [
+            "room"
+          ],
+          "id_glosa": [
+            "kamar"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-木",
+          "ekspresi": "木",
+          "bacaan": "き",
+          "jenis": "vocab",
+          "en": [
+            "tree",
+            "wood"
+          ],
+          "id_glosa": [
+            "pohon",
+            "kayu"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-郵便局",
+          "ekspresi": "郵便局",
+          "bacaan": "ゆうびんきょく",
+          "jenis": "vocab",
+          "en": [
+            "post office"
+          ],
+          "id_glosa": [
+            "kantor pos"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-隣",
+          "ekspresi": "隣",
+          "bacaan": "となり",
+          "jenis": "vocab",
+          "en": [
+            "next door to"
+          ],
+          "id_glosa": [
+            "sebelah"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "kanji-n5-中",
+          "ekspresi": "中",
+          "bacaan": "なか",
+          "jenis": "kanji",
+          "en": [
+            "in",
+            "inside",
+            "middle",
+            "mean",
+            "center"
+          ],
+          "id_glosa": [
+            "dalam"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "kanji-n5-前",
+          "ekspresi": "前",
+          "bacaan": "まえ",
+          "jenis": "kanji",
+          "en": [
+            "in front",
+            "before"
+          ],
+          "id_glosa": [
+            "sebelum"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "kanji-n5-上",
+          "ekspresi": "上",
+          "bacaan": "うえ",
+          "jenis": "kanji",
+          "en": [
+            "above",
+            "up"
+          ],
+          "id_glosa": [
+            "naik"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "kanji-n5-下",
+          "ekspresi": "下",
+          "bacaan": "した",
+          "jenis": "kanji",
+          "en": [
+            "below",
+            "down",
+            "descend",
+            "give",
+            "low",
+            "inferior"
+          ],
+          "id_glosa": [
+            "turun",
+            "bawah"
+          ],
+          "catatan": null,
+          "direview": false
+        }
+      ]
+    },
+    {
+      "n": 12,
+      "judul": "Berapa harganya?",
+      "item": [
+        {
+          "id": "vocab-n5-いくら",
+          "ekspresi": "いくら",
+          "bacaan": "いくら",
+          "jenis": "vocab",
+          "en": [
+            "how much?"
+          ],
+          "id_glosa": [
+            "berapa (harga)"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-お金",
+          "ekspresi": "お金",
+          "bacaan": "おかね",
+          "jenis": "vocab",
+          "en": [
+            "money"
+          ],
+          "id_glosa": [
+            "uang"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-たくさん",
+          "ekspresi": "たくさん",
+          "bacaan": "たくさん",
+          "jenis": "vocab",
+          "en": [
+            "many"
+          ],
+          "id_glosa": [
+            "banyak"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-一つ",
+          "ekspresi": "一つ",
+          "bacaan": "ひとつ",
+          "jenis": "vocab",
+          "en": [
+            "one"
+          ],
+          "id_glosa": [
+            "satu buah"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-九つ",
+          "ekspresi": "九つ",
+          "bacaan": "ここのつ",
+          "jenis": "vocab",
+          "en": [
+            "nine"
+          ],
+          "id_glosa": [
+            "sembilan buah"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-五つ",
+          "ekspresi": "五つ",
+          "bacaan": "いつつ",
+          "jenis": "vocab",
+          "en": [
+            "five"
+          ],
+          "id_glosa": [
+            "lima buah"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-三つ",
+          "ekspresi": "三つ",
+          "bacaan": "みっつ",
+          "jenis": "vocab",
+          "en": [
+            "three"
+          ],
+          "id_glosa": [
+            "tiga buah"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-四つ",
+          "ekspresi": "四つ",
+          "bacaan": "よっつ",
+          "jenis": "vocab",
+          "en": [
+            "four"
+          ],
+          "id_glosa": [
+            "empat buah"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-七つ",
+          "ekspresi": "七つ",
+          "bacaan": "ななつ",
+          "jenis": "vocab",
+          "en": [
+            "seven"
+          ],
+          "id_glosa": [
+            "tujuh buah"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-切符",
+          "ekspresi": "切符",
+          "bacaan": "きっぷ",
+          "jenis": "vocab",
+          "en": [
+            "ticket"
+          ],
+          "id_glosa": [
+            "karcis",
+            "tiket"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-千",
+          "ekspresi": "千",
+          "bacaan": "せん",
+          "jenis": "vocab",
+          "en": [
+            "thousand"
+          ],
+          "id_glosa": [
+            "seribu"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-二つ",
+          "ekspresi": "二つ",
+          "bacaan": "ふたつ",
+          "jenis": "vocab",
+          "en": [
+            "two"
+          ],
+          "id_glosa": [
+            "dua buah"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-八つ",
+          "ekspresi": "八つ",
+          "bacaan": "やっつ",
+          "jenis": "vocab",
+          "en": [
+            "eight"
+          ],
+          "id_glosa": [
+            "delapan buah"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-百",
+          "ekspresi": "百",
+          "bacaan": "ひゃく",
+          "jenis": "vocab",
+          "en": [
+            "hundred"
+          ],
+          "id_glosa": [
+            "seratus"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-万",
+          "ekspresi": "万",
+          "bacaan": "まん",
+          "jenis": "vocab",
+          "en": [
+            "ten thousand"
+          ],
+          "id_glosa": [
+            "sepuluh ribu"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-六つ",
+          "ekspresi": "六つ",
+          "bacaan": "むっつ",
+          "jenis": "vocab",
+          "en": [
+            "six"
+          ],
+          "id_glosa": [
+            "enam buah"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "kanji-n5-金",
+          "ekspresi": "金",
+          "bacaan": "かね",
+          "jenis": "kanji",
+          "en": [
+            "gold"
+          ],
+          "id_glosa": [
+            "emas",
+            "uang"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "kanji-n5-円",
+          "ekspresi": "円",
+          "bacaan": "まる.い",
+          "jenis": "kanji",
+          "en": [
+            "circle",
+            "yen",
+            "round"
+          ],
+          "id_glosa": [
+            "yen",
+            "bulat"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "kanji-n5-百",
+          "ekspresi": "百",
+          "bacaan": "もも",
+          "jenis": "kanji",
+          "en": [
+            "hundred"
+          ],
+          "id_glosa": [
+            "ratus"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "kanji-n5-千",
+          "ekspresi": "千",
+          "bacaan": "ち",
+          "jenis": "kanji",
+          "en": [
+            "thousand"
+          ],
+          "id_glosa": [
+            "ribu"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "kanji-n5-万",
+          "ekspresi": "万",
+          "bacaan": "よろず",
+          "jenis": "kanji",
+          "en": [
+            "ten thousand",
+            "10,000"
+          ],
+          "id_glosa": [
+            "puluh ribu"
+          ],
+          "catatan": null,
+          "direview": false
+        }
+      ]
+    },
+    {
+      "n": 13,
+      "judul": "Kemarin bagaimana? Mana yang lebih?",
+      "item": [
+        {
+          "id": "vocab-n5-でも",
+          "ekspresi": "でも",
+          "bacaan": "でも",
+          "jenis": "vocab",
+          "en": [
+            "but"
+          ],
+          "id_glosa": [
+            "tapi, tetapi"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-どう",
+          "ekspresi": "どう",
+          "bacaan": "どう",
+          "jenis": "vocab",
+          "en": [
+            "how",
+            "in what way"
+          ],
+          "id_glosa": [
+            "bagaimana"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-どちら",
+          "ekspresi": "どちら",
+          "bacaan": "どちら",
+          "jenis": "vocab",
+          "en": [
+            "which of two"
+          ],
+          "id_glosa": [
+            "yang mana"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-夏",
+          "ekspresi": "夏",
+          "bacaan": "なつ",
+          "jenis": "vocab",
+          "en": [
+            "summer"
+          ],
+          "id_glosa": [
+            "musim panas"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-夏休み",
+          "ekspresi": "夏休み",
+          "bacaan": "なつやすみ",
+          "jenis": "vocab",
+          "en": [
+            "summer holiday"
+          ],
+          "id_glosa": [
+            "libur musim panas"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-楽しい",
+          "ekspresi": "楽しい",
+          "bacaan": "たのしい",
+          "jenis": "vocab",
+          "en": [
+            "enjoyable"
+          ],
+          "id_glosa": [
+            "menyenangkan",
+            "asyik"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-寒い",
+          "ekspresi": "寒い",
+          "bacaan": "さむい",
+          "jenis": "vocab",
+          "en": [
+            "cold"
+          ],
+          "id_glosa": [
+            "dingin"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-休み",
+          "ekspresi": "休み",
+          "bacaan": "やすみ",
+          "jenis": "vocab",
+          "en": [
+            "rest",
+            "holiday"
+          ],
+          "id_glosa": [
+            "libur"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-秋",
+          "ekspresi": "秋",
+          "bacaan": "あき",
+          "jenis": "vocab",
+          "en": [
+            "autumn"
+          ],
+          "id_glosa": [
+            "musim gugur"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-春",
+          "ekspresi": "春",
+          "bacaan": "はる",
+          "jenis": "vocab",
+          "en": [
+            "spring"
+          ],
+          "id_glosa": [
+            "musim semi"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-暑い",
+          "ekspresi": "暑い",
+          "bacaan": "あつい",
+          "jenis": "vocab",
+          "en": [
+            "hot"
+          ],
+          "id_glosa": [
+            "panas"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-暖かい",
+          "ekspresi": "暖かい",
+          "bacaan": "あたたかい",
+          "jenis": "vocab",
+          "en": [
+            "warm"
+          ],
+          "id_glosa": [
+            "hangat"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-天気",
+          "ekspresi": "天気",
+          "bacaan": "てんき",
+          "jenis": "vocab",
+          "en": [
+            "weather"
+          ],
+          "id_glosa": [
+            "cuaca"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-冬",
+          "ekspresi": "冬",
+          "bacaan": "ふゆ",
+          "jenis": "vocab",
+          "en": [
+            "winter"
+          ],
+          "id_glosa": [
+            "musim dingin"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-旅行",
+          "ekspresi": "旅行",
+          "bacaan": "りょこう",
+          "jenis": "vocab",
+          "en": [
+            "travel"
+          ],
+          "id_glosa": [
+            "perjalanan",
+            "bepergian"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-涼しい",
+          "ekspresi": "涼しい",
+          "bacaan": "すずしい",
+          "jenis": "vocab",
+          "en": [
+            "refreshing"
+          ],
+          "id_glosa": [
+            "sejuk"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "kanji-n5-気",
+          "ekspresi": "気",
+          "bacaan": "いき",
+          "jenis": "kanji",
+          "en": [
+            "spirit",
+            "mind",
+            "air",
+            "atmosphere",
+            "mood"
+          ],
+          "id_glosa": [
+            "semangat",
+            "perasaan"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "kanji-n5-半",
+          "ekspresi": "半",
+          "bacaan": "なか.ば",
+          "jenis": "kanji",
+          "en": [
+            "half",
+            "middle",
+            "odd number",
+            "semi-",
+            "part-"
+          ],
+          "id_glosa": [
+            "separuh"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "kanji-n5-天",
+          "ekspresi": "天",
+          "bacaan": "あまつ",
+          "jenis": "kanji",
+          "en": [
+            "heavens",
+            "sky",
+            "imperial"
+          ],
+          "id_glosa": [
+            "langit"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "kanji-n5-休",
+          "ekspresi": "休",
+          "bacaan": "やす.む",
+          "jenis": "kanji",
+          "en": [
+            "rest",
+            "day off",
+            "retire",
+            "sleep"
+          ],
+          "id_glosa": [
+            "istirahat"
+          ],
+          "catatan": null,
+          "direview": false
         }
       ]
     },
@@ -1731,6 +3187,135 @@
       "n": 14,
       "judul": "Ingin dan mau",
       "item": [
+        {
+          "id": "vocab-n5-セーター",
+          "ekspresi": "セーター",
+          "bacaan": "セーター",
+          "jenis": "vocab",
+          "en": [
+            "sweater",
+            "jumper"
+          ],
+          "id_glosa": [
+            "sweter",
+            "baju hangat"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-ちょっと",
+          "ekspresi": "ちょっと",
+          "bacaan": "ちょっと",
+          "jenis": "vocab",
+          "en": [
+            "somewhat"
+          ],
+          "id_glosa": [
+            "sebentar",
+            "sedikit"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-プール",
+          "ekspresi": "プール",
+          "bacaan": "プール",
+          "jenis": "vocab",
+          "en": [
+            "swimming pool"
+          ],
+          "id_glosa": [
+            "kolam renang"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-泳ぐ",
+          "ekspresi": "泳ぐ",
+          "bacaan": "およぐ",
+          "jenis": "vocab",
+          "en": [
+            "to swim"
+          ],
+          "id_glosa": [
+            "berenang"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-海",
+          "ekspresi": "海",
+          "bacaan": "うみ",
+          "jenis": "vocab",
+          "en": [
+            "sea"
+          ],
+          "id_glosa": [
+            "laut"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-喫茶店",
+          "ekspresi": "喫茶店",
+          "bacaan": "きっさてん",
+          "jenis": "vocab",
+          "en": [
+            "coffee lounge"
+          ],
+          "id_glosa": [
+            "kedai kopi"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-靴",
+          "ekspresi": "靴",
+          "bacaan": "くつ",
+          "jenis": "vocab",
+          "en": [
+            "shoes"
+          ],
+          "id_glosa": [
+            "sepatu"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-傘",
+          "ekspresi": "傘",
+          "bacaan": "かさ",
+          "jenis": "vocab",
+          "en": [
+            "umbrella"
+          ],
+          "id_glosa": [
+            "payung"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-誕生日",
+          "ekspresi": "誕生日",
+          "bacaan": "たんじょうび",
+          "jenis": "vocab",
+          "en": [
+            "birthday"
+          ],
+          "id_glosa": [
+            "ulang tahun"
+          ],
+          "catatan": null,
+          "direview": false
+        },
         {
           "id": "vocab-n5-買い物",
           "ekspresi": "買い物",
@@ -1741,6 +3326,426 @@
           ],
           "id_glosa": [
             "belanja"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-疲れる",
+          "ekspresi": "疲れる",
+          "bacaan": "つかれる",
+          "jenis": "vocab",
+          "en": [
+            "to get tired"
+          ],
+          "id_glosa": [
+            "lelah",
+            "capek"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-服",
+          "ekspresi": "服",
+          "bacaan": "ふく",
+          "jenis": "vocab",
+          "en": [
+            "clothes"
+          ],
+          "id_glosa": [
+            "baju",
+            "pakaian"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-遊ぶ",
+          "ekspresi": "遊ぶ",
+          "bacaan": "あそぶ",
+          "jenis": "vocab",
+          "en": [
+            "to play",
+            "to make a visit"
+          ],
+          "id_glosa": [
+            "bermain"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-欲しい",
+          "ekspresi": "欲しい",
+          "bacaan": "ほしい",
+          "jenis": "vocab",
+          "en": [
+            "want"
+          ],
+          "id_glosa": [
+            "ingin",
+            "mau"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "kanji-n5-行",
+          "ekspresi": "行",
+          "bacaan": "い.く",
+          "jenis": "kanji",
+          "en": [
+            "going",
+            "journey",
+            "carry out",
+            "conduct",
+            "act",
+            "line",
+            "row",
+            "bank"
+          ],
+          "id_glosa": [
+            "pergi"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "kanji-n5-見",
+          "ekspresi": "見",
+          "bacaan": "み.る",
+          "jenis": "kanji",
+          "en": [
+            "see",
+            "hopes",
+            "chances",
+            "idea",
+            "opinion",
+            "look at",
+            "visible"
+          ],
+          "id_glosa": [
+            "lihat"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "kanji-n5-水",
+          "ekspresi": "水",
+          "bacaan": "みず",
+          "jenis": "kanji",
+          "en": [
+            "water"
+          ],
+          "id_glosa": [
+            "air"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "kanji-n5-食",
+          "ekspresi": "食",
+          "bacaan": "く.う",
+          "jenis": "kanji",
+          "en": [
+            "eat",
+            "food"
+          ],
+          "id_glosa": [
+            "makanan",
+            "makan"
+          ],
+          "catatan": null,
+          "direview": false
+        }
+      ]
+    },
+    {
+      "n": 15,
+      "judul": "Tolong, dan sedang apa",
+      "item": [
+        {
+          "id": "vocab-n5-つける",
+          "ekspresi": "つける",
+          "bacaan": "つける",
+          "jenis": "vocab",
+          "en": [
+            "to turn on"
+          ],
+          "id_glosa": [
+            "menyalakan"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-ドア",
+          "ekspresi": "ドア",
+          "bacaan": "ドア",
+          "jenis": "vocab",
+          "en": [
+            "Western style door"
+          ],
+          "id_glosa": [
+            "pintu"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-雨",
+          "ekspresi": "雨",
+          "bacaan": "あめ",
+          "jenis": "vocab",
+          "en": [
+            "rain"
+          ],
+          "id_glosa": [
+            "hujan"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-荷物",
+          "ekspresi": "荷物",
+          "bacaan": "にもつ",
+          "jenis": "vocab",
+          "en": [
+            "luggage"
+          ],
+          "id_glosa": [
+            "barang bawaan"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-開ける",
+          "ekspresi": "開ける",
+          "bacaan": "あける",
+          "jenis": "vocab",
+          "en": [
+            "to open"
+          ],
+          "id_glosa": [
+            "membuka"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-降る",
+          "ekspresi": "降る",
+          "bacaan": "ふる",
+          "jenis": "vocab",
+          "en": [
+            "to fall",
+            "e.g. rain or snow"
+          ],
+          "id_glosa": [
+            "turun (hujan)"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-座る",
+          "ekspresi": "座る",
+          "bacaan": "すわる",
+          "jenis": "vocab",
+          "en": [
+            "to sit"
+          ],
+          "id_glosa": [
+            "duduk"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-使う",
+          "ekspresi": "使う",
+          "bacaan": "つかう",
+          "jenis": "vocab",
+          "en": [
+            "to use"
+          ],
+          "id_glosa": [
+            "memakai",
+            "menggunakan"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-持つ",
+          "ekspresi": "持つ",
+          "bacaan": "もつ",
+          "jenis": "vocab",
+          "en": [
+            "to hold"
+          ],
+          "id_glosa": [
+            "memegang",
+            "membawa"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-消す",
+          "ekspresi": "消す",
+          "bacaan": "けす",
+          "jenis": "vocab",
+          "en": [
+            "to erase",
+            "to turn off power"
+          ],
+          "id_glosa": [
+            "mematikan",
+            "menghapus"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-窓",
+          "ekspresi": "窓",
+          "bacaan": "まど",
+          "jenis": "vocab",
+          "en": [
+            "window"
+          ],
+          "id_glosa": [
+            "jendela"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-待つ",
+          "ekspresi": "待つ",
+          "bacaan": "まつ",
+          "jenis": "vocab",
+          "en": [
+            "to wait"
+          ],
+          "id_glosa": [
+            "menunggu"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-電気",
+          "ekspresi": "電気",
+          "bacaan": "でんき",
+          "jenis": "vocab",
+          "en": [
+            "electricity",
+            "electric light"
+          ],
+          "id_glosa": [
+            "lampu",
+            "listrik"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-閉める",
+          "ekspresi": "閉める",
+          "bacaan": "しめる",
+          "jenis": "vocab",
+          "en": [
+            "to close something"
+          ],
+          "id_glosa": [
+            "menutup"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-立つ",
+          "ekspresi": "立つ",
+          "bacaan": "たつ",
+          "jenis": "vocab",
+          "en": [
+            "to stand"
+          ],
+          "id_glosa": [
+            "berdiri"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "kanji-n5-話",
+          "ekspresi": "話",
+          "bacaan": "はな.す",
+          "jenis": "kanji",
+          "en": [
+            "tale",
+            "talk"
+          ],
+          "id_glosa": [
+            "cerita",
+            "bicara"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "kanji-n5-電",
+          "ekspresi": "電",
+          "bacaan": "デン",
+          "jenis": "kanji",
+          "en": [
+            "electricity"
+          ],
+          "id_glosa": [
+            "listrik"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "kanji-n5-車",
+          "ekspresi": "車",
+          "bacaan": "くるま",
+          "jenis": "kanji",
+          "en": [
+            "car"
+          ],
+          "id_glosa": [
+            "kendaraan",
+            "mobil"
+          ],
+          "catatan": null,
+          "direview": false
+        }
+      ]
+    },
+    {
+      "n": 17,
+      "judul": "Lalu, setelah itu",
+      "item": [
+        {
+          "id": "vocab-n5-降りる",
+          "ekspresi": "降りる",
+          "bacaan": "おりる",
+          "jenis": "vocab",
+          "en": [
+            "to get off",
+            "to descend"
+          ],
+          "id_glosa": [
+            "turun (dari kendaraan)"
           ],
           "catatan": null,
           "direview": false
@@ -1767,9 +3772,76 @@
           "direview": false
         }
       ]
+    },
+    {
+      "n": 20,
+      "judul": "Pernah, dan kadang-kadang",
+      "item": [
+        {
+          "id": "vocab-n5-消える",
+          "ekspresi": "消える",
+          "bacaan": "きえる",
+          "jenis": "vocab",
+          "en": [
+            "to disappear"
+          ],
+          "id_glosa": [
+            "mati",
+            "hilang"
+          ],
+          "catatan": null,
+          "direview": false
+        }
+      ]
+    },
+    {
+      "n": 23,
+      "judul": "Kalau begini, saat begitu",
+      "item": [
+        {
+          "id": "vocab-n5-開く",
+          "ekspresi": "開く",
+          "bacaan": "あく",
+          "jenis": "vocab",
+          "en": [
+            "to open",
+            "to become open"
+          ],
+          "id_glosa": [
+            "terbuka"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-閉まる",
+          "ekspresi": "閉まる",
+          "bacaan": "しまる",
+          "jenis": "vocab",
+          "en": [
+            "to close",
+            "to be closed"
+          ],
+          "id_glosa": [
+            "tertutup"
+          ],
+          "catatan": null,
+          "direview": false
+        }
+      ]
     }
   ],
   "ditolak": [],
-  "belum_diisi": [],
+  "belum_diisi": [
+    {
+      "id": "kanji-n5-小"
+    },
+    {
+      "id": "vocab-n5-大きい"
+    },
+    {
+      "id": "kanji-n5-雨"
+    }
+  ],
   "catatan_dibuang": []
 }
