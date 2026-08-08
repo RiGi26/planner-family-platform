@@ -280,11 +280,28 @@ gratis.
 | 他動詞 | 入れます | to put in | memasukkan |
 | 自動詞 | 入ります | to enter | masuk |
 
-Aturan: transitif pakai awalan **me-/mem-/meng-**, intransitif pakai bentuk dasar
-atau **ter-/ber-**.
+**Aturannya berlaku untuk PASANGAN, bukan per item.**
+
+Kalau dataset memuat pasangan 他動詞/自動詞 seakar, glosa keduanya **wajib**
+dibedakan awalan: transitif me-/mem-/meng-, intransitif bentuk dasar atau ter-/ber-.
+
+Kalau kata kerja berdiri sendiri (tidak ada pasangan seakar di dataset), pakai kata
+Indonesia yang wajar dan **abaikan tag `vt`/`vi`**. 勉強 bertanda `vt` tapi glosanya
+`belajar`, bukan `mempelajari` — bahasa Indonesia menandai transitivitas dengan
+awalan hanya kadang-kadang, dan "belajar bahasa Jepang" mengambil objek langsung
+tanpa me-. Memaksakan me- di sini berarti morfologi Indonesia mengikuti tag JMdict,
+bukan sebaliknya.
 
 **Datanya sudah ada.** `data.pos` memuat tag `vt` (68 item) dan `vi` (64 item)
 dari JMdict. Tidak perlu turunan baru — validator bisa langsung membacanya.
+
+**Cakupan validatornya sudah benar sejak awal — yang salah prosa di atas.**
+Peringatan vt/vi di `verify:gloss` hanya menyala untuk **pasangan** yang ekspresinya
+berakar kanji sama dan kedua sisinya sudah berglosa; kata kerja yang berdiri sendiri
+tidak pernah membuatnya menyala. Jadi 勉強 → "belajar" tidak melanggar apa pun, dan
+tidak ada kode yang berubah di sini — hanya §3.3 yang dulu menuliskan aturannya
+seolah berlaku per item. Ketimpangannya ketemu di batch 3, saat tujuh kata kerja
+pertama masuk dan semuanya kebetulan berdiri sendiri.
 
 ### 3.4 Kata sifat
 
