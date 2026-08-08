@@ -40,6 +40,7 @@ import {
   isCounter,
   norm,
   peerKey,
+  sisiVt,
 } from './lib/gloss-rules.mjs'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
@@ -165,14 +166,28 @@ if (CEK_LENGKAP) {
  */
 const berglosa = items.filter(glossed)
 
+/**
+ * §4.1 SADAR-TIPE: satu unit, satu `type`.
+ *
+ * Aturan ini ada supaya kartu Kilat tidak pernah punya dua pilihan yang sama-sama
+ * benar. Pengecohnya diambil dari kolam sejenis — kartu kanji melawan kanji,
+ * kosakata melawan kosakata — jadi kanji 大 dan kosakata 大きい yang sama-sama
+ * "besar" tidak pernah muncul sebagai dua pilihan di satu pertanyaan. Memaksa
+ * keduanya berbeda berarti menuntut salah satunya memakai kata yang bukan artinya.
+ * §4.2 sudah sadar-tipe sejak awal; ini menyusul.
+ */
 const byUnit = new Map()
 for (const i of berglosa) {
   if (i.data.unit == null) continue
-  const key = i.data.unit
+  const key = `${i.data.unit}/${i.type}`
   if (!byUnit.has(key)) byUnit.set(key, [])
   byUnit.get(key).push(i)
 }
-rule(failures, 'glosa pertama kembar di dalam satu unit (§4.1)', collisions(byUnit, (u) => `unit ${u}`))
+rule(
+  failures,
+  'glosa pertama kembar di dalam satu unit, sesama tipe (§4.1)',
+  collisions(byUnit, (k) => `unit ${k.split('/')[0]} (${k.split('/')[1]})`),
+)
 
 const byClass = new Map()
 for (const i of berglosa) {
@@ -284,8 +299,10 @@ const AWALAN_TRANSITIF = /^(me|mem|men|meng|meny|memper)/i
 const akarKanji = (s) => (s.match(/^[一-鿿]+/) ?? [''])[0]
 const byRoot = new Map()
 for (const i of items) {
-  const pos = Array.isArray(i.data.pos) ? i.data.pos : []
-  const jenis = pos.includes('vt') ? 'vt' : pos.includes('vi') ? 'vi' : null
+  // sisiVt, bukan salinan lokal: kata kerja ambitransitif bertanda vt DAN vi,
+  // dan memilih salah satunya lebih dulu membuat pasangan 開ける/開く tak pernah
+  // diperiksa sama sekali (§2.5).
+  const jenis = sisiVt(i)
   const akar = akarKanji(i.expression)
   if (!jenis || !akar) continue
   if (!byRoot.has(akar)) byRoot.set(akar, [])
@@ -293,11 +310,14 @@ for (const i of items) {
 }
 const vtviHits = []
 for (const [akar, anggota] of byRoot) {
-  const vt = anggota.filter((a) => a.jenis === 'vt')
-  const vi = anggota.filter((a) => a.jenis === 'vi')
+  // Ambitransitif berdiri di kedua sisi, jadi ia bisa jadi pasangan bagi yang
+  // murni vt maupun yang murni vi — asal bukan dirinya sendiri.
+  const vt = anggota.filter((a) => a.jenis === 'vt' || a.jenis === 'vt/vi')
+  const vi = anggota.filter((a) => a.jenis === 'vi' || a.jenis === 'vt/vi')
   if (!vt.length || !vi.length) continue
   for (const t of vt) {
     for (const n of vi) {
+      if (t.item.id === n.item.id) continue
       if (!glossed(t.item) || !glossed(n.item)) continue
       const gt = t.item.meanings.id[0]
       const gn = n.item.meanings.id[0]

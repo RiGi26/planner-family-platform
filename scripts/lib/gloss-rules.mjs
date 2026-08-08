@@ -61,6 +61,28 @@ export function wordClass(item) {
 export const peerKey = (item) => `${item.type}/${wordClass(item)}`
 
 /**
+ * Which side of the transitive/intransitive divide an item sits on.
+ *
+ * Returns 'vt/vi' for ambitransitive entries — 開く carries both tags in JMdict —
+ * because collapsing those to whichever tag is checked first makes a genuine pair
+ * look like two verbs of the same side.
+ *
+ * LIVES HERE, not in gloss-data.mjs, because the validator needs it too. It used
+ * to live only in gloss-data.mjs while verify-gloss.mjs carried its own copy
+ * (`pos.includes('vt') ? 'vt' : pos.includes('vi') ? 'vi' : null`), and that copy
+ * never got the ambitransitive fix — see §2.5.
+ */
+export function sisiVt(item) {
+  const pos = Array.isArray(item.data.pos) ? item.data.pos : []
+  const vt = pos.includes('vt')
+  const vi = pos.includes('vi')
+  if (vt && vi) return 'vt/vi'
+  if (vt) return 'vt'
+  if (vi) return 'vi'
+  return null
+}
+
+/**
  * 助数詞 in the sense §3.6 means: an item whose whole job is to count things.
  *
  * Deliberately NOT `pos.includes('ctr')`. JMdict tags 山, 風, 頭 and ページ as

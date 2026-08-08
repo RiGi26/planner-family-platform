@@ -110,10 +110,32 @@ dan aturan bentuk per-glosa (§3.1, §3.10) — hidup di satu modul yang dipakai
 
 | Berkas | Perannya |
 |---|---|
-| `scripts/lib/gloss-rules.mjs` | aturan: `wordClass`, `peerKey`, `isCounter`, `ATURAN_BENTUK`, `cekPenggolong`, `KELAS_PAKSA` |
+| `scripts/lib/gloss-rules.mjs` | aturan: `wordClass`, `peerKey`, `sisiVt`, `isCounter`, `ATURAN_BENTUK`, `cekPenggolong`, `KELAS_PAKSA` |
 | `scripts/lib/gloss-data.mjs` | dataset, irisan §3, penyusunan batch, konteks §4, pemeriksaan |
 | `scripts/gloss-siapkan.mjs` · `gloss-terapkan.mjs` | generator (§5) |
 | `scripts/verify-gloss.mjs` | validator (§6) |
+
+**Klasifikasi vt/vi (`sisiVt`) ikut jadi milik modul ini — dan ia buktinya.**
+Fungsi itu dulu hanya ada di `gloss-data.mjs`, sementara `verify-gloss.mjs`
+membawa salinannya sendiri:
+
+```js
+const jenis = pos.includes('vt') ? 'vt' : pos.includes('vi') ? 'vi' : null
+```
+
+Kata kerja ambitransitif bertanda **`vt` DAN `vi`**. Baris itu memeriksa `vt`
+lebih dulu, jadi 開く dicatat sebagai `vt` semata, akar 開 dianggap tidak punya
+sisi `vi`, dan pasangan 開ける/開く **tidak pernah diperiksa sama sekali** oleh
+peringatan §3.3. Perbaikannya sudah dibuat di Commit 3 — tapi hanya mendarat di
+satu dari dua salinan, dan yang tidak kebagian justru validatornya.
+
+Bukti dari kalibrasi batch 11, sebelum diperbaiki: 開く sengaja diberi glosa
+"membuka sendiri" (intransitif berawalan me-, pelanggaran telak) → **tidak ada
+peringatan**; 消える diberi "menghilang" → peringatan menyala. Satu pasangan
+diperiksa, satunya tidak, dan tidak ada apa pun yang menyebutkan bedanya.
+
+Itulah kenapa aturan yang bisa dieksekusi hidup di satu berkas: bukan kerapian,
+tapi karena salinan kedua akan tertinggal tanpa memberi tahu siapa pun.
 
 **Dua salinan berbahaya, dan diam-diam.** Kalau generator mengelompokkan item
 dengan satu definisi kelas kata dan validator memeriksanya dengan definisi lain,
@@ -430,6 +452,23 @@ On/kun-yomi punya tempatnya sendiri.
 
 Jangan salin seluruh daftar KANJIDIC. Ambil yang dipakai di kosakata N5.
 
+**Kalau kanji punya makna yang lebih luas dari kosakata seejaan, pakai makna yang
+lebih luas.** Panduan, bukan kewajiban — dan bukan untuk menghindari bentrok
+(sejak §4.1 sadar-tipe, bentroknya tidak ada), tapi karena kanji memang
+membawanya:
+
+| Kanji | glosa kanji | kosakata seejaan | kenapa |
+|---|---|---|---|
+| 下 | turun | 下 `bawah` | 下がる, 下りる — hurufnya membawa gerakan, kata bendanya cuma posisi |
+| 上 | naik | 上 `atas` | 上がる, 上る — sama, arah sebaliknya |
+| 前 | sebelum | 前 `depan` · sebelum | 前年, 前回 — hurufnya lebih sering waktu daripada tempat |
+| 百 · 千 | ratus · ribu | 百 `seratus` · 千 `seribu` | 三百 = tiga ratus; hurufnya satuan, kata bacanya bilangan |
+| 電 | listrik | 電気 `lampu` · listrik | 電車, 電話 — hurufnya listrik itu sendiri |
+
+Kalau kanji dan kosakatanya memang berarti hal yang sama persis — 大 dan 大きい
+keduanya "besar" — tulis sama saja. Memaksa perbedaan yang tidak ada
+menghasilkan glosa yang salah demi aturan yang sudah tidak menuntutnya.
+
 ### 3.9 Grammar
 
 49 item, dan glosanya yang paling buruk sekarang (`〜が` → "but; however").
@@ -469,11 +508,31 @@ ambigu.
 
 Dari yang wajib ke yang diusahakan:
 
-1. **WAJIB** — `meanings.id[0]` unik di antara semua item dalam unit yang sama
+1. **WAJIB** — `meanings.id[0]` unik di antara item **bertipe sama** dalam unit
+   yang sama
 2. **WAJIB** — unik di antara item yang bisa saling jadi pengecoh: sesama `type`
    dan sesama kelas kata
 3. **DIUSAHAKAN** — unik global. Kalau tidak bisa, bedakan dengan kurung
    (`ya` / `ya (lebih santai)`), bukan dengan memaksa sinonim yang janggal
+
+### §4.1 sadar-tipe — kanji tidak bentrok dengan kosakatanya
+
+Aturan 1 dulu berlaku ke **semua** item dalam satu unit, tanpa memandang `type`.
+Itu keliru, dan alasannya ada di alasan aturan itu sendiri: ia lahir supaya kartu
+Kilat tidak pernah punya dua pilihan yang sama-sama benar. Pengecoh kartu diambil
+dari **kolam sejenis** — kartu kanji melawan kanji, kosakata melawan kosakata —
+jadi bentrok lintas-tipe tidak pernah menghasilkan kartu yang mustahil dijawab.
+Aturan 2 sudah sadar-tipe sejak awal; aturan 1 tertinggal.
+
+Akibatnya nyata, bukan teoretis. Kanji dan kosakatanya sering duduk di unit yang
+sama, dan artinya memang kata yang sama: 大 dan 大きい (unit 9) sama-sama "besar",
+小/小さい "kecil", 雨/雨 (unit 15) "hujan", 百/百 (unit 12) "seratus". Aturan
+lama menuntut salah satu sisi memakai kata yang **bukan artinya** — bukan
+pembedaan, cuma pemaksaan.
+
+Yang **tidak** ikut dibatalkan: pembedaan yang ternyata lebih tepat tetap dipakai
+(lihat §3.8). Kanji 下 memang membawa gerakan turun selain posisi bawah; itu bukan
+kompromi, itu deskripsi yang lebih benar.
 
 ---
 

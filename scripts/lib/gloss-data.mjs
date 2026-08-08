@@ -20,7 +20,10 @@ import {
   isCounter,
   norm,
   peerKey,
+  sisiVt,
 } from './gloss-rules.mjs'
+
+export { sisiVt }
 
 const HERE = dirname(fileURLToPath(import.meta.url))
 export const ROOT = join(HERE, '..', '..')
@@ -155,24 +158,6 @@ export function bacaPanduan() {
 
 const akarKanji = (s) => (s.match(/^[一-鿿]+/) ?? [''])[0]
 
-/**
- * Which side of the transitive/intransitive divide an item sits on.
- *
- * Returns 'vt/vi' for ambitransitive entries — 開く carries both tags in JMdict —
- * because collapsing those to whichever tag is checked first makes a genuine pair
- * look like two verbs of the same side, and the §3.3 guidance they most need
- * never reaches the batch.
- */
-export const sisiVt = (item) => {
-  const pos = Array.isArray(item.data.pos) ? item.data.pos : []
-  const vt = pos.includes('vt')
-  const vi = pos.includes('vi')
-  if (vt && vi) return 'vt/vi'
-  if (vt) return 'vt'
-  if (vi) return 'vi'
-  return null
-}
-
 export function kunciPasangan(item) {
   if (!sisiVt(item)) return null
   const akar = akarKanji(item.expression)
@@ -238,7 +223,12 @@ export function susunBatch(daftar) {
  * sees everything batch N−1 wrote — there is no cached list to go stale.
  */
 export function konteksKeunikan(batch, semua) {
-  const unitBatch = new Set(batch.map((i) => i.data.unit).filter((u) => u != null))
+  // Kunci per_unit memuat tipe, karena §4.1 sadar-tipe: glosa kanji di unit 9 tidak
+  // membatasi kosakata di unit 9. Menggabungkannya akan membuat pengisi batch
+  // menghindari bentrok yang tidak ada.
+  const unitBatch = new Set(
+    batch.filter((i) => i.data.unit != null).map((i) => `${i.data.unit}/${i.type}`),
+  )
   const kelasBatch = new Set(batch.map(peerKey))
 
   const perUnit = {}
@@ -248,8 +238,9 @@ export function konteksKeunikan(batch, semua) {
     if (!berglosa(item)) continue
     const glosa = item.meanings.id[0]
 
-    if (item.data.unit != null && unitBatch.has(item.data.unit)) {
-      ;(perUnit[item.data.unit] ??= []).push(glosa)
+    const kunciUnit = item.data.unit != null ? `${item.data.unit}/${item.type}` : null
+    if (kunciUnit && unitBatch.has(kunciUnit)) {
+      ;(perUnit[kunciUnit] ??= []).push(glosa)
     }
     const kelas = peerKey(item)
     if (kelasBatch.has(kelas)) {
@@ -328,7 +319,8 @@ export function periksa(item, arti, semua, dalamBatch) {
   for (const lain of semua) {
     if (lain.id === item.id || !berglosa(lain)) continue
     if (norm(lain.meanings.id[0]) !== pertama) continue
-    if (item.data.unit != null && lain.data.unit === item.data.unit) {
+    // §4.1 sadar-tipe: kanji dan kosakata tidak pernah jadi pengecoh satu sama lain.
+    if (item.data.unit != null && lain.data.unit === item.data.unit && lain.type === item.type) {
       return `"${arti[0]}" sudah dipakai ${lain.id} di unit ${item.data.unit} (§4.1)`
     }
     if (peerKey(lain) === peerKey(item)) {
@@ -341,7 +333,7 @@ export function periksa(item, arti, semua, dalamBatch) {
     if (idLain === item.id || norm(artiLain[0]) !== pertama) continue
     const lain = semua.find((x) => x.id === idLain)
     if (!lain) continue
-    if (item.data.unit != null && lain.data.unit === item.data.unit) {
+    if (item.data.unit != null && lain.data.unit === item.data.unit && lain.type === item.type) {
       return `"${arti[0]}" bentrok dengan ${idLain} di berkas ini, unit sama (§4.1)`
     }
     if (peerKey(lain) === peerKey(item)) {
