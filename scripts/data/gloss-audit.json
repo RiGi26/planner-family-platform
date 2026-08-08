@@ -1,8 +1,8 @@
 {
   "catatan": "Dibaca reviewer penutur asli (§7). en = data sumber OpenJLPT (CC BY-SA), jangan diubah. id_glosa = glosa yang dinilai. direview:false artinya belum ada manusia yang membacanya.",
   "ringkasan": {
-    "berglosa": 49,
-    "belum": 761,
+    "berglosa": 69,
+    "belum": 741,
     "direview": 0
   },
   "unit": [
@@ -589,6 +589,20 @@
           "direview": false
         },
         {
+          "id": "vocab-n5-銀行",
+          "ekspresi": "銀行",
+          "bacaan": "ぎんこう",
+          "jenis": "vocab",
+          "en": [
+            "bank"
+          ],
+          "id_glosa": [
+            "bank"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
           "id": "vocab-n5-九",
           "ekspresi": "九",
           "bacaan": "きゅう / く",
@@ -729,19 +743,285 @@
           ],
           "catatan": null,
           "direview": false
+        },
+        {
+          "id": "vocab-n5-二",
+          "ekspresi": "二",
+          "bacaan": "に",
+          "jenis": "vocab",
+          "en": [
+            "two"
+          ],
+          "id_glosa": [
+            "dua"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-八",
+          "ekspresi": "八",
+          "bacaan": "はち",
+          "jenis": "vocab",
+          "en": [
+            "eight"
+          ],
+          "id_glosa": [
+            "delapan"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-半",
+          "ekspresi": "半",
+          "bacaan": "はん",
+          "jenis": "vocab",
+          "en": [
+            "half"
+          ],
+          "id_glosa": [
+            "setengah"
+          ],
+          "catatan": "三時半 = 3.30; \"setengah tiga\" dalam bahasa Indonesia justru 2.30",
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-六",
+          "ekspresi": "六",
+          "bacaan": "ろく",
+          "jenis": "vocab",
+          "en": [
+            "six"
+          ],
+          "id_glosa": [
+            "enam"
+          ],
+          "catatan": null,
+          "direview": false
+        }
+      ]
+    },
+    {
+      "n": 5,
+      "judul": "Rutinitas harianku",
+      "item": [
+        {
+          "id": "vocab-n5-起きる",
+          "ekspresi": "起きる",
+          "bacaan": "おきる",
+          "jenis": "vocab",
+          "en": [
+            "to get up"
+          ],
+          "id_glosa": [
+            "bangun"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-休む",
+          "ekspresi": "休む",
+          "bacaan": "やすむ",
+          "jenis": "vocab",
+          "en": [
+            "to rest"
+          ],
+          "id_glosa": [
+            "istirahat",
+            "libur"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-今日",
+          "ekspresi": "今日",
+          "bacaan": "きょう",
+          "jenis": "vocab",
+          "en": [
+            "today"
+          ],
+          "id_glosa": [
+            "hari ini"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-昨日",
+          "ekspresi": "昨日",
+          "bacaan": "きのう",
+          "jenis": "vocab",
+          "en": [
+            "yesterday"
+          ],
+          "id_glosa": [
+            "kemarin"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-始まる",
+          "ekspresi": "始まる",
+          "bacaan": "はじまる",
+          "jenis": "vocab",
+          "en": [
+            "to begin"
+          ],
+          "id_glosa": [
+            "mulai"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-終る",
+          "ekspresi": "終る",
+          "bacaan": "おわる",
+          "jenis": "vocab",
+          "en": [
+            "to finish"
+          ],
+          "id_glosa": [
+            "selesai"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-寝る",
+          "ekspresi": "寝る",
+          "bacaan": "ねる",
+          "jenis": "vocab",
+          "en": [
+            "to go to bed",
+            "to sleep"
+          ],
+          "id_glosa": [
+            "tidur"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-朝",
+          "ekspresi": "朝",
+          "bacaan": "あさ",
+          "jenis": "vocab",
+          "en": [
+            "morning"
+          ],
+          "id_glosa": [
+            "pagi"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-働く",
+          "ekspresi": "働く",
+          "bacaan": "はたらく",
+          "jenis": "vocab",
+          "en": [
+            "to work"
+          ],
+          "id_glosa": [
+            "bekerja"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-晩",
+          "ekspresi": "晩",
+          "bacaan": "ばん",
+          "jenis": "vocab",
+          "en": [
+            "evening"
+          ],
+          "id_glosa": [
+            "malam"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-勉強",
+          "ekspresi": "勉強",
+          "bacaan": "べんきょうする",
+          "jenis": "vocab",
+          "en": [
+            "to study"
+          ],
+          "id_glosa": [
+            "belajar"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-毎朝",
+          "ekspresi": "毎朝",
+          "bacaan": "まいあさ",
+          "jenis": "vocab",
+          "en": [
+            "every morning"
+          ],
+          "id_glosa": [
+            "tiap pagi"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-毎日",
+          "ekspresi": "毎日",
+          "bacaan": "まいにち",
+          "jenis": "vocab",
+          "en": [
+            "every day"
+          ],
+          "id_glosa": [
+            "tiap hari"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-毎晩",
+          "ekspresi": "毎晩",
+          "bacaan": "まいばん",
+          "jenis": "vocab",
+          "en": [
+            "every night"
+          ],
+          "id_glosa": [
+            "tiap malam"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "vocab-n5-明日",
+          "ekspresi": "明日",
+          "bacaan": "あした",
+          "jenis": "vocab",
+          "en": [
+            "tomorrow"
+          ],
+          "id_glosa": [
+            "besok"
+          ],
+          "catatan": null,
+          "direview": false
         }
       ]
     }
   ],
-  "ditolak": [
-    {
-      "id": "vocab-n5-銀行",
-      "kandidat": [
-        "bank"
-      ],
-      "alasan": "identik dengan sumber Inggris — belum diterjemahkan (§6)"
-    }
-  ],
+  "ditolak": [],
   "belum_diisi": [],
   "catatan_dibuang": []
 }
