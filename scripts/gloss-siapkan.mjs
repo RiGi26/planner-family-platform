@@ -22,6 +22,9 @@
  *   npm run gloss:siapkan -- --lingkup 6-25
  *   npm run gloss:siapkan -- --lingkup none    (item yang tak diklaim unit mana pun)
  *   npm run gloss:siapkan -- --lingkup semua   (seluruh 810 — harus diketik)
+ *
+ * `--tipe vocab|kanji|grammar` opsional, membatasi batch ke satu jenis:
+ *   npm run gloss:siapkan -- --lingkup none --tipe grammar
  */
 
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
@@ -71,11 +74,37 @@ function parseLingkup() {
   return { set, label: spec }
 }
 
+/**
+ * `--tipe` opsional: batasi batch ke satu `type` saja.
+ *
+ * Berbeda dari `--lingkup`, ini boleh punya bawaan "semua tipe", karena tidak ada
+ * bahaya yang sama — menjalankannya tanpa penyaring hanya berarti batch campuran,
+ * bukan 810 item terisi tak sengaja.
+ *
+ * Gunanya: grammar tunduk pada §3.9 dan kosakata pada §3.2-§3.7, dan keduanya
+ * meminta cara berpikir yang berbeda. Mencampur 49 pola tata bahasa dengan
+ * kosakata di satu batch memaksa pengisi berpindah aturan tiap beberapa baris —
+ * dan itu cara paling mudah menghasilkan glosa grammar yang diam-diam ditulis
+ * seperti kosakata.
+ */
+function parseTipe() {
+  const i = argv.indexOf('--tipe')
+  if (i === -1) return null
+  const spec = argv[i + 1]
+  if (!spec || spec.startsWith('--')) gagal('--tipe butuh nilai: vocab · kanji · grammar')
+  if (!['vocab', 'kanji', 'grammar'].includes(spec)) {
+    gagal(`--tipe "${spec}" tidak dikenal. Pilihannya: vocab · kanji · grammar (kana dikecualikan, §2.2)`)
+  }
+  return spec
+}
+
 const { set: UNITS, label: LINGKUP } = parseLingkup()
+const TIPE = parseTipe()
 const { semua, judulUnit } = muatDataset()
 const PANDUAN = bacaPanduan()
 
 function dalamLingkup(item) {
+  if (TIPE && item.type !== TIPE) return false
   if (UNITS === null) return true
   if (UNITS === 'none') return item.data.unit == null
   return item.data.unit != null && UNITS.has(item.data.unit)
@@ -85,7 +114,7 @@ function dalamLingkup(item) {
 const antrean = semua.filter((i) => dalamLingkup(i) && !berglosa(i))
 const batches = susunBatch(antrean)
 
-console.log(`lingkup   : ${LINGKUP}`)
+console.log(`lingkup   : ${LINGKUP}${TIPE ? ` · tipe ${TIPE}` : ''}`)
 console.log(`antre     : ${antrean.length} item belum berglosa`)
 console.log(`batch     : ${batches.length} tersisa (±${UKURAN_BATCH} item per batch)`)
 

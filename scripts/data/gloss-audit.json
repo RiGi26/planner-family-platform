@@ -1,8 +1,8 @@
 {
   "catatan": "Dibaca reviewer penutur asli (§7). en = data sumber OpenJLPT (CC BY-SA), jangan diubah. id_glosa = glosa yang dinilai. direview:false artinya belum ada manusia yang membacanya.",
   "ringkasan": {
-    "berglosa": 447,
-    "belum": 363,
+    "berglosa": 472,
+    "belum": 338,
     "direview": 0
   },
   "unit": [
@@ -6653,6 +6653,364 @@
           ],
           "id_glosa": [
             "api"
+          ],
+          "catatan": null,
+          "direview": false
+        }
+      ]
+    },
+    {
+      "n": "tanpa-unit",
+      "judul": null,
+      "item": [
+        {
+          "id": "grammar-n5-〜が（but）",
+          "ekspresi": "〜が",
+          "bacaan": null,
+          "jenis": "grammar",
+          "en": [
+            "but; however"
+          ],
+          "id_glosa": [
+            "menyambung dua kalimat yang berlawanan"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "grammar-n5-〜がいます・〜があります",
+          "ekspresi": "〜がいます / 〜があります",
+          "bacaan": null,
+          "jenis": "grammar",
+          "en": [
+            "there is/are (animate or inanimate)"
+          ],
+          "id_glosa": [
+            "menyatakan keberadaan sesuatu"
+          ],
+          "catatan": "います untuk yang bernyawa, あります untuk benda",
+          "direview": false
+        },
+        {
+          "id": "grammar-n5-〜から（reason）",
+          "ekspresi": "〜から",
+          "bacaan": null,
+          "jenis": "grammar",
+          "en": [
+            "because; since"
+          ],
+          "id_glosa": [
+            "menyatakan alasan"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "grammar-n5-〜が好きです・〜が嫌いです",
+          "ekspresi": "〜が好きです / 〜が嫌いです",
+          "bacaan": null,
+          "jenis": "grammar",
+          "en": [
+            "like / dislike"
+          ],
+          "id_glosa": [
+            "menyatakan suka atau tidak suka"
+          ],
+          "catatan": "yang disukai ditandai が, bukan を",
+          "direview": false
+        },
+        {
+          "id": "grammar-n5-〜たい",
+          "ekspresi": "〜たい",
+          "bacaan": null,
+          "jenis": "grammar",
+          "en": [
+            "want to do"
+          ],
+          "id_glosa": [
+            "menyatakan keinginan sendiri"
+          ],
+          "catatan": "hanya untuk diri sendiri; keinginan orang lain pakai 〜たがる",
+          "direview": false
+        },
+        {
+          "id": "grammar-n5-〜たことがあります",
+          "ekspresi": "〜たことがあります",
+          "bacaan": null,
+          "jenis": "grammar",
+          "en": [
+            "have done before; experienced"
+          ],
+          "id_glosa": [
+            "menyatakan pernah mengalami"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "grammar-n5-〜で（place・means）",
+          "ekspresi": "〜で",
+          "bacaan": null,
+          "jenis": "grammar",
+          "en": [
+            "marks the place of action or the means of doing something"
+          ],
+          "id_glosa": [
+            "menandai tempat kegiatan atau alat"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "grammar-n5-〜ている",
+          "ekspresi": "〜ている",
+          "bacaan": null,
+          "jenis": "grammar",
+          "en": [
+            "is/am/are doing (progressive) or resultant state"
+          ],
+          "id_glosa": [
+            "menyatakan perbuatan sedang berlangsung",
+            "menyatakan keadaan yang bertahan"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "grammar-n5-〜てください",
+          "ekspresi": "〜てください",
+          "bacaan": null,
+          "jenis": "grammar",
+          "en": [
+            "please do (for me)"
+          ],
+          "id_glosa": [
+            "meminta lawan bicara melakukan sesuatu"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "grammar-n5-〜でした",
+          "ekspresi": "〜でした",
+          "bacaan": null,
+          "jenis": "grammar",
+          "en": [
+            "was/were (polite past of です)"
+          ],
+          "id_glosa": [
+            "menyatakan keadaan di masa lampau"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "grammar-n5-〜ではありません",
+          "ekspresi": "〜ではありません",
+          "bacaan": null,
+          "jenis": "grammar",
+          "en": [
+            "is not (polite negative)"
+          ],
+          "id_glosa": [
+            "menyatakan sesuatu bukan begitu"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "grammar-n5-〜てはいけません",
+          "ekspresi": "〜てはいけません",
+          "bacaan": null,
+          "jenis": "grammar",
+          "en": [
+            "must not do"
+          ],
+          "id_glosa": [
+            "melarang melakukan sesuatu"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "grammar-n5-〜てもいいです",
+          "ekspresi": "〜てもいいです",
+          "bacaan": null,
+          "jenis": "grammar",
+          "en": [
+            "may do; it's okay to do"
+          ],
+          "id_glosa": [
+            "memberi izin melakukan sesuatu"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "grammar-n5-〜と（and・with）",
+          "ekspresi": "〜と",
+          "bacaan": null,
+          "jenis": "grammar",
+          "en": [
+            "and; with; together with"
+          ],
+          "id_glosa": [
+            "menyambung dua benda",
+            "bersama siapa"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "grammar-n5-〜なくてもいいです",
+          "ekspresi": "〜なくてもいいです",
+          "bacaan": null,
+          "jenis": "grammar",
+          "en": [
+            "don't have to; need not"
+          ],
+          "id_glosa": [
+            "menyatakan tidak perlu melakukan"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "grammar-n5-〜なければなりません・〜なくてはいけません",
+          "ekspresi": "〜なければなりません / 〜なくてはいけません",
+          "bacaan": null,
+          "jenis": "grammar",
+          "en": [
+            "must do; have to do"
+          ],
+          "id_glosa": [
+            "menyatakan keharusan"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "grammar-n5-〜に（time・destination）",
+          "ekspresi": "〜に",
+          "bacaan": null,
+          "jenis": "grammar",
+          "en": [
+            "marks time, destination, or indirect target"
+          ],
+          "id_glosa": [
+            "menandai waktu, tujuan, atau sasaran"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "grammar-n5-〜ましょう",
+          "ekspresi": "〜ましょう",
+          "bacaan": null,
+          "jenis": "grammar",
+          "en": [
+            "let's do; shall we do"
+          ],
+          "id_glosa": [
+            "mengajak melakukan bersama"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "grammar-n5-〜ませんか",
+          "ekspresi": "〜ませんか",
+          "bacaan": null,
+          "jenis": "grammar",
+          "en": [
+            "shall we?; won't you?"
+          ],
+          "id_glosa": [
+            "mengajak dengan bertanya"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "grammar-n5-〜を（objectparticle）",
+          "ekspresi": "〜を",
+          "bacaan": null,
+          "jenis": "grammar",
+          "en": [
+            "marks the direct object of a verb"
+          ],
+          "id_glosa": [
+            "menandai yang dikenai perbuatan"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "grammar-n5-〜は",
+          "ekspresi": "〜は",
+          "bacaan": null,
+          "jenis": "grammar",
+          "en": [
+            "topic marker — as for ..."
+          ],
+          "id_glosa": [
+            "menandai hal yang sedang dibicarakan"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "grammar-n5-〜も",
+          "ekspresi": "〜も",
+          "bacaan": null,
+          "jenis": "grammar",
+          "en": [
+            "also; too"
+          ],
+          "id_glosa": [
+            "menyatakan hal itu juga"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "grammar-n5-〜の",
+          "ekspresi": "〜の",
+          "bacaan": null,
+          "jenis": "grammar",
+          "en": [
+            "possessive; noun linking — 's / of"
+          ],
+          "id_glosa": [
+            "menyatakan milik atau hubungan"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "grammar-n5-〜か",
+          "ekspresi": "〜か",
+          "bacaan": null,
+          "jenis": "grammar",
+          "en": [
+            "question particle"
+          ],
+          "id_glosa": [
+            "mengubah kalimat jadi pertanyaan"
+          ],
+          "catatan": null,
+          "direview": false
+        },
+        {
+          "id": "grammar-n5-〜へ",
+          "ekspresi": "〜へ",
+          "bacaan": null,
+          "jenis": "grammar",
+          "en": [
+            "direction marker — to; toward"
+          ],
+          "id_glosa": [
+            "menandai arah tujuan"
           ],
           "catatan": null,
           "direview": false
