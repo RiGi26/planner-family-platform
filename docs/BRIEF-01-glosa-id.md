@@ -54,7 +54,9 @@ demi jejak provenance dan supaya update dari hulu tetap mungkin.
 
 Perlakuan: skrip migrasi menyalin nilainya ke `en` dan `id` sama persis.
 Validator **wajib melewati** `type === 'kana'` untuk seluruh aturan §3 dan §4 —
-kalau tidak, 208 item akan gagal aturan "glosa identik dengan sumber".
+kalau tidak, 208 item akan menyalakan aturan "glosa identik dengan sumber" tanpa
+kecuali (sejak §6 menurunkannya jadi peringatan: 208 peringatan permanen, yang
+sama saja artinya dengan menghapus seluruh daftar peringatan).
 
 ### 2.3 Tidak ada migrasi IndexedDB
 
@@ -212,6 +214,15 @@ rilis §7.
 - Tanpa titik di akhir
 - Kurung untuk pembeda singkat (`itu (jauh)`), bukan untuk penjelasan
 - Penjelasan panjang → `gloss_note_id`, bukan glosa
+
+**Yang dilarang glosa BERTELE-TELE, bukan glosa PANJANG.** Frasa yang memang unit
+makna terkecil yang tepat bukan pelanggaran. 午前 → `sebelum tengah hari` itu tiga
+kata dan benar: Indonesia tidak punya satu kata untuk AM, dan "pagi" salah begitu
+jamnya bergeser — 午後1時 adalah jam 1 siang, bukan sore. Yang dilarang §3.10 adalah
+kata yang tidak menambah apa-apa ("sebuah", "yang", "untuk") dan penjelasan yang
+seharusnya jadi `gloss_note_id`. Uji cepatnya: kalau satu kata bisa dibuang tanpa
+mengubah arti, buang; kalau tidak bisa, panjangnya memang sepanjang itu. Batas 40
+karakter tetap berlaku sebagai pagar luar.
 
 **Batas "sinonim dekat" lawan "makna berbeda" adalah pertimbangan bahasa, bukan
 aturan mesin.** いいえ jadi satu elemen (`tidak, bukan` — dua kata yang mengisi
@@ -424,6 +435,10 @@ Istilah linguistik boleh muncul di `gloss_note_id`, tidak di glosa utama.
 - ❌ serapan Inggris kalau ada padanan ("kalkulasi" → "hitungan")
   — **kecuali** kata pinjaman Jepang yang memang serapan:
   カメラ → "kamera", テレビ → "televisi", パン → "roti"
+  — dan sebagian serapan itu **ejaannya sama persis** dengan glosa Inggrisnya
+  (銀行 → "bank", ホテル → "hotel", ラジオ → "radio", バス → "bus"). Itu tetap
+  glosa yang benar. §6 dulu menggagalkannya sebagai "belum diterjemahkan"; aturan
+  itu sudah diturunkan jadi peringatan justru karena bertabrakan dengan baris ini
 - ❌ menyalin kekaburan Inggris saat Indonesia bisa tegas
 - ❌ glosa lebih dari 40 karakter
 
@@ -660,9 +675,10 @@ hasil irisannya **di atas 3.000 karakter** (§3 sekarang ~6.500) · memuat subba
 ### Kebijakan tolak
 
 Usulan yang melanggar aturan yang bisa dinilai dari satu batch — bentuk glosa,
-keunikan §4.1/§4.2, aturan penggolong §3.6, glosa yang identik dengan sumber
-Inggris — ditolak, dan itemnya **dibiarkan tanpa glosa** beserta alasannya, bukan
-ditulis apa adanya.
+keunikan §4.1/§4.2, aturan penggolong §3.6 — ditolak, dan itemnya **dibiarkan
+tanpa glosa** beserta alasannya, bukan ditulis apa adanya. Kesamaan dengan sumber
+Inggris **tidak lagi** termasuk: §6 menurunkannya jadi peringatan, dan saringan ini
+tidak menegakkan aturan yang validatornya sendiri sudah cabut.
 
 Item ber-`meanings.id` kosong akan diambil lagi oleh `gloss:siapkan` berikutnya
 (idempoten) dan tetap dihitung kurang oleh `verify:gloss --lengkap`. Menulis glosa
@@ -728,7 +744,6 @@ terlihat, hanya tidak menggagalkan.
 
 - [ ] `meanings.id[0]` unik dalam satu unit (§4.1)
 - [ ] `meanings.id[0]` unik antar item sejenis (§4.2)
-- [ ] tidak ada `meanings.id` identik dengan `meanings.en` (tanda belum diterjemahkan)
 - [ ] tidak ada glosa diawali `untuk `
 - [ ] tidak ada glosa > 40 karakter
 - [ ] item penggolong: satu elemen, satu kata, tanpa kurung
@@ -762,9 +777,38 @@ atau ref tak terbaca), keduanya dilaporkan **dilewati**, bukan lulus.
 
 - [ ] glosa memuat kata Inggris umum (cocokkan lawan daftar) — menangkap
       "counter for", "to be", sisa terjemahan
+- [ ] `meanings.id` identik dengan `meanings.en` — **peringatan, bukan kegagalan**
+      (alasannya di bawah)
 - [ ] pasangan `vt`/`vi` dengan ekspresi berakar sama tapi glosanya tidak berbeda awalan
 - [ ] glosa identik secara global (§4.3)
 - [ ] `gloss_note_id` > 80 karakter
+
+### "Identik dengan sumber Inggris" diturunkan jadi peringatan
+
+Aturan itu dulu menggagalkan. Maksudnya menangkap item yang **belum dikerjakan**,
+tapi yang diperiksanya **kesamaan string** — dan itu proksi yang salah untuk maksud
+tersebut.
+
+Serapan yang ejaannya identik adalah terjemahan yang **benar**: 銀行 → "bank",
+ホテル → "hotel", ラジオ → "radio", バス → "bus", グラム → "gram". §3.10 secara
+eksplisit mengizinkan bentuk itu untuk kata pinjaman. Dua aturan yang saling
+meniadakan tidak meninggalkan pilihan yang sah: satu-satunya jalan lolos adalah
+memaksa glosanya bertele-tele supaya berbeda dari kata yang sebenarnya dipakai
+orang. Batch 2 sudah menabraknya — 銀行 ditolak dengan kandidat yang benar.
+
+Keadaan yang sungguh perlu dijaga sudah dijaga di tempat lain, dan lebih tepat:
+**item yang belum dikerjakan punya `meanings.id` KOSONG**, dan itu persis yang
+dihitung aturan kelengkapan (`--lengkap`, gerbang §7). Tidak ada jalan bagi sebuah
+item punya `meanings.id` terisi tanpa ada yang mengisinya.
+
+**Tanpa daftar pengecualian, sengaja.** Daftar begitu tumbuh selamanya, dan tiap
+entri di dalamnya adalah tebakan tentang kata mana yang "boleh" sama — tebakan yang
+dibuat di muka, oleh orang yang belum melihat itemnya. Peringatan memunculkan
+kasusnya ke reviewer §7 tanpa memblokir siapa pun, dan penilaian "ini serapan yang
+sah, bukan terjemahan yang terlewat" memang pertanyaan manusia.
+
+Saringan cepat di `gloss:terapkan` ikut dicabut aturannya. Ia bukan implementasi
+kedua dari §6, jadi ia tidak boleh menolak apa yang §6 sendiri sudah tidak tolak.
 
 ---
 

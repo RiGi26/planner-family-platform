@@ -182,14 +182,6 @@ for (const i of berglosa) {
 }
 rule(failures, 'glosa pertama kembar antar item sejenis (§4.2)', collisions(byClass, (k) => k))
 
-rule(
-  failures,
-  'glosa identik dengan sumber Inggris — tandanya belum diterjemahkan',
-  berglosa
-    .filter((i) => norm(i.meanings.id.join('|')) === norm(i.meanings.en.join('|')))
-    .map((i) => ({ id: i.id, detail: i.meanings.id.join('; ') })),
-)
-
 // Delegated to scripts/lib/gloss-rules.mjs so the generator can pre-check the
 // exact same rules before it spends a batch (§3.10, §3.1).
 for (const { nama, cek } of ATURAN_BENTUK) {
@@ -260,6 +252,33 @@ const SISA_INGGRIS = [
 const SISA_RE = new RegExp(`\\b(${SISA_INGGRIS.join('|')})\\b`, 'i')
 
 rule(warnings, 'glosa masih memuat kata Inggris', flagGloss(berglosa, (g) => SISA_RE.test(g)))
+
+/**
+ * PERINGATAN, bukan kegagalan — dan itu penurunan yang disengaja.
+ *
+ * Aturan ini dimaksudkan menangkap item yang belum dikerjakan, tapi yang
+ * diperiksanya kesamaan string: proksi yang salah untuk maksud itu. Serapan yang
+ * ejaannya identik — 銀行 "bank", ホテル "hotel", ラジオ "radio", バス "bus",
+ * グラム "gram" — adalah terjemahan yang BENAR dan §3.10 memang mengizinkannya,
+ * tapi tidak punya jalan lolos selain dipaksa bertele-tele.
+ *
+ * Keadaan yang sungguh perlu dijaga sudah dijaga di tempat lain: item yang belum
+ * dikerjakan punya `meanings.id` KOSONG, dan itu urusan aturan kelengkapan
+ * (--lengkap). Tidak ada jalan bagi item punya `meanings.id` terisi tanpa ada yang
+ * mengisinya.
+ *
+ * Tidak ada daftar pengecualian, sengaja: daftar begitu tumbuh selamanya dan tiap
+ * entrinya tebakan tentang kata mana yang "boleh" sama. Peringatan memunculkan
+ * kasusnya ke reviewer §7 tanpa memblokir, dan penilaiannya memang pertanyaan
+ * manusia.
+ */
+rule(
+  warnings,
+  'glosa identik dengan sumber Inggris — periksa apakah serapan atau belum diterjemahkan',
+  berglosa
+    .filter((i) => norm(i.meanings.id.join('|')) === norm(i.meanings.en.join('|')))
+    .map((i) => ({ id: i.id, detail: i.meanings.id.join('; ') })),
+)
 
 const AWALAN_TRANSITIF = /^(me|mem|men|meng|meny|memper)/i
 const akarKanji = (s) => (s.match(/^[一-鿿]+/) ?? [''])[0]

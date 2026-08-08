@@ -313,9 +313,10 @@ export function periksa(item, arti, semua, dalamBatch) {
     }
   }
 
-  if (norm(arti.join('|')) === norm(item.meanings.en.join('|'))) {
-    return 'identik dengan sumber Inggris — belum diterjemahkan (§6)'
-  }
+  // Glosa yang identik dengan sumber Inggris TIDAK ditolak di sini. §6 menurunkannya
+  // jadi peringatan karena kesamaan string bukan tanda "belum dikerjakan" — 銀行
+  // memang "bank". Menolaknya di saringan ini akan menegakkan aturan yang sudah
+  // dicabut dari validatornya, dan saringan ini bukan implementasi kedua dari §6.
 
   if (isCounter(item)) {
     const sebab = cekPenggolong(arti)
